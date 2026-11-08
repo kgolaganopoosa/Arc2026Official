@@ -209,6 +209,7 @@
     var b=e.target.closest('button.opt');if(!b)return;
     try{localStorage.setItem(KEY,b.dataset.name)}catch(err){}
     cc.reset();show(b.dataset.name);
+    if(b.dataset.name==='South Africa')setTimeout(function(){ex.open(true)},0);
   });
   $('changeCountry').addEventListener('click',function(){
     ex.reset();$('stageExplore').hidden=true;$('stageCountry').hidden=false;$('ccBtn').focus();
