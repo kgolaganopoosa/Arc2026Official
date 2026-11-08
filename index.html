@@ -25,6 +25,16 @@
   .dd-list a:hover,.dd-list a:focus-visible,.dd-list a.active{background:var(--lime);outline:none}
   .dd-list small{color:var(--muted);font-weight:500;font-size:.7rem}
   .dd-empty{display:none;padding:.9rem .8rem;color:var(--muted);font-size:.85rem}
+  [hidden]{display:none!important}
+  .stage{width:100%;max-width:22rem}
+  .dd-list button.opt{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.65rem .8rem;border:0;border-radius:.6rem;background:none;color:var(--ink);font:inherit;font-weight:600;font-size:.9rem;text-align:left;cursor:pointer}
+  .dd-list button.opt:hover,.dd-list button.opt:focus-visible{background:var(--lime);outline:none}
+  .dd-list button.opt[aria-selected="true"]::after{content:"✓";font-weight:800}
+  .where{margin:0 0 .9rem;font-size:.85rem;color:var(--muted)}
+  .where b{color:var(--ink)}
+  .linkbtn{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .linkbtn:hover{background:var(--lime)}
+  .soon{border:1px solid var(--line);border-radius:.85rem;padding:1rem;font-size:.88rem;line-height:1.55;color:#374151;background:var(--soft)}
   footer{border-top:1px solid var(--line);padding:1.25rem;text-align:center;font-size:.75rem;color:var(--muted)}
   footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.25rem;margin-bottom:.6rem}
   footer button{background:none;border:0;padding:.25rem 0;font:inherit;color:var(--ink);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
@@ -46,19 +56,39 @@
   <h1>Arcknowledge</h1>
   <p class="tag">Everything in one place</p>
 
+  <div class="stage" id="stageCountry">
+    <div class="dd" id="cc">
+      <button class="dd-btn" id="ccBtn" aria-haspopup="listbox" aria-expanded="false">
+        <span>Select Country</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dd-panel">
+        <input class="dd-search" type="search" placeholder="Search countries…" aria-label="Search countries" autocomplete="off">
+        <ul class="dd-list" id="ccList" role="listbox" aria-label="Countries"></ul>
+        <div class="dd-empty">No matches found.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stageExplore" hidden>
+    <p class="where">Country: <b id="whereName"></b> · <button class="linkbtn" id="changeCountry" type="button">Change</button></p>
+    <div class="soon" id="soon" role="status" hidden></div>
+    <div id="exploreWrap">
   <div class="dd" id="dd">
-    <button class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false">
-      <span>Explore Arcknowledge</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
-    <div class="dd-panel" id="ddPanel">
-      <input class="dd-search" id="ddSearch" type="search" placeholder="Search…" aria-label="Search the list" autocomplete="off">
-      <ul class="dd-list" id="ddList" role="listbox">
-        <li><a href="https://www.arcknowledge.online/studentkit" target="_blank" rel="noopener">SA Student Kit <small>↗</small></a></li>
-        <li><a href="https://www.arcknowledge.online/everythingcars" target="_blank" rel="noopener">Everything Cars SA <small>↗</small></a></li>
-        <li><a href="https://www.arcknowledge.online/InfScore" target="_blank" rel="noopener">InfScore <small>↗</small></a></li>
-      </ul>
-      <div class="dd-empty" id="ddEmpty">No matches found.</div>
+      <button class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false">
+        <span>Explore Arcknowledge</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dd-panel" id="ddPanel">
+        <input class="dd-search" id="ddSearch" type="search" placeholder="Search…" aria-label="Search the list" autocomplete="off">
+        <ul class="dd-list" id="ddList" role="listbox">
+          <li><a href="https://www.arcknowledge.online/studentkit" target="_blank" rel="noopener">SA Student Kit <small>↗</small></a></li>
+          <li><a href="https://www.arcknowledge.online/everythingcars" target="_blank" rel="noopener">Everything Cars SA <small>↗</small></a></li>
+          <li><a href="https://www.arcknowledge.online/InfScore" target="_blank" rel="noopener">InfScore <small>↗</small></a></li>
+        </ul>
+        <div class="dd-empty" id="ddEmpty">No matches found.</div>
+      </div>
+    </div>
     </div>
   </div>
 </main>
@@ -127,27 +157,66 @@
 
 <script>
 (function(){
-  var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn'),search=document.getElementById('ddSearch'),
-      items=[].slice.call(document.querySelectorAll('#ddList li')),empty=document.getElementById('ddEmpty');
-  function open(o){dd.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);if(o){setTimeout(function(){search.focus()},0)}else{btn.focus()}}
-  function visible(){return items.filter(function(li){return li.style.display!=='none'})}
-  btn.addEventListener('click',function(){open(!dd.classList.contains('open'))});
-  search.addEventListener('input',function(){
-    var q=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    items.forEach(function(li){var t=li.textContent.toLowerCase();li.style.display=q.every(function(w){return t.indexOf(w)>-1})?'':'none'});
-    empty.style.display=visible().length?'none':'block';
+  var RAW="Afghanistan|Albania|Algeria|Andorra|Angola|Antigua and Barbuda|Argentina|Armenia|Australia|Austria|Azerbaijan|Bahamas|Bahrain|Bangladesh|Barbados|Belarus|Belgium|Belize|Benin|Bhutan|Bolivia|Bosnia and Herzegovina|Botswana|Brazil|Brunei|Bulgaria|Burkina Faso|Burundi|Cabo Verde:cape verde|Cambodia|Cameroon|Canada|Central African Republic|Chad|Chile|China|Colombia|Comoros|Congo (Republic of the):congo brazzaville|Costa Rica|Côte d’Ivoire:ivory coast|Croatia|Cuba|Cyprus|Czechia:czech republic|Democratic Republic of the Congo:drc congo kinshasa|Denmark|Djibouti|Dominica|Dominican Republic|Ecuador|Egypt|El Salvador|Equatorial Guinea|Eritrea|Estonia|Eswatini:swaziland|Ethiopia|Fiji|Finland|France|Gabon|Gambia|Georgia|Germany|Ghana|Greece|Grenada|Guatemala|Guinea|Guinea-Bissau|Guyana|Haiti|Holy See:vatican city|Honduras|Hungary|Iceland|India|Indonesia|Iran|Iraq|Ireland|Israel|Italy|Jamaica|Japan|Jordan|Kazakhstan|Kenya|Kiribati|Kuwait|Kyrgyzstan|Laos|Latvia|Lebanon|Lesotho|Liberia|Libya|Liechtenstein|Lithuania|Luxembourg|Madagascar|Malawi|Malaysia|Maldives|Mali|Malta|Marshall Islands|Mauritania|Mauritius|Mexico|Micronesia|Moldova|Monaco|Mongolia|Montenegro|Morocco|Mozambique|Myanmar:burma|Namibia|Nauru|Nepal|Netherlands:holland|New Zealand|Nicaragua|Niger|Nigeria|North Korea|North Macedonia|Norway|Oman|Pakistan|Palau|Palestine|Panama|Papua New Guinea|Paraguay|Peru|Philippines|Poland|Portugal|Qatar|Romania|Russia|Rwanda|Saint Kitts and Nevis|Saint Lucia|Saint Vincent and the Grenadines|Samoa|San Marino|São Tomé and Príncipe|Saudi Arabia|Senegal|Serbia|Seychelles|Sierra Leone|Singapore|Slovakia|Slovenia|Solomon Islands|Somalia|South Africa:rsa za|South Korea|South Sudan|Spain|Sri Lanka|Sudan|Suriname|Sweden|Switzerland|Syria|Tajikistan|Tanzania|Thailand|Timor-Leste:east timor|Togo|Tonga|Trinidad and Tobago|Tunisia|Türkiye:turkey|Turkmenistan|Tuvalu|Uganda|Ukraine|United Arab Emirates:uae|United Kingdom:uk britain england|United States:usa us america|Uruguay|Uzbekistan|Vanuatu|Venezuela|Vietnam|Yemen|Zambia|Zimbabwe".split('|');
+  var KEY='arcknowledge-country';
+  function norm(t){return t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+  function $(id){return document.getElementById(id)}
+
+  function init(dd){
+    var btn=dd.querySelector('.dd-btn'),search=dd.querySelector('.dd-search'),list=dd.querySelector('.dd-list'),empty=dd.querySelector('.dd-empty');
+    function items(){return [].slice.call(list.children)}
+    function vis(){return items().filter(function(li){return !li.hidden})}
+    function open(o,noFocus){
+      dd.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);
+      if(o){setTimeout(function(){search.focus()},0)}else if(!noFocus){btn.focus()}
+    }
+    function filter(){
+      var q=norm(search.value.trim()).split(/\s+/).filter(Boolean);
+      items().forEach(function(li){var t=li.dataset.s||(li.dataset.s=norm(li.textContent));li.hidden=!q.every(function(w){return t.indexOf(w)>-1})});
+      empty.style.display=vis().length?'none':'block';
+    }
+    btn.addEventListener('click',function(){open(!dd.classList.contains('open'))});
+    search.addEventListener('input',filter);
+    dd.addEventListener('keydown',function(e){
+      var f=vis().map(function(li){return li.firstElementChild}),i=f.indexOf(document.activeElement);
+      if(e.key==='Escape'){open(false)}
+      else if(e.key==='ArrowDown'){e.preventDefault();(f[i+1]||f[0]||search).focus()}
+      else if(e.key==='ArrowUp'){e.preventDefault();(i>0?f[i-1]:search).focus()}
+      else if(e.key==='Enter'&&document.activeElement===search&&f[0]){e.preventDefault();f[0].click()}
+    });
+    document.addEventListener('click',function(e){if(!dd.contains(e.target)&&dd.classList.contains('open'))open(false,true)});
+    return {open:open,reset:function(){search.value='';filter();open(false,true)}};
+  }
+
+  var cc=init($('cc')),ex=init($('dd')),ccList=$('ccList');
+  ccList.innerHTML=RAW.map(function(r){
+    var p=r.split(':'),n=p[0],li=document.createElement('li');
+    li.dataset.s=norm(n+' '+(p[1]||''));
+    var b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('role','option');b.dataset.name=n;b.textContent=n;
+    li.appendChild(b);return li.outerHTML;
+  }).join('');
+
+  function show(name){
+    $('whereName').textContent=name;
+    $('stageCountry').hidden=true;$('stageExplore').hidden=false;
+    var za=name==='South Africa';
+    $('exploreWrap').hidden=!za;$('soon').hidden=za;
+    if(!za){$('soon').textContent='Arcknowledge isn’t available in '+name+' yet. We’re starting with South Africa and expanding soon.'}
+    ccList.querySelectorAll('[aria-selected]').forEach(function(b){b.removeAttribute('aria-selected')});
+    var sel=ccList.querySelector('[data-name="'+name.replace(/"/g,'\\"')+'"]');if(sel)sel.setAttribute('aria-selected','true');
+  }
+  ccList.addEventListener('click',function(e){
+    var b=e.target.closest('button.opt');if(!b)return;
+    try{localStorage.setItem(KEY,b.dataset.name)}catch(err){}
+    cc.reset();show(b.dataset.name);
   });
-  dd.addEventListener('keydown',function(e){
-    var links=visible().map(function(li){return li.firstElementChild}),i=links.indexOf(document.activeElement);
-    if(e.key==='Escape'){open(false)}
-    else if(e.key==='ArrowDown'){e.preventDefault();(links[i+1]||links[0]||search).focus()}
-    else if(e.key==='ArrowUp'){e.preventDefault();(i>0?links[i-1]:search).focus()}
-    else if(e.key==='Enter'&&document.activeElement===search&&links[0]){window.open(links[0].href,'_blank','noopener')}
+  $('changeCountry').addEventListener('click',function(){
+    ex.reset();$('stageExplore').hidden=true;$('stageCountry').hidden=false;$('ccBtn').focus();
   });
-  document.addEventListener('click',function(e){if(!dd.contains(e.target)&&dd.classList.contains('open'))open(false)});
+  try{var saved=localStorage.getItem(KEY);if(saved&&RAW.some(function(r){return r.split(':')[0]===saved}))show(saved)}catch(err){}
 
   document.querySelectorAll('[data-modal]').forEach(function(b){
-    b.addEventListener('click',function(){var d=document.getElementById(b.dataset.modal);d.showModal();d.querySelector('.m-body').scrollTop=0});
+    b.addEventListener('click',function(){var d=$(b.dataset.modal);d.showModal();d.querySelector('.m-body').scrollTop=0});
   });
   document.querySelectorAll('dialog').forEach(function(d){
     d.addEventListener('click',function(e){if(e.target===d||e.target.hasAttribute('data-close'))d.close()});
