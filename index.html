@@ -35,6 +35,14 @@
   .linkbtn{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
   .linkbtn:hover{background:var(--lime)}
   .soon{border:1px solid var(--line);border-radius:.85rem;padding:1rem;font-size:.88rem;line-height:1.55;color:#374151;background:var(--soft)}
+  .results{margin-top:1rem;text-align:left}
+  .results h3{margin:0 0 .6rem;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .card{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.8rem 1rem;margin-bottom:.5rem;border:1px solid var(--line);border-radius:.75rem;background:#fff;color:var(--ink);text-decoration:none;font-weight:700;font-size:.9rem}
+  .card:hover,.card:focus-visible{background:var(--lime);border-color:var(--lime)}
+  .tagb{font-size:.65rem;font-weight:700;padding:.15rem .55rem;border-radius:9999px;background:var(--soft);color:#4B5563;white-space:nowrap}
+  .tagb.r{background:#FEF3C7;color:#92400E}
+  .fine{margin:.75rem 0 0;font-size:.72rem;line-height:1.5;color:var(--muted)}
+  .dd-list small{color:var(--muted);font-weight:500;font-size:.75rem}
   footer{border-top:1px solid var(--line);padding:1.25rem;text-align:center;font-size:.75rem;color:var(--muted)}
   footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.25rem;margin-bottom:.6rem}
   footer button{background:none;border:0;padding:.25rem 0;font:inherit;color:var(--ink);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
@@ -72,7 +80,6 @@
 
   <div class="stage" id="stageExplore" hidden>
     <p class="where">Country: <b id="whereName"></b> · <button class="linkbtn" id="changeCountry" type="button">Change</button></p>
-    <div class="soon" id="soon" role="status" hidden></div>
     <div id="exploreWrap">
   <div class="dd" id="dd">
       <button class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false">
@@ -80,15 +87,12 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
       </button>
       <div class="dd-panel" id="ddPanel">
-        <input class="dd-search" id="ddSearch" type="search" placeholder="Search…" aria-label="Search the list" autocomplete="off">
-        <ul class="dd-list" id="ddList" role="listbox">
-          <li><a href="https://www.arcknowledge.online/studentkit" target="_blank" rel="noopener">SA Student Kit <small>↗</small></a></li>
-          <li><a href="https://www.arcknowledge.online/everythingcars" target="_blank" rel="noopener">Everything Cars SA <small>↗</small></a></li>
-          <li><a href="https://www.arcknowledge.online/InfScore" target="_blank" rel="noopener">InfScore <small>↗</small></a></li>
-        </ul>
+        <input class="dd-search" id="ddSearch" type="search" placeholder="Search categories or platforms…" aria-label="Search the list" autocomplete="off">
+        <ul class="dd-list" id="ddList" role="listbox" aria-label="Categories"></ul>
         <div class="dd-empty" id="ddEmpty">No matches found.</div>
       </div>
     </div>
+      <div id="results" class="results" hidden></div>
     </div>
   </div>
 </main>
@@ -196,12 +200,80 @@
     li.appendChild(b);return li.outerHTML;
   }).join('');
 
+  var G={
+    social:[
+      ['Facebook','https://www.facebook.com',['China','Iran','Russia','Turkmenistan','Myanmar','Uganda']],
+      ['Instagram','https://www.instagram.com',['China','Iran','Russia','Turkmenistan']],
+      ['X','https://x.com',['China','Iran','Russia','Turkmenistan','Myanmar','Tanzania']],
+      ['YouTube','https://www.youtube.com',['China','Iran','Turkmenistan'],['Russia']],
+      ['WhatsApp','https://www.whatsapp.com',['China','Russia','Turkmenistan'],['Iran','Cuba']],
+      ['TikTok','https://www.tiktok.com',['Afghanistan','China','India','Iran','Jordan','Kyrgyzstan','Somalia','Senegal','Tajikistan','Uzbekistan','Gabon']],
+      ['Telegram','https://telegram.org',['China','Iran','Vietnam','Nepal','Somalia'],['Russia','Pakistan','Cuba']]
+    ],
+    music:[
+      ['Spotify','https://www.spotify.com',['Afghanistan','Central African Republic','China','Cuba','Eritrea','Iran','Myanmar','Russia','Somalia','South Sudan','Sudan','Syria','Turkmenistan','Yemen']],
+      ['Apple Music','https://music.apple.com',['Cuba','Iran','Syria'],[],'Check availability'],
+      ['YouTube Music','https://music.youtube.com',['China','Iran','Turkmenistan'],['Russia']],
+      ['Deezer','https://www.deezer.com',['China','Cuba','Iran','Russia','Syria'],[],'Check availability']
+    ],
+    search:[
+      ['Google','https://www.google.com',['China','Turkmenistan']],
+      ['Bing','https://www.bing.com',[],['China']],
+      ['DuckDuckGo','https://duckduckgo.com',['China']],
+      ['Yahoo Search','https://search.yahoo.com',[],['China']]
+    ]
+  };
+  var L={};
+  function loc(c,k,e){c.forEach(function(n){var o=L[n]=L[n]||{};(o[k]=o[k]||[]).push(e)})}
+  loc(['China'],'social',['WeChat','https://www.wechat.com']);loc(['China'],'social',['Weibo','https://weibo.com']);loc(['China'],'social',['Douyin','https://www.douyin.com']);
+  loc(['China'],'music',['NetEase Cloud Music','https://music.163.com']);loc(['China'],'music',['QQ Music','https://y.qq.com']);
+  loc(['China'],'search',['Baidu','https://www.baidu.com']);loc(['China'],'search',['Sogou','https://www.sogou.com']);
+  loc(['Russia'],'social',['VK','https://vk.com']);loc(['Russia'],'social',['OK','https://ok.ru']);
+  loc(['Russia'],'music',['Yandex Music','https://music.yandex.ru']);loc(['Russia'],'music',['VK Music','https://vk.com/music']);
+  loc(['Russia','Belarus','Kazakhstan','Uzbekistan','Türkiye'],'search',['Yandex','https://yandex.com']);
+  loc(['South Korea'],'social',['KakaoTalk','https://www.kakaocorp.com']);loc(['South Korea'],'music',['Melon','https://www.melon.com']);
+  loc(['South Korea'],'search',['Naver','https://www.naver.com']);loc(['South Korea'],'search',['Daum','https://www.daum.net']);
+  loc(['Japan','Taiwan','Thailand'],'social',['LINE','https://line.me']);loc(['Japan'],'search',['Yahoo! Japan','https://www.yahoo.co.jp']);
+  loc(['Czechia'],'search',['Seznam','https://www.seznam.cz']);
+  loc(['Vietnam'],'social',['Zalo','https://zalo.me']);loc(['Vietnam'],'music',['Zing MP3','https://zingmp3.vn']);loc(['Vietnam'],'search',['Cốc Cốc','https://coccoc.com']);
+  loc(['Iran'],'social',['Rubika','https://rubika.ir']);loc(['Iran'],'social',['Eitaa','https://eitaa.com']);
+  loc(['Nepal'],'social',['Viber','https://www.viber.com']);
+  loc(['India'],'social',['ShareChat','https://sharechat.com']);loc(['India'],'music',['JioSaavn','https://www.jiosaavn.com']);
+  loc(['Türkiye'],'music',['Fizy','https://fizy.com']);
+  loc(['Egypt','Saudi Arabia','United Arab Emirates','Lebanon','Jordan','Iraq','Kuwait','Qatar','Bahrain','Oman','Morocco','Algeria','Tunisia','Libya','Palestine'],'music',['Anghami','https://www.anghami.com']);
+  loc(['Nigeria','Ghana','Kenya','Tanzania','Uganda','Cameroon','Côte d’Ivoire','Zambia','Ethiopia','Democratic Republic of the Congo'],'music',['Boomplay','https://www.boomplay.com']);
+  var CATS=[['social','Social media platforms'],['music','Music streaming platforms'],['search','Search engines']],cur={};
+  function entriesFor(name,k){
+    var out=[];
+    G[k].forEach(function(g){
+      if(g[2].concat('North Korea').indexOf(name)>-1)return;
+      var lim=(g[3]||[]).indexOf(name)>-1;
+      out.push({n:g[0],u:g[1],t:lim?'Restricted':(g[4]||''),r:lim});
+    });
+    ((L[name]||{})[k]||[]).forEach(function(e){out.push({n:e[0],u:e[1],t:'Local'})});
+    return out;
+  }
+  function buildFor(name){
+    cur={};
+    $('ddList').innerHTML=CATS.map(function(c){
+      var e=cur[c[0]]=entriesFor(name,c[0]);
+      return '<li data-s="'+norm(c[1]+' '+e.map(function(x){return x.n}).join(' '))+'"><button type="button" class="opt" data-cat="'+c[0]+'">'+c[1]+'<small>'+e.length+'</small></button></li>';
+    }).join('');
+    $('results').hidden=true;$('ddBtn').firstElementChild.textContent='Explore Arcknowledge';
+  }
+  $('ddList').addEventListener('click',function(e){
+    var b=e.target.closest('button.opt');if(!b)return;
+    var k=b.dataset.cat,c=CATS.filter(function(x){return x[0]===k})[0],list=cur[k],r=$('results');
+    r.innerHTML='<h3>'+c[1]+' · '+$('whereName').textContent+'</h3>'+(list.length?list.map(function(x){
+      return '<a class="card" href="'+x.u+'" target="_blank" rel="noopener"><span>'+x.n+'</span>'+(x.t?'<span class="tagb'+(x.r?' r':'')+'">'+x.t+'</span>':'')+'</a>';
+    }).join(''):'<p class="fine">No publicly accessible options were found for this country.</p>')+
+    '<p class="fine">Based on public reports as of November 2026. Blocks, age limits and local laws change, so check current rules before use.</p>';
+    r.hidden=false;ex.reset();$('ddBtn').firstElementChild.textContent=c[1];
+  });
   function show(name){
     $('whereName').textContent=name;
     $('stageCountry').hidden=true;$('stageExplore').hidden=false;
-    var za=name==='South Africa';
-    $('exploreWrap').hidden=!za;$('soon').hidden=za;
-    if(!za){$('soon').textContent='Arcknowledge isn’t available in '+name+' yet. We’re starting with South Africa and expanding soon.'}
+    buildFor(name);$('exploreWrap').hidden=false;
     ccList.querySelectorAll('[aria-selected]').forEach(function(b){b.removeAttribute('aria-selected')});
     var sel=ccList.querySelector('[data-name="'+name.replace(/"/g,'\\"')+'"]');if(sel)sel.setAttribute('aria-selected','true');
   }
@@ -209,10 +281,10 @@
     var b=e.target.closest('button.opt');if(!b)return;
     try{localStorage.setItem(KEY,b.dataset.name)}catch(err){}
     cc.reset();show(b.dataset.name);
-    if(b.dataset.name==='South Africa')setTimeout(function(){ex.open(true)},0);
+    setTimeout(function(){ex.open(true)},0);
   });
   $('changeCountry').addEventListener('click',function(){
-    ex.reset();$('stageExplore').hidden=true;$('stageCountry').hidden=false;$('ccBtn').focus();
+    ex.reset();$('results').hidden=true;$('stageExplore').hidden=true;$('stageCountry').hidden=false;$('ccBtn').focus();
   });
   try{var saved=localStorage.getItem(KEY);if(saved&&RAW.some(function(r){return r.split(':')[0]===saved}))show(saved)}catch(err){}
 
