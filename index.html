@@ -1,300 +1,301 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Arcknowledge | Everything in one place</title>
-<style>
-  :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-    --ink:#0D0E10;--muted:#6B7280;--line:#E5E7EB;--soft:#F3F4F6;--lime:#C2F012}
-  *,*::before,*::after{box-sizing:inherit}
-  html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-  body{margin:0;min-height:100%;background:#fff;color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column}
-  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.25rem;text-align:center}
-  h1{margin:0;font-size:clamp(2.4rem,9vw,4rem);font-weight:800;letter-spacing:-.03em}
-  .tag{margin:.35rem 0 2rem;font-size:.8rem;color:var(--muted);letter-spacing:.04em}
-  .dd{position:relative;width:100%;max-width:22rem;text-align:left}
-  .dd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.85rem 1rem;background:#fff;border:1.5px solid var(--ink);border-radius:.85rem;font:inherit;font-weight:700;font-size:.95rem;cursor:pointer}
-  .dd-btn svg{transition:transform .2s}.dd.open .dd-btn svg{transform:rotate(180deg)}
-  .dd-panel{display:none;position:absolute;left:0;right:0;top:calc(100% + .5rem);background:#fff;border:1px solid var(--line);border-radius:.85rem;box-shadow:0 12px 32px rgba(0,0,0,.12);padding:.6rem;z-index:10}
-  .dd.open .dd-panel{display:block}
-  .dd-search{width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:.6rem;font:inherit;font-size:.9rem;outline:none;background:var(--soft)}
-  .dd-search:focus{border-color:var(--ink);background:#fff}
-  .dd-list{list-style:none;margin:.5rem 0 0;padding:0;max-height:14rem;overflow-y:auto}
-  .dd-list a{display:flex;align-items:center;justify-content:space-between;padding:.7rem .8rem;border-radius:.6rem;color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem}
-  .dd-list a:hover,.dd-list a:focus-visible,.dd-list a.active{background:var(--lime);outline:none}
-  .dd-list small{color:var(--muted);font-weight:500;font-size:.7rem}
-  .dd-empty{display:none;padding:.9rem .8rem;color:var(--muted);font-size:.85rem}
-  [hidden]{display:none!important}
-  .stage{width:100%;max-width:22rem}
-  .dd-list button.opt{width:100%;display:flex;align-items:center;justify-content:space-between;padding:.65rem .8rem;border:0;border-radius:.6rem;background:none;color:var(--ink);font:inherit;font-weight:600;font-size:.9rem;text-align:left;cursor:pointer}
-  .dd-list button.opt:hover,.dd-list button.opt:focus-visible{background:var(--lime);outline:none}
-  .dd-list button.opt[aria-selected="true"]::after{content:"✓";font-weight:800}
-  .where{margin:0 0 .9rem;font-size:.85rem;color:var(--muted)}
-  .where b{color:var(--ink)}
-  .linkbtn{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-  .linkbtn:hover{background:var(--lime)}
-  .soon{border:1px solid var(--line);border-radius:.85rem;padding:1rem;font-size:.88rem;line-height:1.55;color:#374151;background:var(--soft)}
-  .results{margin-top:1rem;text-align:left}
-  .results h3{margin:0 0 .6rem;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-  .card{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.8rem 1rem;margin-bottom:.5rem;border:1px solid var(--line);border-radius:.75rem;background:#fff;color:var(--ink);text-decoration:none;font-weight:700;font-size:.9rem}
-  .card:hover,.card:focus-visible{background:var(--lime);border-color:var(--lime)}
-  .tagb{font-size:.65rem;font-weight:700;padding:.15rem .55rem;border-radius:9999px;background:var(--soft);color:#4B5563;white-space:nowrap}
-  .tagb.r{background:#FEF3C7;color:#92400E}
-  .fine{margin:.75rem 0 0;font-size:.72rem;line-height:1.5;color:var(--muted)}
-  .dd-list small{color:var(--muted);font-weight:500;font-size:.75rem}
-  footer{border-top:1px solid var(--line);padding:1.25rem;text-align:center;font-size:.75rem;color:var(--muted)}
-  footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.25rem;margin-bottom:.6rem}
-  footer button{background:none;border:0;padding:.25rem 0;font:inherit;color:var(--ink);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-  footer button:hover{background:var(--lime)}
-  :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-  dialog{width:min(42rem,calc(100% - 2rem));max-height:85vh;padding:0;border:1px solid var(--line);border-radius:1rem;color:var(--ink);background:#fff;box-shadow:0 24px 60px rgba(0,0,0,.25)}
-  dialog::backdrop{background:rgba(13,14,16,.6)}
-  .m-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:#fff;border-bottom:1px solid var(--line)}
-  .m-head h2{margin:0;font-size:1.1rem}
-  .m-x{border:0;background:var(--soft);width:2rem;height:2rem;border-radius:50%;font-size:1.1rem;cursor:pointer}
-  .m-body{padding:1rem 1.25rem 1.5rem;font-size:.86rem;line-height:1.65;color:#374151;overflow-y:auto;max-height:calc(85vh - 4rem)}
-  .m-body h3{margin:1.1rem 0 .3rem;font-size:.92rem;color:var(--ink)}
-  .m-body p,.m-body ul{margin:.3rem 0}.m-body ul{padding-left:1.2rem}
-  .upd{color:var(--muted);font-size:.75rem}
-</style>
-</head>
-<body>
-<main>
-  <h1>Arcknowledge</h1>
-  <p class="tag">Everything in one place</p>
-
-  <div class="stage" id="stageCountry">
-    <div class="dd" id="cc">
-      <button class="dd-btn" id="ccBtn" aria-haspopup="listbox" aria-expanded="false">
-        <span>Select Country</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="dd-panel">
-        <input class="dd-search" type="search" placeholder="Search countries…" aria-label="Search countries" autocomplete="off">
-        <ul class="dd-list" id="ccList" role="listbox" aria-label="Countries"></ul>
-        <div class="dd-empty">No matches found.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="stage" id="stageExplore" hidden>
-    <p class="where">Country: <b id="whereName"></b> · <button class="linkbtn" id="changeCountry" type="button">Change</button></p>
-    <div id="exploreWrap">
-  <div class="dd" id="dd">
-      <button class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false">
-        <span>Explore Arcknowledge</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div class="dd-panel" id="ddPanel">
-        <input class="dd-search" id="ddSearch" type="search" placeholder="Search categories or platforms…" aria-label="Search the list" autocomplete="off">
-        <ul class="dd-list" id="ddList" role="listbox" aria-label="Categories"></ul>
-        <div class="dd-empty" id="ddEmpty">No matches found.</div>
-      </div>
-    </div>
-      <div id="results" class="results" hidden></div>
-    </div>
-  </div>
-</main>
-
-<footer>
-  <nav aria-label="Legal">
-    <button data-modal="privacy">Privacy Policy</button>
-    <button data-modal="terms">Terms of Use</button>
-    <button data-modal="conditions">Terms &amp; Conditions</button>
-  </nav>
-  <div>© 2026 Arcknowledge. All rights reserved.</div>
-</footer>
-
-<dialog id="privacy" aria-labelledby="t1">
-  <div class="m-head"><h2 id="t1">Privacy Policy</h2><button class="m-x" aria-label="Close" data-close>×</button></div>
-  <div class="m-body">
-    <p class="upd">Last updated: November 2026. Prepared with reference to the Protection of Personal Information Act 4 of 2013 (POPIA).</p>
-    <h3>1. Who we are</h3><p>Arcknowledge (“we”, “us”) operates this website as a gateway to its related platforms: SA Student Kit, Everything Cars SA and InfScore. We act as the “responsible party” under POPIA for any personal information we process.</p>
-    <h3>2. Information we collect</h3>
-    <ul><li><b>Directly from you:</b> any details you choose to send us, such as your name, email address or WhatsApp number when you contact us.</li>
-    <li><b>Automatically:</b> basic technical data such as browser type, device type, approximate region and pages viewed, used to keep the site working and improve it.</li>
-    <li><b>Search box:</b> text typed into the menu search stays in your browser and is not sent to us.</li></ul>
-    <h3>3. Why we use it</h3><p>To respond to your enquiries, operate and secure the website, understand how it is used, meet legal obligations, and protect against fraud or abuse. We process information only for purposes compatible with these reasons.</p>
-    <h3>4. Legal basis</h3><p>We process information with your consent, where needed to respond to your request, where the law requires it, or where we have a legitimate interest that does not override your rights.</p>
-    <h3>5. Sharing</h3><p>We do not sell your personal information. We may share it with trusted service providers (such as hosting or analytics providers) who are bound to protect it, or with authorities where legally required. Links on this site lead to other Arcknowledge pages and may have their own policies.</p>
-    <h3>6. Cookies and local storage</h3><p>We may use cookies or similar technologies for essential functions and anonymous analytics. You can block or delete them in your browser settings, though some features may then work less well.</p>
-    <h3>7. Security and retention</h3><p>We apply reasonable technical and organisational safeguards. No system is completely secure, so we cannot guarantee absolute security. We keep information only as long as needed for the purposes above or as the law requires.</p>
-    <h3>8. Your rights</h3><p>Under POPIA you may ask to access, correct or delete your personal information, object to its processing, withdraw consent, and lodge a complaint with the Information Regulator of South Africa (inforegulator.org.za).</p>
-    <h3>9. Children</h3><p>This website is not directed at children under 18, and we do not knowingly collect their personal information without a parent or guardian’s consent.</p>
-    <h3>10. Changes and contact</h3><p>We may update this policy and will change the date above when we do. Questions or requests: WhatsApp 082 459 8656 or visit www.arcknowledge.online.</p>
-  </div>
-</dialog>
-
-<dialog id="terms" aria-labelledby="t2">
-  <div class="m-head"><h2 id="t2">Terms of Use</h2><button class="m-x" aria-label="Close" data-close>×</button></div>
-  <div class="m-body">
-    <p class="upd">Last updated: November 2026.</p>
-    <h3>1. Acceptance</h3><p>By accessing this website you agree to these Terms of Use. If you do not agree, please stop using the site.</p>
-    <h3>2. Purpose of the site</h3><p>The site provides links to Arcknowledge platforms. Content is provided for general information and convenience only.</p>
-    <h3>3. Acceptable use</h3>
-    <ul><li>Do not use the site for unlawful, fraudulent or harmful purposes.</li><li>Do not attempt to hack, overload, scrape at scale, or interfere with the site or its security.</li><li>Do not misrepresent your identity or affiliation with Arcknowledge.</li></ul>
-    <h3>4. Intellectual property</h3><p>The Arcknowledge name, logo, design and content are owned by or licensed to us and protected by South African and international law. You may not copy, modify or redistribute them without written permission, except for personal, non-commercial use.</p>
-    <h3>5. Third-party links</h3><p>We are not responsible for the content, accuracy or practices of external websites that may be linked from our pages.</p>
-    <h3>6. Availability</h3><p>We try to keep the site available but do not guarantee uninterrupted or error-free access. We may change, suspend or remove any part of it at any time.</p>
-    <h3>7. Disclaimer and liability</h3><p>The site is provided “as is” and “as available”. To the fullest extent permitted by law, Arcknowledge is not liable for any loss or damage arising from use of, or inability to use, the site. Nothing here limits rights you have under the Consumer Protection Act 68 of 2008 that cannot lawfully be excluded.</p>
-    <h3>8. Governing law</h3><p>These terms are governed by the laws of the Republic of South Africa, and the South African courts have jurisdiction over any dispute.</p>
-  </div>
-</dialog>
-
-<dialog id="conditions" aria-labelledby="t3">
-  <div class="m-head"><h2 id="t3">Terms &amp; Conditions</h2><button class="m-x" aria-label="Close" data-close>×</button></div>
-  <div class="m-body">
-    <p class="upd">Last updated: November 2026.</p>
-    <h3>1. Agreement</h3><p>These Terms &amp; Conditions apply to your use of Arcknowledge’s website and the platforms reached through it (SA Student Kit, Everything Cars SA and InfScore), together with our Privacy Policy and Terms of Use. Individual platforms may add their own terms, which apply to that platform.</p>
-    <h3>2. Eligibility</h3><p>You must be 18 or older, or have the consent of a parent or guardian, to use our services.</p>
-    <h3>3. Information accuracy</h3><p>We aim to keep information accurate and current, but we give no warranty that it is complete or error-free. Verify important details (such as fees, dates, vehicle or financial information) with the official source before acting on them.</p>
-    <h3>4. No professional advice</h3><p>Nothing on our platforms is financial, legal, credit, academic or motor-trade advice. Scores, listings, comparisons and rankings are informational and are not guarantees or recommendations.</p>
-    <h3>5. User content and communications</h3><p>If you send us content or feedback, you confirm you have the right to do so and grant us a non-exclusive licence to use it to operate and improve our services. You are responsible for what you submit.</p>
-    <h3>6. Fees and payments</h3><p>Browsing the website is free. If paid features are introduced, their prices and terms will be shown clearly before you commit, as required by the Electronic Communications and Transactions Act 25 of 2002.</p>
-    <h3>7. Suspension and termination</h3><p>We may restrict or end access for anyone who breaches these terms or misuses our services.</p>
-    <h3>8. Limitation of liability</h3><p>To the extent permitted by law, we are not liable for indirect, incidental or consequential loss, or for loss caused by third parties or events beyond our reasonable control.</p>
-    <h3>9. Changes</h3><p>We may revise these terms. Continued use after changes means you accept the updated terms.</p>
-    <h3>10. Disputes and contact</h3><p>We encourage you to contact us first to resolve any concern: WhatsApp 082 459 8656 or www.arcknowledge.online. These terms are governed by South African law.</p>
-  </div>
-</dialog>
-
-<script>
-(function(){
-  var RAW="Afghanistan|Albania|Algeria|Andorra|Angola|Antigua and Barbuda|Argentina|Armenia|Australia|Austria|Azerbaijan|Bahamas|Bahrain|Bangladesh|Barbados|Belarus|Belgium|Belize|Benin|Bhutan|Bolivia|Bosnia and Herzegovina|Botswana|Brazil|Brunei|Bulgaria|Burkina Faso|Burundi|Cabo Verde:cape verde|Cambodia|Cameroon|Canada|Central African Republic|Chad|Chile|China|Colombia|Comoros|Congo (Republic of the):congo brazzaville|Costa Rica|Côte d’Ivoire:ivory coast|Croatia|Cuba|Cyprus|Czechia:czech republic|Democratic Republic of the Congo:drc congo kinshasa|Denmark|Djibouti|Dominica|Dominican Republic|Ecuador|Egypt|El Salvador|Equatorial Guinea|Eritrea|Estonia|Eswatini:swaziland|Ethiopia|Fiji|Finland|France|Gabon|Gambia|Georgia|Germany|Ghana|Greece|Grenada|Guatemala|Guinea|Guinea-Bissau|Guyana|Haiti|Holy See:vatican city|Honduras|Hungary|Iceland|India|Indonesia|Iran|Iraq|Ireland|Israel|Italy|Jamaica|Japan|Jordan|Kazakhstan|Kenya|Kiribati|Kuwait|Kyrgyzstan|Laos|Latvia|Lebanon|Lesotho|Liberia|Libya|Liechtenstein|Lithuania|Luxembourg|Madagascar|Malawi|Malaysia|Maldives|Mali|Malta|Marshall Islands|Mauritania|Mauritius|Mexico|Micronesia|Moldova|Monaco|Mongolia|Montenegro|Morocco|Mozambique|Myanmar:burma|Namibia|Nauru|Nepal|Netherlands:holland|New Zealand|Nicaragua|Niger|Nigeria|North Korea|North Macedonia|Norway|Oman|Pakistan|Palau|Palestine|Panama|Papua New Guinea|Paraguay|Peru|Philippines|Poland|Portugal|Qatar|Romania|Russia|Rwanda|Saint Kitts and Nevis|Saint Lucia|Saint Vincent and the Grenadines|Samoa|San Marino|São Tomé and Príncipe|Saudi Arabia|Senegal|Serbia|Seychelles|Sierra Leone|Singapore|Slovakia|Slovenia|Solomon Islands|Somalia|South Africa:rsa za|South Korea|South Sudan|Spain|Sri Lanka|Sudan|Suriname|Sweden|Switzerland|Syria|Tajikistan|Tanzania|Thailand|Timor-Leste:east timor|Togo|Tonga|Trinidad and Tobago|Tunisia|Türkiye:turkey|Turkmenistan|Tuvalu|Uganda|Ukraine|United Arab Emirates:uae|United Kingdom:uk britain england|United States:usa us america|Uruguay|Uzbekistan|Vanuatu|Venezuela|Vietnam|Yemen|Zambia|Zimbabwe".split('|');
-  var KEY='arcknowledge-country';
-  function norm(t){return t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
-  function $(id){return document.getElementById(id)}
-
-  function init(dd){
-    var btn=dd.querySelector('.dd-btn'),search=dd.querySelector('.dd-search'),list=dd.querySelector('.dd-list'),empty=dd.querySelector('.dd-empty');
-    function items(){return [].slice.call(list.children)}
-    function vis(){return items().filter(function(li){return !li.hidden})}
-    function open(o,noFocus){
-      dd.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);
-      if(o){setTimeout(function(){search.focus()},0)}else if(!noFocus){btn.focus()}
-    }
-    function filter(){
-      var q=norm(search.value.trim()).split(/\s+/).filter(Boolean);
-      items().forEach(function(li){var t=li.dataset.s||(li.dataset.s=norm(li.textContent));li.hidden=!q.every(function(w){return t.indexOf(w)>-1})});
-      empty.style.display=vis().length?'none':'block';
-    }
-    btn.addEventListener('click',function(){open(!dd.classList.contains('open'))});
-    search.addEventListener('input',filter);
-    dd.addEventListener('keydown',function(e){
-      var f=vis().map(function(li){return li.firstElementChild}),i=f.indexOf(document.activeElement);
-      if(e.key==='Escape'){open(false)}
-      else if(e.key==='ArrowDown'){e.preventDefault();(f[i+1]||f[0]||search).focus()}
-      else if(e.key==='ArrowUp'){e.preventDefault();(i>0?f[i-1]:search).focus()}
-      else if(e.key==='Enter'&&document.activeElement===search&&f[0]){e.preventDefault();f[0].click()}
-    });
-    document.addEventListener('click',function(e){if(!dd.contains(e.target)&&dd.classList.contains('open'))open(false,true)});
-    return {open:open,reset:function(){search.value='';filter();open(false,true)}};
-  }
-
-  var cc=init($('cc')),ex=init($('dd')),ccList=$('ccList');
-  ccList.innerHTML=RAW.map(function(r){
-    var p=r.split(':'),n=p[0],li=document.createElement('li');
-    li.dataset.s=norm(n+' '+(p[1]||''));
-    var b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('role','option');b.dataset.name=n;b.textContent=n;
-    li.appendChild(b);return li.outerHTML;
-  }).join('');
-
-  var G={
-    social:[
-      ['Facebook','https://www.facebook.com',['China','Iran','Russia','Turkmenistan','Myanmar','Uganda']],
-      ['Instagram','https://www.instagram.com',['China','Iran','Russia','Turkmenistan']],
-      ['X','https://x.com',['China','Iran','Russia','Turkmenistan','Myanmar','Tanzania']],
-      ['YouTube','https://www.youtube.com',['China','Iran','Turkmenistan'],['Russia']],
-      ['WhatsApp','https://www.whatsapp.com',['China','Russia','Turkmenistan'],['Iran','Cuba']],
-      ['TikTok','https://www.tiktok.com',['Afghanistan','China','India','Iran','Jordan','Kyrgyzstan','Somalia','Senegal','Tajikistan','Uzbekistan','Gabon']],
-      ['Telegram','https://telegram.org',['China','Iran','Vietnam','Nepal','Somalia'],['Russia','Pakistan','Cuba']]
-    ],
-    music:[
-      ['Spotify','https://www.spotify.com',['Afghanistan','Central African Republic','China','Cuba','Eritrea','Iran','Myanmar','Russia','Somalia','South Sudan','Sudan','Syria','Turkmenistan','Yemen']],
-      ['Apple Music','https://music.apple.com',['Cuba','Iran','Syria'],[],'Check availability'],
-      ['YouTube Music','https://music.youtube.com',['China','Iran','Turkmenistan'],['Russia']],
-      ['Deezer','https://www.deezer.com',['China','Cuba','Iran','Russia','Syria'],[],'Check availability']
-    ],
-    search:[
-      ['Google','https://www.google.com',['China','Turkmenistan']],
-      ['Bing','https://www.bing.com',[],['China']],
-      ['DuckDuckGo','https://duckduckgo.com',['China']],
-      ['Yahoo Search','https://search.yahoo.com',[],['China']]
-    ]
-  };
-  var L={};
-  function loc(c,k,e){c.forEach(function(n){var o=L[n]=L[n]||{};(o[k]=o[k]||[]).push(e)})}
-  loc(['China'],'social',['WeChat','https://www.wechat.com']);loc(['China'],'social',['Weibo','https://weibo.com']);loc(['China'],'social',['Douyin','https://www.douyin.com']);
-  loc(['China'],'music',['NetEase Cloud Music','https://music.163.com']);loc(['China'],'music',['QQ Music','https://y.qq.com']);
-  loc(['China'],'search',['Baidu','https://www.baidu.com']);loc(['China'],'search',['Sogou','https://www.sogou.com']);
-  loc(['Russia'],'social',['VK','https://vk.com']);loc(['Russia'],'social',['OK','https://ok.ru']);
-  loc(['Russia'],'music',['Yandex Music','https://music.yandex.ru']);loc(['Russia'],'music',['VK Music','https://vk.com/music']);
-  loc(['Russia','Belarus','Kazakhstan','Uzbekistan','Türkiye'],'search',['Yandex','https://yandex.com']);
-  loc(['South Korea'],'social',['KakaoTalk','https://www.kakaocorp.com']);loc(['South Korea'],'music',['Melon','https://www.melon.com']);
-  loc(['South Korea'],'search',['Naver','https://www.naver.com']);loc(['South Korea'],'search',['Daum','https://www.daum.net']);
-  loc(['Japan','Taiwan','Thailand'],'social',['LINE','https://line.me']);loc(['Japan'],'search',['Yahoo! Japan','https://www.yahoo.co.jp']);
-  loc(['Czechia'],'search',['Seznam','https://www.seznam.cz']);
-  loc(['Vietnam'],'social',['Zalo','https://zalo.me']);loc(['Vietnam'],'music',['Zing MP3','https://zingmp3.vn']);loc(['Vietnam'],'search',['Cốc Cốc','https://coccoc.com']);
-  loc(['Iran'],'social',['Rubika','https://rubika.ir']);loc(['Iran'],'social',['Eitaa','https://eitaa.com']);
-  loc(['Nepal'],'social',['Viber','https://www.viber.com']);
-  loc(['India'],'social',['ShareChat','https://sharechat.com']);loc(['India'],'music',['JioSaavn','https://www.jiosaavn.com']);
-  loc(['Türkiye'],'music',['Fizy','https://fizy.com']);
-  loc(['Egypt','Saudi Arabia','United Arab Emirates','Lebanon','Jordan','Iraq','Kuwait','Qatar','Bahrain','Oman','Morocco','Algeria','Tunisia','Libya','Palestine'],'music',['Anghami','https://www.anghami.com']);
-  loc(['Nigeria','Ghana','Kenya','Tanzania','Uganda','Cameroon','Côte d’Ivoire','Zambia','Ethiopia','Democratic Republic of the Congo'],'music',['Boomplay','https://www.boomplay.com']);
-  var CATS=[['social','Social media platforms'],['music','Music streaming platforms'],['search','Search engines']],cur={};
-  function entriesFor(name,k){
-    var out=[];
-    G[k].forEach(function(g){
-      if(g[2].concat('North Korea').indexOf(name)>-1)return;
-      var lim=(g[3]||[]).indexOf(name)>-1;
-      out.push({n:g[0],u:g[1],t:lim?'Restricted':(g[4]||''),r:lim});
-    });
-    ((L[name]||{})[k]||[]).forEach(function(e){out.push({n:e[0],u:e[1],t:'Local'})});
-    return out;
-  }
-  function buildFor(name){
-    cur={};
-    $('ddList').innerHTML=CATS.map(function(c){
-      var e=cur[c[0]]=entriesFor(name,c[0]);
-      return '<li data-s="'+norm(c[1]+' '+e.map(function(x){return x.n}).join(' '))+'"><button type="button" class="opt" data-cat="'+c[0]+'">'+c[1]+'<small>'+e.length+'</small></button></li>';
-    }).join('');
-    $('results').hidden=true;$('ddBtn').firstElementChild.textContent='Explore Arcknowledge';
-  }
-  $('ddList').addEventListener('click',function(e){
-    var b=e.target.closest('button.opt');if(!b)return;
-    var k=b.dataset.cat,c=CATS.filter(function(x){return x[0]===k})[0],list=cur[k],r=$('results');
-    r.innerHTML='<h3>'+c[1]+' · '+$('whereName').textContent+'</h3>'+(list.length?list.map(function(x){
-      return '<a class="card" href="'+x.u+'" target="_blank" rel="noopener"><span>'+x.n+'</span>'+(x.t?'<span class="tagb'+(x.r?' r':'')+'">'+x.t+'</span>':'')+'</a>';
-    }).join(''):'<p class="fine">No publicly accessible options were found for this country.</p>')+
-    '<p class="fine">Based on public reports as of November 2026. Blocks, age limits and local laws change, so check current rules before use.</p>';
-    r.hidden=false;ex.reset();$('ddBtn').firstElementChild.textContent=c[1];
-  });
-  function show(name){
-    $('whereName').textContent=name;
-    $('stageCountry').hidden=true;$('stageExplore').hidden=false;
-    buildFor(name);$('exploreWrap').hidden=false;
-    ccList.querySelectorAll('[aria-selected]').forEach(function(b){b.removeAttribute('aria-selected')});
-    var sel=ccList.querySelector('[data-name="'+name.replace(/"/g,'\\"')+'"]');if(sel)sel.setAttribute('aria-selected','true');
-  }
-  ccList.addEventListener('click',function(e){
-    var b=e.target.closest('button.opt');if(!b)return;
-    try{localStorage.setItem(KEY,b.dataset.name)}catch(err){}
-    cc.reset();show(b.dataset.name);
-    setTimeout(function(){ex.open(true)},0);
-  });
-  $('changeCountry').addEventListener('click',function(){
-    ex.reset();$('results').hidden=true;$('stageExplore').hidden=true;$('stageCountry').hidden=false;$('ccBtn').focus();
-  });
-  try{var saved=localStorage.getItem(KEY);if(saved&&RAW.some(function(r){return r.split(':')[0]===saved}))show(saved)}catch(err){}
-
-  document.querySelectorAll('[data-modal]').forEach(function(b){
-    b.addEventListener('click',function(){var d=$(b.dataset.modal);d.showModal();d.querySelector('.m-body').scrollTop=0});
-  });
-  document.querySelectorAll('dialog').forEach(function(d){
-    d.addEventListener('click',function(e){if(e.target===d||e.target.hasAttribute('data-close'))d.close()});
-  });
-})();
-</script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Arcknowledge: your global everyday hub for trusted websites, apps and services."><title>Arcknowledge — Everything in one place</title><style>
+:root{--bg:#f6f7fb;--panel:#fff;--text:#111827;--muted:#64748b;--line:#e4e8f0;--accent:#2457e7;--soft:#eaf0ff;--shadow:0 10px 35px #13234b0c}body.dark{--bg:#0b1020;--panel:#151c2e;--text:#f4f6fc;--muted:#a3afc5;--line:#29334a;--soft:#1d305b;--shadow:none}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}.wrap{max-width:1240px;margin:auto;padding:0 22px}.nav{height:74px;display:flex;align-items:center;gap:18px}.brand{font-weight:900;letter-spacing:-1.2px;font-size:24px}.brand b{color:var(--accent)}.navlinks{display:flex;gap:22px;margin-left:auto;font-size:13px;font-weight:700;color:var(--muted)}.iconbtn,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:11px 15px;font-weight:700}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.hero{padding:70px 0 36px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--accent)}h1{font-size:clamp(38px,6vw,72px);line-height:1.06;letter-spacing:-3px;margin:17px 0}.hero p{color:var(--muted);font-size:17px;max-width:650px;line-height:1.7}.searchbox{display:flex;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);padding:7px;max-width:850px;margin-top:30px;gap:8px}.searchbox input{border:0;outline:0;background:transparent;color:var(--text);padding:14px;flex:1;min-width:0}.searchbox button{border:0;border-radius:11px;background:var(--accent);color:white;padding:15px 23px;font-weight:800}.stats{display:flex;gap:30px;margin:25px 0;color:var(--muted);font-size:13px}.stats strong{color:var(--text);font-size:19px}.section{padding:28px 0}.sectiontop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.sectiontop h2{font-size:23px;letter-spacing:-.7px;margin:0}.muted{color:var(--muted)}.chips{display:flex;gap:9px;flex-wrap:wrap}.chip{background:var(--panel);color:var(--muted);border:1px solid var(--line);padding:10px 14px;border-radius:999px;font-size:12px;font-weight:700}.chip.active{background:var(--accent);color:white;border-color:var(--accent)}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 25px}.filters select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:12px;max-width:100%}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:19px;min-width:0;transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-3px);border-color:var(--accent)}.cardhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.logo{width:47px;height:47px;display:grid;place-items:center;background:var(--soft);color:var(--accent);border-radius:14px;font-weight:900;font-size:20px}.fav{background:transparent;border:0;font-size:24px;color:var(--muted)}.fav.saved{color:#e8a000}.card h3{font-size:17px;margin:18px 0 8px}.card p{font-size:13px;color:var(--muted);line-height:1.6;min-height:43px}.meta{font-size:11px;color:var(--muted);margin:14px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cardfoot{display:flex;justify-content:space-between;align-items:center;gap:7px}.tag{font-size:11px;border-radius:8px;background:var(--soft);color:var(--accent);padding:7px 9px;max-width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.visit{color:var(--accent);font-size:12px;font-weight:800}.empty{padding:45px;text-align:center;background:var(--panel);border:1px dashed var(--line);border-radius:16px}.more{display:block;margin:30px auto}.banner{background:#172b64;color:white;border-radius:24px;padding:35px;display:flex;align-items:center;justify-content:space-between;gap:20px}.banner p{color:#c5d3f7}footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;color:var(--muted);font-size:13px}.footerline{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.footlinks{display:flex;gap:16px;flex-wrap:wrap}.footlinks button{background:none;border:0;color:var(--muted);padding:0}.modal{position:fixed;inset:0;background:#0009;z-index:20;display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{background:var(--panel);color:var(--text);width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:20px;padding:26px;line-height:1.7}.dialog h2{margin-top:0}.dialog h3{margin-bottom:4px}.dialog p,.dialog li{color:var(--muted)}.dialoghead{display:flex;justify-content:space-between;align-items:center;gap:12px}.close{border:0;background:var(--soft);color:var(--text);border-radius:10px;padding:9px 13px}#suggestions{margin-top:10px}.hide{display:none!important}@media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.navlinks{display:none}.hero{padding-top:48px}h1{letter-spacing:-2px}.stats{gap:15px;flex-wrap:wrap}.banner{display:block}.card{padding:14px}.card p{min-height:60px}}@media(max-width:420px){.grid{grid-template-columns:1fr}.searchbox button{padding:14px}.wrap{padding:0 15px}}
+</style></head><body><header><div class="wrap nav"><a class="brand" href="#home">ARC<b>KNOWLEDGE</b></a><nav class="navlinks"><a href="#categories">Categories</a><a href="#directory">Explore</a><a href="#saved" id="savedNav">Saved</a></nav><button class="iconbtn" id="theme" aria-label="Toggle dark mode">☾</button></div></header><main id="home"><div class="wrap"><section class="hero"><div class="eyebrow">THE WORLD, ONE CLICK AWAY</div><h1>Everything you need.<br><span style="color:var(--accent)">One place to find it.</span></h1><p>Discover websites, apps and everyday services from around the globe. Search smarter, explore categories, and keep your favourite platforms close.</p><form class="searchbox" id="searchForm"><span style="padding-left:13px;color:var(--muted)">⌕</span><input id="search" type="search" placeholder="Search apps, services, categories or tags..." aria-label="Search directory" autocomplete="off"><button>Search</button></form><div class="stats"><span><strong id="total">0</strong><br>Platforms</span><span><strong id="catTotal">0</strong><br>Categories</span><span><strong>Worldwide</strong><br>Discovery</span><span><strong>Free</strong><br>Directory access</span></div></section><section class="section" id="categories"><div class="sectiontop"><h2>Explore by category</h2><span class="muted">Choose what you need today</span></div><div class="chips" id="categoriesList"></div></section><section class="section" id="directory"><div class="sectiontop"><div><h2 id="resultsTitle">Discover platforms</h2><p class="muted" id="count" aria-live="polite"></p></div><button class="btn" id="clear">Clear filters</button></div><div class="filters"><select id="region" aria-label="Filter by region"><option value="all">All regions</option><option value="global">Global</option><option value="africa">Africa</option><option value="asia">Asia</option><option value="europe">Europe</option><option value="north america">North America</option><option value="south america">South America</option><option value="oceania">Oceania</option></select><select id="sort" aria-label="Sort results"><option value="name">Name A–Z</option><option value="category">Category A–Z</option></select><button class="btn" id="savedFilter">☆ Saved only</button><button class="btn" id="recentFilter">Recently visited</button></div><div id="cards" class="grid"></div><div id="empty" class="empty hide">No matching platforms found. Try another keyword, tag, category or region.</div><button id="more" class="btn more">Load more platforms</button></section><section class="section"><div class="banner"><div><h2 style="margin:0">Make everyday life simpler.</h2><p>One directory. Hundreds of useful destinations. Save your favourites on this device.</p></div><a href="#home" class="btn primary">Find a platform ↑</a></div></section></div></main><footer><div class="wrap footerline"><div><strong style="color:var(--text)">ARCKNOWLEDGE</strong><p>Everything in one place. Independent global resource directory.</p><p>© <span id="year"></span> Arcknowledge. All rights reserved.</p></div><div class="footlinks"><button data-policy="privacy">Privacy Policy</button><button data-policy="use">Terms of Use</button><button data-policy="conditions">Terms & Conditions</button><a href="mailto:hello@arcknowledge.online">Contact</a></div></div></footer><div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog"><div class="dialoghead"><h2 id="modalTitle"></h2><button class="close" id="close" aria-label="Close dialog">✕</button></div><div id="modalBody"></div></div></div><script>
+// Entries: name | URL | category | region(s) | tags | description. All external services are independently operated.
+const raw=`Facebook|https://www.facebook.com|Social Media|global|community friends groups|Connect with friends, groups and communities
+Instagram|https://www.instagram.com|Social Media|global|photos reels creators|Share photos, videos and stories
+TikTok|https://www.tiktok.com|Social Media|global|short videos entertainment|Discover and create short videos
+X|https://x.com|Social Media|global|twitter news posts|Follow conversations and updates
+LinkedIn|https://www.linkedin.com|Social Media|global|professional careers networking|Build professional connections
+Reddit|https://www.reddit.com|Social Media|global|forums communities questions|Explore topic-based communities
+Pinterest|https://www.pinterest.com|Social Media|global|ideas inspiration design|Find and save creative ideas
+Snapchat|https://www.snapchat.com|Social Media|global|stories chat camera|Share moments and messages
+Threads|https://www.threads.com|Social Media|global|microblogging conversation|Join public text conversations
+Discord|https://discord.com|Social Media|global|communities chat gaming|Chat with communities and friends
+Mastodon|https://joinmastodon.org|Social Media|global|decentralized microblogging|Explore decentralized social networking
+Bluesky|https://bsky.app|Social Media|global|social posts network|Join open social conversations
+WhatsApp|https://www.whatsapp.com|Messaging & Calls|global|chat phone messaging|Message and call people worldwide
+Telegram|https://telegram.org|Messaging & Calls|global|groups channels messaging|Message and join large communities
+Signal|https://signal.org|Messaging & Calls|global|private secure messages|Private messaging and calls
+Messenger|https://www.messenger.com|Messaging & Calls|global|facebook chat|Chat with contacts
+Viber|https://www.viber.com|Messaging & Calls|global|calls chat|Voice calls and messaging
+LINE|https://line.me|Messaging & Calls|asia,global|chat stickers japan|Messaging and digital services
+WeChat|https://www.wechat.com|Messaging & Calls|asia|china messaging payments|Messaging and mini services
+Gmail|https://mail.google.com|Email Platforms|global|google mail inbox|Google email and inbox
+Outlook|https://outlook.live.com|Email Platforms|global|microsoft hotmail mail|Microsoft email service
+Yahoo Mail|https://mail.yahoo.com|Email Platforms|global|yahoo email|Email and inbox tools
+Proton Mail|https://proton.me/mail|Email Platforms|global|privacy encrypted email|Privacy-focused email
+iCloud Mail|https://www.icloud.com/mail|Email Platforms|global|apple email|Apple cloud email
+Zoho Mail|https://www.zoho.com/mail/|Email Platforms|global|business email|Email for individuals and businesses
+Fastmail|https://www.fastmail.com|Email Platforms|global|email productivity|Personal email hosting
+Tuta|https://tuta.com|Email Platforms|global|encrypted private email|Privacy-focused encrypted email
+Spotify|https://open.spotify.com|Music Streaming|global|songs playlists podcasts|Listen to music and podcasts
+Apple Music|https://music.apple.com|Music Streaming|global|songs albums|Stream songs and albums
+YouTube Music|https://music.youtube.com|Music Streaming|global|songs videos|Listen to music and playlists
+Amazon Music|https://music.amazon.com|Music Streaming|global|music albums|Stream music and podcasts
+Deezer|https://www.deezer.com|Music Streaming|global|songs playlists|Discover music and artists
+SoundCloud|https://soundcloud.com|Music Streaming|global|independent artists tracks|Discover emerging music
+TIDAL|https://tidal.com|Music Streaming|global|hifi music|Listen to high-quality music
+Audiomack|https://audiomack.com|Music Streaming|global,africa|afrobeats hiphop music|Discover trending music
+Boomplay|https://www.boomplay.com|Music Streaming|africa|african music songs|Stream African and global music
+Netflix|https://www.netflix.com|Movie & TV Streaming|global|films series tv|Watch movies and TV series
+Disney+|https://www.disneyplus.com|Movie & TV Streaming|global|disney marvel films|Watch movies and shows
+Prime Video|https://www.primevideo.com|Movie & TV Streaming|global|amazon movies series|Stream movies and original series
+Apple TV|https://tv.apple.com|Movie & TV Streaming|global|apple series films|Watch original shows and films
+YouTube|https://www.youtube.com|Movie & TV Streaming|global|video creators documentaries|Watch videos and channels
+Hulu|https://www.hulu.com|Movie & TV Streaming|north america|shows films tv|Watch shows and movies where available
+Max|https://www.hbomax.com|Movie & TV Streaming|global|hbo series movies|Watch shows and films in supported markets
+Paramount+|https://www.paramountplus.com|Movie & TV Streaming|global|paramount movies tv|Stream movies and series
+Crunchyroll|https://www.crunchyroll.com|Movie & TV Streaming|global|anime animation|Stream anime series
+Showmax|https://www.showmax.com|Movie & TV Streaming|africa|african series movies|Stream entertainment in supported regions
+Viki|https://www.viki.com|Movie & TV Streaming|global|asian dramas tv|Watch Asian entertainment
+Zara|https://www.zara.com|Online Clothing|global|fashion clothing shoes|Shop contemporary fashion
+H&M|https://www.hm.com|Online Clothing|global|fashion basics clothing|Shop fashion and basics
+ASOS|https://www.asos.com|Online Clothing|global|fashion shoes clothing|Browse online fashion
+UNIQLO|https://www.uniqlo.com|Online Clothing|global|basics apparel|Shop everyday apparel
+Nike|https://www.nike.com|Online Clothing|global|sportswear shoes|Shop sportswear and footwear
+adidas|https://www.adidas.com|Online Clothing|global|sportswear sneakers|Shop athletic apparel
+SHEIN|https://www.shein.com|Online Clothing|global|fashion accessories|Browse online fashion
+Boohoo|https://www.boohoo.com|Online Clothing|global|fashion outfits|Shop online clothing
+Mr Price|https://www.mrprice.com|Online Clothing|africa|south africa fashion|Shop clothing and homeware
+Superbalist|https://superbalist.com|Online Clothing|africa|south africa fashion|Shop fashion and accessories
+Myntra|https://www.myntra.com|Online Clothing|asia|india fashion|Shop fashion in India
+Amazon|https://www.amazon.com|Online Marketplaces|global|shopping ecommerce electronics|Browse a wide range of products
+eBay|https://www.ebay.com|Online Marketplaces|global|auction resale marketplace|Buy and sell items
+AliExpress|https://www.aliexpress.com|Online Marketplaces|global|shopping imports|Shop products from sellers
+Etsy|https://www.etsy.com|Online Marketplaces|global|handmade gifts crafts|Shop handmade and vintage goods
+Takealot|https://www.takealot.com|Online Marketplaces|africa|south africa shopping|Shop online in South Africa
+Jumia|https://www.jumia.com|Online Marketplaces|africa|african ecommerce|Shop in supported African markets
+Flipkart|https://www.flipkart.com|Online Marketplaces|asia|india ecommerce|Shop products in India
+Mercado Libre|https://www.mercadolibre.com|Online Marketplaces|south america|latin america marketplace|Shop across Latin American markets
+Rakuten|https://www.rakuten.com|Online Marketplaces|global|shopping cashback|Discover shopping offers
+Temu|https://www.temu.com|Online Marketplaces|global|shopping marketplace|Browse products from merchants
+Alibaba|https://www.alibaba.com|Wholesale & B2B|global|bulk suppliers wholesale|Find wholesale suppliers
+1688|https://www.1688.com|Wholesale & B2B|asia|china wholesale suppliers|Explore wholesale products
+Global Sources|https://www.globalsources.com|Wholesale & B2B|global|manufacturing suppliers|Find suppliers and manufacturers
+Made-in-China|https://www.made-in-china.com|Wholesale & B2B|global|manufacturers bulk|Source products from manufacturers
+IndiaMART|https://www.indiamart.com|Wholesale & B2B|asia|india suppliers b2b|Connect with business suppliers
+Faire|https://www.faire.com|Wholesale & B2B|global|retail wholesale brands|Source products for retail
+DHgate|https://www.dhgate.com|Wholesale & B2B|global|bulk ecommerce|Shop wholesale listings
+Google|https://www.google.com|Search Engines|global|web search internet|Search the web
+Bing|https://www.bing.com|Search Engines|global|microsoft search|Find websites and information
+DuckDuckGo|https://duckduckgo.com|Search Engines|global|privacy search|Search with privacy-focused tools
+Brave Search|https://search.brave.com|Search Engines|global|independent privacy search|Search the web privately
+Yahoo Search|https://search.yahoo.com|Search Engines|global|web search|Find web results
+Ecosia|https://www.ecosia.org|Search Engines|global|environment search|Search with an environmental mission
+Startpage|https://www.startpage.com|Search Engines|global|private search|Search with privacy features
+Baidu|https://www.baidu.com|Search Engines|asia|china search|Search Chinese-language content
+Yandex|https://yandex.com|Search Engines|europe,asia|web search|Search websites and services
+Google Play|https://play.google.com/store|App Stores|global|android apps games|Find Android apps and games
+Apple App Store|https://www.apple.com/app-store/|App Stores|global|ios iphone apps|Discover apps for Apple devices
+Microsoft Store|https://apps.microsoft.com|App Stores|global|windows pc apps|Find Windows apps
+Samsung Galaxy Store|https://galaxystore.samsung.com|App Stores|global|samsung android apps|Explore Samsung apps
+Huawei AppGallery|https://appgallery.huawei.com|App Stores|global|huawei apps|Discover Huawei apps
+F-Droid|https://f-droid.org|App Stores|global|android open source|Find open-source Android apps
+Steam|https://store.steampowered.com|Games & Gaming|global|pc games gaming|Browse and play PC games
+Epic Games Store|https://store.epicgames.com|Games & Gaming|global|pc games|Discover PC games
+PlayStation Store|https://store.playstation.com|Games & Gaming|global|console games|Browse PlayStation games
+Xbox|https://www.xbox.com|Games & Gaming|global|console games gamepass|Explore Xbox games and services
+Nintendo|https://www.nintendo.com|Games & Gaming|global|switch console games|Discover Nintendo games
+Roblox|https://www.roblox.com|Games & Gaming|global|online games creator|Play and create experiences
+Zoom|https://zoom.us|Video Conferencing|global|meetings video calls|Host video meetings
+Google Meet|https://meet.google.com|Video Conferencing|global|google meetings calls|Join video meetings
+Microsoft Teams|https://www.microsoft.com/microsoft-teams|Video Conferencing|global|office meetings collaboration|Meet and collaborate with teams
+Cisco Webex|https://www.webex.com|Video Conferencing|global|business video meetings|Host online meetings
+Jitsi Meet|https://meet.jit.si|Video Conferencing|global|open source meetings|Start browser-based video calls
+Whereby|https://whereby.com|Video Conferencing|global|browser meetings|Host simple video meetings
+Slack|https://slack.com|Work & Collaboration|global|team chat work|Collaborate with colleagues
+Notion|https://www.notion.so|Work & Collaboration|global|notes wiki projects|Organize work and knowledge
+Trello|https://trello.com|Work & Collaboration|global|kanban tasks projects|Manage tasks visually
+Asana|https://asana.com|Work & Collaboration|global|project tasks|Coordinate team projects
+ClickUp|https://clickup.com|Work & Collaboration|global|tasks projects|Plan and track work
+Monday.com|https://monday.com|Work & Collaboration|global|workflows projects|Manage team workflows
+Google Drive|https://drive.google.com|Cloud Storage|global|files documents backup|Store and share files
+Dropbox|https://www.dropbox.com|Cloud Storage|global|cloud files backup|Save and share files
+OneDrive|https://onedrive.live.com|Cloud Storage|global|microsoft files backup|Store cloud files
+iCloud|https://www.icloud.com|Cloud Storage|global|apple cloud storage|Access Apple cloud services
+MEGA|https://mega.io|Cloud Storage|global|encrypted storage|Store files online
+Google Docs|https://docs.google.com|Documents & Office|global|word processing documents|Write and collaborate on documents
+Microsoft 365|https://www.microsoft365.com|Documents & Office|global|word excel powerpoint|Create documents and spreadsheets
+Canva|https://www.canva.com|Design & Creativity|global|graphics posters presentations|Design graphics and presentations
+Figma|https://www.figma.com|Design & Creativity|global|ui ux prototyping|Design digital interfaces
+Adobe Express|https://www.adobe.com/express/|Design & Creativity|global|posters graphics design|Create graphics and social content
+Photopea|https://www.photopea.com|Design & Creativity|global|photo editor photoshop|Edit images in your browser
+Unsplash|https://unsplash.com|Design & Creativity|global|photos images|Find photography
+Pexels|https://www.pexels.com|Design & Creativity|global|stock photos videos|Browse photos and videos
+ChatGPT|https://chatgpt.com|AI Assistants|global|ai writing research|Ask questions and work with AI
+Claude|https://claude.ai|AI Assistants|global|ai assistant writing|Work with an AI assistant
+Gemini|https://gemini.google.com|AI Assistants|global|google ai|Explore Google's AI assistant
+Microsoft Copilot|https://copilot.microsoft.com|AI Assistants|global|microsoft ai|Get AI assistance
+Perplexity|https://www.perplexity.ai|AI Assistants|global|ai search answers|Research with AI search
+DeepSeek|https://chat.deepseek.com|AI Assistants|global|ai chatbot|Explore an AI assistant
+Grok|https://grok.com|AI Assistants|global|ai chatbot|Chat with an AI assistant
+Walmart|https://www.walmart.com|Online Groceries|north america|supermarket grocery delivery|Shop groceries online
+Instacart|https://www.instacart.com|Online Groceries|north america|grocery delivery|Order groceries from local stores
+Kroger|https://www.kroger.com|Online Groceries|north america|supermarket grocery|Order groceries and essentials
+Carrefour|https://www.carrefour.com|Online Groceries|global|supermarket groceries|Find Carrefour shopping services
+Tesco|https://www.tesco.com|Online Groceries|europe|uk groceries|Shop groceries in supported areas
+Ocado|https://www.ocado.com|Online Groceries|europe|uk online groceries|Order online groceries
+Checkers Sixty60|https://www.checkers.co.za|Online Groceries|africa|south africa groceries delivery|Shop Checkers groceries
+Pick n Pay|https://www.pnp.co.za|Online Groceries|africa|south africa supermarket|Shop groceries and essentials
+Woolworths South Africa|https://www.woolworths.co.za|Online Groceries|africa|groceries clothing|Shop groceries and lifestyle products
+BigBasket|https://www.bigbasket.com|Online Groceries|asia|india groceries|Order groceries in India
+Uber Eats|https://www.ubereats.com|Food Delivery|global|restaurant takeaway delivery|Order food from restaurants
+DoorDash|https://www.doordash.com|Food Delivery|north america|food delivery|Order meals and essentials
+Deliveroo|https://deliveroo.co.uk|Food Delivery|europe,asia|food takeaway|Order food where supported
+Just Eat|https://www.just-eat.com|Food Delivery|europe|food delivery|Browse takeaway restaurants
+Grubhub|https://www.grubhub.com|Food Delivery|north america|takeaway restaurants|Order food online
+Mr D|https://www.mrd.com|Food Delivery|africa|south africa food|Order meals and groceries
+Glovo|https://glovoapp.com|Food Delivery|europe,africa|delivery courier food|Order food and essentials
+foodpanda|https://www.foodpanda.com|Food Delivery|asia|food delivery|Order food in supported markets
+Zomato|https://www.zomato.com|Food Delivery|asia|india restaurants food|Explore restaurants and food services
+PayPal|https://www.paypal.com|Payments & Wallets|global|online payment money|Send and receive payments
+Wise|https://wise.com|Payments & Wallets|global|international transfer exchange|Send money internationally
+Revolut|https://www.revolut.com|Payments & Wallets|global|finance transfers|Explore digital money services
+Skrill|https://www.skrill.com|Payments & Wallets|global|digital wallet|Use online wallet services
+Payoneer|https://www.payoneer.com|Payments & Wallets|global|international business payments|Manage cross-border payments
+M-PESA|https://www.safaricom.co.ke|Payments & Wallets|africa|mobile money kenya|Explore mobile money services
+Cash App|https://cash.app|Payments & Wallets|north america,europe|peer payments|Send money in supported markets
+Venmo|https://venmo.com|Payments & Wallets|north america|peer payments|Pay people in supported markets
+Standard Bank|https://www.standardbank.com|Banking Platforms|africa|bank account south africa|Explore personal and business banking
+Absa|https://www.absa.africa|Banking Platforms|africa|bank account|Explore banking services
+FNB|https://www.fnb.co.za|Banking Platforms|africa|banking south africa|Access banking products
+Nedbank|https://www.nedbank.co.za|Banking Platforms|africa|bank account|Explore Nedbank services
+Capitec|https://www.capitecbank.co.za|Banking Platforms|africa|south africa banking|Explore banking and accounts
+HSBC|https://www.hsbc.com|Banking Platforms|global|international bank|Explore international banking
+Citibank|https://www.citi.com|Banking Platforms|global|banking cards|Explore banking services
+Chase|https://www.chase.com|Banking Platforms|north america|us banking|Explore banking and cards
+Bank of America|https://www.bankofamerica.com|Banking Platforms|north america|us banking|Explore bank accounts
+Barclays|https://www.barclays.co.uk|Banking Platforms|europe|uk bank|Explore UK banking services
+Monzo|https://monzo.com|Banking Platforms|europe|digital bank|Explore mobile banking
+N26|https://n26.com|Banking Platforms|europe|digital bank|Explore online banking
+DBS|https://www.dbs.com|Banking Platforms|asia|singapore banking|Explore financial services
+Google Maps|https://maps.google.com|Maps & Navigation|global|gps directions places|Find places and directions
+Waze|https://www.waze.com|Maps & Navigation|global|traffic navigation|Navigate with traffic information
+Apple Maps|https://maps.apple.com|Maps & Navigation|global|navigation gps|Find places and routes
+OpenStreetMap|https://www.openstreetmap.org|Maps & Navigation|global|open map geography|Explore community-built maps
+HERE WeGo|https://wego.here.com|Maps & Navigation|global|maps directions|Plan journeys
+Uber|https://www.uber.com|Transport & Rides|global|taxi rides mobility|Request rides in supported cities
+Bolt|https://bolt.eu|Transport & Rides|global|rides taxi|Find rides in supported cities
+Lyft|https://www.lyft.com|Transport & Rides|north america|rides taxi|Book rides in supported areas
+Grab|https://www.grab.com|Transport & Rides|asia|rides delivery|Explore transport services
+inDrive|https://indrive.com|Transport & Rides|global|ride hailing|Find rides in supported markets
+Gautrain|https://www.gautrain.co.za|Transport & Rides|africa|south africa rail|Plan Gauteng rail travel
+Booking.com|https://www.booking.com|Hotels & Accommodation|global|hotels stays booking|Find places to stay
+Airbnb|https://www.airbnb.com|Hotels & Accommodation|global|homes rentals travel|Find accommodation
+Agoda|https://www.agoda.com|Hotels & Accommodation|global|hotels asia travel|Book stays and hotels
+Hotels.com|https://www.hotels.com|Hotels & Accommodation|global|hotels travel|Browse accommodation
+Hostelworld|https://www.hostelworld.com|Hotels & Accommodation|global|hostels budget travel|Find hostels worldwide
+Expedia|https://www.expedia.com|Flights & Travel|global|flights hotels trips|Plan and book trips
+Skyscanner|https://www.skyscanner.net|Flights & Travel|global|flights comparison|Compare flights and travel
+Google Flights|https://www.google.com/travel/flights|Flights & Travel|global|airfare flight search|Explore flight options
+KAYAK|https://www.kayak.com|Flights & Travel|global|flight hotels comparison|Search travel options
+Tripadvisor|https://www.tripadvisor.com|Flights & Travel|global|reviews attractions travel|Explore travel reviews
+Rome2Rio|https://www.rome2rio.com|Flights & Travel|global|routes transport planning|Compare ways to travel
+Coursera|https://www.coursera.org|Learning & Courses|global|online courses certificates|Learn skills online
+edX|https://www.edx.org|Learning & Courses|global|university courses|Study online courses
+Khan Academy|https://www.khanacademy.org|Learning & Courses|global|math science free lessons|Learn academic subjects
+Udemy|https://www.udemy.com|Learning & Courses|global|skills courses|Browse online classes
+Duolingo|https://www.duolingo.com|Learning & Courses|global|languages learning|Practice new languages
+Alison|https://alison.com|Learning & Courses|global|free courses|Explore online learning
+MIT OpenCourseWare|https://ocw.mit.edu|Learning & Courses|global|university free education|Access open course materials
+Google Scholar|https://scholar.google.com|Research & Reference|global|academic research papers|Search scholarly literature
+Wikipedia|https://www.wikipedia.org|Research & Reference|global|encyclopedia information|Explore reference articles
+Internet Archive|https://archive.org|Research & Reference|global|books archive media|Explore archived digital material
+Project Gutenberg|https://www.gutenberg.org|Books & Reading|global|free ebooks classics|Read public-domain books
+Open Library|https://openlibrary.org|Books & Reading|global|books library|Discover and borrow books
+Goodreads|https://www.goodreads.com|Books & Reading|global|book reviews reading|Track books and reading
+Audible|https://www.audible.com|Books & Reading|global|audiobooks stories|Listen to audiobooks
+LinkedIn Jobs|https://www.linkedin.com/jobs|Jobs & Careers|global|job search careers|Search job openings
+Indeed|https://www.indeed.com|Jobs & Careers|global|employment job search|Find job listings
+Glassdoor|https://www.glassdoor.com|Jobs & Careers|global|company reviews salaries|Research employers and jobs
+Upwork|https://www.upwork.com|Freelancing|global|freelance remote work|Find freelance projects
+Fiverr|https://www.fiverr.com|Freelancing|global|gig services|Offer or buy freelance services
+Freelancer|https://www.freelancer.com|Freelancing|global|freelance projects|Find project opportunities
+Remote OK|https://remoteok.com|Jobs & Careers|global|remote jobs|Explore remote positions
+CareerJunction|https://www.careerjunction.co.za|Jobs & Careers|africa|south africa jobs|Find South African vacancies
+PNet|https://www.pnet.co.za|Jobs & Careers|africa|south africa careers|Search jobs in South Africa
+WHO|https://www.who.int|Health & Wellness|global|public health information|Read public health guidance
+NHS|https://www.nhs.uk|Health & Wellness|europe|uk health guidance|Access UK health information
+WebMD|https://www.webmd.com|Health & Wellness|north america,global|health information|Read general health information
+MedlinePlus|https://medlineplus.gov|Health & Wellness|global|medical reference|Access health education resources
+Fitbit|https://www.fitbit.com|Fitness & Activity|global|fitness tracking wellness|Explore activity tracking
+Strava|https://www.strava.com|Fitness & Activity|global|running cycling|Track fitness activities
+MyFitnessPal|https://www.myfitnesspal.com|Fitness & Activity|global|nutrition tracking|Track meals and activity
+Headspace|https://www.headspace.com|Health & Wellness|global|mindfulness meditation|Explore meditation resources
+Calm|https://www.calm.com|Health & Wellness|global|meditation sleep|Explore relaxation content
+AccuWeather|https://www.accuweather.com|Weather & Environment|global|weather forecast|Check forecasts
+The Weather Channel|https://weather.com|Weather & Environment|global|weather alerts forecast|Check weather conditions
+Windy|https://www.windy.com|Weather & Environment|global|wind weather maps|Explore weather maps
+IQAir|https://www.iqair.com|Weather & Environment|global|air quality pollution|Explore air-quality data
+BBC News|https://www.bbc.com/news|News & Media|global|world news|Read international news
+Reuters|https://www.reuters.com|News & Media|global|news world business|Read news reports
+AP News|https://apnews.com|News & Media|global|breaking news|Read news coverage
+Al Jazeera|https://www.aljazeera.com|News & Media|global|world news|Read global reporting
+CNN|https://www.cnn.com|News & Media|global|breaking news|Explore news coverage
+News24|https://www.news24.com|News & Media|africa|south africa news|Read South African news
+Google News|https://news.google.com|News & Media|global|news aggregator|Browse news from sources
+Eventbrite|https://www.eventbrite.com|Events & Tickets|global|events conferences tickets|Find events and tickets
+Ticketmaster|https://www.ticketmaster.com|Events & Tickets|global|concert tickets|Find live event tickets
+Meetup|https://www.meetup.com|Events & Tickets|global|communities local events|Find interest-based gatherings
+Quicket|https://www.quicket.co.za|Events & Tickets|africa|south africa tickets|Discover events and tickets
+Computicket|https://www.computicket.com|Events & Tickets|africa|south africa events|Browse event tickets
+Gov.za|https://www.gov.za|Government Services|africa|south africa government|Access South African government information
+USA.gov|https://www.usa.gov|Government Services|north america|united states government|Find US government services
+GOV.UK|https://www.gov.uk|Government Services|europe|united kingdom government|Access UK public services
+Your Europe|https://europa.eu/youreurope|Government Services|europe|eu public services|Find European Union citizen guidance
+Service Canada|https://www.canada.ca|Government Services|north america|canada government|Find Canadian public services
+Australia.gov.au|https://www.australia.gov.au|Government Services|oceania|australia government|Find Australian government services
+Google Calendar|https://calendar.google.com|Planning & Productivity|global|calendar schedule|Manage events and schedules
+Todoist|https://todoist.com|Planning & Productivity|global|tasks to do|Organize personal tasks
+Microsoft To Do|https://to-do.office.com|Planning & Productivity|global|tasks lists|Plan daily tasks
+Evernote|https://evernote.com|Planning & Productivity|global|notes organization|Capture and organize notes
+Google Keep|https://keep.google.com|Planning & Productivity|global|notes reminders|Save notes and lists
+Pocket|https://getpocket.com|Planning & Productivity|global|reading bookmarks|Discover read-later information
+1Password|https://1password.com|Privacy & Security|global|password manager|Manage passwords securely
+Bitwarden|https://bitwarden.com|Privacy & Security|global|password vault|Manage login credentials
+Proton VPN|https://protonvpn.com|Privacy & Security|global|vpn privacy|Explore VPN services
+Have I Been Pwned|https://haveibeenpwned.com|Privacy & Security|global|breach email security|Check known breach exposure
+Cloudflare|https://www.cloudflare.com|Privacy & Security|global|internet security dns|Explore internet security tools
+IKEA|https://www.ikea.com|Home & Living|global|furniture homeware|Browse furniture and home essentials
+Wayfair|https://www.wayfair.com|Home & Living|north america,europe|furniture decor|Shop home furnishings
+Leroy Merlin|https://www.leroymerlin.com|Home & Living|global|hardware diy|Find home improvement products
+Builders|https://www.builders.co.za|Home & Living|africa|hardware home south africa|Shop building and home supplies
+AutoTrader|https://www.autotrader.com|Cars & Automotive|north america|used cars vehicles|Browse vehicles for sale
+AutoTrader SA|https://www.autotrader.co.za|Cars & Automotive|africa|south africa used cars|Browse cars in South Africa
+Cars.com|https://www.cars.com|Cars & Automotive|north america|vehicles dealers|Research and browse cars
+CarGurus|https://www.cargurus.com|Cars & Automotive|north america,europe|car prices listings|Compare car listings
+Cars.co.za|https://www.cars.co.za|Cars & Automotive|africa|south africa cars|Find vehicles and car news
+Zillow|https://www.zillow.com|Property & Rentals|north america|houses apartments property|Explore property listings
+Rightmove|https://www.rightmove.co.uk|Property & Rentals|europe|uk property rent|Search UK properties
+Property24|https://www.property24.com|Property & Rentals|africa|south africa property|Find homes to rent or buy
+Realtor.com|https://www.realtor.com|Property & Rentals|north america|homes real estate|Browse homes and listings
+Google Translate|https://translate.google.com|Language & Translation|global|translation languages|Translate text and websites
+DeepL|https://www.deepl.com/translator|Language & Translation|global|translation writing|Translate text and documents
+Reverso|https://www.reverso.net|Language & Translation|global|dictionary translations|Explore translations and examples
+XE|https://www.xe.com|Currency & Calculators|global|exchange rates currency|Check currency conversion rates
+Wise Currency Converter|https://wise.com/gb/currency-converter/|Currency & Calculators|global|exchange currency|Compare currency conversion
+Calculator.net|https://www.calculator.net|Currency & Calculators|global|calculator math finance|Use everyday calculators
+WolframAlpha|https://www.wolframalpha.com|Currency & Calculators|global|math calculations knowledge|Compute answers and calculations
+GitHub|https://github.com|Developer Tools|global|code repositories|Host and collaborate on code
+GitLab|https://gitlab.com|Developer Tools|global|code devops|Manage software projects
+Stack Overflow|https://stackoverflow.com|Developer Tools|global|programming questions|Find developer answers
+CodePen|https://codepen.io|Developer Tools|global|html css javascript|Prototype front-end code
+Replit|https://replit.com|Developer Tools|global|online coding|Create and run code online
+Google Forms|https://forms.google.com|Forms & Surveys|global|forms surveys|Create forms and collect responses
+Typeform|https://www.typeform.com|Forms & Surveys|global|surveys forms|Build interactive forms
+SurveyMonkey|https://www.surveymonkey.com|Forms & Surveys|global|surveys feedback|Create surveys
+Calendly|https://calendly.com|Appointments & Booking|global|meeting scheduling|Schedule appointments
+Google Flights Hotels|https://www.google.com/travel/hotels|Appointments & Booking|global|hotel search booking|Compare places to stay
+OpenTable|https://www.opentable.com|Appointments & Booking|global|restaurant reservations|Explore restaurant booking
+TheFork|https://www.thefork.com|Appointments & Booking|europe|restaurant booking|Find restaurant reservations
+Petfinder|https://www.petfinder.com|Pets & Animals|north america|pet adoption|Find adoptable pets
+Rover|https://www.rover.com|Pets & Animals|north america,europe|pet sitting walking|Explore pet care services
+Chewy|https://www.chewy.com|Pets & Animals|north america|pet food supplies|Shop pet products
+Google Finance|https://www.google.com/finance|Finance & Markets|global|stocks markets|Explore financial market data
+Yahoo Finance|https://finance.yahoo.com|Finance & Markets|global|stocks finance news|Track market information
+TradingView|https://www.tradingview.com|Finance & Markets|global|charts markets|Explore financial charts
+Investopedia|https://www.investopedia.com|Finance & Markets|global|finance education|Learn financial concepts`;
+const entries=raw.trim().split('\n').map((line,i)=>{const [name,url,category,regions,tags,description]=line.split('|');return{id:i,name,url,category,regions:regions.split(','),tags,description}});const $=s=>document.querySelector(s);let category='All',savedOnly=false,recentOnly=false,limit=24;const read=(key)=>{try{return JSON.parse(localStorage.getItem(key)||'[]')}catch{return []}};let saved=read('arc-saved'),recent=read('arc-recent');const store=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))}catch{}};const cats=['All',...new Set(entries.map(x=>x.category))].sort((a,b)=>a==='All'?-1:b==='All'?1:a.localeCompare(b));function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function drawCats(){const term=$('#search').value.toLowerCase();$('#categoriesList').innerHTML=cats.map(c=>`<button class="chip ${c===category?'active':''}" data-cat="${esc(c)}">${esc(c)} <span style="opacity:.65">${c==='All'?entries.length:entries.filter(x=>x.category===c).length}</span></button>`).join('')}function matches(e){const q=$('#search').value.toLowerCase().trim(),words=q.split(/\s+/).filter(Boolean),hay=[e.name,e.category,e.tags,e.description,e.regions.join(' ')].join(' ').toLowerCase();return(category==='All'||e.category===category)&&($('#region').value==='all'||e.regions.includes($('#region').value)||e.regions.includes('global')&&$('#region').value==='global')&&(!savedOnly||saved.includes(e.id))&&(!recentOnly||recent.includes(e.id))&&words.every(w=>hay.includes(w))}function render(){let list=entries.filter(matches);list.sort((a,b)=>$('#sort').value==='category'?a.category.localeCompare(b.category)||a.name.localeCompare(b.name):a.name.localeCompare(b.name));$('#count').textContent=`${list.length} matching platforms`;$('#resultsTitle').textContent=category==='All'?'Discover platforms':category;$('#cards').innerHTML=list.slice(0,limit).map(e=>`<article class="card"><div class="cardhead"><div class="logo">${esc(e.name[0])}</div><button class="fav ${saved.includes(e.id)?'saved':''}" data-fav="${e.id}" aria-label="${saved.includes(e.id)?'Remove from':'Add to'} favourites" title="Save platform">${saved.includes(e.id)?'★':'☆'}</button></div><h3>${esc(e.name)}</h3><p>${esc(e.description)}</p><div class="meta">${esc(e.regions.join(' · '))} · ${esc(e.tags.split(' ').slice(0,3).join(' · '))}</div><div class="cardfoot"><span class="tag">${esc(e.category)}</span><a class="visit" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer" data-visit="${e.id}" aria-label="Visit ${esc(e.name)} official website">Visit website ↗</a></div></article>`).join('');$('#empty').classList.toggle('hide',list.length>0);$('#more').classList.toggle('hide',list.length<=limit);$('#savedFilter').textContent=savedOnly?'★ Saved only':'☆ Saved only';$('#recentFilter').textContent=recentOnly?'✓ Recently visited':'Recently visited'}function reset(){category='All';savedOnly=false;recentOnly=false;limit=24;$('#search').value='';$('#region').value='all';$('#sort').value='name';drawCats();render()}$('#categoriesList').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;category=b.dataset.cat;limit=24;drawCats();render();$('#directory').scrollIntoView({behavior:'smooth'})});$('#cards').addEventListener('click',e=>{const f=e.target.closest('[data-fav]');if(f){let id=+f.dataset.fav;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];store('arc-saved',saved);render()}const v=e.target.closest('[data-visit]');if(v){recent=[+v.dataset.visit,...recent.filter(x=>x!==+v.dataset.visit)].slice(0,30);store('arc-recent',recent)}});$('#search').addEventListener('input',()=>{limit=24;render()});$('#searchForm').addEventListener('submit',e=>{e.preventDefault();$('#directory').scrollIntoView({behavior:'smooth'})});$('#region').addEventListener('change',render);$('#sort').addEventListener('change',render);$('#savedFilter').onclick=()=>{savedOnly=!savedOnly;recentOnly=false;render()};$('#recentFilter').onclick=()=>{recentOnly=!recentOnly;savedOnly=false;render()};$('#savedNav').onclick=()=>{savedOnly=true;recentOnly=false;render()};$('#clear').onclick=reset;$('#more').onclick=()=>{limit+=24;render()};$('#total').textContent=entries.length;$('#catTotal').textContent=cats.length-1;$('#year').textContent=new Date().getFullYear();try{if(localStorage.getItem('arc-theme')==='dark')document.body.classList.add('dark')}catch{}function updateTheme(){$('#theme').textContent=document.body.classList.contains('dark')?'☀':'☾'}updateTheme();$('#theme').onclick=()=>{document.body.classList.toggle('dark');try{localStorage.setItem('arc-theme',document.body.classList.contains('dark')?'dark':'light')}catch{}updateTheme()};
+const policies={privacy:{title:'Privacy Policy',body:`<p><strong>Last updated:</strong> 12 November 2026. This policy explains how this front-end Arcknowledge directory handles information. This is a starter policy for the website operator to review and update before publication.</p><h3>1. Scope and operator</h3><p>Arcknowledge provides a directory of links to third-party websites and services. The website operator is responsible for this directory, not for the independent services linked from it. Contact: hello@arcknowledge.online (confirm this address before publication).</p><h3>2. Information stored on your device</h3><p>This version does not require registration or request your name, phone number or payment details. Your favourites, recently visited directory links and theme preference are stored in your browser's localStorage. Searches and filters run in your browser; this website does not intentionally transmit those queries to an Arcknowledge server.</p><h3>3. Hosting and technical information</h3><p>The hosting provider may process IP addresses, device information, timestamps and request logs to deliver the site, maintain security and diagnose faults. Its handling depends on the hosting service selected by the operator. Review the hosting provider's privacy terms and update this section accordingly.</p><h3>4. Cookies and analytics</h3><p>The supplied website code does not set tracking cookies or include advertising trackers or analytics scripts. If the operator adds analytics, advertisements, embedded content or third-party scripts, this policy and any required consent mechanism must be updated first.</p><h3>5. External links</h3><p>Clicking a listing takes you to an independent service. Those services may collect data, use cookies, require accounts or process payments under their own policies. Arcknowledge does not control their data practices. Read their notices before providing information.</p><h3>6. Purposes and lawful grounds</h3><p>On-device preferences are used to provide requested functionality. Any hosting-related technical processing must be assessed against applicable privacy law, including lawful basis and notice requirements where relevant.</p><h3>7. Sharing and international transfers</h3><p>The supplied code does not send favourites or searches to an Arcknowledge database. Hosting infrastructure may involve processing across borders; the operator should disclose actual providers, locations and safeguards after deployment.</p><h3>8. Retention and deletion</h3><p>On-device preferences remain until you clear the site's browser storage or use a browser that removes it. Hosting logs, if any, follow the hosting provider's retention configuration. Clearing browser data removes saved preferences on that device.</p><h3>9. Security</h3><p>The site uses no account passwords or checkout forms. No online service is guaranteed completely secure. The operator should deploy over HTTPS, maintain the hosting environment and avoid adding unreviewed scripts.</p><h3>10. Your rights</h3><p>Depending on your jurisdiction, you may have rights to access, correct, erase, restrict or object to processing and to complain to a data protection authority. For browser-only data, you can remove it directly in your browser settings. Contact the operator for requests about any information the operator actually holds.</p><h3>11. Children</h3><p>This directory is intended for a general audience. Some linked services have age restrictions and parental controls. Parents or guardians should supervise children's use of third-party platforms.</p><h3>12. Changes and contact</h3><p>This policy may be updated when functionality, hosting or applicable requirements change. Material changes should be clearly communicated on this page. Contact: hello@arcknowledge.online.</p>`},use:{title:'Terms of Use',body:`<p><strong>Last updated:</strong> 12 November 2026. By accessing this directory, you agree to the following website usage rules. If you disagree, discontinue use.</p><h3>1. Directory purpose</h3><p>Arcknowledge helps visitors discover external websites, apps and services. Listings are informational and do not constitute endorsements, certifications, financial advice, legal advice or medical advice.</p><h3>2. Eligibility</h3><p>You must comply with the laws applicable to your use of the site. Parents and guardians are responsible for supervising minors. Third-party services may impose their own minimum age and eligibility rules.</p><h3>3. Permitted use</h3><p>You may browse, search, filter and save links for personal or legitimate business purposes. You agree not to interfere with site operation, introduce malicious code, attempt unauthorized access, scrape the site abusively or use it for unlawful activity.</p><h3>4. Accuracy and availability</h3><p>Listings may become outdated, unavailable, region-restricted or subject to different fees and eligibility rules. We do not guarantee the accuracy, availability, safety or suitability of any linked service. Verify details directly with each provider.</p><h3>5. Third-party services</h3><p>When you leave Arcknowledge, the provider's terms, privacy notices, pricing, dispute procedures and applicable laws govern your interaction. Arcknowledge is not a party to purchases, transfers, subscriptions or bookings made with third parties.</p><h3>6. Intellectual property</h3><p>Arcknowledge's original site design, text and code are subject to applicable intellectual property rights. Names, trademarks and service marks of listed platforms belong to their respective owners. Listing a brand does not imply partnership or affiliation.</p><h3>7. Changes to the service</h3><p>Categories, links, features and access may be changed or discontinued at any time. The operator may remove inaccurate, harmful or inappropriate listings.</p><h3>8. Disclaimer</h3><p>The directory is provided on an “as is” and “as available” basis to the extent permitted by law, without guarantees of uninterrupted operation or error-free listings. Nothing in these terms excludes protections that cannot legally be waived.</p><h3>9. Responsibility</h3><p>You are responsible for checking the legitimacy, safety, fees and terms of external providers before using them, and for protecting your accounts and devices.</p><h3>10. Governing law and contact</h3><p>Applicable law and mandatory consumer rights depend on the operator's legal location and your jurisdiction. Before publication, the operator should specify its registered business details and governing law. Questions: hello@arcknowledge.online.</p>`},conditions:{title:'Terms & Conditions',body:`<p><strong>Last updated:</strong> 12 November 2026. These conditions describe the practical operation and limitations of the Arcknowledge directory.</p><h3>1. Service description</h3><p>Arcknowledge is a discovery hub that organizes links to third-party platforms by category, region and keywords. It does not provide the underlying banking, retail, transport, medical or other services advertised by linked providers.</p><h3>2. Pricing</h3><p>Browsing the supplied directory is free. Linked providers may charge subscription fees, transaction costs, delivery fees or other charges. Their current prices, currencies and taxes are determined by them, not by Arcknowledge.</p><h3>3. Accounts and purchases</h3><p>This front-end version has no Arcknowledge user registration, payment collection, wallet or checkout. Any third-party account or purchase is governed solely by the external provider's terms and processes.</p><h3>4. Geographic limitations</h3><p>“Worldwide” describes the breadth of the directory, not a promise that every service operates in every country. Region labels are broad discovery hints and may not reflect licensing, availability, shipping, access restrictions or local legal requirements.</p><h3>5. Listings and editorial control</h3><p>Arcknowledge may add, revise, reorder or remove listings without notice. Links are included for convenience, not as endorsements or assurances of trustworthiness. The operator should review and maintain links regularly.</p><h3>6. Saved items and browser data</h3><p>Favourites, recent visits and theme settings are stored only in the browser on the device used. They do not synchronize across devices, may be lost if browser data is cleared, and may be unavailable in private browsing or restricted storage environments.</p><h3>7. External transactions and disputes</h3><p>For orders, refunds, cancellations, deliveries, subscriptions, financial transfers and other external transactions, contact the relevant service provider. Arcknowledge does not process or arbitrate those transactions.</p><h3>8. Safety and due diligence</h3><p>Exercise care before sharing personal data, transferring funds, downloading software or relying on health, legal or financial information. Verify official URLs and independently assess third-party terms and risks.</p><h3>9. Limitation of liability</h3><p>To the extent allowed by applicable law, the operator is not responsible for losses arising solely from third-party service failures, inaccurate external information or unavailable external sites. This clause does not exclude liability that cannot legally be excluded.</p><h3>10. Availability and modifications</h3><p>The directory may be interrupted for hosting issues, maintenance or updates. Features may change without advance notice. We may revise these conditions and publish an updated date.</p><h3>11. Severability and rights</h3><p>If a provision is unenforceable, the remaining provisions continue to apply where legally possible. Mandatory consumer and privacy protections remain unaffected.</p><h3>12. Complaints and operator details</h3><p>For questions, broken links or complaints, contact hello@arcknowledge.online. The operator should confirm this mailbox, add a physical or registered business address where legally required, and obtain legal review for relevant jurisdictions before launch.</p>`}};let lastFocus=null;function openPolicy(key){lastFocus=document.activeElement;$('#modalTitle').textContent=policies[key].title;$('#modalBody').innerHTML=policies[key].body;$('#modal').classList.add('open');document.body.style.overflow='hidden';$('#close').focus()}function closePolicy(){$('#modal').classList.remove('open');document.body.style.overflow='';lastFocus?.focus()}document.querySelectorAll('[data-policy]').forEach(b=>b.onclick=()=>openPolicy(b.dataset.policy));$('#close').onclick=closePolicy;$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closePolicy()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modal').classList.contains('open'))closePolicy();if(e.key==='Tab'&&$('#modal').classList.contains('open')){const focusables=[...$('#modal').querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')];if(!focusables.length)return;const first=focusables[0],last=focusables[focusables.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});drawCats();render();
+</script></body></html>
