@@ -1,1363 +1,848 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="antialiased">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arcknowledge | Worldwide Everyday Digital Hub</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="One Spot! — Your essential daily apps in one clean launcher, ranked from most to least daily active users." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="One Spot!" />
+  <title>One Spot! — Essential Daily App Launcher</title>
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- Tailwind Configuration -->
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
           },
           colors: {
             brand: {
               50: '#eef2ff',
               100: '#e0e7ff',
-              200: '#c7d2fe',
-              300: '#a5b4fc',
-              400: '#818cf8',
               500: '#6366f1',
               600: '#4f46e5',
               700: '#4338ca',
-              800: '#3730a3',
               900: '#312e81',
-              950: '#1e1b4b',
             }
-          },
-          boxShadow: {
-            'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
-            'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.35)',
           }
         }
       }
-    }
+    };
   </script>
 
+  <!-- Inline App Icon (Favicon & Apple Touch Icon) -->
+  <link id="dynamic-favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234f46e5'/%3E%3Cstop offset='100%25' stop-color='%230ea5e9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='120' fill='url(%23g)'/%3E%3Ccircle cx='256' cy='256' r='112' fill='none' stroke='%23ffffff' stroke-width='36'/%3E%3Ccircle cx='256' cy='256' r='44' fill='%23ffffff'/%3E%3C/svg%3E" />
+  <link id="dynamic-manifest" rel="manifest" href="" />
+
   <style>
-    /* Custom Scrollbar & Glassmorphism Utilities */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    /* Strict 2-apps-per-row grid across all viewport sizes */
+    .strict-two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    ::-webkit-scrollbar-track {
-      background: transparent;
+
+    /* Smooth custom scrollbar for legal modals */
+    .modal-scroll::-webkit-scrollbar {
+      width: 6px;
     }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.4);
+    .modal-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
       border-radius: 9999px;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(156, 163, 175, 0.7);
+    .modal-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
     }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    .modal-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+
+    /* Subtle tactile card lift */
+    .app-card {
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.22s ease;
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .app-card:hover {
+      transform: translateY(-4px);
     }
-    .animate-fade-up {
-      animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .app-card:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-brand-500 selection:text-white">
+<body class="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-indigo-500 selection:text-white">
 
-  <!-- Ambient Top Gradient Glow -->
-  <div class="fixed inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl pointer-events-none" aria-hidden="true">
-    <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-brand-500 to-cyan-400 opacity-15 dark:opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+  <!-- Top Offline / PWA Status Toast Banner -->
+  <div id="status-banner" class="hidden bg-amber-500 text-slate-950 text-xs font-semibold text-center py-2 px-4 transition-all">
+    You are currently offline. One Spot! interface is cached and ready, though external links require an internet connection.
   </div>
 
-  <!-- STICKY TOP HEADER -->
-  <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <a href="#" onclick="resetAllFilters(); return false;" class="flex items-center gap-3 group focus:outline-none">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform">
-          <!-- Custom Geometric Arch + Knowledge Node SVG -->
-          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 20V11a8 8 0 0 1 16 0v9" />
-            <path d="M8 20v-7a4 4 0 0 1 8 0v7" />
-            <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+  <!-- Main Centered Launcher Wrapper -->
+  <div class="flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 pt-8 pb-10 flex flex-col">
+
+    <!-- Header Section -->
+    <header class="mb-6">
+      <div class="flex items-center justify-between gap-3 mb-4">
+        <!-- Brand Logo & Title -->
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-sky-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 shrink-0">
+            <svg class="w-7 h-7 text-white" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="32" cy="32" r="18" stroke="currentColor" stroke-width="5.5" />
+              <circle cx="32" cy="32" r="7" fill="currentColor" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                One Spot!
+              </h1>
+              <span id="pwa-badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80">
+                PWA
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+              Your essential daily apps, ranked by global daily users
+            </p>
+          </div>
+        </div>
+
+        <!-- Install PWA Button (Revealed when beforeinstallprompt fires or manual install info) -->
+        <button
+          id="install-pwa-btn"
+          type="button"
+          class="hidden items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 active:scale-95 text-white text-xs sm:text-sm font-semibold shadow-sm transition-all cursor-pointer shrink-0"
+          aria-label="Install One Spot! App"
+        >
+          <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+          </svg>
+          <span>Install App</span>
+        </button>
+      </div>
+
+      <!-- Quick Filter & Sort Info Bar -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 mt-4">
+        <div class="relative flex-1">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
+          </svg>
+          <input
+            id="app-search"
+            type="search"
+            placeholder="Filter your 6 essential apps..."
+            autocomplete="off"
+            class="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200/90 rounded-2xl shadow-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 transition-all"
+          />
+        </div>
+        <div class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-white border border-slate-200/90 text-xs font-semibold text-slate-600 shrink-0">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Sorted: Most &rarr; Least DAU</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main App Grid (Strictly 2 Apps Per Row on all screens) -->
+    <main class="flex-1">
+      <div
+        id="apps-grid"
+        class="strict-two-col-grid gap-3.5 sm:gap-5"
+        role="list"
+        aria-label="Essential daily apps ranked by daily active users"
+      >
+        <!-- Cards are rendered dynamically via JS to preserve exact ranking & SVG quality -->
+      </div>
+
+      <!-- Empty Filter State -->
+      <div id="empty-state" class="hidden text-center py-14 px-4 bg-white rounded-3xl border border-slate-200/80 mt-2">
+        <p class="text-base font-bold text-slate-800">No matching app found</p>
+        <p class="text-xs text-slate-500 mt-1">Try clearing your filter to see all 6 ranked apps.</p>
+        <button
+          id="reset-search-btn"
+          type="button"
+          class="mt-4 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition-colors cursor-pointer"
+        >
+          Show All Apps
+        </button>
+      </div>
+
+      <!-- Ranking Methodology Footnote -->
+      <section class="mt-6 p-3.5 sm:p-4 rounded-2xl bg-white/80 border border-slate-200/80 flex items-start gap-3">
+        <div class="w-7 h-7 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" />
           </svg>
         </div>
-        <div class="flex flex-col">
-          <span class="font-display font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-            Arcknowledge
-          </span>
-          <span class="text-[10px] font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 -mt-1">
-            Worldwide Edition
-          </span>
-        </div>
-      </a>
+        <p class="text-[11px] sm:text-xs text-slate-500 leading-relaxed">
+          <strong class="text-slate-700 font-semibold">Ranking Order:</strong> Ordered from highest to lowest estimated global Daily Active Users (DAU):
+          <span class="text-slate-700 font-medium">#1 Google Search (~3.5B+ DAU)</span>,
+          <span class="text-slate-700 font-medium">#2 Facebook (~2.17B DAU)</span>,
+          <span class="text-slate-700 font-medium">#3 Gmail (~1.8B+ DAU)</span>,
+          <span class="text-slate-700 font-medium">#4 YouTube (~1.2B+ DAU)</span>,
+          <span class="text-slate-700 font-medium">#5 Netflix (~190M+ DAU)</span>, and
+          <span class="text-slate-700 font-medium">#6 Uber Eats (~23M+ DAU)</span>.
+        </p>
+      </section>
+    </main>
 
-      <!-- Right Controls: Region Selector, My Hub Counter & Theme Toggle -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Region Selector Pill -->
-        <div class="relative flex items-center">
-          <i data-lucide="globe" class="w-4 h-4 text-brand-600 dark:text-brand-400 absolute left-3 pointer-events-none"></i>
-          <select id="regionSelect" aria-label="Select Region"
-            class="pl-9 pr-8 py-2 text-xs sm:text-sm font-medium rounded-xl bg-slate-100 hover:bg-slate-200/70 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 transition cursor-pointer appearance-none">
-            <option value="Worldwide">Worldwide</option>
-            <option value="North America">North America</option>
-            <option value="Europe">Europe</option>
-            <option value="Asia-Pacific">Asia-Pacific</option>
-            <option value="Africa">Africa</option>
-            <option value="Latin America">Latin America</option>
-            <option value="Middle East">Middle East</option>
-          </select>
-          <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none"></i>
-        </div>
-
-        <!-- Jump to Pinned Hub Button -->
-        <button onclick="scrollToHub()" id="headerHubBtn"
-          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-brand-50 text-brand-700 hover:bg-brand-100 dark:bg-brand-950/60 dark:text-brand-300 dark:hover:bg-brand-900/60 border border-brand-200/70 dark:border-brand-800/60 transition">
-          <i data-lucide="pin" class="w-3.5 h-3.5"></i>
-          <span>My Hub</span>
-          <span id="pinnedCountBadge" class="ml-0.5 px-1.5 py-0.2 rounded-full text-[11px] font-bold bg-brand-600 text-white">0</span>
-        </button>
-
-        <!-- Dark / Light Mode Toggle -->
-        <button id="themeToggle" aria-label="Toggle Dark Mode"
-          class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 transition">
-          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
-          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- HERO & SEARCH SECTION -->
-  <section class="pt-10 pb-8 sm:pt-14 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="text-center max-w-3xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/70 text-brand-700 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60 mb-5">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
-        </span>
-        Your Worldwide Everyday Digital Hub
-      </div>
-      
-      <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-        Everything you use daily, <br class="hidden sm:inline" />
-        <span class="bg-gradient-to-r from-brand-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
-          indexed in one global arch.
-        </span>
-      </h1>
-      
-      <p class="mt-4 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-        Instant access to essential global platforms across communication, entertainment, banking, shopping, productivity, travel, health, and everyday utilities.
-      </p>
-    </div>
-
-    <!-- PROMINENT SEARCH BAR -->
-    <div class="mt-8 max-w-3xl mx-auto">
-      <div class="relative group">
-        <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-cyan-500 rounded-2xl blur opacity-20 group-focus-within:opacity-40 transition duration-300"></div>
-        <div class="relative flex items-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-glass dark:shadow-glass-dark px-4 py-3 sm:py-3.5">
-          <i data-lucide="search" class="w-5 h-5 text-slate-400 mr-3 shrink-0"></i>
-          <input id="searchInput" type="text" autocomplete="off"
-            placeholder="Search platforms, services, regions, or tags (e.g., Spotify, Banking, Free, AI-Powered, Delivery)..."
-            class="w-full bg-transparent text-sm sm:text-base text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none" />
-          
-          <button id="clearSearchBtn" onclick="clearSearch()" title="Clear search"
-            class="hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition mr-1">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-
-          <kbd class="hidden md:inline-flex items-center px-2 py-1 text-[11px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
-            /
-          </kbd>
-        </div>
-      </div>
-
-      <!-- INTERACTIVE TAG FILTER PILLS -->
-      <div class="mt-4">
-        <div class="flex items-center justify-between mb-2 px-1">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-            <i data-lucide="tags" class="w-3.5 h-3.5 text-brand-500"></i>
-            Filter by Tag
-          </span>
-          <button id="resetTagsBtn" onclick="resetAllFilters()" class="hidden text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline">
-            Reset all filters
-          </button>
-        </div>
-        <div id="tagContainer" class="flex flex-wrap gap-1.5 sm:gap-2">
-          <!-- Dynamically populated tag chips -->
-        </div>
-      </div>
-    </div>
-
-    <!-- QUICK STATS BAR -->
-    <div class="mt-8 max-w-4xl mx-auto grid grid-cols-3 gap-3 sm:gap-6 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-3.5 sm:p-4 text-center shadow-sm">
-      <div>
-        <div id="statCategories" class="font-display text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white">17</div>
-        <div class="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">Daily Categories</div>
-      </div>
-      <div class="border-x border-slate-200 dark:border-slate-800">
-        <div id="statTotalPlatforms" class="font-display text-lg sm:text-2xl font-extrabold text-brand-600 dark:text-brand-400">0</div>
-        <div class="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">Worldwide Platforms</div>
-      </div>
-      <div>
-        <div id="statShowing" class="font-display text-lg sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
-        <div class="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">Matching Results</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PERSONALIZED "MY DAILY HUB" QUICK-LAUNCH BAR -->
-  <section id="myHubSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-    <div class="rounded-2xl bg-gradient-to-r from-brand-50/90 via-indigo-50/80 to-cyan-50/90 dark:from-slate-900 dark:via-brand-950/30 dark:to-slate-900 border border-brand-200/70 dark:border-brand-800/50 p-4 sm:p-5 shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center">
-            <i data-lucide="bookmark-check" class="w-4 h-4"></i>
-          </div>
-          <div>
-            <h2 class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">My Daily Hub Quick-Launch</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Pin your go-to platforms using the pin icon on any card for instant access.</p>
-          </div>
-        </div>
-        <button id="clearPinnedBtn" onclick="clearAllPinned()" class="hidden text-xs font-medium text-rose-600 dark:text-rose-400 hover:underline px-2 py-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
-          Clear Pinned
-        </button>
-      </div>
-      
-      <div id="pinnedGrid" class="flex flex-wrap gap-2.5">
-        <!-- Populated dynamically -->
-      </div>
-    </div>
-  </section>
-
-  <!-- STICKY CATEGORY NAVIGATION TABS -->
-  <nav aria-label="Category Navigation" class="sticky top-16 z-30 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-md border-y border-slate-200/70 dark:border-slate-800/70 py-2.5 mb-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
-        <!-- Dynamically populated category pills -->
-      </div>
-    </div>
-  </nav>
-
-  <!-- MAIN DIRECTORY CONTENT -->
-  <main id="directoryContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-12">
-    <!-- Dynamically populated category sections & platform cards -->
-  </main>
-
-  <!-- EMPTY STATE (Shown when no search/tag matches) -->
-  <div id="emptyState" class="hidden max-w-lg mx-auto px-4 py-16 text-center">
-    <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center mx-auto mb-4 text-slate-400">
-      <i data-lucide="search-x" class="w-8 h-8"></i>
-    </div>
-    <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">No matching platforms found</h3>
-    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
-      Try adjusting your search keywords, changing the region selector, or clearing active tag filters.
-    </p>
-    <button onclick="resetAllFilters()" class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 transition">
-      <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-      Reset All Filters
-    </button>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-200 dark:border-slate-800">
-        
-        <!-- Brand Column -->
-        <div class="lg:col-span-1">
-          <div class="flex items-center gap-2.5 mb-3">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-600 to-cyan-500 flex items-center justify-center text-white">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 20V11a8 8 0 0 1 16 0v9" />
-                <path d="M8 20v-7a4 4 0 0 1 8 0v7" />
-                <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-              </svg>
-            </div>
-            <span class="font-display font-extrabold text-lg text-slate-900 dark:text-white">Arcknowledge</span>
-          </div>
-          <p class="text-xs sm:text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-            Your Worldwide Everyday Digital Hub. Organizing the world's most essential platforms for daily life, commerce, communication, and discovery.
-          </p>
-          <div class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
-            <i data-lucide="globe-2" class="w-3.5 h-3.5 text-brand-500"></i>
-            Global Directory • Front-End Edition
-          </div>
-        </div>
-
-        <!-- Core Categories -->
-        <div>
-          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider mb-3">Core Categories</h4>
-          <ul class="space-y-2 text-xs sm:text-sm">
-            <li><a href="#cat-social" onclick="selectCategory('social')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Social Media Platforms</a></li>
-            <li><a href="#cat-email" onclick="selectCategory('email')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Email & Messaging</a></li>
-            <li><a href="#cat-music" onclick="selectCategory('music')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Music & Audio Streaming</a></li>
-            <li><a href="#cat-movies" onclick="selectCategory('movies')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Movies & TV Streaming</a></li>
-            <li><a href="#cat-banking" onclick="selectCategory('banking')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Banking & Digital Finance</a></li>
-            <li><a href="#cat-search" onclick="selectCategory('search')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Global Search Engines</a></li>
-          </ul>
-        </div>
-
-        <!-- Everyday Living -->
-        <div>
-          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider mb-3">Everyday Living</h4>
-          <ul class="space-y-2 text-xs sm:text-sm">
-            <li><a href="#cat-clothing" onclick="selectCategory('clothing')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Online Clothing & Fashion</a></li>
-            <li><a href="#cat-grocery" onclick="selectCategory('grocery')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Grocery & Food Delivery</a></li>
-            <li><a href="#cat-wholesale" onclick="selectCategory('wholesale')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Wholesalers & Bulk Trade</a></li>
-            <li><a href="#cat-travel" onclick="selectCategory('travel')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Travel, Maps & Rides</a></li>
-            <li><a href="#cat-health" onclick="selectCategory('health')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Health, Fitness & Wellness</a></li>
-            <li><a href="#cat-utilities" onclick="selectCategory('utilities')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">News, Weather & Utilities</a></li>
-          </ul>
-        </div>
-
-        <!-- Legal & Governance (Modal Triggers) -->
-        <div>
-          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider mb-3">Legal & Governance</h4>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">
-            Review our global compliance, data transparency, and directory usage policies:
-          </p>
-          <ul class="space-y-2 text-xs sm:text-sm">
-            <li>
-              <button onclick="openLegalModal('privacy')" class="inline-flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition">
-                <i data-lucide="shield-check" class="w-4 h-4 text-brand-500"></i>
-                Privacy Policy
-              </button>
-            </li>
-            <li>
-              <button onclick="openLegalModal('termsOfUse')" class="inline-flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition">
-                <i data-lucide="file-text" class="w-4 h-4 text-brand-500"></i>
-                Terms of Use
-              </button>
-            </li>
-            <li>
-              <button onclick="openLegalModal('termsAndConditions')" class="inline-flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition">
-                <i data-lucide="scale" class="w-4 h-4 text-brand-500"></i>
-                Terms and Conditions
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Bottom Bar -->
-      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-        <p>© <span id="currentYear"></span> Arcknowledge Worldwide. All rights reserved. Trademarks belong to their respective owners.</p>
-        <div class="flex flex-wrap items-center gap-4">
-          <button onclick="openLegalModal('privacy')" class="hover:text-brand-600 dark:hover:text-brand-400 underline-offset-4 hover:underline">Privacy Policy</button>
-          <span>•</span>
-          <button onclick="openLegalModal('termsOfUse')" class="hover:text-brand-600 dark:hover:text-brand-400 underline-offset-4 hover:underline">Terms of Use</button>
-          <span>•</span>
-          <button onclick="openLegalModal('termsAndConditions')" class="hover:text-brand-600 dark:hover:text-brand-400 underline-offset-4 hover:underline">Terms & Conditions</button>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- LEGAL MODAL OVERLAY -->
-  <div id="legalModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
-    class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-sm transition-opacity">
-    
-    <!-- Modal Dialog Box -->
-    <div id="modalContentBox" class="relative w-full max-w-3xl max-h-[88vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-fade-up">
-      
-      <!-- Modal Header -->
-      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/90">
-        <div class="flex items-center gap-3">
-          <div id="modalIconWrap" class="w-9 h-9 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h3 id="modalTitle" class="font-display font-bold text-lg sm:text-xl text-slate-900 dark:text-white">Privacy Policy</h3>
-            <p id="modalSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Effective Date: November 2026 • Arcknowledge Global</p>
-          </div>
-        </div>
-        <button onclick="closeLegalModal()" aria-label="Close modal"
-          class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Modal Tab Switcher -->
-      <div class="flex items-center gap-1 px-6 pt-3 pb-2 bg-slate-50/50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
-        <button id="tab-privacy" onclick="openLegalModal('privacy')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+    <!-- Footer with Legal Modal Triggers -->
+    <footer class="mt-10 pt-6 border-t border-slate-200/90 text-center">
+      <nav aria-label="Legal and policy links" class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-3">
+        <button
+          type="button"
+          data-legal="privacy"
+          class="legal-trigger text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 underline decoration-slate-300 hover:decoration-indigo-500 underline-offset-4 transition-colors py-1 px-1 cursor-pointer"
+        >
           Privacy Policy
         </button>
-        <button id="tab-termsOfUse" onclick="openLegalModal('termsOfUse')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+        <span class="text-slate-300 select-none" aria-hidden="true">&bull;</span>
+        <button
+          type="button"
+          data-legal="termsOfUse"
+          class="legal-trigger text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 underline decoration-slate-300 hover:decoration-indigo-500 underline-offset-4 transition-colors py-1 px-1 cursor-pointer"
+        >
           Terms of Use
         </button>
-        <button id="tab-termsAndConditions" onclick="openLegalModal('termsAndConditions')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition">
-          Terms & Conditions
+        <span class="text-slate-300 select-none" aria-hidden="true">&bull;</span>
+        <button
+          type="button"
+          data-legal="termsAndConditions"
+          class="legal-trigger text-xs sm:text-sm font-medium text-slate-600 hover:text-indigo-600 underline decoration-slate-300 hover:decoration-indigo-500 underline-offset-4 transition-colors py-1 px-1 cursor-pointer"
+        >
+          Terms and Conditions
+        </button>
+      </nav>
+      <p class="text-xs text-slate-400">
+        &copy; 2026 <strong class="font-semibold text-slate-500">One Spot!</strong> All rights reserved. Trademarks and brand logos belong to their respective owners.
+      </p>
+    </footer>
+  </div>
+
+  <!-- Accessible Scrollable Legal Modal Dialog -->
+  <div
+    id="legal-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <!-- Backdrop -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"></div>
+
+    <!-- Modal Panel -->
+    <div class="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col max-h-[86vh] overflow-hidden animate-[fadeIn_0.18s_ease-out]">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between gap-4 px-5 sm:px-7 py-4 sm:py-5 border-b border-slate-100 bg-slate-50/70">
+        <div>
+          <span id="modal-badge" class="inline-block text-[10px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full mb-1">
+            Legal Documentation
+          </span>
+          <h2 id="modal-title" class="text-lg sm:text-xl font-extrabold text-slate-900">
+            Privacy Policy
+          </h2>
+          <p id="modal-updated" class="text-[11px] text-slate-400 mt-0.5">
+            Effective Date: November 12, 2026 &bull; Version 2.4
+          </p>
+        </div>
+
+        <button
+          id="modal-close-top"
+          type="button"
+          class="w-10 h-10 rounded-2xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-500 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+          aria-label="Close legal modal"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
 
-      <!-- Scrollable Legal Body -->
-      <div id="modalBody" class="p-6 overflow-y-auto space-y-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-        <!-- Dynamically injected legal content -->
+      <!-- Modal Scrollable Content -->
+      <div id="modal-body" class="modal-scroll flex-1 overflow-y-auto px-5 sm:px-7 py-5 sm:py-6 space-y-5 text-sm text-slate-600 leading-relaxed">
+        <!-- Populated dynamically when a legal link is clicked -->
       </div>
 
       <!-- Modal Footer -->
-      <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/90 flex items-center justify-between gap-4">
-        <span class="text-xs text-slate-500 dark:text-slate-400">Press <kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[11px]">ESC</kbd> to close</span>
-        <button onclick="closeLegalModal()"
-          class="px-5 py-2 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-sm transition">
-          I Understand & Close
+      <div class="px-5 sm:px-7 py-4 border-t border-slate-100 bg-slate-50/70 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <span>Switch document:</span>
+          <button type="button" data-legal="privacy" class="modal-switch font-semibold text-indigo-600 hover:underline cursor-pointer">Privacy</button>
+          <span>&bull;</span>
+          <button type="button" data-legal="termsOfUse" class="modal-switch font-semibold text-indigo-600 hover:underline cursor-pointer">Terms of Use</button>
+          <span>&bull;</span>
+          <button type="button" data-legal="termsAndConditions" class="modal-switch font-semibold text-indigo-600 hover:underline cursor-pointer">Terms &amp; Conditions</button>
+        </div>
+        <button
+          id="modal-close-bottom"
+          type="button"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+        >
+          I Understand &amp; Close
         </button>
       </div>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-300">
-    <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs sm:text-sm font-medium shadow-xl">
-      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
-      <span id="toastMessage">Updated My Daily Hub</span>
-    </div>
+  <!-- Non-blocking Toast Message Box (replaces alert()) -->
+  <div
+    id="toast-message"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs sm:text-sm font-medium shadow-xl border border-slate-700/80 max-w-[90vw]"
+  >
+    <span id="toast-text"></span>
   </div>
 
-  <!-- APPLICATION DATA & LOGIC -->
   <script>
     /**
-     * 1. COMPREHENSIVE WORLDWIDE DIRECTORY DATASET
-     * Covers 17 essential daily-living categories and 155+ global & regional platforms.
+     * 1. APP DATA DEFINITION
+     * Strictly ordered from highest to lowest estimated Daily Active Users (DAU):
+     * 1. Google Search (~3.5B+ daily active searchers / ~16.4B daily searches)
+     * 2. Facebook (~2.17B daily active users)
+     * 3. Gmail (~1.8B+ daily active users)
+     * 4. YouTube (~1.2B+ estimated daily active users / 2.7B+ MAU)
+     * 5. Netflix (~190M+ estimated daily active viewers / 325M+ paid subscribers)
+     * 6. Uber Eats (~23M+ estimated daily active users / 95M+ monthly users)
      */
-    const DIRECTORY_DATA = [
+    const APPS_RANKED_BY_DAU = [
       {
-        id: 'social',
-        title: 'Social Media Platforms',
-        icon: 'share-2',
-        description: 'Global communities, microblogging, short-form video, and professional networks.',
-        platforms: [
-          { name: 'X (Twitter)', url: 'https://x.com', desc: 'Real-time global news, public conversations, and live commentary.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Communication'] },
-          { name: 'Instagram', url: 'https://instagram.com', desc: 'Visual storytelling, Reels, Stories, and creator communities.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Entertainment'] },
-          { name: 'TikTok', url: 'https://tiktok.com', desc: 'Short-form mobile video discovery, trends, and live streaming.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Entertainment', 'AI-Powered'] },
-          { name: 'LinkedIn', url: 'https://linkedin.com', desc: 'World’s largest professional networking, hiring, and career platform.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Web', 'Productivity', 'B2B'] },
-          { name: 'Reddit', url: 'https://reddit.com', desc: 'Community-driven forums, niche discussions, and crowdsourced answers.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Communication'] },
-          { name: 'Facebook', url: 'https://facebook.com', desc: 'Connect with friends, local groups, events, and Marketplace.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'E-Commerce'] },
-          { name: 'Snapchat', url: 'https://snapchat.com', desc: 'Ephemeral messaging, AR lenses, and close-friend sharing.', region: 'North America', tags: ['Free', 'iOS & Android', 'Communication'] },
-          { name: 'Pinterest', url: 'https://pinterest.com', desc: 'Visual discovery engine for home decor, fashion, recipes, and ideas.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android'] },
-          { name: 'Threads', url: 'https://threads.net', desc: 'Text-based public conversation app integrated with Instagram.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Communication'] },
-          { name: 'Bluesky', url: 'https://bsky.app', desc: 'Decentralized social networking built on the open AT Protocol.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'Web', 'iOS & Android'] },
-          { name: 'WeChat', url: 'https://wechat.com', desc: 'All-in-one messaging, social feed, mini-programs, and mobile payments.', region: 'Asia-Pacific', tags: ['Free', 'iOS & Android', 'Communication', 'Finance'] },
-          { name: 'Discord', url: 'https://discord.com', desc: 'Voice, video, and text servers for communities, gaming, and study groups.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Web', 'iOS & Android', 'Communication'] }
-        ]
+        id: 'google-search',
+        rank: 1,
+        name: 'Google Search',
+        category: 'Search Engine',
+        dauLabel: '~3.5B+ DAU',
+        dauDetail: '16.4B+ daily searches',
+        url: 'https://www.google.com',
+        accentRing: 'group-hover:border-blue-400/70',
+        badgeBg: 'bg-blue-50 text-blue-700 border-blue-200/80',
+        iconBg: 'bg-white border border-slate-200/90 shadow-xs',
+        svg: `
+          <svg class="w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+        `
       },
       {
-        id: 'email',
-        title: 'Email Platforms',
-        icon: 'mail',
-        description: 'Personal, enterprise, and end-to-end encrypted electronic mail services.',
-        platforms: [
-          { name: 'Gmail', url: 'https://mail.google.com', desc: 'Fast, searchable email by Google with smart spam protection and Workspace.', region: 'Worldwide', tags: ['Global', 'Free', 'Cloud', 'Web', 'iOS & Android', 'Productivity', 'AI-Powered'] },
-          { name: 'Microsoft Outlook', url: 'https://outlook.live.com', desc: 'Integrated email, calendar, contacts, and tasks for personal & enterprise.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity'] },
-          { name: 'Proton Mail', url: 'https://proton.me/mail', desc: 'Swiss-based, open-source, end-to-end encrypted private email service.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'Open Source', 'Utilities'] },
-          { name: 'Yahoo Mail', url: 'https://mail.yahoo.com', desc: 'Generous inbox storage with receipt tracking and subscription management.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android'] },
-          { name: 'iCloud Mail', url: 'https://icloud.com/mail', desc: 'Ad-free email built seamlessly into Apple devices with Hide My Email.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'iOS & Android'] },
-          { name: 'Zoho Mail', url: 'https://zoho.com/mail', desc: 'Ad-free, secure custom-domain email hosting for teams and businesses.', region: 'Asia-Pacific', tags: ['Global', 'Free', 'Subscription', 'B2B', 'Productivity'] },
-          { name: 'Tuta (Tutanota)', url: 'https://tuta.com', desc: 'Quantum-safe encrypted email and calendar hosted on green energy in Germany.', region: 'Europe', tags: ['Global', 'Free', 'Open Source', 'Utilities'] },
-          { name: 'Fastmail', url: 'https://fastmail.com', desc: 'Privacy-first, ultra-fast independent email, calendars, and contacts.', region: 'Asia-Pacific', tags: ['Global', 'Subscription', 'Web', 'iOS & Android', 'Productivity'] }
-        ]
+        id: 'facebook',
+        rank: 2,
+        name: 'Facebook',
+        category: 'Social Network',
+        dauLabel: '~2.17B DAU',
+        dauDetail: '2.17B daily active users',
+        url: 'https://www.facebook.com',
+        accentRing: 'group-hover:border-blue-500/70',
+        badgeBg: 'bg-sky-50 text-sky-700 border-sky-200/80',
+        iconBg: 'bg-[#1877F2] shadow-sm shadow-blue-500/20',
+        svg: `
+          <svg class="w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#FFFFFF" d="M26.5 44V26.2h5.9l.9-6.9h-6.8v-4.4c0-2 .6-3.4 3.5-3.4h3.7V5.3c-.6-.1-2.8-.3-5.3-.3-5.3 0-8.9 3.2-8.9 9.1v5.2h-6v6.9h6V44h7z"/>
+          </svg>
+        `
       },
       {
-        id: 'music',
-        title: 'Music Streaming Platforms',
-        icon: 'music',
-        description: 'On-demand songs, lossless hi-fi audio, podcasts, and curated playlists worldwide.',
-        platforms: [
-          { name: 'Spotify', url: 'https://open.spotify.com', desc: 'Global leader in music streaming, AI DJ playlists, podcasts, and audiobooks.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment', 'AI-Powered', 'iOS & Android'] },
-          { name: 'Apple Music', url: 'https://music.apple.com', desc: 'Over 100 million songs with Spatial Audio and Lossless Hi-Res streaming.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'iOS & Android'] },
-          { name: 'YouTube Music', url: 'https://music.youtube.com', desc: 'Official tracks, live performances, remixes, and music videos.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment', 'Web'] },
-          { name: 'Amazon Music', url: 'https://music.amazon.com', desc: 'HD & Ultra HD music streaming plus ad-free top podcasts with Prime.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'iOS & Android'] },
-          { name: 'Tidal', url: 'https://tidal.com', desc: 'Artist-first streaming platform offering master-quality FLAC audio.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment'] },
-          { name: 'Deezer', url: 'https://deezer.com', desc: 'French global music streaming app featuring Flow personalized soundtracks.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'Entertainment'] },
-          { name: 'SoundCloud', url: 'https://soundcloud.com', desc: 'World’s largest open audio platform for independent artists and DJs.', region: 'Worldwide', tags: ['Global', 'Free', 'Entertainment', 'Web'] },
-          { name: 'Anghami', url: 'https://anghami.com', desc: 'Leading music and entertainment streaming platform across MENA.', region: 'Middle East', tags: ['Free', 'Subscription', 'Entertainment', 'iOS & Android'] },
-          { name: 'JioSaavn', url: 'https://jiosaavn.com', desc: 'Premier South Asian music, Bollywood, and regional audio streaming service.', region: 'Asia-Pacific', tags: ['Free', 'Subscription', 'Entertainment', 'iOS & Android'] }
-        ]
+        id: 'gmail',
+        rank: 3,
+        name: 'Gmail',
+        category: 'Email & Workspace',
+        dauLabel: '~1.8B+ DAU',
+        dauDetail: '1.8B+ active accounts',
+        url: 'https://mail.google.com',
+        accentRing: 'group-hover:border-red-400/70',
+        badgeBg: 'bg-rose-50 text-rose-700 border-rose-200/80',
+        iconBg: 'bg-white border border-slate-200/90 shadow-xs',
+        svg: `
+          <svg class="w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#4285F4" d="M6 39h6V23.4L3 16.6V36c0 1.66 1.34 3 3 3z"/>
+            <path fill="#34A853" d="M36 39h6c1.66 0 3-1.34 3-3V16.6l-9 6.8V39z"/>
+            <path fill="#FBBC04" d="M36 13.5v9.9l9-6.8V12.5c0-3.71-4.24-5.83-7.2-3.6L36 10.25v3.25z"/>
+            <path fill="#EA4335" d="M12 23.4v-9.9L24 22.5l12-9v9.9l-12 9-12-9z"/>
+            <path fill="#C5221F" d="M3 12.5v4.1l9 6.8v-9.9l-1.8-1.35C7.24 9.92 3 12.04 3 15.75v-3.25z"/>
+          </svg>
+        `
       },
       {
-        id: 'movies',
-        title: 'Movie & TV Streaming Platforms',
-        icon: 'film',
-        description: 'Blockbuster cinema, original series, anime, documentaries, and live TV.',
-        platforms: [
-          { name: 'Netflix', url: 'https://netflix.com', desc: 'Award-winning original series, global films, documentaries, and mobile games.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'Web', 'iOS & Android'] },
-          { name: 'Disney+', url: 'https://disneyplus.com', desc: 'Streaming home of Disney, Pixar, Marvel, Star Wars, and National Geographic.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'iOS & Android'] },
-          { name: 'Prime Video', url: 'https://primevideo.com', desc: 'Amazon Originals, theatrical movie rentals, and live sports channels.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'Web'] },
-          { name: 'Max', url: 'https://max.com', desc: 'Iconic HBO series, Warner Bros. cinema, DC Universe, and reality hits.', region: 'North America', tags: ['Global', 'Subscription', 'Entertainment'] },
-          { name: 'Apple TV+', url: 'https://tv.apple.com', desc: 'Critically acclaimed Apple Original dramas, comedies, and films in 4K HDR.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment'] },
-          { name: 'Hulu', url: 'https://hulu.com', desc: 'Next-day TV episodes, live TV bundles, and acclaimed original shows.', region: 'North America', tags: ['Subscription', 'Entertainment', 'Web'] },
-          { name: 'Crunchyroll', url: 'https://crunchyroll.com', desc: 'World’s largest dedicated anime and manga streaming library.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment'] },
-          { name: 'YouTube', url: 'https://youtube.com', desc: 'Global video platform for creators, tutorials, live streams, and movies.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment', 'Education'] },
-          { name: 'Tubi', url: 'https://tubitv.com', desc: '100% free ad-supported streaming with thousands of movies and TV shows.', region: 'North America', tags: ['Free', 'Entertainment', 'Web', 'iOS & Android'] },
-          { name: 'Showmax', url: 'https://showmax.com', desc: 'Leading African streaming service with local originals, HBO, and Premier League.', region: 'Africa', tags: ['Subscription', 'Entertainment', 'iOS & Android'] },
-          { name: 'Rakuten Viki', url: 'https://viki.com', desc: 'Global streaming destination for Korean, Chinese, and Japanese dramas.', region: 'Asia-Pacific', tags: ['Global', 'Free', 'Subscription', 'Entertainment'] }
-        ]
+        id: 'youtube',
+        rank: 4,
+        name: 'YouTube',
+        category: 'Video & Streaming',
+        dauLabel: '~1.2B+ DAU',
+        dauDetail: '2.7B+ monthly users',
+        url: 'https://www.youtube.com',
+        accentRing: 'group-hover:border-red-500/70',
+        badgeBg: 'bg-red-50 text-red-700 border-red-200/80',
+        iconBg: 'bg-white border border-slate-200/90 shadow-xs',
+        svg: `
+          <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#FF0000" d="M43.2 14.2c-.5-1.8-1.9-3.2-3.7-3.7C36.2 9.6 24 9.6 24 9.6s-12.2 0-15.5.9c-1.8.5-3.2 1.9-3.7 3.7C4 17.5 4 24 4 24s0 6.5.8 9.8c.5 1.8 1.9 3.2 3.7 3.7 3.3.9 15.5.9 15.5.9s12.2 0 15.5-.9c1.8-.5 3.2-1.9 3.7-3.7.8-3.3.8-9.8.8-9.8s0-6.5-.8-9.8z"/>
+            <path fill="#FFFFFF" d="M20 30V18l10.4 6L20 30z"/>
+          </svg>
+        `
       },
       {
-        id: 'clothing',
-        title: 'Online Clothing & Fashion Stores',
-        icon: 'shirt',
-        description: 'Everyday apparel, streetwear, athletic gear, and luxury fashion delivered worldwide.',
-        platforms: [
-          { name: 'ASOS', url: 'https://asos.com', desc: 'Global online fashion destination featuring 850+ brands and ASOS Design.', region: 'Europe', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android', 'Delivery'] },
-          { name: 'Zara', url: 'https://zara.com', desc: 'Contemporary runway-inspired apparel, footwear, and accessories.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android'] },
-          { name: 'H&M', url: 'https://hm.com', desc: 'Affordable everyday fashion, basics, and sustainable conscious collections.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android'] },
-          { name: 'Uniqlo', url: 'https://uniqlo.com', desc: 'Japanese casual wear engineered for everyday comfort (LifeWear).', region: 'Asia-Pacific', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android'] },
-          { name: 'Nike', url: 'https://nike.com', desc: 'Performance athletic footwear, sportswear, and custom sneaker drops.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Health', 'iOS & Android'] },
-          { name: 'Zalando', url: 'https://zalando.com', desc: 'Europe’s leading online platform for fashion, shoes, and beauty.', region: 'Europe', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'SHEIN', url: 'https://shein.com', desc: 'Ultra-fast global fashion and lifestyle e-commerce marketplace.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'iOS & Android', 'Delivery'] },
-          { name: 'Farfetch', url: 'https://farfetch.com', desc: 'Global luxury fashion marketplace connecting boutiques and designers.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Delivery'] },
-          { name: 'SSENSE', url: 'https://ssense.com', desc: 'Curated luxury, independent designers, and avant-garde streetwear.', region: 'North America', tags: ['Global', 'E-Commerce', 'Web'] },
-          { name: 'Superbalist', url: 'https://superbalist.com', desc: 'South Africa’s premier online fashion, sneaker, and apartment store.', region: 'Africa', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] }
-        ]
+        id: 'netflix',
+        rank: 5,
+        name: 'Netflix',
+        category: 'Movies & TV Shows',
+        dauLabel: '~190M+ DAU',
+        dauDetail: '325M+ paid subscribers',
+        url: 'https://www.netflix.com',
+        accentRing: 'group-hover:border-red-600/70',
+        badgeBg: 'bg-neutral-100 text-neutral-800 border-neutral-300/80',
+        iconBg: 'bg-[#141414] shadow-sm',
+        svg: `
+          <svg class="w-9 h-9 sm:w-11 sm:h-11" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#B1060F" d="M13 6h6.5v36c-2.2-.3-4.3-.4-6.5-.3V6z"/>
+            <path fill="#B1060F" d="M28.5 6H35v35.7c-2.2-.1-4.3 0-6.5.3V6z"/>
+            <path fill="#E50914" d="M13 6h6.5L35 41.7c-2.3-.1-4.5 0-6.7.3L13 6z"/>
+          </svg>
+        `
       },
       {
-        id: 'banking',
-        title: 'Banking & Digital Finance Platforms',
-        icon: 'landmark',
-        description: 'Neobanks, cross-border transfers, digital wallets, and global payment rails.',
-        platforms: [
-          { name: 'PayPal', url: 'https://paypal.com', desc: 'Trusted global online payments, buyer protection, and peer transfers.', region: 'Worldwide', tags: ['Global', 'Free', 'Finance', 'Web', 'iOS & Android'] },
-          { name: 'Wise', url: 'https://wise.com', desc: 'Multi-currency accounts and international money transfers at real exchange rates.', region: 'Worldwide', tags: ['Global', 'Finance', 'Web', 'iOS & Android', 'Utilities'] },
-          { name: 'Revolut', url: 'https://revolut.com', desc: 'Global financial super-app for banking, FX, cards, and investments.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'Finance', 'iOS & Android'] },
-          { name: 'Chase', url: 'https://chase.com', desc: 'Consumer banking, credit cards, mortgages, and wealth management.', region: 'North America', tags: ['Finance', 'Web', 'iOS & Android'] },
-          { name: 'HSBC', url: 'https://hsbc.com', desc: 'International banking and financial services across 60+ countries.', region: 'Worldwide', tags: ['Global', 'Finance', 'Web', 'iOS & Android'] },
-          { name: 'Nubank', url: 'https://nubank.com.br', desc: 'Latin America’s largest digital bank with zero-fee credit cards and accounts.', region: 'Latin America', tags: ['Free', 'Finance', 'iOS & Android'] },
-          { name: 'Monzo', url: 'https://monzo.com', desc: 'Smart UK mobile-first bank with instant spending notifications and pots.', region: 'Europe', tags: ['Free', 'Finance', 'iOS & Android'] },
-          { name: 'Cash App', url: 'https://cash.app', desc: 'Instant peer-to-peer payments, banking, stocks, and Bitcoin.', region: 'North America', tags: ['Free', 'Finance', 'iOS & Android'] },
-          { name: 'Paystack', url: 'https://paystack.com', desc: 'Modern online and offline payment infrastructure powering African businesses.', region: 'Africa', tags: ['Finance', 'B2B', 'Web'] },
-          { name: 'Alipay', url: 'https://global.alipay.com', desc: 'Leading digital wallet and lifestyle payment platform across Asia.', region: 'Asia-Pacific', tags: ['Finance', 'iOS & Android', 'E-Commerce'] }
-        ]
-      },
-      {
-        id: 'search',
-        title: 'Search Engines',
-        icon: 'search',
-        description: 'Web search, privacy-focused discovery, eco-friendly search, and AI answer engines.',
-        platforms: [
-          { name: 'Google', url: 'https://google.com', desc: 'The world’s most comprehensive web search, knowledge graph, and index.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'AI-Powered', 'Utilities'] },
-          { name: 'Bing', url: 'https://bing.com', desc: 'Microsoft’s search engine integrated with Copilot AI and rewards.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'AI-Powered', 'Utilities'] },
-          { name: 'DuckDuckGo', url: 'https://duckduckgo.com', desc: 'Privacy-first search engine that never tracks your search history.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Utilities'] },
-          { name: 'Brave Search', url: 'https://search.brave.com', desc: 'Independent search index with built-in AI summarizer and zero profiling.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'AI-Powered'] },
-          { name: 'Ecosia', url: 'https://ecosia.org', desc: 'The search engine that uses ad revenue to plant trees worldwide.', region: 'Europe', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Utilities'] },
-          { name: 'Perplexity', url: 'https://perplexity.ai', desc: 'Conversational AI answer engine with real-time cited web sources.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'AI-Powered', 'Education'] },
-          { name: 'Yahoo Search', url: 'https://search.yahoo.com', desc: 'Web search portal integrated with Yahoo News, Finance, and Sports.', region: 'Worldwide', tags: ['Global', 'Free', 'Web'] },
-          { name: 'Baidu', url: 'https://baidu.com', desc: 'Dominant Chinese-language search engine, maps, and AI cloud platform.', region: 'Asia-Pacific', tags: ['Free', 'Web', 'AI-Powered'] },
-          { name: 'Yandex', url: 'https://yandex.com', desc: 'Multilingual search engine, web browser, and ecosystem utilities.', region: 'Europe', tags: ['Free', 'Web', 'Utilities'] }
-        ]
-      },
-      {
-        id: 'appstores',
-        title: 'App Stores & Software Marketplaces',
-        icon: 'layout-grid',
-        description: 'Official mobile app ecosystems, desktop software hubs, and open-source repositories.',
-        platforms: [
-          { name: 'Apple App Store', url: 'https://apps.apple.com', desc: 'Curated marketplace for iOS, iPadOS, macOS, and visionOS applications.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Utilities'] },
-          { name: 'Google Play Store', url: 'https://play.google.com', desc: 'Official Android app, game, movie, and digital book distribution platform.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Entertainment'] },
-          { name: 'Microsoft Store', url: 'https://apps.microsoft.com', desc: 'Official Windows apps, PC games, and productivity tools.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'Productivity'] },
-          { name: 'Amazon Appstore', url: 'https://amazon.com/appstore', desc: 'Apps and games for Fire tablets, Fire TV, and Android devices.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android'] },
-          { name: 'F-Droid', url: 'https://f-droid.org', desc: 'Installable catalog of Free and Open Source Software (FOSS) for Android.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'iOS & Android'] },
-          { name: 'Samsung Galaxy Store', url: 'https://galaxystore.samsung.com', desc: 'Exclusive apps, themes, and Good Lock utilities for Galaxy devices.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android'] },
-          { name: 'Huawei AppGallery', url: 'https://appgallery.huawei.com', desc: 'Official app distribution platform for HarmonyOS and Huawei devices.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android'] },
-          { name: 'Steam', url: 'https://store.steampowered.com', desc: 'World’s largest digital distribution platform for PC gaming.', region: 'Worldwide', tags: ['Global', 'Free', 'Entertainment', 'Web'] }
-        ]
-      },
-      {
-        id: 'conferencing',
-        title: 'Video Conferencing & Messaging',
-        icon: 'video',
-        description: 'HD video meetings, team collaboration hubs, and encrypted instant messaging.',
-        platforms: [
-          { name: 'Zoom', url: 'https://zoom.us', desc: 'Reliable video conferencing, webinars, and AI-assisted team collaboration.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'Productivity', 'B2B'] },
-          { name: 'Microsoft Teams', url: 'https://microsoft.com/microsoft-teams', desc: 'Enterprise chat, video calls, file sharing, and Office 365 integration.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'Productivity', 'B2B'] },
-          { name: 'Google Meet', url: 'https://meet.google.com', desc: 'Browser-based secure video meetings integrated with Google Calendar.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'Communication', 'Productivity'] },
-          { name: 'WhatsApp', url: 'https://whatsapp.com', desc: 'End-to-end encrypted messaging, voice, and video calls used by 2B+ people.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Web', 'Communication'] },
-          { name: 'Telegram', url: 'https://telegram.org', desc: 'Cloud-based fast messaging, large channels, bots, and file sharing.', region: 'Worldwide', tags: ['Global', 'Free', 'Cloud', 'iOS & Android', 'Communication'] },
-          { name: 'Slack', url: 'https://slack.com', desc: 'Channel-based workplace messaging and workflow automation.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'Productivity', 'B2B'] },
-          { name: 'Cisco Webex', url: 'https://webex.com', desc: 'Enterprise video conferencing, cloud calling, and hybrid events.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'B2B'] },
-          { name: 'Signal', url: 'https://signal.org', desc: 'Non-profit, gold-standard open-source encrypted messaging and calls.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'iOS & Android', 'Communication'] }
-        ]
-      },
-      {
-        id: 'grocery',
-        title: 'Online Grocery & Food Delivery',
-        icon: 'shopping-bag',
-        description: 'Same-day supermarket essentials, fresh produce, and restaurant meals at your door.',
-        platforms: [
-          { name: 'Instacart', url: 'https://instacart.com', desc: 'Same-day grocery delivery and pickup from local supermarkets across North America.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'Uber Eats', url: 'https://ubereats.com', desc: 'Global restaurant meal, convenience, and grocery delivery platform.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'DoorDash', url: 'https://doordash.com', desc: 'On-demand restaurant, grocery, and retail delivery service.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'Amazon Fresh', url: 'https://amazon.com/fresh', desc: 'Fresh produce, pantry staples, and household goods with fast Prime delivery.', region: 'Worldwide', tags: ['Global', 'Subscription', 'E-Commerce', 'Delivery'] },
-          { name: 'Walmart Grocery', url: 'https://walmart.com/grocery', desc: 'Everyday low-price groceries with curbside pickup and home delivery.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'Web', 'iOS & Android'] },
-          { name: 'Deliveroo', url: 'https://deliveroo.co.uk', desc: 'Fast restaurant and supermarket delivery across Europe, Middle East, and Asia.', region: 'Europe', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'GrabFood', url: 'https://grab.com', desc: 'Southeast Asia’s leading everyday food and grocery delivery super-app.', region: 'Asia-Pacific', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'Woolworths Online', url: 'https://woolworths.co.za', desc: 'Premium fresh food, pantry, and household delivery across South Africa.', region: 'Africa', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
-          { name: 'Ocado', url: 'https://ocado.com', desc: 'World’s largest dedicated online supermarket with automated fulfillment.', region: 'Europe', tags: ['E-Commerce', 'Delivery', 'Web'] },
-          { name: 'Rappi', url: 'https://rappi.com', desc: 'On-demand super-app delivering groceries, meals, and pharmacy items in LatAm.', region: 'Latin America', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] }
-        ]
-      },
-      {
-        id: 'wholesale',
-        title: 'Wholesalers & Bulk Marketplaces',
-        icon: 'warehouse',
-        description: 'Warehouse clubs, bulk consumer goods, and global B2B wholesale sourcing.',
-        platforms: [
-          { name: 'Costco Wholesale', url: 'https://costco.com', desc: 'Members-only warehouse club offering bulk groceries, electronics, and appliances.', region: 'Worldwide', tags: ['Global', 'Subscription', 'E-Commerce', 'B2B'] },
-          { name: 'Alibaba.com', url: 'https://alibaba.com', desc: 'World’s largest B2B wholesale marketplace connecting global buyers and factories.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'B2B', 'Web'] },
-          { name: "Sam's Club", url: 'https://samsclub.com', desc: 'Bulk warehouse retail and Scan & Go shopping for families and businesses.', region: 'North America', tags: ['Subscription', 'E-Commerce', 'B2B'] },
-          { name: 'Makro', url: 'https://makro.co.za', desc: 'Warehouse club for bulk groceries, liquor, electronics, and business supplies.', region: 'Africa', tags: ['E-Commerce', 'B2B', 'Delivery'] },
-          { name: 'Metro AG', url: 'https://metro.de', desc: 'International cash-and-carry wholesaler serving hospitality and traders.', region: 'Europe', tags: ['B2B', 'E-Commerce'] },
-          { name: 'Faire', url: 'https://faire.com', desc: 'Online wholesale marketplace connecting independent retailers with brands.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'B2B', 'Web'] },
-          { name: "BJ's Wholesale", url: 'https://bjs.com', desc: 'Membership warehouse club offering bulk groceries and household essentials.', region: 'North America', tags: ['Subscription', 'E-Commerce', 'Delivery'] },
-          { name: 'IndiaMART', url: 'https://indiamart.com', desc: 'India’s largest online B2B marketplace for industrial and commercial goods.', region: 'Asia-Pacific', tags: ['Free', 'E-Commerce', 'B2B', 'Web'] },
-          { name: 'Global Sources', url: 'https://globalsources.com', desc: 'Trusted B2B sourcing platform for verified electronics and lifestyle suppliers.', region: 'Asia-Pacific', tags: ['Global', 'B2B', 'E-Commerce'] }
-        ]
-      },
-      {
-        id: 'productivity',
-        title: 'Cloud Storage & Productivity',
-        icon: 'folder-kanban',
-        description: 'Cloud drives, connected workspaces, office suites, and task organization.',
-        platforms: [
-          { name: 'Google Drive', url: 'https://drive.google.com', desc: 'Cloud file storage paired with Docs, Sheets, and Slides collaboration.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity', 'AI-Powered'] },
-          { name: 'Notion', url: 'https://notion.so', desc: 'All-in-one workspace for notes, wikis, databases, and project management.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity', 'AI-Powered'] },
-          { name: 'Microsoft 365', url: 'https://office.com', desc: 'Word, Excel, PowerPoint, and 1TB OneDrive cloud storage with Copilot.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Cloud', 'Productivity', 'AI-Powered'] },
-          { name: 'Dropbox', url: 'https://dropbox.com', desc: 'Fast cross-device file syncing, large file transfers, and e-signatures.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity'] },
-          { name: 'Trello', url: 'https://trello.com', desc: 'Visual Kanban boards, lists, and cards for organizing daily tasks and teams.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Productivity'] },
-          { name: 'Apple iCloud', url: 'https://icloud.com', desc: 'Automatic backup and syncing for photos, files, passwords, and notes.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'iOS & Android'] },
-          { name: 'Evernote', url: 'https://evernote.com', desc: 'Capture notes, web clippings, scanned receipts, and to-do lists anywhere.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Productivity'] },
-          { name: 'Box', url: 'https://box.com', desc: 'Secure enterprise content management and workflow collaboration.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Cloud', 'B2B', 'Productivity'] }
-        ]
-      },
-      {
-        id: 'travel',
-        title: 'Travel, Maps & Ride-Hailing',
-        icon: 'compass',
-        description: 'Turn-by-turn navigation, flights, stays, and on-demand city mobility.',
-        platforms: [
-          { name: 'Google Maps', url: 'https://maps.google.com', desc: 'Real-time GPS navigation, live traffic, transit schedules, and local reviews.', region: 'Worldwide', tags: ['Global', 'Free', 'Travel', 'Utilities', 'iOS & Android'] },
-          { name: 'Uber', url: 'https://uber.com', desc: 'On-demand rides, airport transfers, and city mobility across 70+ countries.', region: 'Worldwide', tags: ['Global', 'Travel', 'iOS & Android'] },
-          { name: 'Airbnb', url: 'https://airbnb.com', desc: 'Book unique homes, vacation rentals, and local experiences worldwide.', region: 'Worldwide', tags: ['Global', 'Travel', 'E-Commerce', 'iOS & Android'] },
-          { name: 'Booking.com', url: 'https://booking.com', desc: 'Global hotel, apartment, flight, and car rental reservations.', region: 'Worldwide', tags: ['Global', 'Travel', 'E-Commerce', 'Web'] },
-          { name: 'Skyscanner', url: 'https://skyscanner.net', desc: 'Compare cheap flights, hotels, and car hire across hundreds of airlines.', region: 'Worldwide', tags: ['Global', 'Free', 'Travel', 'Web', 'Utilities'] },
-          { name: 'Bolt', url: 'https://bolt.eu', desc: 'Fast, affordable ride-hailing, e-scooters, and car-sharing in Europe & Africa.', region: 'Europe', tags: ['Travel', 'iOS & Android'] },
-          { name: 'Waze', url: 'https://waze.com', desc: 'Community-driven GPS navigation with real-time hazard and police alerts.', region: 'Worldwide', tags: ['Global', 'Free', 'Travel', 'Utilities', 'iOS & Android'] },
-          { name: 'Expedia', url: 'https://expedia.com', desc: 'Bundle flights, hotels, cruises, and travel packages with One Key rewards.', region: 'Worldwide', tags: ['Global', 'Travel', 'E-Commerce'] },
-          { name: 'Trip.com', url: 'https://trip.com', desc: 'Comprehensive international flight, high-speed rail, and hotel booking.', region: 'Asia-Pacific', tags: ['Global', 'Travel', 'iOS & Android'] }
-        ]
-      },
-      {
-        id: 'education',
-        title: 'Online Learning & Knowledge',
-        icon: 'graduation-cap',
-        description: 'University courses, language learning, open encyclopedias, and computational knowledge.',
-        platforms: [
-          { name: 'Wikipedia', url: 'https://wikipedia.org', desc: 'The free, multilingual open encyclopedia edited by volunteers worldwide.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'Education', 'Web'] },
-          { name: 'Coursera', url: 'https://coursera.org', desc: 'Online degrees and certificates from Stanford, Yale, Google, and IBM.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education', 'Web'] },
-          { name: 'Khan Academy', url: 'https://khanacademy.org', desc: '100% free world-class education in math, science, computing, and economics.', region: 'Worldwide', tags: ['Global', 'Free', 'Education', 'Web', 'iOS & Android'] },
-          { name: 'Duolingo', url: 'https://duolingo.com', desc: 'Gamified daily lessons for learning 40+ languages, math, and music.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education', 'AI-Powered', 'iOS & Android'] },
-          { name: 'Udemy', url: 'https://udemy.com', desc: 'Marketplace of 200,000+ practical courses in coding, business, and design.', region: 'Worldwide', tags: ['Global', 'Education', 'Web', 'iOS & Android'] },
-          { name: 'edX', url: 'https://edx.org', desc: 'University-level courses and MicroMasters founded by Harvard and MIT.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education'] },
-          { name: 'Quizlet', url: 'https://quizlet.com', desc: 'AI-enhanced digital flashcards, practice tests, and study sets.', region: 'Worldwide', tags: ['Global', 'Free', 'Education', 'AI-Powered', 'iOS & Android'] },
-          { name: 'WolframAlpha', url: 'https://wolframalpha.com', desc: 'Computational intelligence engine for step-by-step math, science, and data.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education', 'AI-Powered', 'Utilities'] }
-        ]
-      },
-      {
-        id: 'health',
-        title: 'Health, Fitness & Wellness',
-        icon: 'heart-pulse',
-        description: 'Activity tracking, nutrition logging, mindfulness meditation, and medical info.',
-        platforms: [
-          { name: 'Strava', url: 'https://strava.com', desc: 'Social fitness network and GPS tracker for runners, cyclists, and hikers.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Health', 'iOS & Android'] },
-          { name: 'MyFitnessPal', url: 'https://myfitnesspal.com', desc: 'Calorie counter, barcode food scanner, and macro nutrition tracker.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Health', 'iOS & Android'] },
-          { name: 'Headspace', url: 'https://headspace.com', desc: 'Guided meditation, sleepcasts, and daily stress-relief exercises.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Health', 'iOS & Android'] },
-          { name: 'Calm', url: 'https://calm.com', desc: 'Sleep stories, breathing programs, and relaxing soundscapes for mental wellness.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Health', 'iOS & Android'] },
-          { name: 'WebMD', url: 'https://webmd.com', desc: 'Trusted medical symptom checker, drug reference, and health news.', region: 'Worldwide', tags: ['Global', 'Free', 'Health', 'Web'] },
-          { name: 'Teladoc Health', url: 'https://teladochealth.com', desc: '24/7 virtual doctor visits, mental health therapy, and medical advice.', region: 'North America', tags: ['Subscription', 'Health', 'iOS & Android'] },
-          { name: 'Fitbit', url: 'https://fitbit.com', desc: 'Daily step, heart-rate, sleep-stage, and readiness tracking ecosystem.', region: 'Worldwide', tags: ['Global', 'Free', 'Health', 'iOS & Android'] },
-          { name: 'Flo Health', url: 'https://flo.health', desc: 'Cycle tracking, ovulation calendar, and women’s health insights.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Health', 'iOS & Android'] }
-        ]
-      },
-      {
-        id: 'utilities',
-        title: 'News, Weather & Daily Utilities',
-        icon: 'newspaper',
-        description: 'Verified global journalism, hyperlocal forecasts, currency rates, and translation.',
-        platforms: [
-          { name: 'Reuters', url: 'https://reuters.com', desc: 'Unbiased international breaking news, financial markets, and world affairs.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web'] },
-          { name: 'BBC News', url: 'https://bbc.com/news', desc: 'Trusted global news coverage, live radio, and in-depth reporting.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web', 'iOS & Android'] },
-          { name: 'Associated Press', url: 'https://apnews.com', desc: 'Independent global fact-based journalism and real-time wire news.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web'] },
-          { name: 'AccuWeather', url: 'https://accuweather.com', desc: 'MinuteCast hyperlocal precipitation forecasts and severe weather alerts.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web', 'iOS & Android'] },
-          { name: 'The Weather Channel', url: 'https://weather.com', desc: 'Interactive radar maps, 10-day forecasts, and climate tracking.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web'] },
-          { name: 'Speedtest by Ookla', url: 'https://speedtest.net', desc: 'Instant global internet bandwidth, ping, and network diagnostics.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web', 'iOS & Android'] },
-          { name: 'XE Currency', url: 'https://xe.com', desc: 'Live mid-market foreign exchange rates and currency converter.', region: 'Worldwide', tags: ['Global', 'Free', 'Finance', 'Utilities', 'Web'] },
-          { name: 'DeepL Translate', url: 'https://deepl.com', desc: 'Ultra-accurate AI neural machine translation for text and documents.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'AI-Powered', 'Utilities', 'Web'] }
-        ]
-      },
-      {
-        id: 'home',
-        title: 'Home, Real Estate & Classifieds',
-        icon: 'home',
-        description: 'Furniture, home improvement, property portals, and local peer-to-peer classifieds.',
-        platforms: [
-          { name: 'IKEA', url: 'https://ikea.com', desc: 'Affordable Scandinavian furniture, home decor, and smart home essentials.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android', 'Delivery'] },
-          { name: 'Zillow', url: 'https://zillow.com', desc: 'Real estate marketplace for buying, selling, renting, and home Zestimates.', region: 'North America', tags: ['Free', 'E-Commerce', 'Web', 'iOS & Android'] },
-          { name: 'Wayfair', url: 'https://wayfair.com', desc: 'Millions of home furnishings, lighting, rugs, and decor items online.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'Web'] },
-          { name: 'Rightmove', url: 'https://rightmove.co.uk', desc: 'UK’s number one property portal for homes to buy and rent.', region: 'Europe', tags: ['Free', 'Web', 'iOS & Android'] },
-          { name: 'Gumtree', url: 'https://gumtree.com', desc: 'Local classified ads for second-hand goods, cars, jobs, and rentals.', region: 'Africa', tags: ['Free', 'E-Commerce', 'Web', 'iOS & Android'] },
-          { name: 'Craigslist', url: 'https://craigslist.org', desc: 'Classic hyperlocal classifieds for housing, jobs, gigs, and for-sale items.', region: 'North America', tags: ['Free', 'E-Commerce', 'Web'] },
-          { name: 'The Home Depot', url: 'https://homedepot.com', desc: 'Tools, appliances, building materials, and DIY home improvement.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'Web'] }
-        ]
+        id: 'uber-eats',
+        rank: 6,
+        name: 'Uber Eats',
+        category: 'Food & Delivery',
+        dauLabel: '~23M+ DAU',
+        dauDetail: '95M+ monthly users',
+        url: 'https://www.ubereats.com',
+        accentRing: 'group-hover:border-emerald-500/70',
+        badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
+        iconBg: 'bg-[#06C167] shadow-sm shadow-emerald-500/20',
+        svg: `
+          <svg class="w-10 h-10 sm:w-12 sm:h-12" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <text x="32" y="29" text-anchor="middle" fill="#142328" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="16" letter-spacing="-0.5">Uber</text>
+            <text x="32" y="46" text-anchor="middle" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="16" letter-spacing="-0.5">Eats</text>
+          </svg>
+        `
       }
     ];
 
     /**
-     * 2. ALL POSSIBLE INTERACTIVE TAGS
+     * 2. COMPREHENSIVE LEGAL DOCUMENTS FOR "ONE SPOT!"
      */
-    const ALL_TAGS = [
-      'All',
-      'Global',
-      'Free',
-      'Subscription',
-      'iOS & Android',
-      'Web',
-      'Cloud',
-      'AI-Powered',
-      'E-Commerce',
-      'Finance',
-      'Entertainment',
-      'Productivity',
-      'Communication',
-      'Travel',
-      'Health',
-      'Education',
-      'Utilities',
-      'Open Source',
-      'B2B',
-      'Delivery'
-    ];
-
-    /**
-     * 3. DETAILED LEGAL MODAL CONTENT
-     */
-    const LEGAL_DOCS = {
+    const LEGAL_DOCUMENTS = {
       privacy: {
+        badge: 'Data & Privacy Protection',
         title: 'Privacy Policy',
-        subtitle: 'Effective Date: November 12, 2026 • Global Data Protection Compliance (GDPR, CCPA/CPRA, POPIA)',
-        icon: 'shield-check',
+        updated: 'Effective Date: November 12, 2026 • Last Reviewed: November 12, 2026',
         sections: [
           {
-            heading: '1. Overview & Privacy-First Architecture',
-            body: 'Arcknowledge ("we," "our," or "us") operates as a Worldwide Everyday Digital Hub and Directory. We are engineered on a privacy-by-design, front-end-first architecture. We do not sell, rent, trade, or monetize your personal browsing history or search queries to data brokers or advertising networks.'
+            heading: '1. Overview & Zero-Server Architecture',
+            body: 'One Spot! ("we," "our," or "us") operates as a front-end-only Progressive Web Application (PWA) designed to serve as a streamlined quick-launch directory for popular third-party web applications. Your privacy is foundational to our architecture: One Spot! does not operate backend user databases, does not require account registration, and does not transmit your browsing activity, search queries, or app click history to any One Spot! server.'
           },
           {
             heading: '2. Information Stored Locally on Your Device',
-            body: 'To deliver personalized convenience without requiring account registration, Arcknowledge utilizes your browser’s local storage (localStorage) solely for: (a) saving your pinned "My Daily Hub" shortcut platforms, (b) remembering your Light/Dark visual theme preference, and (c) retaining your preferred geographic region filter. This data resides exclusively on your device and can be cleared at any time via your browser settings or the "Clear Pinned" button.'
+            body: 'To provide Progressive Web App functionality—including offline shell availability, fast startup times, and home-screen installation—your web browser stores static application assets (HTML, styling, vector icons, and Service Worker cache entries) locally on your device. Any in-app filter text you enter is processed strictly in transient browser memory (RAM) and is immediately discarded when you clear the search box or close the tab.'
           },
           {
-            heading: '3. Third-Party External Websites & Services',
-            body: 'Arcknowledge serves as an organized index linking directly to independent third-party platforms (including banking institutions, streaming services, retailers, and search engines). Once you click an external link and leave Arcknowledge, your interactions are governed exclusively by the privacy policy, cookie practices, and security standards of that destination platform. We strongly encourage reviewing the privacy notices of any external platform before submitting sensitive personal or financial credentials.'
+            heading: '3. Third-Party Services & External Destinations',
+            body: 'One Spot! provides direct hyperlinks to six external third-party platforms: Google Search, Facebook, Gmail, YouTube, Netflix, and Uber Eats. When you tap or click an application card, your browser opens that third-party website in a new tab. Once you leave One Spot!, your interactions, login credentials, cookies, and personal data are governed solely by the respective third party’s Privacy Policy and data practices. We strongly encourage you to review the privacy policies of each destination service you access.'
           },
           {
-            heading: '4. Cookies & Technical Telemetry',
-            body: 'This front-end web application does not deploy invasive cross-site tracking cookies. Standard content delivery networks (CDNs) used to load typography and icons may temporarily process anonymized IP routing headers strictly to deliver static assets reliably and securely.'
+            heading: '4. Cookies, Analytics & Advertising Trackers',
+            body: 'One Spot! does not set first-party tracking cookies, behavioral profiling pixels, or third-party advertising SDKs. Note that loading web fonts or styling libraries from content delivery networks (such as Google Fonts or Tailwind CDN) may expose standard HTTP request metadata (such as your IP address and user-agent string) to those infrastructure providers solely to deliver the requested stylesheet or font file.'
           },
           {
-            heading: '5. Your International Privacy Rights (GDPR, CCPA & POPIA)',
-            body: 'Regardless of your jurisdiction—including the European Economic Area (GDPR), United Kingdom, California (CCPA/CPRA), South Africa (POPIA), Brazil (LGPD), or Asia-Pacific—you retain full control over your local preferences. Because Arcknowledge does not maintain centralized user databases, you can exercise immediate erasure of all stored preferences directly within your browser.'
+            heading: '5. Children’s Privacy',
+            body: 'One Spot! is a general-audience utility launcher and does not knowingly collect personal information from children under the age of 13 (or the applicable age of digital consent in your jurisdiction, such as 16 under GDPR or 18 under South Africa’s POPIA). Because we collect no personal data, no user profiles exist in our systems.'
           },
           {
-            heading: '6. Policy Updates & Contact',
-            body: 'We may periodically update this Privacy Policy to reflect new directory features or evolving international data regulations. Continued use of the Arcknowledge hub constitutes acknowledgment of the current version displayed in this portal.'
+            heading: '6. Your Privacy Rights & Data Deletion',
+            body: 'Under global data protection frameworks (including GDPR, CCPA/CPRA, and POPIA), you retain full control over your local device data. You may remove all locally cached One Spot! PWA files at any time by uninstalling the app from your device home screen or clearing your browser’s site storage and Service Worker cache.'
           }
         ]
       },
       termsOfUse: {
+        badge: 'Acceptable Platform Usage',
         title: 'Terms of Use',
-        subtitle: 'Effective Date: November 12, 2026 • Directory Usage & Intellectual Property Guidelines',
-        icon: 'file-text',
+        updated: 'Effective Date: November 12, 2026 • Version 2.4',
         sections: [
           {
             heading: '1. Acceptance of Terms of Use',
-            body: 'By accessing, browsing, searching, or using the Arcknowledge Worldwide Everyday Digital Hub ("the Platform"), you confirm that you have read, understood, and agreed to comply with these Terms of Use. If you do not agree with any provision herein, you should discontinue use of the Platform.'
+            body: 'By accessing, installing, or using the One Spot! Progressive Web Application ("the Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms of Use. If you do not agree with any provision herein, please discontinue use of One Spot! and uninstall the application from your device.'
           },
           {
-            heading: '2. Permitted Personal & Commercial Directory Use',
-            body: 'Arcknowledge grants you a limited, non-exclusive, revocable, worldwide license to access and use this directory as a personal or workplace start-page and navigation hub. You agree not to: (a) deploy automated scrapers, bots, or spiders to harvest directory metadata at scale, (b) attempt to disrupt, reverse-engineer, or overload the front-end infrastructure, or (c) misrepresent Arcknowledge as an official financial, medical, or governmental authority.'
+            heading: '2. Permitted Personal & Commercial Use',
+            body: 'One Spot! grants you a revocable, non-exclusive, non-transferable, royalty-free license to install and use the application on compatible smartphones, tablets, and desktop computers as a personal or workplace productivity launcher to access supported third-party web services.'
           },
           {
-            heading: '3. Directory Accuracy & Regional Availability Disclaimer',
-            body: 'While we strive to maintain accurate, up-to-date links, descriptions, pricing tags (such as "Free" or "Subscription"), and regional availability badges, third-party platforms frequently modify their URLs, subscription tiers, and geographic licensing restrictions. Arcknowledge does not warrant that every listed service will be uninterrupted, error-free, or legally available in every territory.'
+            heading: '3. Prohibited Conduct & Restrictions',
+            body: 'When using One Spot!, you agree not to: (a) misrepresent One Spot! as an official product of Google, Meta, Netflix, or Uber Technologies; (b) inject malicious scripts, automated scraping bots, or deceptive phishing overlays into cached copies of the Service; (c) attempt to bypass security attributes (such as rel="noopener noreferrer") designed to protect users when opening external tabs; or (d) use the Service for any unlawful purpose.'
           },
           {
-            heading: '4. Third-Party Trademarks & Non-Affiliation',
-            body: 'All brand names, product titles, service marks, and corporate identities referenced in Arcknowledge (including Google, Apple, Microsoft, Spotify, Netflix, PayPal, Amazon, and others) are the sole property of their respective trademark owners. Listing in the Arcknowledge directory is strictly for informational and navigational convenience and does not imply endorsement, sponsorship, or corporate affiliation.'
+            heading: '4. Daily Active User (DAU) Ranking Metrics',
+            body: 'Applications displayed inside One Spot! are arranged from highest to lowest estimated global Daily Active Users (DAU) based on publicly reported corporate filings, industry research benchmarks, and active user disclosures. These metrics are provided strictly for informational and organizational convenience and may fluctuate over time as third-party platforms release updated user statistics.'
           },
           {
-            heading: '5. Arcknowledge Intellectual Property',
-            body: 'The Arcknowledge brand name, geometric arch emblem, interface layout, curated taxonomy, tag architecture, and custom front-end code are protected by international copyright and intellectual property laws.'
+            heading: '5. Third-Party Account Compliance',
+            body: 'Accessing Google Search, Facebook, Gmail, YouTube, Netflix, or Uber Eats through One Spot! does not grant you subscription access or bypass authentication requirements. You remain solely responsible for maintaining valid accounts, subscriptions, and compliance with each third-party provider’s own rules and community standards.'
+          },
+          {
+            heading: '6. Modifications & Offline Availability',
+            body: 'We reserve the right to update the interface, ranking figures, or supported links in future versions of One Spot!. While our Service Worker enables the launcher interface to load offline, active internet connectivity is required to reach external third-party websites.'
           }
         ]
       },
       termsAndConditions: {
+        badge: 'Legal Agreement & Disclaimers',
         title: 'Terms and Conditions',
-        subtitle: 'Effective Date: November 12, 2026 • Service Governance, Liability & Dispute Resolution',
-        icon: 'scale',
+        updated: 'Effective Date: November 12, 2026 • Governing Framework',
         sections: [
           {
-            heading: '1. Nature of Service ("As-Is" Provision)',
-            body: 'Arcknowledge is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express, implied, or statutory, including implied warranties of merchantability, fitness for a particular purpose, title, or non-infringement. We act solely as a neutral informational gateway and do not process payments, host third-party media, or custody user funds.'
+            heading: '1. Independent Launcher & Non-Affiliation Disclaimer',
+            body: 'One Spot! is an independent web utility and application directory. One Spot! is NOT affiliated with, endorsed by, sponsored by, or officially connected with Alphabet Inc. (Google Search, Gmail, YouTube), Meta Platforms, Inc. (Facebook), Netflix, Inc. (Netflix), or Uber Technologies, Inc. (Uber Eats). All product names, logos, and brands are the property of their respective owners and are used strictly for nominative identification purposes.'
           },
           {
-            heading: '2. Third-Party Transactions & Financial Safety',
-            body: 'Any transactions, subscriptions, banking transfers, wholesale orders, travel bookings, or account registrations you initiate after navigating to a third-party website are strictly bilateral agreements between you and that third-party provider. Always verify the destination browser URL and SSL security lock icon before entering passwords or banking credentials.'
+            heading: '2. Intellectual Property Rights',
+            body: 'The original software code, layout architecture, ranking curation, and "One Spot!" brand identity are protected by applicable copyright and intellectual property laws. All third-party vector marks displayed in the launcher remain the exclusive trademarks of their respective trademark holders.'
           },
           {
-            heading: '3. Limitation of Liability',
-            body: 'To the fullest extent permitted by applicable law, Arcknowledge, its creators, contributors, and affiliates shall not be liable for any indirect, incidental, consequential, special, or punitive damages—including loss of profits, data, goodwill, or unauthorized third-party account access—arising out of or related to your use of the directory or any linked external platform.'
+            heading: '3. Disclaimer of Warranties ("AS IS" & "AS AVAILABLE")',
+            body: 'THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR UNINTERRUPTED AVAILABILITY. WE DO NOT WARRANT THAT EXTERNAL THIRD-PARTY LINKS WILL ALWAYS BE AVAILABLE, ERROR-FREE, OR COMPATIBLE WITH YOUR SPECIFIC DEVICE OR BROWSER.'
           },
           {
-            heading: '4. Indemnification',
-            body: 'You agree to defend, indemnify, and hold harmless Arcknowledge and its operators from and against any claims, liabilities, damages, losses, and expenses arising from your violation of these Terms and Conditions or misuse of the Platform.'
+            heading: '4. Limitation of Liability',
+            body: 'TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL ONE SPOT! OR ITS CREATORS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF DATA, LOSS OF PROFITS, SERVICE INTERRUPTIONS, OR ISSUES ARISING OUT OF YOUR USE OF OR INABILITY TO USE ANY THIRD-PARTY WEBSITE ACCESSED VIA ONE SPOT!.'
           },
           {
-            heading: '5. Modifications to the Hub & Termination',
-            body: 'We reserve the right to add, recategorize, update, or remove listed platforms, tags, regions, or interface features at any time without prior notice to improve global utility and user safety.'
+            heading: '5. Indemnification',
+            body: 'You agree to defend, indemnify, and hold harmless One Spot! and its developers from and against any claims, liabilities, damages, losses, and expenses arising out of your violation of these Terms and Conditions or your misuse of any linked third-party platform.'
           },
           {
-            heading: '6. Severability & Governing Principles',
-            body: 'If any clause of these Terms and Conditions is deemed unenforceable under applicable local law, the remaining provisions shall remain in full force and effect. These terms are governed by internationally recognized commercial and digital service principles.'
+            heading: '6. Severability & Entire Agreement',
+            body: 'If any provision of these Terms and Conditions is held to be invalid or unenforceable by a court of competent jurisdiction, the remaining provisions shall remain in full force and effect. Together with our Privacy Policy and Terms of Use, these Terms and Conditions constitute the entire agreement between you and One Spot! regarding your use of the application.'
           }
         ]
       }
     };
 
     /**
-     * 4. APPLICATION STATE
+     * 3. RENDER APP CARDS IN STRICT 2-PER-ROW GRID
      */
-    let state = {
-      searchQuery: '',
-      selectedTag: 'All',
-      selectedRegion: 'Worldwide',
-      selectedCategory: 'all',
-      pinnedPlatforms: JSON.parse(localStorage.getItem('arcknowledge_pinned') || '["Google", "Spotify", "Netflix", "WhatsApp", "YouTube", "Wise"]')
-    };
+    const appsGrid = document.getElementById('apps-grid');
+    const emptyState = document.getElementById('empty-state');
+    const searchInput = document.getElementById('app-search');
+    const resetSearchBtn = document.getElementById('reset-search-btn');
 
-    /**
-     * 5. INITIALIZATION & THEME SETUP
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      document.getElementById('currentYear').textContent = new Date().getFullYear();
-      
-      // Count total platforms
-      const totalCount = DIRECTORY_DATA.reduce((sum, cat) => sum + cat.platforms.length, 0);
-      document.getElementById('statTotalPlatforms').textContent = totalCount;
-      document.getElementById('statCategories').textContent = DIRECTORY_DATA.length;
-
-      renderTagPills();
-      renderCategoryTabs();
-      renderPinnedHub();
-      renderDirectory();
-      bindEvents();
-      lucide.createIcons();
-    });
-
-    function initTheme() {
-      const savedTheme = localStorage.getItem('arcknowledge_theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    }
-
-    function toggleTheme() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('arcknowledge_theme', isDark ? 'dark' : 'light');
-      lucide.createIcons();
-    }
-
-    /**
-     * 6. EVENT LISTENERS
-     */
-    function bindEvents() {
-      // Theme toggle
-      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-
-      // Search input
-      const searchInput = document.getElementById('searchInput');
-      searchInput.addEventListener('input', (e) => {
-        state.searchQuery = e.target.value.trim();
-        document.getElementById('clearSearchBtn').classList.toggle('hidden', state.searchQuery === '');
-        updateResetVisibility();
-        renderDirectory();
+    function renderApps(filterQuery = '') {
+      const normalizedQuery = filterQuery.trim().toLowerCase();
+      const filteredApps = APPS_RANKED_BY_DAU.filter((app) => {
+        if (!normalizedQuery) return true;
+        return (
+          app.name.toLowerCase().includes(normalizedQuery) ||
+          app.category.toLowerCase().includes(normalizedQuery) ||
+          `#${app.rank}`.includes(normalizedQuery)
+        );
       });
 
-      // Region dropdown
-      document.getElementById('regionSelect').addEventListener('change', (e) => {
-        state.selectedRegion = e.target.value;
-        updateResetVisibility();
-        renderDirectory();
-      });
-
-      // Keyboard shortcuts ('/' to focus search, 'Escape' to close modal)
-      document.addEventListener('keydown', (e) => {
-        if (e.key === '/' && document.activeElement !== searchInput && !isModalOpen()) {
-          e.preventDefault();
-          searchInput.focus();
-        }
-        if (e.key === 'Escape' && isModalOpen()) {
-          closeLegalModal();
-        }
-      });
-
-      // Close modal on backdrop click
-      document.getElementById('legalModal').addEventListener('click', (e) => {
-        if (e.target.id === 'legalModal') {
-          closeLegalModal();
-        }
-      });
-    }
-
-    /**
-     * 7. RENDER TAG PILLS
-     */
-    function renderTagPills() {
-      const container = document.getElementById('tagContainer');
-      container.innerHTML = ALL_TAGS.map(tag => {
-        const isActive = state.selectedTag === tag;
-        return `
-          <button onclick="selectTag('${tag}')"
-            class="px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border ${
-              isActive
-                ? 'bg-brand-600 text-white border-brand-600 shadow-sm shadow-brand-500/25'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-brand-400 dark:hover:border-brand-600 hover:text-brand-600 dark:hover:text-brand-400'
-            }">
-            ${tag === 'All' ? 'All Tags' : '#' + tag}
-          </button>
-        `;
-      }).join('');
-    }
-
-    function selectTag(tag) {
-      state.selectedTag = (state.selectedTag === tag && tag !== 'All') ? 'All' : tag;
-      renderTagPills();
-      updateResetVisibility();
-      renderDirectory();
-    }
-
-    /**
-     * 8. RENDER STICKY CATEGORY TABS
-     */
-    function renderCategoryTabs() {
-      const container = document.getElementById('categoryTabs');
-      const allTab = `
-        <button onclick="selectCategory('all')"
-          class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-            state.selectedCategory === 'all'
-              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm'
-              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-          }">
-          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-          All Categories
-        </button>
-      `;
-
-      const catTabs = DIRECTORY_DATA.map(cat => {
-        const isActive = state.selectedCategory === cat.id;
-        return `
-          <button onclick="selectCategory('${cat.id}')"
-            class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-              isActive
-                ? 'bg-brand-600 text-white shadow-sm'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }">
-            <i data-lucide="${cat.icon}" class="w-3.5 h-3.5"></i>
-            ${cat.title}
-          </button>
-        `;
-      }).join('');
-
-      container.innerHTML = allTab + catTabs;
-      lucide.createIcons();
-    }
-
-    function selectCategory(catId) {
-      state.selectedCategory = catId;
-      renderCategoryTabs();
-      updateResetVisibility();
-      renderDirectory();
-    }
-
-    /**
-     * 9. FILTERING & DIRECTORY RENDERING
-     */
-    function matchesFilters(platform, categoryTitle) {
-      // 1. Region filter
-      if (state.selectedRegion !== 'Worldwide') {
-        const matchesExactRegion = platform.region === state.selectedRegion;
-        const isGlobalPlatform = platform.region === 'Worldwide' || platform.tags.includes('Global');
-        if (!matchesExactRegion && !isGlobalPlatform) return false;
-      }
-
-      // 2. Tag filter
-      if (state.selectedTag !== 'All') {
-        if (!platform.tags.includes(state.selectedTag)) return false;
-      }
-
-      // 3. Search query filter
-      if (state.searchQuery !== '') {
-        const q = state.searchQuery.toLowerCase();
-        const inName = platform.name.toLowerCase().includes(q);
-        const inDesc = platform.desc.toLowerCase().includes(q);
-        const inRegion = platform.region.toLowerCase().includes(q);
-        const inTags = platform.tags.some(t => t.toLowerCase().includes(q));
-        const inCat = categoryTitle.toLowerCase().includes(q);
-        if (!inName && !inDesc && !inRegion && !inTags && !inCat) return false;
-      }
-
-      return true;
-    }
-
-    function renderDirectory() {
-      const container = document.getElementById('directoryContainer');
-      const emptyState = document.getElementById('emptyState');
-      let totalMatched = 0;
-      let html = '';
-
-      const categoriesToRender = state.selectedCategory === 'all'
-        ? DIRECTORY_DATA
-        : DIRECTORY_DATA.filter(c => c.id === state.selectedCategory);
-
-      categoriesToRender.forEach(category => {
-        const filteredPlatforms = category.platforms.filter(p => matchesFilters(p, category.title));
-        if (filteredPlatforms.length === 0) return;
-
-        totalMatched += filteredPlatforms.length;
-
-        html += `
-          <section id="cat-${category.id}" class="scroll-mt-32 animate-fade-up">
-            <!-- Category Header -->
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 mb-5 border-b border-slate-200/80 dark:border-slate-800/80">
-              <div class="flex items-start sm:items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/80 border border-brand-200/60 dark:border-brand-800/60 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
-                  <i data-lucide="${category.icon}" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <div class="flex items-center gap-2.5">
-                    <h2 class="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white">${category.title}</h2>
-                    <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                      ${filteredPlatforms.length}
-                    </span>
-                  </div>
-                  <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">${category.description}</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Platform Cards Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              ${filteredPlatforms.map(platform => renderPlatformCard(platform)).join('')}
-            </div>
-          </section>
-        `;
-      });
-
-      document.getElementById('statShowing').textContent = totalMatched;
-
-      if (totalMatched === 0) {
-        container.innerHTML = '';
+      if (filteredApps.length === 0) {
+        appsGrid.classList.add('hidden');
         emptyState.classList.remove('hidden');
-      } else {
-        emptyState.classList.add('hidden');
-        container.innerHTML = html;
-      }
-
-      lucide.createIcons();
-    }
-
-    function getDomainFromUrl(url) {
-      try {
-        return new URL(url).hostname;
-      } catch {
-        return '';
-      }
-    }
-
-    function renderPlatformCard(platform) {
-      const isPinned = state.pinnedPlatforms.includes(platform.name);
-      const domain = getDomainFromUrl(platform.url);
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-      const initial = platform.name.charAt(0).toUpperCase();
-
-      return `
-        <div class="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 p-4 shadow-sm hover:shadow-lg hover:shadow-brand-500/5 hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-200">
-          
-          <div>
-            <!-- Card Top: Icon, Name, Region & Pin Button -->
-            <div class="flex items-start justify-between gap-2 mb-3">
-              <a href="${platform.url}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 min-w-0 group/link">
-                <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700/70 flex items-center justify-center overflow-hidden shrink-0">
-                  <img src="${faviconUrl}" alt="${platform.name} icon" loading="lazy"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                    class="w-6 h-6 object-contain" />
-                  <span style="display:none;" class="w-full h-full items-center justify-center font-display font-bold text-sm text-brand-600 dark:text-brand-400">
-                    ${initial}
-                  </span>
-                </div>
-                <div class="min-w-0">
-                  <h3 class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition">
-                    ${platform.name}
-                  </h3>
-                  <span class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
-                    <i data-lucide="map-pin" class="w-3 h-3 text-brand-500"></i>
-                    ${platform.region}
-                  </span>
-                </div>
-              </a>
-
-              <!-- Pin to My Hub Button -->
-              <button onclick="togglePinPlatform('${platform.name.replace(/'/g, "\\'")}')"
-                title="${isPinned ? 'Unpin from My Daily Hub' : 'Pin to My Daily Hub'}"
-                aria-label="Pin ${platform.name}"
-                class="p-2 rounded-xl border transition shrink-0 ${
-                  isPinned
-                    ? 'bg-brand-50 dark:bg-brand-950/80 border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400'
-                    : 'bg-slate-50 dark:bg-slate-800/60 border-transparent text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }">
-                <i data-lucide="pin" class="w-3.5 h-3.5 ${isPinned ? 'fill-current' : ''}"></i>
-              </button>
-            </div>
-
-            <!-- Description -->
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2 mb-3.5">
-              ${platform.desc}
-            </p>
-          </div>
-
-          <!-- Card Bottom: Clickable Tags + Visit Link -->
-          <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
-            <div class="flex flex-wrap gap-1 overflow-hidden max-h-6">
-              ${platform.tags.slice(0, 3).map(tag => `
-                <button onclick="selectTag('${tag}')"
-                  class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 hover:bg-brand-100 dark:bg-slate-800 dark:hover:bg-brand-950 text-slate-600 hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-300 transition">
-                  ${tag}
-                </button>
-              `).join('')}
-            </div>
-
-            <a href="${platform.url}" target="_blank" rel="noopener noreferrer"
-              class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/60 transition">
-              Open
-              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-        </div>
-      `;
-    }
-
-    /**
-     * 10. PINNED "MY DAILY HUB" FUNCTIONALITY
-     */
-    function findPlatformByName(name) {
-      for (const cat of DIRECTORY_DATA) {
-        const found = cat.platforms.find(p => p.name === name);
-        if (found) return found;
-      }
-      return null;
-    }
-
-    function togglePinPlatform(name) {
-      const idx = state.pinnedPlatforms.indexOf(name);
-      if (idx > -1) {
-        state.pinnedPlatforms.splice(idx, 1);
-        showToast(`Removed ${name} from My Daily Hub`);
-      } else {
-        state.pinnedPlatforms.push(name);
-        showToast(`Pinned ${name} to My Daily Hub`);
-      }
-      localStorage.setItem('arcknowledge_pinned', JSON.stringify(state.pinnedPlatforms));
-      renderPinnedHub();
-      renderDirectory();
-    }
-
-    function clearAllPinned() {
-      state.pinnedPlatforms = [];
-      localStorage.setItem('arcknowledge_pinned', JSON.stringify([]));
-      renderPinnedHub();
-      renderDirectory();
-      showToast('Cleared all pinned shortcuts');
-    }
-
-    function renderPinnedHub() {
-      const grid = document.getElementById('pinnedGrid');
-      const countBadge = document.getElementById('pinnedCountBadge');
-      const clearBtn = document.getElementById('clearPinnedBtn');
-
-      countBadge.textContent = state.pinnedPlatforms.length;
-      clearBtn.classList.toggle('hidden', state.pinnedPlatforms.length === 0);
-
-      if (state.pinnedPlatforms.length === 0) {
-        grid.innerHTML = `
-          <div class="text-xs text-slate-500 dark:text-slate-400 italic py-1">
-            No platforms pinned yet. Click the <span class="font-semibold text-brand-600 dark:text-brand-400">pin icon</span> on any card below to build your personal quick-launch bar.
-          </div>
-        `;
         return;
       }
 
-      grid.innerHTML = state.pinnedPlatforms.map(name => {
-        const platform = findPlatformByName(name);
-        if (!platform) return '';
-        const domain = getDomainFromUrl(platform.url);
-        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+      appsGrid.classList.remove('hidden');
+      emptyState.classList.add('hidden');
 
-        return `
-          <div class="inline-flex items-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:border-brand-400 dark:hover:border-brand-600 transition overflow-hidden">
-            <a href="${platform.url}" target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 pl-3 pr-2.5 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 transition">
-              <img src="${faviconUrl}" alt="" class="w-4 h-4 rounded-sm" onerror="this.style.display='none'" />
-              <span>${platform.name}</span>
-              <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
-            </a>
-            <button onclick="togglePinPlatform('${platform.name.replace(/'/g, "\\'")}')" title="Remove shortcut"
-              class="px-2 py-1.5 text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800 border-l border-slate-100 dark:border-slate-800 transition">
-              <i data-lucide="x" class="w-3 h-3"></i>
-            </button>
-          </div>
-        `;
-      }).join('');
+      appsGrid.innerHTML = filteredApps
+        .map(
+          (app) => `
+          <a
+            href="${app.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            role="listitem"
+            aria-label="Open ${app.name} (Rank #${app.rank}, ${app.dauLabel}) in a new tab"
+            class="app-card group relative flex flex-col justify-between bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 ${app.accentRing} shadow-xs hover:shadow-xl hover:shadow-slate-900/5 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <!-- Top Row: Rank Badge & External Launch Arrow -->
+            <div class="flex items-center justify-between gap-2 mb-3.5 sm:mb-4">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${app.badgeBg}">
+                <span>#${app.rank}</span>
+                <span class="hidden sm:inline opacity-75">&bull; ${app.dauLabel}</span>
+              </span>
 
-      lucide.createIcons();
+              <span class="w-7 h-7 rounded-full bg-slate-50 group-hover:bg-indigo-50 text-slate-400 group-hover:text-indigo-600 flex items-center justify-center transition-colors" aria-hidden="true">
+                <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10" />
+                </svg>
+              </span>
+            </div>
+
+            <!-- Center Logo Container -->
+            <div class="flex flex-col items-center text-center my-1 sm:my-2">
+              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl sm:rounded-3xl ${app.iconBg} flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+                ${app.svg}
+              </div>
+
+              <h2 class="mt-3.5 text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors tracking-tight">
+                ${app.name}
+              </h2>
+              <p class="text-[11px] sm:text-xs font-medium text-slate-500 mt-0.5">
+                ${app.category}
+              </p>
+            </div>
+
+            <!-- Bottom DAU Metric Pill -->
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-1 text-[11px]">
+              <span class="font-bold text-slate-700">${app.dauLabel}</span>
+              <span class="text-slate-400 truncate text-right hidden xs:inline sm:inline">${app.dauDetail}</span>
+            </div>
+          </a>
+        `
+        )
+        .join('');
     }
 
-    function scrollToHub() {
-      document.getElementById('myHubSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    searchInput.addEventListener('input', (e) => {
+      renderApps(e.target.value);
+    });
+
+    resetSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      renderApps('');
+      searchInput.focus();
+    });
+
+    // Initial render
+    renderApps();
 
     /**
-     * 11. FILTER RESET & UTILITY HELPERS
+     * 4. LEGAL MODAL DIALOG CONTROLLER
      */
-    function clearSearch() {
-      state.searchQuery = '';
-      document.getElementById('searchInput').value = '';
-      document.getElementById('clearSearchBtn').classList.add('hidden');
-      updateResetVisibility();
-      renderDirectory();
-    }
-
-    function resetAllFilters() {
-      state.searchQuery = '';
-      state.selectedTag = 'All';
-      state.selectedRegion = 'Worldwide';
-      state.selectedCategory = 'all';
-
-      document.getElementById('searchInput').value = '';
-      document.getElementById('clearSearchBtn').classList.add('hidden');
-      document.getElementById('regionSelect').value = 'Worldwide';
-
-      renderTagPills();
-      renderCategoryTabs();
-      updateResetVisibility();
-      renderDirectory();
-    }
-
-    function updateResetVisibility() {
-      const hasActiveFilter =
-        state.searchQuery !== '' ||
-        state.selectedTag !== 'All' ||
-        state.selectedRegion !== 'Worldwide' ||
-        state.selectedCategory !== 'all';
-
-      document.getElementById('resetTagsBtn').classList.toggle('hidden', !hasActiveFilter);
-    }
-
-    let toastTimer;
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastMessage').textContent = msg;
-      toast.classList.remove('opacity-0', 'translate-y-2');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-y-2');
-      }, 2400);
-    }
-
-    /**
-     * 12. LEGAL MODALS CONTROLLER (Privacy Policy, Terms of Use, Terms & Conditions)
-     */
-    function isModalOpen() {
-      return !document.getElementById('legalModal').classList.contains('hidden');
-    }
+    const legalModal = document.getElementById('legal-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalBadge = document.getElementById('modal-badge');
+    const modalTitle = document.getElementById('modal-title');
+    const modalUpdated = document.getElementById('modal-updated');
+    const modalBody = document.getElementById('modal-body');
+    const modalCloseTop = document.getElementById('modal-close-top');
+    const modalCloseBottom = document.getElementById('modal-close-bottom');
+    let lastFocusedElement = null;
 
     function openLegalModal(docKey) {
-      const doc = LEGAL_DOCS[docKey];
+      const doc = LEGAL_DOCUMENTS[docKey];
       if (!doc) return;
 
-      const modal = document.getElementById('legalModal');
-      document.getElementById('modalTitle').textContent = doc.title;
-      document.getElementById('modalSubtitle').textContent = doc.subtitle;
+      lastFocusedElement = document.activeElement;
+      modalBadge.textContent = doc.badge;
+      modalTitle.textContent = doc.title;
+      modalUpdated.textContent = doc.updated;
 
-      // Update header icon
-      const iconWrap = document.getElementById('modalIconWrap');
-      iconWrap.innerHTML = `<i data-lucide="${doc.icon}" class="w-5 h-5"></i>`;
+      modalBody.innerHTML = doc.sections
+        .map(
+          (sec) => `
+          <article class="bg-slate-50/70 rounded-2xl p-4 border border-slate-100">
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5">${sec.heading}</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${sec.body}</p>
+          </article>
+        `
+        )
+        .join('');
 
-      // Highlight active tab inside modal
-      ['privacy', 'termsOfUse', 'termsAndConditions'].forEach(key => {
-        const tab = document.getElementById(`tab-${key}`);
-        if (key === docKey) {
-          tab.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white shadow-xs transition';
-        } else {
-          tab.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-800 transition';
-        }
-      });
-
-      // Populate structured legal sections
-      const body = document.getElementById('modalBody');
-      body.innerHTML = doc.sections.map(sec => `
-        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/70 dark:border-slate-800/80">
-          <h4 class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5">${sec.heading}</h4>
-          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${sec.body}</p>
-        </div>
-      `).join('');
-
-      body.scrollTop = 0;
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      legalModal.classList.remove('hidden');
+      legalModal.classList.add('flex');
       document.body.style.overflow = 'hidden';
-      lucide.createIcons();
+      modalBody.scrollTop = 0;
+      modalCloseTop.focus();
     }
 
     function closeLegalModal() {
-      const modal = document.getElementById('legalModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      legalModal.classList.add('hidden');
+      legalModal.classList.remove('flex');
       document.body.style.overflow = '';
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
     }
+
+    document.querySelectorAll('.legal-trigger, .modal-switch').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const docKey = btn.getAttribute('data-legal');
+        openLegalModal(docKey);
+      });
+    });
+
+    modalCloseTop.addEventListener('click', closeLegalModal);
+    modalCloseBottom.addEventListener('click', closeLegalModal);
+    modalBackdrop.addEventListener('click', closeLegalModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !legalModal.classList.contains('hidden')) {
+        closeLegalModal();
+      }
+    });
+
+    /**
+     * 5. TOAST HELPER (Non-blocking notification instead of alert())
+     */
+    const toastEl = document.getElementById('toast-message');
+    const toastText = document.getElementById('toast-text');
+    let toastTimer = null;
+
+    function showToast(message) {
+      toastText.textContent = message;
+      toastEl.classList.remove('hidden');
+      toastEl.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.add('hidden');
+        toastEl.classList.remove('flex');
+      }, 4000);
+    }
+
+    /**
+     * 6. INLINE PWA MANIFEST (BLOB URL) & SERVICE WORKER REGISTRATION
+     */
+    (function setupPWA() {
+      try {
+        const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#0ea5e9"/></linearGradient></defs><rect width="512" height="512" rx="120" fill="url(#g)"/><circle cx="256" cy="256" r="112" fill="none" stroke="#ffffff" stroke-width="36"/><circle cx="256" cy="256" r="44" fill="#ffffff"/></svg>`;
+        const iconDataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg);
+
+        const manifestObj = {
+          name: 'One Spot!',
+          short_name: 'One Spot!',
+          description: 'Your essential daily apps in one clean launcher, ranked by daily active users.',
+          start_url: window.location.href,
+          display: 'standalone',
+          orientation: 'portrait-primary',
+          background_color: '#f8fafc',
+          theme_color: '#0f172a',
+          icons: [
+            {
+              src: iconDataUri,
+              sizes: '192x192',
+              type: 'image/svg+xml',
+              purpose: 'any maskable'
+            },
+            {
+              src: iconDataUri,
+              sizes: '512x512',
+              type: 'image/svg+xml',
+              purpose: 'any maskable'
+            }
+          ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+        const manifestUrl = URL.createObjectURL(manifestBlob);
+        const manifestLink = document.getElementById('dynamic-manifest');
+        if (manifestLink) {
+          manifestLink.setAttribute('href', manifestUrl);
+        }
+      } catch (err) {
+        console.warn('Dynamic manifest setup skipped:', err);
+      }
+
+      // Inline Service Worker via Blob URL for offline caching when supported
+      if ('serviceWorker' in navigator) {
+        try {
+          const swCode = `
+            const CACHE_NAME = 'one-spot-pwa-v1';
+            self.addEventListener('install', (event) => {
+              self.skipWaiting();
+            });
+            self.addEventListener('activate', (event) => {
+              event.waitUntil(self.clients.claim());
+            });
+            self.addEventListener('fetch', (event) => {
+              if (event.request.method !== 'GET') return;
+              event.respondWith(
+                caches.open(CACHE_NAME).then((cache) =>
+                  fetch(event.request)
+                    .then((networkResponse) => {
+                      if (networkResponse && networkResponse.status === 200) {
+                        cache.put(event.request, networkResponse.clone());
+                      }
+                      return networkResponse;
+                    })
+                    .catch(() => cache.match(event.request))
+                )
+              );
+            });
+          `;
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker.register(swUrl).catch(() => {
+            // Blob SW registration may be restricted in sandboxed iframes; degrade gracefully
+          });
+        } catch (err) {
+          console.warn('Service worker registration skipped:', err);
+        }
+      }
+
+      // Handle beforeinstallprompt for native PWA installation
+      let deferredPrompt = null;
+      const installBtn = document.getElementById('install-pwa-btn');
+      const pwaBadge = document.getElementById('pwa-badge');
+
+      // Detect if already running in standalone installed mode
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isStandalone && pwaBadge) {
+        pwaBadge.textContent = 'Installed';
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installBtn && !isStandalone) {
+          installBtn.classList.remove('hidden');
+          installBtn.classList.add('inline-flex');
+        }
+      });
+
+      if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+          if (!deferredPrompt) {
+            showToast('Use your browser menu and select "Add to Home Screen" or "Install App".');
+            return;
+          }
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            showToast('Installing One Spot! to your device...');
+            installBtn.classList.add('hidden');
+            installBtn.classList.remove('inline-flex');
+          }
+          deferredPrompt = null;
+        });
+      }
+
+      window.addEventListener('appinstalled', () => {
+        deferredPrompt = null;
+        if (installBtn) {
+          installBtn.classList.add('hidden');
+          installBtn.classList.remove('inline-flex');
+        }
+        if (pwaBadge) pwaBadge.textContent = 'Installed';
+        showToast('One Spot! has been installed to your device.');
+      });
+
+      // Network connectivity status listener
+      const statusBanner = document.getElementById('status-banner');
+      function updateOnlineStatus() {
+        if (!navigator.onLine) {
+          statusBanner.classList.remove('hidden');
+        } else {
+          statusBanner.classList.add('hidden');
+        }
+      }
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      updateOnlineStatus();
+    })();
   </script>
 </body>
 </html>
