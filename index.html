@@ -1,301 +1,1363 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Arcknowledge: your global everyday hub for trusted websites, apps and services."><title>Arcknowledge — Everything in one place</title><style>
-:root{--bg:#f6f7fb;--panel:#fff;--text:#111827;--muted:#64748b;--line:#e4e8f0;--accent:#2457e7;--soft:#eaf0ff;--shadow:0 10px 35px #13234b0c}body.dark{--bg:#0b1020;--panel:#151c2e;--text:#f4f6fc;--muted:#a3afc5;--line:#29334a;--soft:#1d305b;--shadow:none}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}header{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}.wrap{max-width:1240px;margin:auto;padding:0 22px}.nav{height:74px;display:flex;align-items:center;gap:18px}.brand{font-weight:900;letter-spacing:-1.2px;font-size:24px}.brand b{color:var(--accent)}.navlinks{display:flex;gap:22px;margin-left:auto;font-size:13px;font-weight:700;color:var(--muted)}.iconbtn,.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:11px 15px;font-weight:700}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.hero{padding:70px 0 36px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:2px;color:var(--accent)}h1{font-size:clamp(38px,6vw,72px);line-height:1.06;letter-spacing:-3px;margin:17px 0}.hero p{color:var(--muted);font-size:17px;max-width:650px;line-height:1.7}.searchbox{display:flex;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);padding:7px;max-width:850px;margin-top:30px;gap:8px}.searchbox input{border:0;outline:0;background:transparent;color:var(--text);padding:14px;flex:1;min-width:0}.searchbox button{border:0;border-radius:11px;background:var(--accent);color:white;padding:15px 23px;font-weight:800}.stats{display:flex;gap:30px;margin:25px 0;color:var(--muted);font-size:13px}.stats strong{color:var(--text);font-size:19px}.section{padding:28px 0}.sectiontop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.sectiontop h2{font-size:23px;letter-spacing:-.7px;margin:0}.muted{color:var(--muted)}.chips{display:flex;gap:9px;flex-wrap:wrap}.chip{background:var(--panel);color:var(--muted);border:1px solid var(--line);padding:10px 14px;border-radius:999px;font-size:12px;font-weight:700}.chip.active{background:var(--accent);color:white;border-color:var(--accent)}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 25px}.filters select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:12px;max-width:100%}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:19px;min-width:0;transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-3px);border-color:var(--accent)}.cardhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.logo{width:47px;height:47px;display:grid;place-items:center;background:var(--soft);color:var(--accent);border-radius:14px;font-weight:900;font-size:20px}.fav{background:transparent;border:0;font-size:24px;color:var(--muted)}.fav.saved{color:#e8a000}.card h3{font-size:17px;margin:18px 0 8px}.card p{font-size:13px;color:var(--muted);line-height:1.6;min-height:43px}.meta{font-size:11px;color:var(--muted);margin:14px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cardfoot{display:flex;justify-content:space-between;align-items:center;gap:7px}.tag{font-size:11px;border-radius:8px;background:var(--soft);color:var(--accent);padding:7px 9px;max-width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.visit{color:var(--accent);font-size:12px;font-weight:800}.empty{padding:45px;text-align:center;background:var(--panel);border:1px dashed var(--line);border-radius:16px}.more{display:block;margin:30px auto}.banner{background:#172b64;color:white;border-radius:24px;padding:35px;display:flex;align-items:center;justify-content:space-between;gap:20px}.banner p{color:#c5d3f7}footer{border-top:1px solid var(--line);margin-top:50px;padding:35px 0;color:var(--muted);font-size:13px}.footerline{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}.footlinks{display:flex;gap:16px;flex-wrap:wrap}.footlinks button{background:none;border:0;color:var(--muted);padding:0}.modal{position:fixed;inset:0;background:#0009;z-index:20;display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{background:var(--panel);color:var(--text);width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:20px;padding:26px;line-height:1.7}.dialog h2{margin-top:0}.dialog h3{margin-bottom:4px}.dialog p,.dialog li{color:var(--muted)}.dialoghead{display:flex;justify-content:space-between;align-items:center;gap:12px}.close{border:0;background:var(--soft);color:var(--text);border-radius:10px;padding:9px 13px}#suggestions{margin-top:10px}.hide{display:none!important}@media(max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.navlinks{display:none}.hero{padding-top:48px}h1{letter-spacing:-2px}.stats{gap:15px;flex-wrap:wrap}.banner{display:block}.card{padding:14px}.card p{min-height:60px}}@media(max-width:420px){.grid{grid-template-columns:1fr}.searchbox button{padding:14px}.wrap{padding:0 15px}}
-</style></head><body><header><div class="wrap nav"><a class="brand" href="#home">ARC<b>KNOWLEDGE</b></a><nav class="navlinks"><a href="#categories">Categories</a><a href="#directory">Explore</a><a href="#saved" id="savedNav">Saved</a></nav><button class="iconbtn" id="theme" aria-label="Toggle dark mode">☾</button></div></header><main id="home"><div class="wrap"><section class="hero"><div class="eyebrow">THE WORLD, ONE CLICK AWAY</div><h1>Everything you need.<br><span style="color:var(--accent)">One place to find it.</span></h1><p>Discover websites, apps and everyday services from around the globe. Search smarter, explore categories, and keep your favourite platforms close.</p><form class="searchbox" id="searchForm"><span style="padding-left:13px;color:var(--muted)">⌕</span><input id="search" type="search" placeholder="Search apps, services, categories or tags..." aria-label="Search directory" autocomplete="off"><button>Search</button></form><div class="stats"><span><strong id="total">0</strong><br>Platforms</span><span><strong id="catTotal">0</strong><br>Categories</span><span><strong>Worldwide</strong><br>Discovery</span><span><strong>Free</strong><br>Directory access</span></div></section><section class="section" id="categories"><div class="sectiontop"><h2>Explore by category</h2><span class="muted">Choose what you need today</span></div><div class="chips" id="categoriesList"></div></section><section class="section" id="directory"><div class="sectiontop"><div><h2 id="resultsTitle">Discover platforms</h2><p class="muted" id="count" aria-live="polite"></p></div><button class="btn" id="clear">Clear filters</button></div><div class="filters"><select id="region" aria-label="Filter by region"><option value="all">All regions</option><option value="global">Global</option><option value="africa">Africa</option><option value="asia">Asia</option><option value="europe">Europe</option><option value="north america">North America</option><option value="south america">South America</option><option value="oceania">Oceania</option></select><select id="sort" aria-label="Sort results"><option value="name">Name A–Z</option><option value="category">Category A–Z</option></select><button class="btn" id="savedFilter">☆ Saved only</button><button class="btn" id="recentFilter">Recently visited</button></div><div id="cards" class="grid"></div><div id="empty" class="empty hide">No matching platforms found. Try another keyword, tag, category or region.</div><button id="more" class="btn more">Load more platforms</button></section><section class="section"><div class="banner"><div><h2 style="margin:0">Make everyday life simpler.</h2><p>One directory. Hundreds of useful destinations. Save your favourites on this device.</p></div><a href="#home" class="btn primary">Find a platform ↑</a></div></section></div></main><footer><div class="wrap footerline"><div><strong style="color:var(--text)">ARCKNOWLEDGE</strong><p>Everything in one place. Independent global resource directory.</p><p>© <span id="year"></span> Arcknowledge. All rights reserved.</p></div><div class="footlinks"><button data-policy="privacy">Privacy Policy</button><button data-policy="use">Terms of Use</button><button data-policy="conditions">Terms & Conditions</button><a href="mailto:hello@arcknowledge.online">Contact</a></div></div></footer><div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog"><div class="dialoghead"><h2 id="modalTitle"></h2><button class="close" id="close" aria-label="Close dialog">✕</button></div><div id="modalBody"></div></div></div><script>
-// Entries: name | URL | category | region(s) | tags | description. All external services are independently operated.
-const raw=`Facebook|https://www.facebook.com|Social Media|global|community friends groups|Connect with friends, groups and communities
-Instagram|https://www.instagram.com|Social Media|global|photos reels creators|Share photos, videos and stories
-TikTok|https://www.tiktok.com|Social Media|global|short videos entertainment|Discover and create short videos
-X|https://x.com|Social Media|global|twitter news posts|Follow conversations and updates
-LinkedIn|https://www.linkedin.com|Social Media|global|professional careers networking|Build professional connections
-Reddit|https://www.reddit.com|Social Media|global|forums communities questions|Explore topic-based communities
-Pinterest|https://www.pinterest.com|Social Media|global|ideas inspiration design|Find and save creative ideas
-Snapchat|https://www.snapchat.com|Social Media|global|stories chat camera|Share moments and messages
-Threads|https://www.threads.com|Social Media|global|microblogging conversation|Join public text conversations
-Discord|https://discord.com|Social Media|global|communities chat gaming|Chat with communities and friends
-Mastodon|https://joinmastodon.org|Social Media|global|decentralized microblogging|Explore decentralized social networking
-Bluesky|https://bsky.app|Social Media|global|social posts network|Join open social conversations
-WhatsApp|https://www.whatsapp.com|Messaging & Calls|global|chat phone messaging|Message and call people worldwide
-Telegram|https://telegram.org|Messaging & Calls|global|groups channels messaging|Message and join large communities
-Signal|https://signal.org|Messaging & Calls|global|private secure messages|Private messaging and calls
-Messenger|https://www.messenger.com|Messaging & Calls|global|facebook chat|Chat with contacts
-Viber|https://www.viber.com|Messaging & Calls|global|calls chat|Voice calls and messaging
-LINE|https://line.me|Messaging & Calls|asia,global|chat stickers japan|Messaging and digital services
-WeChat|https://www.wechat.com|Messaging & Calls|asia|china messaging payments|Messaging and mini services
-Gmail|https://mail.google.com|Email Platforms|global|google mail inbox|Google email and inbox
-Outlook|https://outlook.live.com|Email Platforms|global|microsoft hotmail mail|Microsoft email service
-Yahoo Mail|https://mail.yahoo.com|Email Platforms|global|yahoo email|Email and inbox tools
-Proton Mail|https://proton.me/mail|Email Platforms|global|privacy encrypted email|Privacy-focused email
-iCloud Mail|https://www.icloud.com/mail|Email Platforms|global|apple email|Apple cloud email
-Zoho Mail|https://www.zoho.com/mail/|Email Platforms|global|business email|Email for individuals and businesses
-Fastmail|https://www.fastmail.com|Email Platforms|global|email productivity|Personal email hosting
-Tuta|https://tuta.com|Email Platforms|global|encrypted private email|Privacy-focused encrypted email
-Spotify|https://open.spotify.com|Music Streaming|global|songs playlists podcasts|Listen to music and podcasts
-Apple Music|https://music.apple.com|Music Streaming|global|songs albums|Stream songs and albums
-YouTube Music|https://music.youtube.com|Music Streaming|global|songs videos|Listen to music and playlists
-Amazon Music|https://music.amazon.com|Music Streaming|global|music albums|Stream music and podcasts
-Deezer|https://www.deezer.com|Music Streaming|global|songs playlists|Discover music and artists
-SoundCloud|https://soundcloud.com|Music Streaming|global|independent artists tracks|Discover emerging music
-TIDAL|https://tidal.com|Music Streaming|global|hifi music|Listen to high-quality music
-Audiomack|https://audiomack.com|Music Streaming|global,africa|afrobeats hiphop music|Discover trending music
-Boomplay|https://www.boomplay.com|Music Streaming|africa|african music songs|Stream African and global music
-Netflix|https://www.netflix.com|Movie & TV Streaming|global|films series tv|Watch movies and TV series
-Disney+|https://www.disneyplus.com|Movie & TV Streaming|global|disney marvel films|Watch movies and shows
-Prime Video|https://www.primevideo.com|Movie & TV Streaming|global|amazon movies series|Stream movies and original series
-Apple TV|https://tv.apple.com|Movie & TV Streaming|global|apple series films|Watch original shows and films
-YouTube|https://www.youtube.com|Movie & TV Streaming|global|video creators documentaries|Watch videos and channels
-Hulu|https://www.hulu.com|Movie & TV Streaming|north america|shows films tv|Watch shows and movies where available
-Max|https://www.hbomax.com|Movie & TV Streaming|global|hbo series movies|Watch shows and films in supported markets
-Paramount+|https://www.paramountplus.com|Movie & TV Streaming|global|paramount movies tv|Stream movies and series
-Crunchyroll|https://www.crunchyroll.com|Movie & TV Streaming|global|anime animation|Stream anime series
-Showmax|https://www.showmax.com|Movie & TV Streaming|africa|african series movies|Stream entertainment in supported regions
-Viki|https://www.viki.com|Movie & TV Streaming|global|asian dramas tv|Watch Asian entertainment
-Zara|https://www.zara.com|Online Clothing|global|fashion clothing shoes|Shop contemporary fashion
-H&M|https://www.hm.com|Online Clothing|global|fashion basics clothing|Shop fashion and basics
-ASOS|https://www.asos.com|Online Clothing|global|fashion shoes clothing|Browse online fashion
-UNIQLO|https://www.uniqlo.com|Online Clothing|global|basics apparel|Shop everyday apparel
-Nike|https://www.nike.com|Online Clothing|global|sportswear shoes|Shop sportswear and footwear
-adidas|https://www.adidas.com|Online Clothing|global|sportswear sneakers|Shop athletic apparel
-SHEIN|https://www.shein.com|Online Clothing|global|fashion accessories|Browse online fashion
-Boohoo|https://www.boohoo.com|Online Clothing|global|fashion outfits|Shop online clothing
-Mr Price|https://www.mrprice.com|Online Clothing|africa|south africa fashion|Shop clothing and homeware
-Superbalist|https://superbalist.com|Online Clothing|africa|south africa fashion|Shop fashion and accessories
-Myntra|https://www.myntra.com|Online Clothing|asia|india fashion|Shop fashion in India
-Amazon|https://www.amazon.com|Online Marketplaces|global|shopping ecommerce electronics|Browse a wide range of products
-eBay|https://www.ebay.com|Online Marketplaces|global|auction resale marketplace|Buy and sell items
-AliExpress|https://www.aliexpress.com|Online Marketplaces|global|shopping imports|Shop products from sellers
-Etsy|https://www.etsy.com|Online Marketplaces|global|handmade gifts crafts|Shop handmade and vintage goods
-Takealot|https://www.takealot.com|Online Marketplaces|africa|south africa shopping|Shop online in South Africa
-Jumia|https://www.jumia.com|Online Marketplaces|africa|african ecommerce|Shop in supported African markets
-Flipkart|https://www.flipkart.com|Online Marketplaces|asia|india ecommerce|Shop products in India
-Mercado Libre|https://www.mercadolibre.com|Online Marketplaces|south america|latin america marketplace|Shop across Latin American markets
-Rakuten|https://www.rakuten.com|Online Marketplaces|global|shopping cashback|Discover shopping offers
-Temu|https://www.temu.com|Online Marketplaces|global|shopping marketplace|Browse products from merchants
-Alibaba|https://www.alibaba.com|Wholesale & B2B|global|bulk suppliers wholesale|Find wholesale suppliers
-1688|https://www.1688.com|Wholesale & B2B|asia|china wholesale suppliers|Explore wholesale products
-Global Sources|https://www.globalsources.com|Wholesale & B2B|global|manufacturing suppliers|Find suppliers and manufacturers
-Made-in-China|https://www.made-in-china.com|Wholesale & B2B|global|manufacturers bulk|Source products from manufacturers
-IndiaMART|https://www.indiamart.com|Wholesale & B2B|asia|india suppliers b2b|Connect with business suppliers
-Faire|https://www.faire.com|Wholesale & B2B|global|retail wholesale brands|Source products for retail
-DHgate|https://www.dhgate.com|Wholesale & B2B|global|bulk ecommerce|Shop wholesale listings
-Google|https://www.google.com|Search Engines|global|web search internet|Search the web
-Bing|https://www.bing.com|Search Engines|global|microsoft search|Find websites and information
-DuckDuckGo|https://duckduckgo.com|Search Engines|global|privacy search|Search with privacy-focused tools
-Brave Search|https://search.brave.com|Search Engines|global|independent privacy search|Search the web privately
-Yahoo Search|https://search.yahoo.com|Search Engines|global|web search|Find web results
-Ecosia|https://www.ecosia.org|Search Engines|global|environment search|Search with an environmental mission
-Startpage|https://www.startpage.com|Search Engines|global|private search|Search with privacy features
-Baidu|https://www.baidu.com|Search Engines|asia|china search|Search Chinese-language content
-Yandex|https://yandex.com|Search Engines|europe,asia|web search|Search websites and services
-Google Play|https://play.google.com/store|App Stores|global|android apps games|Find Android apps and games
-Apple App Store|https://www.apple.com/app-store/|App Stores|global|ios iphone apps|Discover apps for Apple devices
-Microsoft Store|https://apps.microsoft.com|App Stores|global|windows pc apps|Find Windows apps
-Samsung Galaxy Store|https://galaxystore.samsung.com|App Stores|global|samsung android apps|Explore Samsung apps
-Huawei AppGallery|https://appgallery.huawei.com|App Stores|global|huawei apps|Discover Huawei apps
-F-Droid|https://f-droid.org|App Stores|global|android open source|Find open-source Android apps
-Steam|https://store.steampowered.com|Games & Gaming|global|pc games gaming|Browse and play PC games
-Epic Games Store|https://store.epicgames.com|Games & Gaming|global|pc games|Discover PC games
-PlayStation Store|https://store.playstation.com|Games & Gaming|global|console games|Browse PlayStation games
-Xbox|https://www.xbox.com|Games & Gaming|global|console games gamepass|Explore Xbox games and services
-Nintendo|https://www.nintendo.com|Games & Gaming|global|switch console games|Discover Nintendo games
-Roblox|https://www.roblox.com|Games & Gaming|global|online games creator|Play and create experiences
-Zoom|https://zoom.us|Video Conferencing|global|meetings video calls|Host video meetings
-Google Meet|https://meet.google.com|Video Conferencing|global|google meetings calls|Join video meetings
-Microsoft Teams|https://www.microsoft.com/microsoft-teams|Video Conferencing|global|office meetings collaboration|Meet and collaborate with teams
-Cisco Webex|https://www.webex.com|Video Conferencing|global|business video meetings|Host online meetings
-Jitsi Meet|https://meet.jit.si|Video Conferencing|global|open source meetings|Start browser-based video calls
-Whereby|https://whereby.com|Video Conferencing|global|browser meetings|Host simple video meetings
-Slack|https://slack.com|Work & Collaboration|global|team chat work|Collaborate with colleagues
-Notion|https://www.notion.so|Work & Collaboration|global|notes wiki projects|Organize work and knowledge
-Trello|https://trello.com|Work & Collaboration|global|kanban tasks projects|Manage tasks visually
-Asana|https://asana.com|Work & Collaboration|global|project tasks|Coordinate team projects
-ClickUp|https://clickup.com|Work & Collaboration|global|tasks projects|Plan and track work
-Monday.com|https://monday.com|Work & Collaboration|global|workflows projects|Manage team workflows
-Google Drive|https://drive.google.com|Cloud Storage|global|files documents backup|Store and share files
-Dropbox|https://www.dropbox.com|Cloud Storage|global|cloud files backup|Save and share files
-OneDrive|https://onedrive.live.com|Cloud Storage|global|microsoft files backup|Store cloud files
-iCloud|https://www.icloud.com|Cloud Storage|global|apple cloud storage|Access Apple cloud services
-MEGA|https://mega.io|Cloud Storage|global|encrypted storage|Store files online
-Google Docs|https://docs.google.com|Documents & Office|global|word processing documents|Write and collaborate on documents
-Microsoft 365|https://www.microsoft365.com|Documents & Office|global|word excel powerpoint|Create documents and spreadsheets
-Canva|https://www.canva.com|Design & Creativity|global|graphics posters presentations|Design graphics and presentations
-Figma|https://www.figma.com|Design & Creativity|global|ui ux prototyping|Design digital interfaces
-Adobe Express|https://www.adobe.com/express/|Design & Creativity|global|posters graphics design|Create graphics and social content
-Photopea|https://www.photopea.com|Design & Creativity|global|photo editor photoshop|Edit images in your browser
-Unsplash|https://unsplash.com|Design & Creativity|global|photos images|Find photography
-Pexels|https://www.pexels.com|Design & Creativity|global|stock photos videos|Browse photos and videos
-ChatGPT|https://chatgpt.com|AI Assistants|global|ai writing research|Ask questions and work with AI
-Claude|https://claude.ai|AI Assistants|global|ai assistant writing|Work with an AI assistant
-Gemini|https://gemini.google.com|AI Assistants|global|google ai|Explore Google's AI assistant
-Microsoft Copilot|https://copilot.microsoft.com|AI Assistants|global|microsoft ai|Get AI assistance
-Perplexity|https://www.perplexity.ai|AI Assistants|global|ai search answers|Research with AI search
-DeepSeek|https://chat.deepseek.com|AI Assistants|global|ai chatbot|Explore an AI assistant
-Grok|https://grok.com|AI Assistants|global|ai chatbot|Chat with an AI assistant
-Walmart|https://www.walmart.com|Online Groceries|north america|supermarket grocery delivery|Shop groceries online
-Instacart|https://www.instacart.com|Online Groceries|north america|grocery delivery|Order groceries from local stores
-Kroger|https://www.kroger.com|Online Groceries|north america|supermarket grocery|Order groceries and essentials
-Carrefour|https://www.carrefour.com|Online Groceries|global|supermarket groceries|Find Carrefour shopping services
-Tesco|https://www.tesco.com|Online Groceries|europe|uk groceries|Shop groceries in supported areas
-Ocado|https://www.ocado.com|Online Groceries|europe|uk online groceries|Order online groceries
-Checkers Sixty60|https://www.checkers.co.za|Online Groceries|africa|south africa groceries delivery|Shop Checkers groceries
-Pick n Pay|https://www.pnp.co.za|Online Groceries|africa|south africa supermarket|Shop groceries and essentials
-Woolworths South Africa|https://www.woolworths.co.za|Online Groceries|africa|groceries clothing|Shop groceries and lifestyle products
-BigBasket|https://www.bigbasket.com|Online Groceries|asia|india groceries|Order groceries in India
-Uber Eats|https://www.ubereats.com|Food Delivery|global|restaurant takeaway delivery|Order food from restaurants
-DoorDash|https://www.doordash.com|Food Delivery|north america|food delivery|Order meals and essentials
-Deliveroo|https://deliveroo.co.uk|Food Delivery|europe,asia|food takeaway|Order food where supported
-Just Eat|https://www.just-eat.com|Food Delivery|europe|food delivery|Browse takeaway restaurants
-Grubhub|https://www.grubhub.com|Food Delivery|north america|takeaway restaurants|Order food online
-Mr D|https://www.mrd.com|Food Delivery|africa|south africa food|Order meals and groceries
-Glovo|https://glovoapp.com|Food Delivery|europe,africa|delivery courier food|Order food and essentials
-foodpanda|https://www.foodpanda.com|Food Delivery|asia|food delivery|Order food in supported markets
-Zomato|https://www.zomato.com|Food Delivery|asia|india restaurants food|Explore restaurants and food services
-PayPal|https://www.paypal.com|Payments & Wallets|global|online payment money|Send and receive payments
-Wise|https://wise.com|Payments & Wallets|global|international transfer exchange|Send money internationally
-Revolut|https://www.revolut.com|Payments & Wallets|global|finance transfers|Explore digital money services
-Skrill|https://www.skrill.com|Payments & Wallets|global|digital wallet|Use online wallet services
-Payoneer|https://www.payoneer.com|Payments & Wallets|global|international business payments|Manage cross-border payments
-M-PESA|https://www.safaricom.co.ke|Payments & Wallets|africa|mobile money kenya|Explore mobile money services
-Cash App|https://cash.app|Payments & Wallets|north america,europe|peer payments|Send money in supported markets
-Venmo|https://venmo.com|Payments & Wallets|north america|peer payments|Pay people in supported markets
-Standard Bank|https://www.standardbank.com|Banking Platforms|africa|bank account south africa|Explore personal and business banking
-Absa|https://www.absa.africa|Banking Platforms|africa|bank account|Explore banking services
-FNB|https://www.fnb.co.za|Banking Platforms|africa|banking south africa|Access banking products
-Nedbank|https://www.nedbank.co.za|Banking Platforms|africa|bank account|Explore Nedbank services
-Capitec|https://www.capitecbank.co.za|Banking Platforms|africa|south africa banking|Explore banking and accounts
-HSBC|https://www.hsbc.com|Banking Platforms|global|international bank|Explore international banking
-Citibank|https://www.citi.com|Banking Platforms|global|banking cards|Explore banking services
-Chase|https://www.chase.com|Banking Platforms|north america|us banking|Explore banking and cards
-Bank of America|https://www.bankofamerica.com|Banking Platforms|north america|us banking|Explore bank accounts
-Barclays|https://www.barclays.co.uk|Banking Platforms|europe|uk bank|Explore UK banking services
-Monzo|https://monzo.com|Banking Platforms|europe|digital bank|Explore mobile banking
-N26|https://n26.com|Banking Platforms|europe|digital bank|Explore online banking
-DBS|https://www.dbs.com|Banking Platforms|asia|singapore banking|Explore financial services
-Google Maps|https://maps.google.com|Maps & Navigation|global|gps directions places|Find places and directions
-Waze|https://www.waze.com|Maps & Navigation|global|traffic navigation|Navigate with traffic information
-Apple Maps|https://maps.apple.com|Maps & Navigation|global|navigation gps|Find places and routes
-OpenStreetMap|https://www.openstreetmap.org|Maps & Navigation|global|open map geography|Explore community-built maps
-HERE WeGo|https://wego.here.com|Maps & Navigation|global|maps directions|Plan journeys
-Uber|https://www.uber.com|Transport & Rides|global|taxi rides mobility|Request rides in supported cities
-Bolt|https://bolt.eu|Transport & Rides|global|rides taxi|Find rides in supported cities
-Lyft|https://www.lyft.com|Transport & Rides|north america|rides taxi|Book rides in supported areas
-Grab|https://www.grab.com|Transport & Rides|asia|rides delivery|Explore transport services
-inDrive|https://indrive.com|Transport & Rides|global|ride hailing|Find rides in supported markets
-Gautrain|https://www.gautrain.co.za|Transport & Rides|africa|south africa rail|Plan Gauteng rail travel
-Booking.com|https://www.booking.com|Hotels & Accommodation|global|hotels stays booking|Find places to stay
-Airbnb|https://www.airbnb.com|Hotels & Accommodation|global|homes rentals travel|Find accommodation
-Agoda|https://www.agoda.com|Hotels & Accommodation|global|hotels asia travel|Book stays and hotels
-Hotels.com|https://www.hotels.com|Hotels & Accommodation|global|hotels travel|Browse accommodation
-Hostelworld|https://www.hostelworld.com|Hotels & Accommodation|global|hostels budget travel|Find hostels worldwide
-Expedia|https://www.expedia.com|Flights & Travel|global|flights hotels trips|Plan and book trips
-Skyscanner|https://www.skyscanner.net|Flights & Travel|global|flights comparison|Compare flights and travel
-Google Flights|https://www.google.com/travel/flights|Flights & Travel|global|airfare flight search|Explore flight options
-KAYAK|https://www.kayak.com|Flights & Travel|global|flight hotels comparison|Search travel options
-Tripadvisor|https://www.tripadvisor.com|Flights & Travel|global|reviews attractions travel|Explore travel reviews
-Rome2Rio|https://www.rome2rio.com|Flights & Travel|global|routes transport planning|Compare ways to travel
-Coursera|https://www.coursera.org|Learning & Courses|global|online courses certificates|Learn skills online
-edX|https://www.edx.org|Learning & Courses|global|university courses|Study online courses
-Khan Academy|https://www.khanacademy.org|Learning & Courses|global|math science free lessons|Learn academic subjects
-Udemy|https://www.udemy.com|Learning & Courses|global|skills courses|Browse online classes
-Duolingo|https://www.duolingo.com|Learning & Courses|global|languages learning|Practice new languages
-Alison|https://alison.com|Learning & Courses|global|free courses|Explore online learning
-MIT OpenCourseWare|https://ocw.mit.edu|Learning & Courses|global|university free education|Access open course materials
-Google Scholar|https://scholar.google.com|Research & Reference|global|academic research papers|Search scholarly literature
-Wikipedia|https://www.wikipedia.org|Research & Reference|global|encyclopedia information|Explore reference articles
-Internet Archive|https://archive.org|Research & Reference|global|books archive media|Explore archived digital material
-Project Gutenberg|https://www.gutenberg.org|Books & Reading|global|free ebooks classics|Read public-domain books
-Open Library|https://openlibrary.org|Books & Reading|global|books library|Discover and borrow books
-Goodreads|https://www.goodreads.com|Books & Reading|global|book reviews reading|Track books and reading
-Audible|https://www.audible.com|Books & Reading|global|audiobooks stories|Listen to audiobooks
-LinkedIn Jobs|https://www.linkedin.com/jobs|Jobs & Careers|global|job search careers|Search job openings
-Indeed|https://www.indeed.com|Jobs & Careers|global|employment job search|Find job listings
-Glassdoor|https://www.glassdoor.com|Jobs & Careers|global|company reviews salaries|Research employers and jobs
-Upwork|https://www.upwork.com|Freelancing|global|freelance remote work|Find freelance projects
-Fiverr|https://www.fiverr.com|Freelancing|global|gig services|Offer or buy freelance services
-Freelancer|https://www.freelancer.com|Freelancing|global|freelance projects|Find project opportunities
-Remote OK|https://remoteok.com|Jobs & Careers|global|remote jobs|Explore remote positions
-CareerJunction|https://www.careerjunction.co.za|Jobs & Careers|africa|south africa jobs|Find South African vacancies
-PNet|https://www.pnet.co.za|Jobs & Careers|africa|south africa careers|Search jobs in South Africa
-WHO|https://www.who.int|Health & Wellness|global|public health information|Read public health guidance
-NHS|https://www.nhs.uk|Health & Wellness|europe|uk health guidance|Access UK health information
-WebMD|https://www.webmd.com|Health & Wellness|north america,global|health information|Read general health information
-MedlinePlus|https://medlineplus.gov|Health & Wellness|global|medical reference|Access health education resources
-Fitbit|https://www.fitbit.com|Fitness & Activity|global|fitness tracking wellness|Explore activity tracking
-Strava|https://www.strava.com|Fitness & Activity|global|running cycling|Track fitness activities
-MyFitnessPal|https://www.myfitnesspal.com|Fitness & Activity|global|nutrition tracking|Track meals and activity
-Headspace|https://www.headspace.com|Health & Wellness|global|mindfulness meditation|Explore meditation resources
-Calm|https://www.calm.com|Health & Wellness|global|meditation sleep|Explore relaxation content
-AccuWeather|https://www.accuweather.com|Weather & Environment|global|weather forecast|Check forecasts
-The Weather Channel|https://weather.com|Weather & Environment|global|weather alerts forecast|Check weather conditions
-Windy|https://www.windy.com|Weather & Environment|global|wind weather maps|Explore weather maps
-IQAir|https://www.iqair.com|Weather & Environment|global|air quality pollution|Explore air-quality data
-BBC News|https://www.bbc.com/news|News & Media|global|world news|Read international news
-Reuters|https://www.reuters.com|News & Media|global|news world business|Read news reports
-AP News|https://apnews.com|News & Media|global|breaking news|Read news coverage
-Al Jazeera|https://www.aljazeera.com|News & Media|global|world news|Read global reporting
-CNN|https://www.cnn.com|News & Media|global|breaking news|Explore news coverage
-News24|https://www.news24.com|News & Media|africa|south africa news|Read South African news
-Google News|https://news.google.com|News & Media|global|news aggregator|Browse news from sources
-Eventbrite|https://www.eventbrite.com|Events & Tickets|global|events conferences tickets|Find events and tickets
-Ticketmaster|https://www.ticketmaster.com|Events & Tickets|global|concert tickets|Find live event tickets
-Meetup|https://www.meetup.com|Events & Tickets|global|communities local events|Find interest-based gatherings
-Quicket|https://www.quicket.co.za|Events & Tickets|africa|south africa tickets|Discover events and tickets
-Computicket|https://www.computicket.com|Events & Tickets|africa|south africa events|Browse event tickets
-Gov.za|https://www.gov.za|Government Services|africa|south africa government|Access South African government information
-USA.gov|https://www.usa.gov|Government Services|north america|united states government|Find US government services
-GOV.UK|https://www.gov.uk|Government Services|europe|united kingdom government|Access UK public services
-Your Europe|https://europa.eu/youreurope|Government Services|europe|eu public services|Find European Union citizen guidance
-Service Canada|https://www.canada.ca|Government Services|north america|canada government|Find Canadian public services
-Australia.gov.au|https://www.australia.gov.au|Government Services|oceania|australia government|Find Australian government services
-Google Calendar|https://calendar.google.com|Planning & Productivity|global|calendar schedule|Manage events and schedules
-Todoist|https://todoist.com|Planning & Productivity|global|tasks to do|Organize personal tasks
-Microsoft To Do|https://to-do.office.com|Planning & Productivity|global|tasks lists|Plan daily tasks
-Evernote|https://evernote.com|Planning & Productivity|global|notes organization|Capture and organize notes
-Google Keep|https://keep.google.com|Planning & Productivity|global|notes reminders|Save notes and lists
-Pocket|https://getpocket.com|Planning & Productivity|global|reading bookmarks|Discover read-later information
-1Password|https://1password.com|Privacy & Security|global|password manager|Manage passwords securely
-Bitwarden|https://bitwarden.com|Privacy & Security|global|password vault|Manage login credentials
-Proton VPN|https://protonvpn.com|Privacy & Security|global|vpn privacy|Explore VPN services
-Have I Been Pwned|https://haveibeenpwned.com|Privacy & Security|global|breach email security|Check known breach exposure
-Cloudflare|https://www.cloudflare.com|Privacy & Security|global|internet security dns|Explore internet security tools
-IKEA|https://www.ikea.com|Home & Living|global|furniture homeware|Browse furniture and home essentials
-Wayfair|https://www.wayfair.com|Home & Living|north america,europe|furniture decor|Shop home furnishings
-Leroy Merlin|https://www.leroymerlin.com|Home & Living|global|hardware diy|Find home improvement products
-Builders|https://www.builders.co.za|Home & Living|africa|hardware home south africa|Shop building and home supplies
-AutoTrader|https://www.autotrader.com|Cars & Automotive|north america|used cars vehicles|Browse vehicles for sale
-AutoTrader SA|https://www.autotrader.co.za|Cars & Automotive|africa|south africa used cars|Browse cars in South Africa
-Cars.com|https://www.cars.com|Cars & Automotive|north america|vehicles dealers|Research and browse cars
-CarGurus|https://www.cargurus.com|Cars & Automotive|north america,europe|car prices listings|Compare car listings
-Cars.co.za|https://www.cars.co.za|Cars & Automotive|africa|south africa cars|Find vehicles and car news
-Zillow|https://www.zillow.com|Property & Rentals|north america|houses apartments property|Explore property listings
-Rightmove|https://www.rightmove.co.uk|Property & Rentals|europe|uk property rent|Search UK properties
-Property24|https://www.property24.com|Property & Rentals|africa|south africa property|Find homes to rent or buy
-Realtor.com|https://www.realtor.com|Property & Rentals|north america|homes real estate|Browse homes and listings
-Google Translate|https://translate.google.com|Language & Translation|global|translation languages|Translate text and websites
-DeepL|https://www.deepl.com/translator|Language & Translation|global|translation writing|Translate text and documents
-Reverso|https://www.reverso.net|Language & Translation|global|dictionary translations|Explore translations and examples
-XE|https://www.xe.com|Currency & Calculators|global|exchange rates currency|Check currency conversion rates
-Wise Currency Converter|https://wise.com/gb/currency-converter/|Currency & Calculators|global|exchange currency|Compare currency conversion
-Calculator.net|https://www.calculator.net|Currency & Calculators|global|calculator math finance|Use everyday calculators
-WolframAlpha|https://www.wolframalpha.com|Currency & Calculators|global|math calculations knowledge|Compute answers and calculations
-GitHub|https://github.com|Developer Tools|global|code repositories|Host and collaborate on code
-GitLab|https://gitlab.com|Developer Tools|global|code devops|Manage software projects
-Stack Overflow|https://stackoverflow.com|Developer Tools|global|programming questions|Find developer answers
-CodePen|https://codepen.io|Developer Tools|global|html css javascript|Prototype front-end code
-Replit|https://replit.com|Developer Tools|global|online coding|Create and run code online
-Google Forms|https://forms.google.com|Forms & Surveys|global|forms surveys|Create forms and collect responses
-Typeform|https://www.typeform.com|Forms & Surveys|global|surveys forms|Build interactive forms
-SurveyMonkey|https://www.surveymonkey.com|Forms & Surveys|global|surveys feedback|Create surveys
-Calendly|https://calendly.com|Appointments & Booking|global|meeting scheduling|Schedule appointments
-Google Flights Hotels|https://www.google.com/travel/hotels|Appointments & Booking|global|hotel search booking|Compare places to stay
-OpenTable|https://www.opentable.com|Appointments & Booking|global|restaurant reservations|Explore restaurant booking
-TheFork|https://www.thefork.com|Appointments & Booking|europe|restaurant booking|Find restaurant reservations
-Petfinder|https://www.petfinder.com|Pets & Animals|north america|pet adoption|Find adoptable pets
-Rover|https://www.rover.com|Pets & Animals|north america,europe|pet sitting walking|Explore pet care services
-Chewy|https://www.chewy.com|Pets & Animals|north america|pet food supplies|Shop pet products
-Google Finance|https://www.google.com/finance|Finance & Markets|global|stocks markets|Explore financial market data
-Yahoo Finance|https://finance.yahoo.com|Finance & Markets|global|stocks finance news|Track market information
-TradingView|https://www.tradingview.com|Finance & Markets|global|charts markets|Explore financial charts
-Investopedia|https://www.investopedia.com|Finance & Markets|global|finance education|Learn financial concepts`;
-const entries=raw.trim().split('\n').map((line,i)=>{const [name,url,category,regions,tags,description]=line.split('|');return{id:i,name,url,category,regions:regions.split(','),tags,description}});const $=s=>document.querySelector(s);let category='All',savedOnly=false,recentOnly=false,limit=24;const read=(key)=>{try{return JSON.parse(localStorage.getItem(key)||'[]')}catch{return []}};let saved=read('arc-saved'),recent=read('arc-recent');const store=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value))}catch{}};const cats=['All',...new Set(entries.map(x=>x.category))].sort((a,b)=>a==='All'?-1:b==='All'?1:a.localeCompare(b));function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function drawCats(){const term=$('#search').value.toLowerCase();$('#categoriesList').innerHTML=cats.map(c=>`<button class="chip ${c===category?'active':''}" data-cat="${esc(c)}">${esc(c)} <span style="opacity:.65">${c==='All'?entries.length:entries.filter(x=>x.category===c).length}</span></button>`).join('')}function matches(e){const q=$('#search').value.toLowerCase().trim(),words=q.split(/\s+/).filter(Boolean),hay=[e.name,e.category,e.tags,e.description,e.regions.join(' ')].join(' ').toLowerCase();return(category==='All'||e.category===category)&&($('#region').value==='all'||e.regions.includes($('#region').value)||e.regions.includes('global')&&$('#region').value==='global')&&(!savedOnly||saved.includes(e.id))&&(!recentOnly||recent.includes(e.id))&&words.every(w=>hay.includes(w))}function render(){let list=entries.filter(matches);list.sort((a,b)=>$('#sort').value==='category'?a.category.localeCompare(b.category)||a.name.localeCompare(b.name):a.name.localeCompare(b.name));$('#count').textContent=`${list.length} matching platforms`;$('#resultsTitle').textContent=category==='All'?'Discover platforms':category;$('#cards').innerHTML=list.slice(0,limit).map(e=>`<article class="card"><div class="cardhead"><div class="logo">${esc(e.name[0])}</div><button class="fav ${saved.includes(e.id)?'saved':''}" data-fav="${e.id}" aria-label="${saved.includes(e.id)?'Remove from':'Add to'} favourites" title="Save platform">${saved.includes(e.id)?'★':'☆'}</button></div><h3>${esc(e.name)}</h3><p>${esc(e.description)}</p><div class="meta">${esc(e.regions.join(' · '))} · ${esc(e.tags.split(' ').slice(0,3).join(' · '))}</div><div class="cardfoot"><span class="tag">${esc(e.category)}</span><a class="visit" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer" data-visit="${e.id}" aria-label="Visit ${esc(e.name)} official website">Visit website ↗</a></div></article>`).join('');$('#empty').classList.toggle('hide',list.length>0);$('#more').classList.toggle('hide',list.length<=limit);$('#savedFilter').textContent=savedOnly?'★ Saved only':'☆ Saved only';$('#recentFilter').textContent=recentOnly?'✓ Recently visited':'Recently visited'}function reset(){category='All';savedOnly=false;recentOnly=false;limit=24;$('#search').value='';$('#region').value='all';$('#sort').value='name';drawCats();render()}$('#categoriesList').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;category=b.dataset.cat;limit=24;drawCats();render();$('#directory').scrollIntoView({behavior:'smooth'})});$('#cards').addEventListener('click',e=>{const f=e.target.closest('[data-fav]');if(f){let id=+f.dataset.fav;saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];store('arc-saved',saved);render()}const v=e.target.closest('[data-visit]');if(v){recent=[+v.dataset.visit,...recent.filter(x=>x!==+v.dataset.visit)].slice(0,30);store('arc-recent',recent)}});$('#search').addEventListener('input',()=>{limit=24;render()});$('#searchForm').addEventListener('submit',e=>{e.preventDefault();$('#directory').scrollIntoView({behavior:'smooth'})});$('#region').addEventListener('change',render);$('#sort').addEventListener('change',render);$('#savedFilter').onclick=()=>{savedOnly=!savedOnly;recentOnly=false;render()};$('#recentFilter').onclick=()=>{recentOnly=!recentOnly;savedOnly=false;render()};$('#savedNav').onclick=()=>{savedOnly=true;recentOnly=false;render()};$('#clear').onclick=reset;$('#more').onclick=()=>{limit+=24;render()};$('#total').textContent=entries.length;$('#catTotal').textContent=cats.length-1;$('#year').textContent=new Date().getFullYear();try{if(localStorage.getItem('arc-theme')==='dark')document.body.classList.add('dark')}catch{}function updateTheme(){$('#theme').textContent=document.body.classList.contains('dark')?'☀':'☾'}updateTheme();$('#theme').onclick=()=>{document.body.classList.toggle('dark');try{localStorage.setItem('arc-theme',document.body.classList.contains('dark')?'dark':'light')}catch{}updateTheme()};
-const policies={privacy:{title:'Privacy Policy',body:`<p><strong>Last updated:</strong> 12 November 2026. This policy explains how this front-end Arcknowledge directory handles information. This is a starter policy for the website operator to review and update before publication.</p><h3>1. Scope and operator</h3><p>Arcknowledge provides a directory of links to third-party websites and services. The website operator is responsible for this directory, not for the independent services linked from it. Contact: hello@arcknowledge.online (confirm this address before publication).</p><h3>2. Information stored on your device</h3><p>This version does not require registration or request your name, phone number or payment details. Your favourites, recently visited directory links and theme preference are stored in your browser's localStorage. Searches and filters run in your browser; this website does not intentionally transmit those queries to an Arcknowledge server.</p><h3>3. Hosting and technical information</h3><p>The hosting provider may process IP addresses, device information, timestamps and request logs to deliver the site, maintain security and diagnose faults. Its handling depends on the hosting service selected by the operator. Review the hosting provider's privacy terms and update this section accordingly.</p><h3>4. Cookies and analytics</h3><p>The supplied website code does not set tracking cookies or include advertising trackers or analytics scripts. If the operator adds analytics, advertisements, embedded content or third-party scripts, this policy and any required consent mechanism must be updated first.</p><h3>5. External links</h3><p>Clicking a listing takes you to an independent service. Those services may collect data, use cookies, require accounts or process payments under their own policies. Arcknowledge does not control their data practices. Read their notices before providing information.</p><h3>6. Purposes and lawful grounds</h3><p>On-device preferences are used to provide requested functionality. Any hosting-related technical processing must be assessed against applicable privacy law, including lawful basis and notice requirements where relevant.</p><h3>7. Sharing and international transfers</h3><p>The supplied code does not send favourites or searches to an Arcknowledge database. Hosting infrastructure may involve processing across borders; the operator should disclose actual providers, locations and safeguards after deployment.</p><h3>8. Retention and deletion</h3><p>On-device preferences remain until you clear the site's browser storage or use a browser that removes it. Hosting logs, if any, follow the hosting provider's retention configuration. Clearing browser data removes saved preferences on that device.</p><h3>9. Security</h3><p>The site uses no account passwords or checkout forms. No online service is guaranteed completely secure. The operator should deploy over HTTPS, maintain the hosting environment and avoid adding unreviewed scripts.</p><h3>10. Your rights</h3><p>Depending on your jurisdiction, you may have rights to access, correct, erase, restrict or object to processing and to complain to a data protection authority. For browser-only data, you can remove it directly in your browser settings. Contact the operator for requests about any information the operator actually holds.</p><h3>11. Children</h3><p>This directory is intended for a general audience. Some linked services have age restrictions and parental controls. Parents or guardians should supervise children's use of third-party platforms.</p><h3>12. Changes and contact</h3><p>This policy may be updated when functionality, hosting or applicable requirements change. Material changes should be clearly communicated on this page. Contact: hello@arcknowledge.online.</p>`},use:{title:'Terms of Use',body:`<p><strong>Last updated:</strong> 12 November 2026. By accessing this directory, you agree to the following website usage rules. If you disagree, discontinue use.</p><h3>1. Directory purpose</h3><p>Arcknowledge helps visitors discover external websites, apps and services. Listings are informational and do not constitute endorsements, certifications, financial advice, legal advice or medical advice.</p><h3>2. Eligibility</h3><p>You must comply with the laws applicable to your use of the site. Parents and guardians are responsible for supervising minors. Third-party services may impose their own minimum age and eligibility rules.</p><h3>3. Permitted use</h3><p>You may browse, search, filter and save links for personal or legitimate business purposes. You agree not to interfere with site operation, introduce malicious code, attempt unauthorized access, scrape the site abusively or use it for unlawful activity.</p><h3>4. Accuracy and availability</h3><p>Listings may become outdated, unavailable, region-restricted or subject to different fees and eligibility rules. We do not guarantee the accuracy, availability, safety or suitability of any linked service. Verify details directly with each provider.</p><h3>5. Third-party services</h3><p>When you leave Arcknowledge, the provider's terms, privacy notices, pricing, dispute procedures and applicable laws govern your interaction. Arcknowledge is not a party to purchases, transfers, subscriptions or bookings made with third parties.</p><h3>6. Intellectual property</h3><p>Arcknowledge's original site design, text and code are subject to applicable intellectual property rights. Names, trademarks and service marks of listed platforms belong to their respective owners. Listing a brand does not imply partnership or affiliation.</p><h3>7. Changes to the service</h3><p>Categories, links, features and access may be changed or discontinued at any time. The operator may remove inaccurate, harmful or inappropriate listings.</p><h3>8. Disclaimer</h3><p>The directory is provided on an “as is” and “as available” basis to the extent permitted by law, without guarantees of uninterrupted operation or error-free listings. Nothing in these terms excludes protections that cannot legally be waived.</p><h3>9. Responsibility</h3><p>You are responsible for checking the legitimacy, safety, fees and terms of external providers before using them, and for protecting your accounts and devices.</p><h3>10. Governing law and contact</h3><p>Applicable law and mandatory consumer rights depend on the operator's legal location and your jurisdiction. Before publication, the operator should specify its registered business details and governing law. Questions: hello@arcknowledge.online.</p>`},conditions:{title:'Terms & Conditions',body:`<p><strong>Last updated:</strong> 12 November 2026. These conditions describe the practical operation and limitations of the Arcknowledge directory.</p><h3>1. Service description</h3><p>Arcknowledge is a discovery hub that organizes links to third-party platforms by category, region and keywords. It does not provide the underlying banking, retail, transport, medical or other services advertised by linked providers.</p><h3>2. Pricing</h3><p>Browsing the supplied directory is free. Linked providers may charge subscription fees, transaction costs, delivery fees or other charges. Their current prices, currencies and taxes are determined by them, not by Arcknowledge.</p><h3>3. Accounts and purchases</h3><p>This front-end version has no Arcknowledge user registration, payment collection, wallet or checkout. Any third-party account or purchase is governed solely by the external provider's terms and processes.</p><h3>4. Geographic limitations</h3><p>“Worldwide” describes the breadth of the directory, not a promise that every service operates in every country. Region labels are broad discovery hints and may not reflect licensing, availability, shipping, access restrictions or local legal requirements.</p><h3>5. Listings and editorial control</h3><p>Arcknowledge may add, revise, reorder or remove listings without notice. Links are included for convenience, not as endorsements or assurances of trustworthiness. The operator should review and maintain links regularly.</p><h3>6. Saved items and browser data</h3><p>Favourites, recent visits and theme settings are stored only in the browser on the device used. They do not synchronize across devices, may be lost if browser data is cleared, and may be unavailable in private browsing or restricted storage environments.</p><h3>7. External transactions and disputes</h3><p>For orders, refunds, cancellations, deliveries, subscriptions, financial transfers and other external transactions, contact the relevant service provider. Arcknowledge does not process or arbitrate those transactions.</p><h3>8. Safety and due diligence</h3><p>Exercise care before sharing personal data, transferring funds, downloading software or relying on health, legal or financial information. Verify official URLs and independently assess third-party terms and risks.</p><h3>9. Limitation of liability</h3><p>To the extent allowed by applicable law, the operator is not responsible for losses arising solely from third-party service failures, inaccurate external information or unavailable external sites. This clause does not exclude liability that cannot legally be excluded.</p><h3>10. Availability and modifications</h3><p>The directory may be interrupted for hosting issues, maintenance or updates. Features may change without advance notice. We may revise these conditions and publish an updated date.</p><h3>11. Severability and rights</h3><p>If a provision is unenforceable, the remaining provisions continue to apply where legally possible. Mandatory consumer and privacy protections remain unaffected.</p><h3>12. Complaints and operator details</h3><p>For questions, broken links or complaints, contact hello@arcknowledge.online. The operator should confirm this mailbox, add a physical or registered business address where legally required, and obtain legal review for relevant jurisdictions before launch.</p>`}};let lastFocus=null;function openPolicy(key){lastFocus=document.activeElement;$('#modalTitle').textContent=policies[key].title;$('#modalBody').innerHTML=policies[key].body;$('#modal').classList.add('open');document.body.style.overflow='hidden';$('#close').focus()}function closePolicy(){$('#modal').classList.remove('open');document.body.style.overflow='';lastFocus?.focus()}document.querySelectorAll('[data-policy]').forEach(b=>b.onclick=()=>openPolicy(b.dataset.policy));$('#close').onclick=closePolicy;$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closePolicy()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modal').classList.contains('open'))closePolicy();if(e.key==='Tab'&&$('#modal').classList.contains('open')){const focusables=[...$('#modal').querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')];if(!focusables.length)return;const first=focusables[0],last=focusables[focusables.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});drawCats();render();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arcknowledge | Worldwide Everyday Digital Hub</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            }
+          },
+          boxShadow: {
+            'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+            'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar & Glassmorphism Utilities */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.7);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Ambient Top Gradient Glow -->
+  <div class="fixed inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl pointer-events-none" aria-hidden="true">
+    <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-brand-500 to-cyan-400 opacity-15 dark:opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+  </div>
+
+  <!-- STICKY TOP HEADER -->
+  <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" onclick="resetAllFilters(); return false;" class="flex items-center gap-3 group focus:outline-none">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform">
+          <!-- Custom Geometric Arch + Knowledge Node SVG -->
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20V11a8 8 0 0 1 16 0v9" />
+            <path d="M8 20v-7a4 4 0 0 1 8 0v7" />
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
+            Arcknowledge
+          </span>
+          <span class="text-[10px] font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 -mt-1">
+            Worldwide Edition
+          </span>
+        </div>
+      </a>
+
+      <!-- Right Controls: Region Selector, My Hub Counter & Theme Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Region Selector Pill -->
+        <div class="relative flex items-center">
+          <i data-lucide="globe" class="w-4 h-4 text-brand-600 dark:text-brand-400 absolute left-3 pointer-events-none"></i>
+          <select id="regionSelect" aria-label="Select Region"
+            class="pl-9 pr-8 py-2 text-xs sm:text-sm font-medium rounded-xl bg-slate-100 hover:bg-slate-200/70 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 transition cursor-pointer appearance-none">
+            <option value="Worldwide">Worldwide</option>
+            <option value="North America">North America</option>
+            <option value="Europe">Europe</option>
+            <option value="Asia-Pacific">Asia-Pacific</option>
+            <option value="Africa">Africa</option>
+            <option value="Latin America">Latin America</option>
+            <option value="Middle East">Middle East</option>
+          </select>
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none"></i>
+        </div>
+
+        <!-- Jump to Pinned Hub Button -->
+        <button onclick="scrollToHub()" id="headerHubBtn"
+          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-brand-50 text-brand-700 hover:bg-brand-100 dark:bg-brand-950/60 dark:text-brand-300 dark:hover:bg-brand-900/60 border border-brand-200/70 dark:border-brand-800/60 transition">
+          <i data-lucide="pin" class="w-3.5 h-3.5"></i>
+          <span>My Hub</span>
+          <span id="pinnedCountBadge" class="ml-0.5 px-1.5 py-0.2 rounded-full text-[11px] font-bold bg-brand-600 text-white">0</span>
+        </button>
+
+        <!-- Dark / Light Mode Toggle -->
+        <button id="themeToggle" aria-label="Toggle Dark Mode"
+          class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 transition">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO & SEARCH SECTION -->
+  <section class="pt-10 pb-8 sm:pt-14 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-950/70 text-brand-700 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800/60 mb-5">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+        </span>
+        Your Worldwide Everyday Digital Hub
+      </div>
+      
+      <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+        Everything you use daily, <br class="hidden sm:inline" />
+        <span class="bg-gradient-to-r from-brand-600 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+          indexed in one global arch.
+        </span>
+      </h1>
+      
+      <p class="mt-4 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        Instant access to essential global platforms across communication, entertainment, banking, shopping, productivity, travel, health, and everyday utilities.
+      </p>
+    </div>
+
+    <!-- PROMINENT SEARCH BAR -->
+    <div class="mt-8 max-w-3xl mx-auto">
+      <div class="relative group">
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-cyan-500 rounded-2xl blur opacity-20 group-focus-within:opacity-40 transition duration-300"></div>
+        <div class="relative flex items-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-glass dark:shadow-glass-dark px-4 py-3 sm:py-3.5">
+          <i data-lucide="search" class="w-5 h-5 text-slate-400 mr-3 shrink-0"></i>
+          <input id="searchInput" type="text" autocomplete="off"
+            placeholder="Search platforms, services, regions, or tags (e.g., Spotify, Banking, Free, AI-Powered, Delivery)..."
+            class="w-full bg-transparent text-sm sm:text-base text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none" />
+          
+          <button id="clearSearchBtn" onclick="clearSearch()" title="Clear search"
+            class="hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition mr-1">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+
+          <kbd class="hidden md:inline-flex items-center px-2 py-1 text-[11px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+            /
+          </kbd>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE TAG FILTER PILLS -->
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="tags" class="w-3.5 h-3.5 text-brand-500"></i>
+            Filter by Tag
+          </span>
+          <button id="resetTagsBtn" onclick="resetAllFilters()" class="hidden text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline">
+            Reset all filters
+          </button>
+        </div>
+        <div id="tagContainer" class="flex flex-wrap gap-1.5 sm:gap-2">
+          <!-- Dynamically populated tag chips -->
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK STATS BAR -->
+    <div class="mt-8 max-w-4xl mx-auto grid grid-cols-3 gap-3 sm:gap-6 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-3.5 sm:p-4 text-center shadow-sm">
+      <div>
+        <div id="statCategories" class="font-display text-lg sm:text-2xl font-extrabold text-slate-900 dark:text-white">17</div>
+        <div class="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">Daily Categories</div>
+      </div>
+      <div class="border-x border-slate-200 dark:border-slate-800">
+        <div id="statTotalPlatforms" class="font-display text-lg sm:text-2xl font-extrabold text-brand-600 dark:text-brand-400">0</div>
+        <div class="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">Worldwide Platforms</div>
+      </div>
+      <div>
+        <div id="statShowing" class="font-display text-lg sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">0</div>
+        <div class="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">Matching Results</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONALIZED "MY DAILY HUB" QUICK-LAUNCH BAR -->
+  <section id="myHubSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+    <div class="rounded-2xl bg-gradient-to-r from-brand-50/90 via-indigo-50/80 to-cyan-50/90 dark:from-slate-900 dark:via-brand-950/30 dark:to-slate-900 border border-brand-200/70 dark:border-brand-800/50 p-4 sm:p-5 shadow-sm">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-brand-600 text-white flex items-center justify-center">
+            <i data-lucide="bookmark-check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h2 class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white">My Daily Hub Quick-Launch</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Pin your go-to platforms using the pin icon on any card for instant access.</p>
+          </div>
+        </div>
+        <button id="clearPinnedBtn" onclick="clearAllPinned()" class="hidden text-xs font-medium text-rose-600 dark:text-rose-400 hover:underline px-2 py-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
+          Clear Pinned
+        </button>
+      </div>
+      
+      <div id="pinnedGrid" class="flex flex-wrap gap-2.5">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- STICKY CATEGORY NAVIGATION TABS -->
+  <nav aria-label="Category Navigation" class="sticky top-16 z-30 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-md border-y border-slate-200/70 dark:border-slate-800/70 py-2.5 mb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-0.5">
+        <!-- Dynamically populated category pills -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN DIRECTORY CONTENT -->
+  <main id="directoryContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-12">
+    <!-- Dynamically populated category sections & platform cards -->
+  </main>
+
+  <!-- EMPTY STATE (Shown when no search/tag matches) -->
+  <div id="emptyState" class="hidden max-w-lg mx-auto px-4 py-16 text-center">
+    <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center mx-auto mb-4 text-slate-400">
+      <i data-lucide="search-x" class="w-8 h-8"></i>
+    </div>
+    <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">No matching platforms found</h3>
+    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+      Try adjusting your search keywords, changing the region selector, or clearing active tag filters.
+    </p>
+    <button onclick="resetAllFilters()" class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 transition">
+      <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+      Reset All Filters
+    </button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-200 dark:border-slate-800">
+        
+        <!-- Brand Column -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center gap-2.5 mb-3">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-600 to-cyan-500 flex items-center justify-center text-white">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20V11a8 8 0 0 1 16 0v9" />
+                <path d="M8 20v-7a4 4 0 0 1 8 0v7" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+              </svg>
+            </div>
+            <span class="font-display font-extrabold text-lg text-slate-900 dark:text-white">Arcknowledge</span>
+          </div>
+          <p class="text-xs sm:text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+            Your Worldwide Everyday Digital Hub. Organizing the world's most essential platforms for daily life, commerce, communication, and discovery.
+          </p>
+          <div class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
+            <i data-lucide="globe-2" class="w-3.5 h-3.5 text-brand-500"></i>
+            Global Directory • Front-End Edition
+          </div>
+        </div>
+
+        <!-- Core Categories -->
+        <div>
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider mb-3">Core Categories</h4>
+          <ul class="space-y-2 text-xs sm:text-sm">
+            <li><a href="#cat-social" onclick="selectCategory('social')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Social Media Platforms</a></li>
+            <li><a href="#cat-email" onclick="selectCategory('email')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Email & Messaging</a></li>
+            <li><a href="#cat-music" onclick="selectCategory('music')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Music & Audio Streaming</a></li>
+            <li><a href="#cat-movies" onclick="selectCategory('movies')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Movies & TV Streaming</a></li>
+            <li><a href="#cat-banking" onclick="selectCategory('banking')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Banking & Digital Finance</a></li>
+            <li><a href="#cat-search" onclick="selectCategory('search')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Global Search Engines</a></li>
+          </ul>
+        </div>
+
+        <!-- Everyday Living -->
+        <div>
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider mb-3">Everyday Living</h4>
+          <ul class="space-y-2 text-xs sm:text-sm">
+            <li><a href="#cat-clothing" onclick="selectCategory('clothing')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Online Clothing & Fashion</a></li>
+            <li><a href="#cat-grocery" onclick="selectCategory('grocery')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Grocery & Food Delivery</a></li>
+            <li><a href="#cat-wholesale" onclick="selectCategory('wholesale')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Wholesalers & Bulk Trade</a></li>
+            <li><a href="#cat-travel" onclick="selectCategory('travel')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Travel, Maps & Rides</a></li>
+            <li><a href="#cat-health" onclick="selectCategory('health')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">Health, Fitness & Wellness</a></li>
+            <li><a href="#cat-utilities" onclick="selectCategory('utilities')" class="hover:text-brand-600 dark:hover:text-brand-400 transition">News, Weather & Utilities</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal & Governance (Modal Triggers) -->
+        <div>
+          <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white uppercase tracking-wider mb-3">Legal & Governance</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">
+            Review our global compliance, data transparency, and directory usage policies:
+          </p>
+          <ul class="space-y-2 text-xs sm:text-sm">
+            <li>
+              <button onclick="openLegalModal('privacy')" class="inline-flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                <i data-lucide="shield-check" class="w-4 h-4 text-brand-500"></i>
+                Privacy Policy
+              </button>
+            </li>
+            <li>
+              <button onclick="openLegalModal('termsOfUse')" class="inline-flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                <i data-lucide="file-text" class="w-4 h-4 text-brand-500"></i>
+                Terms of Use
+              </button>
+            </li>
+            <li>
+              <button onclick="openLegalModal('termsAndConditions')" class="inline-flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                <i data-lucide="scale" class="w-4 h-4 text-brand-500"></i>
+                Terms and Conditions
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+        <p>© <span id="currentYear"></span> Arcknowledge Worldwide. All rights reserved. Trademarks belong to their respective owners.</p>
+        <div class="flex flex-wrap items-center gap-4">
+          <button onclick="openLegalModal('privacy')" class="hover:text-brand-600 dark:hover:text-brand-400 underline-offset-4 hover:underline">Privacy Policy</button>
+          <span>•</span>
+          <button onclick="openLegalModal('termsOfUse')" class="hover:text-brand-600 dark:hover:text-brand-400 underline-offset-4 hover:underline">Terms of Use</button>
+          <span>•</span>
+          <button onclick="openLegalModal('termsAndConditions')" class="hover:text-brand-600 dark:hover:text-brand-400 underline-offset-4 hover:underline">Terms & Conditions</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LEGAL MODAL OVERLAY -->
+  <div id="legalModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-sm transition-opacity">
+    
+    <!-- Modal Dialog Box -->
+    <div id="modalContentBox" class="relative w-full max-w-3xl max-h-[88vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-fade-up">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/90">
+        <div class="flex items-center gap-3">
+          <div id="modalIconWrap" class="w-9 h-9 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="modalTitle" class="font-display font-bold text-lg sm:text-xl text-slate-900 dark:text-white">Privacy Policy</h3>
+            <p id="modalSubtitle" class="text-xs text-slate-500 dark:text-slate-400">Effective Date: November 2026 • Arcknowledge Global</p>
+          </div>
+        </div>
+        <button onclick="closeLegalModal()" aria-label="Close modal"
+          class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Tab Switcher -->
+      <div class="flex items-center gap-1 px-6 pt-3 pb-2 bg-slate-50/50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
+        <button id="tab-privacy" onclick="openLegalModal('privacy')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+          Privacy Policy
+        </button>
+        <button id="tab-termsOfUse" onclick="openLegalModal('termsOfUse')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+          Terms of Use
+        </button>
+        <button id="tab-termsAndConditions" onclick="openLegalModal('termsAndConditions')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition">
+          Terms & Conditions
+        </button>
+      </div>
+
+      <!-- Scrollable Legal Body -->
+      <div id="modalBody" class="p-6 overflow-y-auto space-y-5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        <!-- Dynamically injected legal content -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/90 flex items-center justify-between gap-4">
+        <span class="text-xs text-slate-500 dark:text-slate-400">Press <kbd class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[11px]">ESC</kbd> to close</span>
+        <button onclick="closeLegalModal()"
+          class="px-5 py-2 rounded-xl text-sm font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-sm transition">
+          I Understand & Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-300">
+    <div class="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs sm:text-sm font-medium shadow-xl">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
+      <span id="toastMessage">Updated My Daily Hub</span>
+    </div>
+  </div>
+
+  <!-- APPLICATION DATA & LOGIC -->
+  <script>
+    /**
+     * 1. COMPREHENSIVE WORLDWIDE DIRECTORY DATASET
+     * Covers 17 essential daily-living categories and 155+ global & regional platforms.
+     */
+    const DIRECTORY_DATA = [
+      {
+        id: 'social',
+        title: 'Social Media Platforms',
+        icon: 'share-2',
+        description: 'Global communities, microblogging, short-form video, and professional networks.',
+        platforms: [
+          { name: 'X (Twitter)', url: 'https://x.com', desc: 'Real-time global news, public conversations, and live commentary.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Communication'] },
+          { name: 'Instagram', url: 'https://instagram.com', desc: 'Visual storytelling, Reels, Stories, and creator communities.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Entertainment'] },
+          { name: 'TikTok', url: 'https://tiktok.com', desc: 'Short-form mobile video discovery, trends, and live streaming.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Entertainment', 'AI-Powered'] },
+          { name: 'LinkedIn', url: 'https://linkedin.com', desc: 'World’s largest professional networking, hiring, and career platform.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Web', 'Productivity', 'B2B'] },
+          { name: 'Reddit', url: 'https://reddit.com', desc: 'Community-driven forums, niche discussions, and crowdsourced answers.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Communication'] },
+          { name: 'Facebook', url: 'https://facebook.com', desc: 'Connect with friends, local groups, events, and Marketplace.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'E-Commerce'] },
+          { name: 'Snapchat', url: 'https://snapchat.com', desc: 'Ephemeral messaging, AR lenses, and close-friend sharing.', region: 'North America', tags: ['Free', 'iOS & Android', 'Communication'] },
+          { name: 'Pinterest', url: 'https://pinterest.com', desc: 'Visual discovery engine for home decor, fashion, recipes, and ideas.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android'] },
+          { name: 'Threads', url: 'https://threads.net', desc: 'Text-based public conversation app integrated with Instagram.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Communication'] },
+          { name: 'Bluesky', url: 'https://bsky.app', desc: 'Decentralized social networking built on the open AT Protocol.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'Web', 'iOS & Android'] },
+          { name: 'WeChat', url: 'https://wechat.com', desc: 'All-in-one messaging, social feed, mini-programs, and mobile payments.', region: 'Asia-Pacific', tags: ['Free', 'iOS & Android', 'Communication', 'Finance'] },
+          { name: 'Discord', url: 'https://discord.com', desc: 'Voice, video, and text servers for communities, gaming, and study groups.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Web', 'iOS & Android', 'Communication'] }
+        ]
+      },
+      {
+        id: 'email',
+        title: 'Email Platforms',
+        icon: 'mail',
+        description: 'Personal, enterprise, and end-to-end encrypted electronic mail services.',
+        platforms: [
+          { name: 'Gmail', url: 'https://mail.google.com', desc: 'Fast, searchable email by Google with smart spam protection and Workspace.', region: 'Worldwide', tags: ['Global', 'Free', 'Cloud', 'Web', 'iOS & Android', 'Productivity', 'AI-Powered'] },
+          { name: 'Microsoft Outlook', url: 'https://outlook.live.com', desc: 'Integrated email, calendar, contacts, and tasks for personal & enterprise.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity'] },
+          { name: 'Proton Mail', url: 'https://proton.me/mail', desc: 'Swiss-based, open-source, end-to-end encrypted private email service.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'Open Source', 'Utilities'] },
+          { name: 'Yahoo Mail', url: 'https://mail.yahoo.com', desc: 'Generous inbox storage with receipt tracking and subscription management.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android'] },
+          { name: 'iCloud Mail', url: 'https://icloud.com/mail', desc: 'Ad-free email built seamlessly into Apple devices with Hide My Email.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'iOS & Android'] },
+          { name: 'Zoho Mail', url: 'https://zoho.com/mail', desc: 'Ad-free, secure custom-domain email hosting for teams and businesses.', region: 'Asia-Pacific', tags: ['Global', 'Free', 'Subscription', 'B2B', 'Productivity'] },
+          { name: 'Tuta (Tutanota)', url: 'https://tuta.com', desc: 'Quantum-safe encrypted email and calendar hosted on green energy in Germany.', region: 'Europe', tags: ['Global', 'Free', 'Open Source', 'Utilities'] },
+          { name: 'Fastmail', url: 'https://fastmail.com', desc: 'Privacy-first, ultra-fast independent email, calendars, and contacts.', region: 'Asia-Pacific', tags: ['Global', 'Subscription', 'Web', 'iOS & Android', 'Productivity'] }
+        ]
+      },
+      {
+        id: 'music',
+        title: 'Music Streaming Platforms',
+        icon: 'music',
+        description: 'On-demand songs, lossless hi-fi audio, podcasts, and curated playlists worldwide.',
+        platforms: [
+          { name: 'Spotify', url: 'https://open.spotify.com', desc: 'Global leader in music streaming, AI DJ playlists, podcasts, and audiobooks.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment', 'AI-Powered', 'iOS & Android'] },
+          { name: 'Apple Music', url: 'https://music.apple.com', desc: 'Over 100 million songs with Spatial Audio and Lossless Hi-Res streaming.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'iOS & Android'] },
+          { name: 'YouTube Music', url: 'https://music.youtube.com', desc: 'Official tracks, live performances, remixes, and music videos.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment', 'Web'] },
+          { name: 'Amazon Music', url: 'https://music.amazon.com', desc: 'HD & Ultra HD music streaming plus ad-free top podcasts with Prime.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'iOS & Android'] },
+          { name: 'Tidal', url: 'https://tidal.com', desc: 'Artist-first streaming platform offering master-quality FLAC audio.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment'] },
+          { name: 'Deezer', url: 'https://deezer.com', desc: 'French global music streaming app featuring Flow personalized soundtracks.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'Entertainment'] },
+          { name: 'SoundCloud', url: 'https://soundcloud.com', desc: 'World’s largest open audio platform for independent artists and DJs.', region: 'Worldwide', tags: ['Global', 'Free', 'Entertainment', 'Web'] },
+          { name: 'Anghami', url: 'https://anghami.com', desc: 'Leading music and entertainment streaming platform across MENA.', region: 'Middle East', tags: ['Free', 'Subscription', 'Entertainment', 'iOS & Android'] },
+          { name: 'JioSaavn', url: 'https://jiosaavn.com', desc: 'Premier South Asian music, Bollywood, and regional audio streaming service.', region: 'Asia-Pacific', tags: ['Free', 'Subscription', 'Entertainment', 'iOS & Android'] }
+        ]
+      },
+      {
+        id: 'movies',
+        title: 'Movie & TV Streaming Platforms',
+        icon: 'film',
+        description: 'Blockbuster cinema, original series, anime, documentaries, and live TV.',
+        platforms: [
+          { name: 'Netflix', url: 'https://netflix.com', desc: 'Award-winning original series, global films, documentaries, and mobile games.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'Web', 'iOS & Android'] },
+          { name: 'Disney+', url: 'https://disneyplus.com', desc: 'Streaming home of Disney, Pixar, Marvel, Star Wars, and National Geographic.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'iOS & Android'] },
+          { name: 'Prime Video', url: 'https://primevideo.com', desc: 'Amazon Originals, theatrical movie rentals, and live sports channels.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment', 'Web'] },
+          { name: 'Max', url: 'https://max.com', desc: 'Iconic HBO series, Warner Bros. cinema, DC Universe, and reality hits.', region: 'North America', tags: ['Global', 'Subscription', 'Entertainment'] },
+          { name: 'Apple TV+', url: 'https://tv.apple.com', desc: 'Critically acclaimed Apple Original dramas, comedies, and films in 4K HDR.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Entertainment'] },
+          { name: 'Hulu', url: 'https://hulu.com', desc: 'Next-day TV episodes, live TV bundles, and acclaimed original shows.', region: 'North America', tags: ['Subscription', 'Entertainment', 'Web'] },
+          { name: 'Crunchyroll', url: 'https://crunchyroll.com', desc: 'World’s largest dedicated anime and manga streaming library.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment'] },
+          { name: 'YouTube', url: 'https://youtube.com', desc: 'Global video platform for creators, tutorials, live streams, and movies.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Entertainment', 'Education'] },
+          { name: 'Tubi', url: 'https://tubitv.com', desc: '100% free ad-supported streaming with thousands of movies and TV shows.', region: 'North America', tags: ['Free', 'Entertainment', 'Web', 'iOS & Android'] },
+          { name: 'Showmax', url: 'https://showmax.com', desc: 'Leading African streaming service with local originals, HBO, and Premier League.', region: 'Africa', tags: ['Subscription', 'Entertainment', 'iOS & Android'] },
+          { name: 'Rakuten Viki', url: 'https://viki.com', desc: 'Global streaming destination for Korean, Chinese, and Japanese dramas.', region: 'Asia-Pacific', tags: ['Global', 'Free', 'Subscription', 'Entertainment'] }
+        ]
+      },
+      {
+        id: 'clothing',
+        title: 'Online Clothing & Fashion Stores',
+        icon: 'shirt',
+        description: 'Everyday apparel, streetwear, athletic gear, and luxury fashion delivered worldwide.',
+        platforms: [
+          { name: 'ASOS', url: 'https://asos.com', desc: 'Global online fashion destination featuring 850+ brands and ASOS Design.', region: 'Europe', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android', 'Delivery'] },
+          { name: 'Zara', url: 'https://zara.com', desc: 'Contemporary runway-inspired apparel, footwear, and accessories.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android'] },
+          { name: 'H&M', url: 'https://hm.com', desc: 'Affordable everyday fashion, basics, and sustainable conscious collections.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android'] },
+          { name: 'Uniqlo', url: 'https://uniqlo.com', desc: 'Japanese casual wear engineered for everyday comfort (LifeWear).', region: 'Asia-Pacific', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android'] },
+          { name: 'Nike', url: 'https://nike.com', desc: 'Performance athletic footwear, sportswear, and custom sneaker drops.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Health', 'iOS & Android'] },
+          { name: 'Zalando', url: 'https://zalando.com', desc: 'Europe’s leading online platform for fashion, shoes, and beauty.', region: 'Europe', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'SHEIN', url: 'https://shein.com', desc: 'Ultra-fast global fashion and lifestyle e-commerce marketplace.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'iOS & Android', 'Delivery'] },
+          { name: 'Farfetch', url: 'https://farfetch.com', desc: 'Global luxury fashion marketplace connecting boutiques and designers.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Delivery'] },
+          { name: 'SSENSE', url: 'https://ssense.com', desc: 'Curated luxury, independent designers, and avant-garde streetwear.', region: 'North America', tags: ['Global', 'E-Commerce', 'Web'] },
+          { name: 'Superbalist', url: 'https://superbalist.com', desc: 'South Africa’s premier online fashion, sneaker, and apartment store.', region: 'Africa', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] }
+        ]
+      },
+      {
+        id: 'banking',
+        title: 'Banking & Digital Finance Platforms',
+        icon: 'landmark',
+        description: 'Neobanks, cross-border transfers, digital wallets, and global payment rails.',
+        platforms: [
+          { name: 'PayPal', url: 'https://paypal.com', desc: 'Trusted global online payments, buyer protection, and peer transfers.', region: 'Worldwide', tags: ['Global', 'Free', 'Finance', 'Web', 'iOS & Android'] },
+          { name: 'Wise', url: 'https://wise.com', desc: 'Multi-currency accounts and international money transfers at real exchange rates.', region: 'Worldwide', tags: ['Global', 'Finance', 'Web', 'iOS & Android', 'Utilities'] },
+          { name: 'Revolut', url: 'https://revolut.com', desc: 'Global financial super-app for banking, FX, cards, and investments.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'Finance', 'iOS & Android'] },
+          { name: 'Chase', url: 'https://chase.com', desc: 'Consumer banking, credit cards, mortgages, and wealth management.', region: 'North America', tags: ['Finance', 'Web', 'iOS & Android'] },
+          { name: 'HSBC', url: 'https://hsbc.com', desc: 'International banking and financial services across 60+ countries.', region: 'Worldwide', tags: ['Global', 'Finance', 'Web', 'iOS & Android'] },
+          { name: 'Nubank', url: 'https://nubank.com.br', desc: 'Latin America’s largest digital bank with zero-fee credit cards and accounts.', region: 'Latin America', tags: ['Free', 'Finance', 'iOS & Android'] },
+          { name: 'Monzo', url: 'https://monzo.com', desc: 'Smart UK mobile-first bank with instant spending notifications and pots.', region: 'Europe', tags: ['Free', 'Finance', 'iOS & Android'] },
+          { name: 'Cash App', url: 'https://cash.app', desc: 'Instant peer-to-peer payments, banking, stocks, and Bitcoin.', region: 'North America', tags: ['Free', 'Finance', 'iOS & Android'] },
+          { name: 'Paystack', url: 'https://paystack.com', desc: 'Modern online and offline payment infrastructure powering African businesses.', region: 'Africa', tags: ['Finance', 'B2B', 'Web'] },
+          { name: 'Alipay', url: 'https://global.alipay.com', desc: 'Leading digital wallet and lifestyle payment platform across Asia.', region: 'Asia-Pacific', tags: ['Finance', 'iOS & Android', 'E-Commerce'] }
+        ]
+      },
+      {
+        id: 'search',
+        title: 'Search Engines',
+        icon: 'search',
+        description: 'Web search, privacy-focused discovery, eco-friendly search, and AI answer engines.',
+        platforms: [
+          { name: 'Google', url: 'https://google.com', desc: 'The world’s most comprehensive web search, knowledge graph, and index.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'AI-Powered', 'Utilities'] },
+          { name: 'Bing', url: 'https://bing.com', desc: 'Microsoft’s search engine integrated with Copilot AI and rewards.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'AI-Powered', 'Utilities'] },
+          { name: 'DuckDuckGo', url: 'https://duckduckgo.com', desc: 'Privacy-first search engine that never tracks your search history.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Utilities'] },
+          { name: 'Brave Search', url: 'https://search.brave.com', desc: 'Independent search index with built-in AI summarizer and zero profiling.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'AI-Powered'] },
+          { name: 'Ecosia', url: 'https://ecosia.org', desc: 'The search engine that uses ad revenue to plant trees worldwide.', region: 'Europe', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Utilities'] },
+          { name: 'Perplexity', url: 'https://perplexity.ai', desc: 'Conversational AI answer engine with real-time cited web sources.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'AI-Powered', 'Education'] },
+          { name: 'Yahoo Search', url: 'https://search.yahoo.com', desc: 'Web search portal integrated with Yahoo News, Finance, and Sports.', region: 'Worldwide', tags: ['Global', 'Free', 'Web'] },
+          { name: 'Baidu', url: 'https://baidu.com', desc: 'Dominant Chinese-language search engine, maps, and AI cloud platform.', region: 'Asia-Pacific', tags: ['Free', 'Web', 'AI-Powered'] },
+          { name: 'Yandex', url: 'https://yandex.com', desc: 'Multilingual search engine, web browser, and ecosystem utilities.', region: 'Europe', tags: ['Free', 'Web', 'Utilities'] }
+        ]
+      },
+      {
+        id: 'appstores',
+        title: 'App Stores & Software Marketplaces',
+        icon: 'layout-grid',
+        description: 'Official mobile app ecosystems, desktop software hubs, and open-source repositories.',
+        platforms: [
+          { name: 'Apple App Store', url: 'https://apps.apple.com', desc: 'Curated marketplace for iOS, iPadOS, macOS, and visionOS applications.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Utilities'] },
+          { name: 'Google Play Store', url: 'https://play.google.com', desc: 'Official Android app, game, movie, and digital book distribution platform.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Entertainment'] },
+          { name: 'Microsoft Store', url: 'https://apps.microsoft.com', desc: 'Official Windows apps, PC games, and productivity tools.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'Productivity'] },
+          { name: 'Amazon Appstore', url: 'https://amazon.com/appstore', desc: 'Apps and games for Fire tablets, Fire TV, and Android devices.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android'] },
+          { name: 'F-Droid', url: 'https://f-droid.org', desc: 'Installable catalog of Free and Open Source Software (FOSS) for Android.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'iOS & Android'] },
+          { name: 'Samsung Galaxy Store', url: 'https://galaxystore.samsung.com', desc: 'Exclusive apps, themes, and Good Lock utilities for Galaxy devices.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android'] },
+          { name: 'Huawei AppGallery', url: 'https://appgallery.huawei.com', desc: 'Official app distribution platform for HarmonyOS and Huawei devices.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android'] },
+          { name: 'Steam', url: 'https://store.steampowered.com', desc: 'World’s largest digital distribution platform for PC gaming.', region: 'Worldwide', tags: ['Global', 'Free', 'Entertainment', 'Web'] }
+        ]
+      },
+      {
+        id: 'conferencing',
+        title: 'Video Conferencing & Messaging',
+        icon: 'video',
+        description: 'HD video meetings, team collaboration hubs, and encrypted instant messaging.',
+        platforms: [
+          { name: 'Zoom', url: 'https://zoom.us', desc: 'Reliable video conferencing, webinars, and AI-assisted team collaboration.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'Productivity', 'B2B'] },
+          { name: 'Microsoft Teams', url: 'https://microsoft.com/microsoft-teams', desc: 'Enterprise chat, video calls, file sharing, and Office 365 integration.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'Productivity', 'B2B'] },
+          { name: 'Google Meet', url: 'https://meet.google.com', desc: 'Browser-based secure video meetings integrated with Google Calendar.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'Communication', 'Productivity'] },
+          { name: 'WhatsApp', url: 'https://whatsapp.com', desc: 'End-to-end encrypted messaging, voice, and video calls used by 2B+ people.', region: 'Worldwide', tags: ['Global', 'Free', 'iOS & Android', 'Web', 'Communication'] },
+          { name: 'Telegram', url: 'https://telegram.org', desc: 'Cloud-based fast messaging, large channels, bots, and file sharing.', region: 'Worldwide', tags: ['Global', 'Free', 'Cloud', 'iOS & Android', 'Communication'] },
+          { name: 'Slack', url: 'https://slack.com', desc: 'Channel-based workplace messaging and workflow automation.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'Productivity', 'B2B'] },
+          { name: 'Cisco Webex', url: 'https://webex.com', desc: 'Enterprise video conferencing, cloud calling, and hybrid events.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Communication', 'B2B'] },
+          { name: 'Signal', url: 'https://signal.org', desc: 'Non-profit, gold-standard open-source encrypted messaging and calls.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'iOS & Android', 'Communication'] }
+        ]
+      },
+      {
+        id: 'grocery',
+        title: 'Online Grocery & Food Delivery',
+        icon: 'shopping-bag',
+        description: 'Same-day supermarket essentials, fresh produce, and restaurant meals at your door.',
+        platforms: [
+          { name: 'Instacart', url: 'https://instacart.com', desc: 'Same-day grocery delivery and pickup from local supermarkets across North America.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'Uber Eats', url: 'https://ubereats.com', desc: 'Global restaurant meal, convenience, and grocery delivery platform.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'DoorDash', url: 'https://doordash.com', desc: 'On-demand restaurant, grocery, and retail delivery service.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'Amazon Fresh', url: 'https://amazon.com/fresh', desc: 'Fresh produce, pantry staples, and household goods with fast Prime delivery.', region: 'Worldwide', tags: ['Global', 'Subscription', 'E-Commerce', 'Delivery'] },
+          { name: 'Walmart Grocery', url: 'https://walmart.com/grocery', desc: 'Everyday low-price groceries with curbside pickup and home delivery.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'Web', 'iOS & Android'] },
+          { name: 'Deliveroo', url: 'https://deliveroo.co.uk', desc: 'Fast restaurant and supermarket delivery across Europe, Middle East, and Asia.', region: 'Europe', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'GrabFood', url: 'https://grab.com', desc: 'Southeast Asia’s leading everyday food and grocery delivery super-app.', region: 'Asia-Pacific', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'Woolworths Online', url: 'https://woolworths.co.za', desc: 'Premium fresh food, pantry, and household delivery across South Africa.', region: 'Africa', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] },
+          { name: 'Ocado', url: 'https://ocado.com', desc: 'World’s largest dedicated online supermarket with automated fulfillment.', region: 'Europe', tags: ['E-Commerce', 'Delivery', 'Web'] },
+          { name: 'Rappi', url: 'https://rappi.com', desc: 'On-demand super-app delivering groceries, meals, and pharmacy items in LatAm.', region: 'Latin America', tags: ['E-Commerce', 'Delivery', 'iOS & Android'] }
+        ]
+      },
+      {
+        id: 'wholesale',
+        title: 'Wholesalers & Bulk Marketplaces',
+        icon: 'warehouse',
+        description: 'Warehouse clubs, bulk consumer goods, and global B2B wholesale sourcing.',
+        platforms: [
+          { name: 'Costco Wholesale', url: 'https://costco.com', desc: 'Members-only warehouse club offering bulk groceries, electronics, and appliances.', region: 'Worldwide', tags: ['Global', 'Subscription', 'E-Commerce', 'B2B'] },
+          { name: 'Alibaba.com', url: 'https://alibaba.com', desc: 'World’s largest B2B wholesale marketplace connecting global buyers and factories.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'B2B', 'Web'] },
+          { name: "Sam's Club", url: 'https://samsclub.com', desc: 'Bulk warehouse retail and Scan & Go shopping for families and businesses.', region: 'North America', tags: ['Subscription', 'E-Commerce', 'B2B'] },
+          { name: 'Makro', url: 'https://makro.co.za', desc: 'Warehouse club for bulk groceries, liquor, electronics, and business supplies.', region: 'Africa', tags: ['E-Commerce', 'B2B', 'Delivery'] },
+          { name: 'Metro AG', url: 'https://metro.de', desc: 'International cash-and-carry wholesaler serving hospitality and traders.', region: 'Europe', tags: ['B2B', 'E-Commerce'] },
+          { name: 'Faire', url: 'https://faire.com', desc: 'Online wholesale marketplace connecting independent retailers with brands.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'B2B', 'Web'] },
+          { name: "BJ's Wholesale", url: 'https://bjs.com', desc: 'Membership warehouse club offering bulk groceries and household essentials.', region: 'North America', tags: ['Subscription', 'E-Commerce', 'Delivery'] },
+          { name: 'IndiaMART', url: 'https://indiamart.com', desc: 'India’s largest online B2B marketplace for industrial and commercial goods.', region: 'Asia-Pacific', tags: ['Free', 'E-Commerce', 'B2B', 'Web'] },
+          { name: 'Global Sources', url: 'https://globalsources.com', desc: 'Trusted B2B sourcing platform for verified electronics and lifestyle suppliers.', region: 'Asia-Pacific', tags: ['Global', 'B2B', 'E-Commerce'] }
+        ]
+      },
+      {
+        id: 'productivity',
+        title: 'Cloud Storage & Productivity',
+        icon: 'folder-kanban',
+        description: 'Cloud drives, connected workspaces, office suites, and task organization.',
+        platforms: [
+          { name: 'Google Drive', url: 'https://drive.google.com', desc: 'Cloud file storage paired with Docs, Sheets, and Slides collaboration.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity', 'AI-Powered'] },
+          { name: 'Notion', url: 'https://notion.so', desc: 'All-in-one workspace for notes, wikis, databases, and project management.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity', 'AI-Powered'] },
+          { name: 'Microsoft 365', url: 'https://office.com', desc: 'Word, Excel, PowerPoint, and 1TB OneDrive cloud storage with Copilot.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Cloud', 'Productivity', 'AI-Powered'] },
+          { name: 'Dropbox', url: 'https://dropbox.com', desc: 'Fast cross-device file syncing, large file transfers, and e-signatures.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'Productivity'] },
+          { name: 'Trello', url: 'https://trello.com', desc: 'Visual Kanban boards, lists, and cards for organizing daily tasks and teams.', region: 'Worldwide', tags: ['Global', 'Free', 'Web', 'iOS & Android', 'Productivity'] },
+          { name: 'Apple iCloud', url: 'https://icloud.com', desc: 'Automatic backup and syncing for photos, files, passwords, and notes.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Cloud', 'iOS & Android'] },
+          { name: 'Evernote', url: 'https://evernote.com', desc: 'Capture notes, web clippings, scanned receipts, and to-do lists anywhere.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Productivity'] },
+          { name: 'Box', url: 'https://box.com', desc: 'Secure enterprise content management and workflow collaboration.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Cloud', 'B2B', 'Productivity'] }
+        ]
+      },
+      {
+        id: 'travel',
+        title: 'Travel, Maps & Ride-Hailing',
+        icon: 'compass',
+        description: 'Turn-by-turn navigation, flights, stays, and on-demand city mobility.',
+        platforms: [
+          { name: 'Google Maps', url: 'https://maps.google.com', desc: 'Real-time GPS navigation, live traffic, transit schedules, and local reviews.', region: 'Worldwide', tags: ['Global', 'Free', 'Travel', 'Utilities', 'iOS & Android'] },
+          { name: 'Uber', url: 'https://uber.com', desc: 'On-demand rides, airport transfers, and city mobility across 70+ countries.', region: 'Worldwide', tags: ['Global', 'Travel', 'iOS & Android'] },
+          { name: 'Airbnb', url: 'https://airbnb.com', desc: 'Book unique homes, vacation rentals, and local experiences worldwide.', region: 'Worldwide', tags: ['Global', 'Travel', 'E-Commerce', 'iOS & Android'] },
+          { name: 'Booking.com', url: 'https://booking.com', desc: 'Global hotel, apartment, flight, and car rental reservations.', region: 'Worldwide', tags: ['Global', 'Travel', 'E-Commerce', 'Web'] },
+          { name: 'Skyscanner', url: 'https://skyscanner.net', desc: 'Compare cheap flights, hotels, and car hire across hundreds of airlines.', region: 'Worldwide', tags: ['Global', 'Free', 'Travel', 'Web', 'Utilities'] },
+          { name: 'Bolt', url: 'https://bolt.eu', desc: 'Fast, affordable ride-hailing, e-scooters, and car-sharing in Europe & Africa.', region: 'Europe', tags: ['Travel', 'iOS & Android'] },
+          { name: 'Waze', url: 'https://waze.com', desc: 'Community-driven GPS navigation with real-time hazard and police alerts.', region: 'Worldwide', tags: ['Global', 'Free', 'Travel', 'Utilities', 'iOS & Android'] },
+          { name: 'Expedia', url: 'https://expedia.com', desc: 'Bundle flights, hotels, cruises, and travel packages with One Key rewards.', region: 'Worldwide', tags: ['Global', 'Travel', 'E-Commerce'] },
+          { name: 'Trip.com', url: 'https://trip.com', desc: 'Comprehensive international flight, high-speed rail, and hotel booking.', region: 'Asia-Pacific', tags: ['Global', 'Travel', 'iOS & Android'] }
+        ]
+      },
+      {
+        id: 'education',
+        title: 'Online Learning & Knowledge',
+        icon: 'graduation-cap',
+        description: 'University courses, language learning, open encyclopedias, and computational knowledge.',
+        platforms: [
+          { name: 'Wikipedia', url: 'https://wikipedia.org', desc: 'The free, multilingual open encyclopedia edited by volunteers worldwide.', region: 'Worldwide', tags: ['Global', 'Free', 'Open Source', 'Education', 'Web'] },
+          { name: 'Coursera', url: 'https://coursera.org', desc: 'Online degrees and certificates from Stanford, Yale, Google, and IBM.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education', 'Web'] },
+          { name: 'Khan Academy', url: 'https://khanacademy.org', desc: '100% free world-class education in math, science, computing, and economics.', region: 'Worldwide', tags: ['Global', 'Free', 'Education', 'Web', 'iOS & Android'] },
+          { name: 'Duolingo', url: 'https://duolingo.com', desc: 'Gamified daily lessons for learning 40+ languages, math, and music.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education', 'AI-Powered', 'iOS & Android'] },
+          { name: 'Udemy', url: 'https://udemy.com', desc: 'Marketplace of 200,000+ practical courses in coding, business, and design.', region: 'Worldwide', tags: ['Global', 'Education', 'Web', 'iOS & Android'] },
+          { name: 'edX', url: 'https://edx.org', desc: 'University-level courses and MicroMasters founded by Harvard and MIT.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education'] },
+          { name: 'Quizlet', url: 'https://quizlet.com', desc: 'AI-enhanced digital flashcards, practice tests, and study sets.', region: 'Worldwide', tags: ['Global', 'Free', 'Education', 'AI-Powered', 'iOS & Android'] },
+          { name: 'WolframAlpha', url: 'https://wolframalpha.com', desc: 'Computational intelligence engine for step-by-step math, science, and data.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Education', 'AI-Powered', 'Utilities'] }
+        ]
+      },
+      {
+        id: 'health',
+        title: 'Health, Fitness & Wellness',
+        icon: 'heart-pulse',
+        description: 'Activity tracking, nutrition logging, mindfulness meditation, and medical info.',
+        platforms: [
+          { name: 'Strava', url: 'https://strava.com', desc: 'Social fitness network and GPS tracker for runners, cyclists, and hikers.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Health', 'iOS & Android'] },
+          { name: 'MyFitnessPal', url: 'https://myfitnesspal.com', desc: 'Calorie counter, barcode food scanner, and macro nutrition tracker.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Health', 'iOS & Android'] },
+          { name: 'Headspace', url: 'https://headspace.com', desc: 'Guided meditation, sleepcasts, and daily stress-relief exercises.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Health', 'iOS & Android'] },
+          { name: 'Calm', url: 'https://calm.com', desc: 'Sleep stories, breathing programs, and relaxing soundscapes for mental wellness.', region: 'Worldwide', tags: ['Global', 'Subscription', 'Health', 'iOS & Android'] },
+          { name: 'WebMD', url: 'https://webmd.com', desc: 'Trusted medical symptom checker, drug reference, and health news.', region: 'Worldwide', tags: ['Global', 'Free', 'Health', 'Web'] },
+          { name: 'Teladoc Health', url: 'https://teladochealth.com', desc: '24/7 virtual doctor visits, mental health therapy, and medical advice.', region: 'North America', tags: ['Subscription', 'Health', 'iOS & Android'] },
+          { name: 'Fitbit', url: 'https://fitbit.com', desc: 'Daily step, heart-rate, sleep-stage, and readiness tracking ecosystem.', region: 'Worldwide', tags: ['Global', 'Free', 'Health', 'iOS & Android'] },
+          { name: 'Flo Health', url: 'https://flo.health', desc: 'Cycle tracking, ovulation calendar, and women’s health insights.', region: 'Worldwide', tags: ['Global', 'Free', 'Subscription', 'Health', 'iOS & Android'] }
+        ]
+      },
+      {
+        id: 'utilities',
+        title: 'News, Weather & Daily Utilities',
+        icon: 'newspaper',
+        description: 'Verified global journalism, hyperlocal forecasts, currency rates, and translation.',
+        platforms: [
+          { name: 'Reuters', url: 'https://reuters.com', desc: 'Unbiased international breaking news, financial markets, and world affairs.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web'] },
+          { name: 'BBC News', url: 'https://bbc.com/news', desc: 'Trusted global news coverage, live radio, and in-depth reporting.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web', 'iOS & Android'] },
+          { name: 'Associated Press', url: 'https://apnews.com', desc: 'Independent global fact-based journalism and real-time wire news.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web'] },
+          { name: 'AccuWeather', url: 'https://accuweather.com', desc: 'MinuteCast hyperlocal precipitation forecasts and severe weather alerts.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web', 'iOS & Android'] },
+          { name: 'The Weather Channel', url: 'https://weather.com', desc: 'Interactive radar maps, 10-day forecasts, and climate tracking.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web'] },
+          { name: 'Speedtest by Ookla', url: 'https://speedtest.net', desc: 'Instant global internet bandwidth, ping, and network diagnostics.', region: 'Worldwide', tags: ['Global', 'Free', 'Utilities', 'Web', 'iOS & Android'] },
+          { name: 'XE Currency', url: 'https://xe.com', desc: 'Live mid-market foreign exchange rates and currency converter.', region: 'Worldwide', tags: ['Global', 'Free', 'Finance', 'Utilities', 'Web'] },
+          { name: 'DeepL Translate', url: 'https://deepl.com', desc: 'Ultra-accurate AI neural machine translation for text and documents.', region: 'Europe', tags: ['Global', 'Free', 'Subscription', 'AI-Powered', 'Utilities', 'Web'] }
+        ]
+      },
+      {
+        id: 'home',
+        title: 'Home, Real Estate & Classifieds',
+        icon: 'home',
+        description: 'Furniture, home improvement, property portals, and local peer-to-peer classifieds.',
+        platforms: [
+          { name: 'IKEA', url: 'https://ikea.com', desc: 'Affordable Scandinavian furniture, home decor, and smart home essentials.', region: 'Worldwide', tags: ['Global', 'E-Commerce', 'Web', 'iOS & Android', 'Delivery'] },
+          { name: 'Zillow', url: 'https://zillow.com', desc: 'Real estate marketplace for buying, selling, renting, and home Zestimates.', region: 'North America', tags: ['Free', 'E-Commerce', 'Web', 'iOS & Android'] },
+          { name: 'Wayfair', url: 'https://wayfair.com', desc: 'Millions of home furnishings, lighting, rugs, and decor items online.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'Web'] },
+          { name: 'Rightmove', url: 'https://rightmove.co.uk', desc: 'UK’s number one property portal for homes to buy and rent.', region: 'Europe', tags: ['Free', 'Web', 'iOS & Android'] },
+          { name: 'Gumtree', url: 'https://gumtree.com', desc: 'Local classified ads for second-hand goods, cars, jobs, and rentals.', region: 'Africa', tags: ['Free', 'E-Commerce', 'Web', 'iOS & Android'] },
+          { name: 'Craigslist', url: 'https://craigslist.org', desc: 'Classic hyperlocal classifieds for housing, jobs, gigs, and for-sale items.', region: 'North America', tags: ['Free', 'E-Commerce', 'Web'] },
+          { name: 'The Home Depot', url: 'https://homedepot.com', desc: 'Tools, appliances, building materials, and DIY home improvement.', region: 'North America', tags: ['E-Commerce', 'Delivery', 'Web'] }
+        ]
+      }
+    ];
+
+    /**
+     * 2. ALL POSSIBLE INTERACTIVE TAGS
+     */
+    const ALL_TAGS = [
+      'All',
+      'Global',
+      'Free',
+      'Subscription',
+      'iOS & Android',
+      'Web',
+      'Cloud',
+      'AI-Powered',
+      'E-Commerce',
+      'Finance',
+      'Entertainment',
+      'Productivity',
+      'Communication',
+      'Travel',
+      'Health',
+      'Education',
+      'Utilities',
+      'Open Source',
+      'B2B',
+      'Delivery'
+    ];
+
+    /**
+     * 3. DETAILED LEGAL MODAL CONTENT
+     */
+    const LEGAL_DOCS = {
+      privacy: {
+        title: 'Privacy Policy',
+        subtitle: 'Effective Date: November 12, 2026 • Global Data Protection Compliance (GDPR, CCPA/CPRA, POPIA)',
+        icon: 'shield-check',
+        sections: [
+          {
+            heading: '1. Overview & Privacy-First Architecture',
+            body: 'Arcknowledge ("we," "our," or "us") operates as a Worldwide Everyday Digital Hub and Directory. We are engineered on a privacy-by-design, front-end-first architecture. We do not sell, rent, trade, or monetize your personal browsing history or search queries to data brokers or advertising networks.'
+          },
+          {
+            heading: '2. Information Stored Locally on Your Device',
+            body: 'To deliver personalized convenience without requiring account registration, Arcknowledge utilizes your browser’s local storage (localStorage) solely for: (a) saving your pinned "My Daily Hub" shortcut platforms, (b) remembering your Light/Dark visual theme preference, and (c) retaining your preferred geographic region filter. This data resides exclusively on your device and can be cleared at any time via your browser settings or the "Clear Pinned" button.'
+          },
+          {
+            heading: '3. Third-Party External Websites & Services',
+            body: 'Arcknowledge serves as an organized index linking directly to independent third-party platforms (including banking institutions, streaming services, retailers, and search engines). Once you click an external link and leave Arcknowledge, your interactions are governed exclusively by the privacy policy, cookie practices, and security standards of that destination platform. We strongly encourage reviewing the privacy notices of any external platform before submitting sensitive personal or financial credentials.'
+          },
+          {
+            heading: '4. Cookies & Technical Telemetry',
+            body: 'This front-end web application does not deploy invasive cross-site tracking cookies. Standard content delivery networks (CDNs) used to load typography and icons may temporarily process anonymized IP routing headers strictly to deliver static assets reliably and securely.'
+          },
+          {
+            heading: '5. Your International Privacy Rights (GDPR, CCPA & POPIA)',
+            body: 'Regardless of your jurisdiction—including the European Economic Area (GDPR), United Kingdom, California (CCPA/CPRA), South Africa (POPIA), Brazil (LGPD), or Asia-Pacific—you retain full control over your local preferences. Because Arcknowledge does not maintain centralized user databases, you can exercise immediate erasure of all stored preferences directly within your browser.'
+          },
+          {
+            heading: '6. Policy Updates & Contact',
+            body: 'We may periodically update this Privacy Policy to reflect new directory features or evolving international data regulations. Continued use of the Arcknowledge hub constitutes acknowledgment of the current version displayed in this portal.'
+          }
+        ]
+      },
+      termsOfUse: {
+        title: 'Terms of Use',
+        subtitle: 'Effective Date: November 12, 2026 • Directory Usage & Intellectual Property Guidelines',
+        icon: 'file-text',
+        sections: [
+          {
+            heading: '1. Acceptance of Terms of Use',
+            body: 'By accessing, browsing, searching, or using the Arcknowledge Worldwide Everyday Digital Hub ("the Platform"), you confirm that you have read, understood, and agreed to comply with these Terms of Use. If you do not agree with any provision herein, you should discontinue use of the Platform.'
+          },
+          {
+            heading: '2. Permitted Personal & Commercial Directory Use',
+            body: 'Arcknowledge grants you a limited, non-exclusive, revocable, worldwide license to access and use this directory as a personal or workplace start-page and navigation hub. You agree not to: (a) deploy automated scrapers, bots, or spiders to harvest directory metadata at scale, (b) attempt to disrupt, reverse-engineer, or overload the front-end infrastructure, or (c) misrepresent Arcknowledge as an official financial, medical, or governmental authority.'
+          },
+          {
+            heading: '3. Directory Accuracy & Regional Availability Disclaimer',
+            body: 'While we strive to maintain accurate, up-to-date links, descriptions, pricing tags (such as "Free" or "Subscription"), and regional availability badges, third-party platforms frequently modify their URLs, subscription tiers, and geographic licensing restrictions. Arcknowledge does not warrant that every listed service will be uninterrupted, error-free, or legally available in every territory.'
+          },
+          {
+            heading: '4. Third-Party Trademarks & Non-Affiliation',
+            body: 'All brand names, product titles, service marks, and corporate identities referenced in Arcknowledge (including Google, Apple, Microsoft, Spotify, Netflix, PayPal, Amazon, and others) are the sole property of their respective trademark owners. Listing in the Arcknowledge directory is strictly for informational and navigational convenience and does not imply endorsement, sponsorship, or corporate affiliation.'
+          },
+          {
+            heading: '5. Arcknowledge Intellectual Property',
+            body: 'The Arcknowledge brand name, geometric arch emblem, interface layout, curated taxonomy, tag architecture, and custom front-end code are protected by international copyright and intellectual property laws.'
+          }
+        ]
+      },
+      termsAndConditions: {
+        title: 'Terms and Conditions',
+        subtitle: 'Effective Date: November 12, 2026 • Service Governance, Liability & Dispute Resolution',
+        icon: 'scale',
+        sections: [
+          {
+            heading: '1. Nature of Service ("As-Is" Provision)',
+            body: 'Arcknowledge is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express, implied, or statutory, including implied warranties of merchantability, fitness for a particular purpose, title, or non-infringement. We act solely as a neutral informational gateway and do not process payments, host third-party media, or custody user funds.'
+          },
+          {
+            heading: '2. Third-Party Transactions & Financial Safety',
+            body: 'Any transactions, subscriptions, banking transfers, wholesale orders, travel bookings, or account registrations you initiate after navigating to a third-party website are strictly bilateral agreements between you and that third-party provider. Always verify the destination browser URL and SSL security lock icon before entering passwords or banking credentials.'
+          },
+          {
+            heading: '3. Limitation of Liability',
+            body: 'To the fullest extent permitted by applicable law, Arcknowledge, its creators, contributors, and affiliates shall not be liable for any indirect, incidental, consequential, special, or punitive damages—including loss of profits, data, goodwill, or unauthorized third-party account access—arising out of or related to your use of the directory or any linked external platform.'
+          },
+          {
+            heading: '4. Indemnification',
+            body: 'You agree to defend, indemnify, and hold harmless Arcknowledge and its operators from and against any claims, liabilities, damages, losses, and expenses arising from your violation of these Terms and Conditions or misuse of the Platform.'
+          },
+          {
+            heading: '5. Modifications to the Hub & Termination',
+            body: 'We reserve the right to add, recategorize, update, or remove listed platforms, tags, regions, or interface features at any time without prior notice to improve global utility and user safety.'
+          },
+          {
+            heading: '6. Severability & Governing Principles',
+            body: 'If any clause of these Terms and Conditions is deemed unenforceable under applicable local law, the remaining provisions shall remain in full force and effect. These terms are governed by internationally recognized commercial and digital service principles.'
+          }
+        ]
+      }
+    };
+
+    /**
+     * 4. APPLICATION STATE
+     */
+    let state = {
+      searchQuery: '',
+      selectedTag: 'All',
+      selectedRegion: 'Worldwide',
+      selectedCategory: 'all',
+      pinnedPlatforms: JSON.parse(localStorage.getItem('arcknowledge_pinned') || '["Google", "Spotify", "Netflix", "WhatsApp", "YouTube", "Wise"]')
+    };
+
+    /**
+     * 5. INITIALIZATION & THEME SETUP
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+      
+      // Count total platforms
+      const totalCount = DIRECTORY_DATA.reduce((sum, cat) => sum + cat.platforms.length, 0);
+      document.getElementById('statTotalPlatforms').textContent = totalCount;
+      document.getElementById('statCategories').textContent = DIRECTORY_DATA.length;
+
+      renderTagPills();
+      renderCategoryTabs();
+      renderPinnedHub();
+      renderDirectory();
+      bindEvents();
+      lucide.createIcons();
+    });
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('arcknowledge_theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('arcknowledge_theme', isDark ? 'dark' : 'light');
+      lucide.createIcons();
+    }
+
+    /**
+     * 6. EVENT LISTENERS
+     */
+    function bindEvents() {
+      // Theme toggle
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+      // Search input
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value.trim();
+        document.getElementById('clearSearchBtn').classList.toggle('hidden', state.searchQuery === '');
+        updateResetVisibility();
+        renderDirectory();
+      });
+
+      // Region dropdown
+      document.getElementById('regionSelect').addEventListener('change', (e) => {
+        state.selectedRegion = e.target.value;
+        updateResetVisibility();
+        renderDirectory();
+      });
+
+      // Keyboard shortcuts ('/' to focus search, 'Escape' to close modal)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput && !isModalOpen()) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        if (e.key === 'Escape' && isModalOpen()) {
+          closeLegalModal();
+        }
+      });
+
+      // Close modal on backdrop click
+      document.getElementById('legalModal').addEventListener('click', (e) => {
+        if (e.target.id === 'legalModal') {
+          closeLegalModal();
+        }
+      });
+    }
+
+    /**
+     * 7. RENDER TAG PILLS
+     */
+    function renderTagPills() {
+      const container = document.getElementById('tagContainer');
+      container.innerHTML = ALL_TAGS.map(tag => {
+        const isActive = state.selectedTag === tag;
+        return `
+          <button onclick="selectTag('${tag}')"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border ${
+              isActive
+                ? 'bg-brand-600 text-white border-brand-600 shadow-sm shadow-brand-500/25'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-brand-400 dark:hover:border-brand-600 hover:text-brand-600 dark:hover:text-brand-400'
+            }">
+            ${tag === 'All' ? 'All Tags' : '#' + tag}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectTag(tag) {
+      state.selectedTag = (state.selectedTag === tag && tag !== 'All') ? 'All' : tag;
+      renderTagPills();
+      updateResetVisibility();
+      renderDirectory();
+    }
+
+    /**
+     * 8. RENDER STICKY CATEGORY TABS
+     */
+    function renderCategoryTabs() {
+      const container = document.getElementById('categoryTabs');
+      const allTab = `
+        <button onclick="selectCategory('all')"
+          class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+            state.selectedCategory === 'all'
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm'
+              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+          }">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          All Categories
+        </button>
+      `;
+
+      const catTabs = DIRECTORY_DATA.map(cat => {
+        const isActive = state.selectedCategory === cat.id;
+        return `
+          <button onclick="selectCategory('${cat.id}')"
+            class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+              isActive
+                ? 'bg-brand-600 text-white shadow-sm'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+            }">
+            <i data-lucide="${cat.icon}" class="w-3.5 h-3.5"></i>
+            ${cat.title}
+          </button>
+        `;
+      }).join('');
+
+      container.innerHTML = allTab + catTabs;
+      lucide.createIcons();
+    }
+
+    function selectCategory(catId) {
+      state.selectedCategory = catId;
+      renderCategoryTabs();
+      updateResetVisibility();
+      renderDirectory();
+    }
+
+    /**
+     * 9. FILTERING & DIRECTORY RENDERING
+     */
+    function matchesFilters(platform, categoryTitle) {
+      // 1. Region filter
+      if (state.selectedRegion !== 'Worldwide') {
+        const matchesExactRegion = platform.region === state.selectedRegion;
+        const isGlobalPlatform = platform.region === 'Worldwide' || platform.tags.includes('Global');
+        if (!matchesExactRegion && !isGlobalPlatform) return false;
+      }
+
+      // 2. Tag filter
+      if (state.selectedTag !== 'All') {
+        if (!platform.tags.includes(state.selectedTag)) return false;
+      }
+
+      // 3. Search query filter
+      if (state.searchQuery !== '') {
+        const q = state.searchQuery.toLowerCase();
+        const inName = platform.name.toLowerCase().includes(q);
+        const inDesc = platform.desc.toLowerCase().includes(q);
+        const inRegion = platform.region.toLowerCase().includes(q);
+        const inTags = platform.tags.some(t => t.toLowerCase().includes(q));
+        const inCat = categoryTitle.toLowerCase().includes(q);
+        if (!inName && !inDesc && !inRegion && !inTags && !inCat) return false;
+      }
+
+      return true;
+    }
+
+    function renderDirectory() {
+      const container = document.getElementById('directoryContainer');
+      const emptyState = document.getElementById('emptyState');
+      let totalMatched = 0;
+      let html = '';
+
+      const categoriesToRender = state.selectedCategory === 'all'
+        ? DIRECTORY_DATA
+        : DIRECTORY_DATA.filter(c => c.id === state.selectedCategory);
+
+      categoriesToRender.forEach(category => {
+        const filteredPlatforms = category.platforms.filter(p => matchesFilters(p, category.title));
+        if (filteredPlatforms.length === 0) return;
+
+        totalMatched += filteredPlatforms.length;
+
+        html += `
+          <section id="cat-${category.id}" class="scroll-mt-32 animate-fade-up">
+            <!-- Category Header -->
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-4 mb-5 border-b border-slate-200/80 dark:border-slate-800/80">
+              <div class="flex items-start sm:items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/80 border border-brand-200/60 dark:border-brand-800/60 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="${category.icon}" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2.5">
+                    <h2 class="font-display text-lg sm:text-xl font-bold text-slate-900 dark:text-white">${category.title}</h2>
+                    <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                      ${filteredPlatforms.length}
+                    </span>
+                  </div>
+                  <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">${category.description}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Platform Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              ${filteredPlatforms.map(platform => renderPlatformCard(platform)).join('')}
+            </div>
+          </section>
+        `;
+      });
+
+      document.getElementById('statShowing').textContent = totalMatched;
+
+      if (totalMatched === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        container.innerHTML = html;
+      }
+
+      lucide.createIcons();
+    }
+
+    function getDomainFromUrl(url) {
+      try {
+        return new URL(url).hostname;
+      } catch {
+        return '';
+      }
+    }
+
+    function renderPlatformCard(platform) {
+      const isPinned = state.pinnedPlatforms.includes(platform.name);
+      const domain = getDomainFromUrl(platform.url);
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+      const initial = platform.name.charAt(0).toUpperCase();
+
+      return `
+        <div class="group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/90 p-4 shadow-sm hover:shadow-lg hover:shadow-brand-500/5 hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-200">
+          
+          <div>
+            <!-- Card Top: Icon, Name, Region & Pin Button -->
+            <div class="flex items-start justify-between gap-2 mb-3">
+              <a href="${platform.url}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 min-w-0 group/link">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700/70 flex items-center justify-center overflow-hidden shrink-0">
+                  <img src="${faviconUrl}" alt="${platform.name} icon" loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    class="w-6 h-6 object-contain" />
+                  <span style="display:none;" class="w-full h-full items-center justify-center font-display font-bold text-sm text-brand-600 dark:text-brand-400">
+                    ${initial}
+                  </span>
+                </div>
+                <div class="min-w-0">
+                  <h3 class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition">
+                    ${platform.name}
+                  </h3>
+                  <span class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                    <i data-lucide="map-pin" class="w-3 h-3 text-brand-500"></i>
+                    ${platform.region}
+                  </span>
+                </div>
+              </a>
+
+              <!-- Pin to My Hub Button -->
+              <button onclick="togglePinPlatform('${platform.name.replace(/'/g, "\\'")}')"
+                title="${isPinned ? 'Unpin from My Daily Hub' : 'Pin to My Daily Hub'}"
+                aria-label="Pin ${platform.name}"
+                class="p-2 rounded-xl border transition shrink-0 ${
+                  isPinned
+                    ? 'bg-brand-50 dark:bg-brand-950/80 border-brand-200 dark:border-brand-800 text-brand-600 dark:text-brand-400'
+                    : 'bg-slate-50 dark:bg-slate-800/60 border-transparent text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }">
+                <i data-lucide="pin" class="w-3.5 h-3.5 ${isPinned ? 'fill-current' : ''}"></i>
+              </button>
+            </div>
+
+            <!-- Description -->
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2 mb-3.5">
+              ${platform.desc}
+            </p>
+          </div>
+
+          <!-- Card Bottom: Clickable Tags + Visit Link -->
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2">
+            <div class="flex flex-wrap gap-1 overflow-hidden max-h-6">
+              ${platform.tags.slice(0, 3).map(tag => `
+                <button onclick="selectTag('${tag}')"
+                  class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 hover:bg-brand-100 dark:bg-slate-800 dark:hover:bg-brand-950 text-slate-600 hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-300 transition">
+                  ${tag}
+                </button>
+              `).join('')}
+            </div>
+
+            <a href="${platform.url}" target="_blank" rel="noopener noreferrer"
+              class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/60 transition">
+              Open
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * 10. PINNED "MY DAILY HUB" FUNCTIONALITY
+     */
+    function findPlatformByName(name) {
+      for (const cat of DIRECTORY_DATA) {
+        const found = cat.platforms.find(p => p.name === name);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function togglePinPlatform(name) {
+      const idx = state.pinnedPlatforms.indexOf(name);
+      if (idx > -1) {
+        state.pinnedPlatforms.splice(idx, 1);
+        showToast(`Removed ${name} from My Daily Hub`);
+      } else {
+        state.pinnedPlatforms.push(name);
+        showToast(`Pinned ${name} to My Daily Hub`);
+      }
+      localStorage.setItem('arcknowledge_pinned', JSON.stringify(state.pinnedPlatforms));
+      renderPinnedHub();
+      renderDirectory();
+    }
+
+    function clearAllPinned() {
+      state.pinnedPlatforms = [];
+      localStorage.setItem('arcknowledge_pinned', JSON.stringify([]));
+      renderPinnedHub();
+      renderDirectory();
+      showToast('Cleared all pinned shortcuts');
+    }
+
+    function renderPinnedHub() {
+      const grid = document.getElementById('pinnedGrid');
+      const countBadge = document.getElementById('pinnedCountBadge');
+      const clearBtn = document.getElementById('clearPinnedBtn');
+
+      countBadge.textContent = state.pinnedPlatforms.length;
+      clearBtn.classList.toggle('hidden', state.pinnedPlatforms.length === 0);
+
+      if (state.pinnedPlatforms.length === 0) {
+        grid.innerHTML = `
+          <div class="text-xs text-slate-500 dark:text-slate-400 italic py-1">
+            No platforms pinned yet. Click the <span class="font-semibold text-brand-600 dark:text-brand-400">pin icon</span> on any card below to build your personal quick-launch bar.
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = state.pinnedPlatforms.map(name => {
+        const platform = findPlatformByName(name);
+        if (!platform) return '';
+        const domain = getDomainFromUrl(platform.url);
+        const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+
+        return `
+          <div class="inline-flex items-center rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs hover:border-brand-400 dark:hover:border-brand-600 transition overflow-hidden">
+            <a href="${platform.url}" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 pl-3 pr-2.5 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-brand-600 dark:hover:text-brand-400 transition">
+              <img src="${faviconUrl}" alt="" class="w-4 h-4 rounded-sm" onerror="this.style.display='none'" />
+              <span>${platform.name}</span>
+              <i data-lucide="external-link" class="w-3 h-3 text-slate-400"></i>
+            </a>
+            <button onclick="togglePinPlatform('${platform.name.replace(/'/g, "\\'")}')" title="Remove shortcut"
+              class="px-2 py-1.5 text-slate-400 hover:text-rose-500 hover:bg-slate-100 dark:hover:bg-slate-800 border-l border-slate-100 dark:border-slate-800 transition">
+              <i data-lucide="x" class="w-3 h-3"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function scrollToHub() {
+      document.getElementById('myHubSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    /**
+     * 11. FILTER RESET & UTILITY HELPERS
+     */
+    function clearSearch() {
+      state.searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      updateResetVisibility();
+      renderDirectory();
+    }
+
+    function resetAllFilters() {
+      state.searchQuery = '';
+      state.selectedTag = 'All';
+      state.selectedRegion = 'Worldwide';
+      state.selectedCategory = 'all';
+
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      document.getElementById('regionSelect').value = 'Worldwide';
+
+      renderTagPills();
+      renderCategoryTabs();
+      updateResetVisibility();
+      renderDirectory();
+    }
+
+    function updateResetVisibility() {
+      const hasActiveFilter =
+        state.searchQuery !== '' ||
+        state.selectedTag !== 'All' ||
+        state.selectedRegion !== 'Worldwide' ||
+        state.selectedCategory !== 'all';
+
+      document.getElementById('resetTagsBtn').classList.toggle('hidden', !hasActiveFilter);
+    }
+
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('opacity-0', 'translate-y-2');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+      }, 2400);
+    }
+
+    /**
+     * 12. LEGAL MODALS CONTROLLER (Privacy Policy, Terms of Use, Terms & Conditions)
+     */
+    function isModalOpen() {
+      return !document.getElementById('legalModal').classList.contains('hidden');
+    }
+
+    function openLegalModal(docKey) {
+      const doc = LEGAL_DOCS[docKey];
+      if (!doc) return;
+
+      const modal = document.getElementById('legalModal');
+      document.getElementById('modalTitle').textContent = doc.title;
+      document.getElementById('modalSubtitle').textContent = doc.subtitle;
+
+      // Update header icon
+      const iconWrap = document.getElementById('modalIconWrap');
+      iconWrap.innerHTML = `<i data-lucide="${doc.icon}" class="w-5 h-5"></i>`;
+
+      // Highlight active tab inside modal
+      ['privacy', 'termsOfUse', 'termsAndConditions'].forEach(key => {
+        const tab = document.getElementById(`tab-${key}`);
+        if (key === docKey) {
+          tab.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white shadow-xs transition';
+        } else {
+          tab.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-800 transition';
+        }
+      });
+
+      // Populate structured legal sections
+      const body = document.getElementById('modalBody');
+      body.innerHTML = doc.sections.map(sec => `
+        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/70 dark:border-slate-800/80">
+          <h4 class="font-display font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5">${sec.heading}</h4>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${sec.body}</p>
+        </div>
+      `).join('');
+
+      body.scrollTop = 0;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+    }
+
+    function closeLegalModal() {
+      const modal = document.getElementById('legalModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+  </script>
+</body>
+</html>
