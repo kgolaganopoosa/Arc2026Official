@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0066FF" />
+  <meta name="description" content="Arc - Social Media: Your global directory of 100+ social networks, messaging apps, video platforms, and communities." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Arc" />
+  <title>Arc - Social Media | Global Social Directory</title>
+
+  <!-- Dynamic Favicon, Apple Touch Icon & Manifest will be injected via JS -->
+  <link id="favicon" rel="icon" type="image/png" />
+  <link id="apple-touch-icon" rel="apple-touch-icon" />
+  <link id="manifest-link" rel="manifest" />
+
+  <style>
+    /* ==========================================================================
+       1. CSS VARIABLES & RESET
+       ========================================================================== */
+    :root {
+      --primary: #0066FF;
+      --primary-hover: #0052CC;
+      --primary-light: #EBF3FF;
+      --primary-subtle: #F4F8FF;
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --text-main: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --heart-inactive: #CBD5E1;
+      --heart-active: #EF4444;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 102, 255, 0.07), 0 1px 3px rgba(15, 23, 42, 0.05);
+      --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: var(--font-sans);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, input {
+      font-family: inherit;
+    }
+
+    /* Accessible Focus Ring */
+    :focus-visible {
+      outline: 3px solid rgba(0, 102, 255, 0.45);
+      outline-offset: 2px;
+    }
+
+    /* ==========================================================================
+       2. HEADER & NAVIGATION CONTROLS
+       ========================================================================== */
+    .app-header {
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--primary-subtle) 100%);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem 1rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(12px);
+      background-color: rgba(255, 255, 255, 0.92);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background-color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 102, 255, 0.25);
+    }
+
+    .brand-mark::after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .brand-tagline {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .install-btn {
+      display: none; /* Shown dynamically on beforeinstallprompt */
+      align-items: center;
+      gap: 0.4rem;
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 102, 255, 0.25);
+      transition: background-color var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+
+    .install-btn.visible {
+      display: inline-flex;
+    }
+
+    .install-btn:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .install-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Search Bar */
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.95rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 46px;
+      padding: 0 2.75rem 0 2.75rem;
+      font-size: 0.9375rem;
+      color: var(--text-main);
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.12);
+    }
+
+    .clear-search {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-page);
+      color: var(--text-secondary);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .clear-search.visible {
+      display: flex;
+    }
+
+    .clear-search:hover {
+      background: var(--border-color);
+      color: var(--text-main);
+    }
+
+    /* Filter Tabs & Status Bar */
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .tabs {
+      display: inline-flex;
+      background-color: var(--bg-page);
+      padding: 0.25rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.95rem;
+      border: none;
+      border-radius: var(--radius-full);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0, 102, 255, 0.25);
+    }
+
+    .tab-btn:not([aria-selected="true"]):hover {
+      color: var(--text-main);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      background-color: rgba(15, 23, 42, 0.08);
+      color: inherit;
+    }
+
+    .tab-btn[aria-selected="true"] .badge {
+      background-color: rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+    }
+
+    .results-meta {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       3. MAIN DIRECTORY GRID (STRICTLY 2 CARDS PER ROW ON ALL SCREEN SIZES)
+       ========================================================================== */
+    .main-content {
+      flex: 1;
+      padding: 1.25rem 1rem 2.5rem;
+    }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.875rem;
+    }
+
+    @media (min-width: 600px) {
+      .platform-grid {
+        gap: 1.15rem;
+      }
+    }
+
+    /* Platform Card */
+    .platform-card {
+      position: relative;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 0.85rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .platform-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: #BFDBFE;
+    }
+
+    /* Favourite Toggle Button */
+    .fav-btn {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      background-color: var(--bg-page);
+      color: var(--heart-inactive);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .fav-btn:hover {
+      background-color: #FEF2F2;
+      color: var(--heart-active);
+      transform: scale(1.08);
+    }
+
+    .fav-btn[aria-pressed="true"] {
+      background-color: #FEF2F2;
+      color: var(--heart-active);
+      border-color: #FECACA;
+    }
+
+    .fav-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s ease;
+    }
+
+    .fav-btn[aria-pressed="true"] svg {
+      fill: currentColor;
+      transform: scale(1.05);
+    }
+
+    /* Platform Logo / Badge */
+    .platform-logo {
+      width: 54px;
+      height: 54px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+      flex-shrink: 0;
+    }
+
+    .platform-logo svg {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+
+    /* Platform Name */
+    .platform-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.2rem;
+      line-height: 1.3;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 0.25rem;
+    }
+
+    .platform-category {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.85rem;
+    }
+
+    /* Open App Link */
+    .open-app-link {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      width: 100%;
+      max-width: 148px;
+      padding: 0.52rem 0.85rem;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      transition: background-color var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .open-app-link:hover {
+      background-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .open-app-link:active {
+      transform: scale(0.98);
+    }
+
+    .open-app-link svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Empty / No Results State */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: var(--bg-card);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 3rem 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .empty-state.visible {
+      display: flex;
+    }
+
+    .empty-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .empty-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+    }
+
+    .empty-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      max-width: 340px;
+      margin-bottom: 1.15rem;
+    }
+
+    .empty-action-btn {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.55rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition);
+    }
+
+    .empty-action-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* ==========================================================================
+       4. FOOTER & LEGAL LINKS
+       ========================================================================== */
+    .app-footer {
+      background-color: #FFFFFF;
+      border-top: 1px solid var(--border-color);
+      padding: 1.75rem 1rem 2rem;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-brand {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+    }
+
+    .footer-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 1rem;
+    }
+
+    .legal-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .legal-link {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.25rem 0.35rem;
+      border-radius: 6px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--transition), background-color var(--transition);
+    }
+
+    .legal-link:hover {
+      color: var(--primary-hover);
+      background-color: var(--primary-light);
+    }
+
+    .copyright {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       5. LEGAL MODALS
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-dialog {
+      background-color: #FFFFFF;
+      width: 100%;
+      max-width: 680px;
+      max-height: 86vh;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(10px) scale(0.98);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-backdrop.open .modal-dialog {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      background-color: var(--primary-subtle);
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .modal-updated {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 0.2rem;
+      font-weight: 500;
+    }
+
+    .modal-close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background-color: #FFFFFF;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+
+    .modal-close-btn:hover {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      font-size: 0.9125rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .modal-body h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1.35rem 0 0.45rem;
+    }
+
+    .modal-body h3:first-child {
+      margin-top: 0;
+    }
+
+    .modal-body p {
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-body ul {
+      margin: 0.4rem 0 0.85rem 1.25rem;
+    }
+
+    .modal-body li {
+      margin-bottom: 0.35rem;
+    }
+
+    .modal-footer {
+      padding: 0.9rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      background-color: #FFFFFF;
+    }
+
+    .modal-done-btn {
+      background-color: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.55rem 1.35rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color var(--transition);
+    }
+
+    .modal-done-btn:hover {
+      background-color: var(--primary-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       HEADER
+       ======================================================================== -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-top">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <h1 class="brand-title">Arc - Social Media</h1>
+            <p class="brand-tagline">Every social network, one clean launchpad</p>
+          </div>
+        </div>
+        <button id="install-btn" class="install-btn" type="button" aria-label="Install Arc - Social Media App">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install App
+        </button>
+      </div>
+
+      <!-- Instant Search Input -->
+      <div class="search-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          id="search-input"
+          class="search-input"
+          type="search"
+          placeholder="Search 115+ platforms (e.g., Instagram, Telegram, Video, Dating)..."
+          aria-label="Search social media platforms"
+          autocomplete="off"
+        />
+        <button id="clear-search" class="clear-search" type="button" aria-label="Clear search query">&times;</button>
+      </div>
+
+      <!-- View Tabs (All | Favourites) -->
+      <div class="controls-row">
+        <div class="tabs" role="tablist" aria-label="Platform Directory Views">
+          <button
+            id="tab-all"
+            class="tab-btn"
+            role="tab"
+            type="button"
+            aria-selected="true"
+            aria-controls="platform-grid"
+            data-view="all"
+          >
+            All <span id="all-count" class="badge">0</span>
+          </button>
+          <button
+            id="tab-fav"
+            class="tab-btn"
+            role="tab"
+            type="button"
+            aria-selected="false"
+            aria-controls="platform-grid"
+            data-view="favourites"
+          >
+            Favourites <span id="fav-count" class="badge">0</span>
+          </button>
+        </div>
+        <div id="results-meta" class="results-meta" aria-live="polite">Showing all platforms</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       MAIN DIRECTORY GRID
+       ======================================================================== -->
+  <main class="main-content">
+    <div class="container">
+      <section
+        id="platform-grid"
+        class="platform-grid"
+        aria-label="Social Media Platforms Directory"
+      ></section>
+
+      <!-- Dynamic Empty / No Results State -->
+      <div id="empty-state" class="empty-state" role="status" aria-live="polite">
+        <div class="empty-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <h2 id="empty-title" class="empty-title">No platforms found</h2>
+        <p id="empty-desc" class="empty-desc">Try adjusting your search term or browse all available networks.</p>
+        <button id="empty-action-btn" class="empty-action-btn" type="button">Reset Search</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER & LEGAL NAVIGATION
+       ======================================================================== -->
+  <footer class="app-footer">
+    <div class="container">
+      <div class="footer-brand">Arc - Social Media</div>
+      <p class="footer-note">
+        An independent global directory of social media, messaging, and community platforms. All product names, logos, and trademarks belong to their respective owners.
+      </p>
+      <nav class="legal-nav" aria-label="Legal Information">
+        <button class="legal-link" type="button" data-legal="privacy">Privacy Policy</button>
+        <button class="legal-link" type="button" data-legal="terms-of-use">Terms of Use</button>
+        <button class="legal-link" type="button" data-legal="terms-conditions">Terms and Conditions</button>
+      </nav>
+      <p class="copyright">&copy; <span id="year"></span> Arc - Social Media. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       ACCESSIBLE LEGAL MODAL
+       ======================================================================== -->
+  <div
+    id="legal-modal-backdrop"
+    class="modal-backdrop"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-title" class="modal-title">Legal Document</h2>
+          <p id="modal-updated" class="modal-updated">Last updated: November 14, 2026</p>
+        </div>
+        <button id="modal-close-btn" class="modal-close-btn" type="button" aria-label="Close legal modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div id="modal-body" class="modal-body" tabindex="0"></div>
+      <div class="modal-footer">
+        <button id="modal-done-btn" class="modal-done-btn" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       APPLICATION JAVASCRIPT (DATA, UI, PWA MANIFEST & SERVICE WORKER)
+       ======================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* ======================================================================
+         1. SVG ICON LIBRARY (Brand marks for major networks + crisp fallbacks)
+         ====================================================================== */
+      const ICONS = {
+        facebook: '<svg viewBox="0 0 24 24"><path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/></svg>',
+        instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>',
+        x: '<svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+        tiktok: '<svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>',
+        whatsapp: '<svg viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.546 20.2c-.151.512.334.997.846.846l3.032-.892A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>',
+        telegram: '<svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>',
+        linkedin: '<svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>',
+        snapchat: '<svg viewBox="0 0 24 24"><path d="M12.166 3c2.478 0 4.333 1.815 4.333 4.22 0 .543-.105 1.132-.222 1.653l-.052.23c.274.124.588.187.895.187.484 0 .938-.152 1.244-.36.22-.149.489-.197.736-.129.365.102.617.434.617.813 0 .451-.347.826-.965 1.074-.457.184-.867.334-.965.62-.066.193-.013.437.152.712.716 1.195 1.841 2.223 3.249 2.752.326.122.541.434.541.782 0 .493-.437.893-1.116 1.04-.415.09-.855.157-1.102.275-.209.1-.295.34-.39.674-.13.457-.308 1.084-.987 1.084-.309 0-.668-.09-1.084-.195-.469-.118-1.001-.252-1.618-.252-.622 0-1.163.149-1.737.392-.769.326-1.564.663-2.681.663-1.118 0-1.913-.337-2.682-.663-.574-.243-1.115-.392-1.737-.392-.617 0-1.149.134-1.618.252-.416.105-.775.195-1.084.195-.679 0-.857-.627-.987-1.084-.095-.334-.181-.574-.39-.674-.247-.118-.687-.185-1.102-.275-.679-.147-1.116-.547-1.116-1.04 0-.348.215-.66.541-.782 1.408-.529 2.533-1.557 3.249-2.752.165-.275.218-.519.152-.712-.098-.286-.508-.436-.965-.62-.618-.248-.965-.623-.965-1.074 0-.379.252-.711.617-.813.247-.068.516-.02.736.129.306.208.76.36 1.244.36.307 0 .621-.063.895-.187l-.052-.23c-.117-.521-.222-1.11-.222-1.653C7.833 4.815 9.688 3 12.166 3z"/></svg>',
+        pinterest: '<svg viewBox="0 0 24 24"><path d="M12.017 2C6.486 2 2 6.486 2 12.017c0 4.242 2.636 7.868 6.357 9.328-.088-.792-.167-2.008.035-2.873.182-.781 1.173-4.972 1.173-4.972s-.299-.599-.299-1.484c0-1.39.806-2.428 1.809-2.428.853 0 1.265.641 1.265 1.409 0 .858-.546 2.141-.828 3.33-.236.996.499 1.808 1.481 1.808 1.778 0 3.144-1.874 3.144-4.58 0-2.394-1.72-4.068-4.177-4.068-2.845 0-4.515 2.134-4.515 4.34 0 .859.331 1.781.744 2.282a.3.3 0 0 1 .069.288l-.278 1.133c-.044.183-.145.223-.335.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.531 0 10.017-4.486 10.017-10.017C22.034 6.486 17.548 2 12.017 2z"/></svg>',
+        reddit: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.8 11.33c.04.21.06.43.06.65 0 2.65-3.09 4.8-6.9 4.8-3.81 0-6.9-2.15-6.9-4.8 0-.22.02-.44.06-.65-.53-.24-.9-.77-.9-1.39 0-.84.68-1.52 1.52-1.52.41 0 .78.16 1.05.42 1.04-.74 2.46-1.22 4.04-1.28l.76-3.58c.04-.19.22-.31.41-.27l2.51.53c.27-.48.78-.81 1.37-.81.87 0 1.57.7 1.57 1.57s-.7 1.57-1.57 1.57c-.84 0-1.52-.66-1.56-1.49l-2.18-.46-.65 3.07c1.54.08 2.93.56 3.95 1.29.27-.25.63-.41 1.03-.41.84 0 1.52.68 1.52 1.52 0 .62-.37 1.15-.9 1.39zM9.25 13c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25S9.94 13 9.25 13zm5.5 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25S16 14.94 16 14.25 15.44 13 14.75 13zm-5.13 3.63c-.2-.2-.2-.51 0-.71.2-.2.51-.2.71 0 .68.68 1.79.96 2.67.96.88 0 1.99-.28 2.67-.96.2-.2.51-.2.71 0 .2.2.2.51 0 .71-.92.92-2.29 1.25-3.38 1.25-1.09 0-2.46-.33-3.38-1.25z"/></svg>',
+        youtube: '<svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+        discord: '<svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>',
+        threads: '<svg viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32l-1.757-1.182c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg>',
+        bluesky: '<svg viewBox="0 0 24 24"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8z"/></svg>',
+        mastodon: '<svg viewBox="0 0 24 24"><path d="M23.268 5.313c-.35-2.578-2.617-4.61-5.304-5.004C17.51.242 15.792 0 11.813 0h-.03c-3.98 0-4.835.242-5.288.309C3.882.692 1.496 2.518.917 5.127.64 6.412.61 7.837.661 9.143c.074 1.874.088 3.745.26 5.611.118 1.24.325 2.47.62 3.68.55 2.237 2.777 4.098 4.96 4.857 2.336.792 4.849.923 7.256.38.265-.061.527-.132.786-.213.585-.184 1.27-.39 1.774-.753a.057.057 0 0 0 .023-.043v-1.809a.052.052 0 0 0-.02-.041.053.053 0 0 0-.046-.01 20.282 20.282 0 0 1-4.709.545c-2.73 0-3.463-1.284-3.674-1.818a5.593 5.593 0 0 1-.319-1.433.053.053 0 0 1 .066-.054c1.517.363 3.072.546 4.632.546.376 0 .75 0 1.125-.01 1.57-.044 3.224-.124 4.768-.422.038-.008.077-.015.11-.024 2.435-.464 4.753-1.92 4.989-5.604.008-.145.03-1.52.03-1.67.002-.512.167-3.63-.024-5.545zm-3.748 9.195h-2.561V8.29c0-1.309-.55-1.976-1.67-1.976-1.23 0-1.846.79-1.846 2.35v3.403h-2.546V8.663c0-1.56-.617-2.35-1.848-2.35-1.112 0-1.668.668-1.67 1.977v6.218H4.822V8.102c0-1.31.337-2.35 1.011-3.12.696-.77 1.608-1.164 2.74-1.164 1.311 0 2.302.5 2.962 1.498l.638 1.06.638-1.06c.66-.999 1.65-1.498 2.96-1.498 1.13 0 2.043.395 2.74 1.164.675.77 1.012 1.81 1.012 3.12z"/></svg>',
+        twitch: '<svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>',
+        github: '<svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>',
+        spotify: '<svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',
+        signal: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2.1 21.9l4.83-1.28A9.93 9.93 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8s-3.59 8-8 8a7.93 7.93 0 0 1-4.18-1.18l-.3-.19-2.86.76.76-2.86-.19-.3A7.93 7.93 0 0 1 4 12c0-4.41 3.59-8 8-8z"/></svg>',
+        tumblr: '<svg viewBox="0 0 24 24"><path d="M14.563 24c-5.093 0-7.031-3.756-7.031-6.411V9.747H5.116V6.648c3.63-1.313 4.512-4.596 4.71-6.469C9.84.051 9.941 0 9.999 0h3.517v6.114h4.801v3.633h-4.82v7.47c.016 1.001.375 2.371 2.207 2.371h.09c.631-.02 1.486-.205 1.936-.419l1.156 3.425c-.436.636-2.4 1.374-4.156 1.404h-.178l.011.002z"/></svg>',
+        vimeo: '<svg viewBox="0 0 24 24"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 0 0 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797l-.013.01z"/></svg>',
+        medium: '<svg viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>',
+        quora: '<svg viewBox="0 0 24 24"><path d="M12.73 18.67c-.95-1.7-2.09-3.38-4.15-3.38-1.11 0-1.99.51-2.46 1.12l.73 1.24c.3-.23.67-.36 1.07-.36 1.28 0 2.09 1.15 2.85 2.53-.44.11-.91.18-1.39.18-3.54 0-5.82-2.97-5.82-7.5 0-4.54 2.28-7.5 5.82-7.5 3.53 0 5.81 2.96 5.81 7.5 0 2.91-.95 5.19-2.46 6.17zm6.75 1.78c-.68.42-1.26.55-1.74.55-.92 0-1.56-.53-2.29-1.69 2.38-1.54 3.84-4.29 3.84-7.81C19.29 5.39 14.99 1 9.38 1 3.77 1 0 5.39 0 11.5S3.77 22 9.38 22c1.19 0 2.32-.21 3.35-.6 1.11 1.66 2.34 2.6 4.18 2.6 1.87 0 3.24-.97 3.97-2.43l-1.4-1.12z"/></svg>',
+        dribbble: '<svg viewBox="0 0 24 24"><path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.025-8.04 6.4 1.73 1.358 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.814zm-11.62-2.58c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.71 1.756 11.7l-.004.312c0 2.633.998 5.037 2.634 6.855zm-2.42-8.955c.46.008 4.683.026 9.477-1.248-1.698-3.018-3.53-5.558-3.8-5.928-2.868 1.35-5.01 3.99-5.676 7.17zM9.6 2.052c.282.38 2.145 2.914 3.822 6 3.645-1.365 5.19-3.44 5.373-3.702-1.81-1.61-4.19-2.586-6.795-2.586-.825 0-1.63.1-2.4.285zm10.335 3.483c-.218.29-1.935 2.493-5.724 4.04.24.49.47.985.68 1.486.08.18.15.36.22.53 3.41-.43 6.8.26 7.14.33-.02-2.42-.88-4.64-2.31-6.38z"/></svg>',
+        behance: '<svg viewBox="0 0 24 24"><path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988H0V5.021h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zM3 11h3.584c2.508 0 2.906-3-.312-3H3v3zm3.391 3H3v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"/></svg>',
+        vk: '<svg viewBox="0 0 24 24"><path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.08 14.27h-1.46c-.55 0-.72-.44-1.71-1.44-.86-.83-1.24-.94-1.46-.94-.3 0-.38.08-.38.48v1.31c0 .35-.11.56-1.04.56-1.54 0-3.25-.93-4.45-2.67-1.81-2.55-2.31-4.46-2.31-4.85 0-.21.08-.41.48-.41h1.46c.36 0 .5.16.64.55.7 2.03 1.88 3.81 2.36 3.81.18 0 .27-.08.27-.54v-2.1c-.06-.99-.58-1.07-.58-1.42 0-.17.14-.34.37-.34h2.29c.31 0 .42.16.42.52v2.83c0 .31.14.42.23.42.18 0 .34-.11.68-.45 1.05-1.18 1.8-3 1.8-3 .1-.21.27-.41.63-.41h1.46c.44 0 .53.23.44.52-.18.84-1.95 3.33-1.95 3.33-.15.25-.21.36 0 .64.15.21.65.64 1 1.04.62.71 1.1 1.3 1.23 1.71.13.42-.07.63-.49.63z"/></svg>',
+        wechat: '<svg viewBox="0 0 24 24"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>',
+        line: '<svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>',
+        slack: '<svg viewBox="0 0 24 24"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>',
+        patreon: '<svg viewBox="0 0 24 24"><path d="M15.386.524c-4.764 0-8.64 3.876-8.64 8.64 0 4.75 3.876 8.613 8.64 8.613 4.75 0 8.614-3.864 8.614-8.613C24 4.4 20.136.524 15.386.524M.003 23.537h4.22V.524H.003"/></svg>',
+        substack: '<svg viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>',
+        tinder: '<svg viewBox="0 0 24 24"><path d="M14.37 7.67c-.15-.82-.68-2.79-2.29-4.61-.24-.27-.68-.11-.69.25-.05 1.88-.82 3.92-2.99 5.39-1.91 1.29-3.12 3.31-3.12 5.65 0 4.02 3.28 7.28 7.32 7.28 4.04 0 7.32-3.26 7.32-7.28 0-3.19-2.16-5.94-5.55-6.68z"/></svg>',
+        steam: '<svg viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0z"/></svg>'
+      };
+
+      /* ======================================================================
+         2. DIRECTORY DATA ARRAY (116 Global Social Media Platforms)
+            Easily editable: { name, url, category, color, icon }
+         ====================================================================== */
+      const PLATFORMS = [
+        // Major Global Social Networks
+        { name: "Facebook", url: "https://www.facebook.com", category: "Social Network", color: "#1877F2", icon: ICONS.facebook },
+        { name: "Instagram", url: "https://www.instagram.com", category: "Photo & Video", color: "#E4405F", icon: ICONS.instagram },
+        { name: "X", url: "https://x.com", category: "Microblogging", color: "#0F1419", icon: ICONS.x },
+        { name: "TikTok", url: "https://www.tiktok.com", category: "Short Video", color: "#111111", icon: ICONS.tiktok },
+        { name: "WhatsApp", url: "https://www.whatsapp.com", category: "Messaging", color: "#25D366", icon: ICONS.whatsapp },
+        { name: "YouTube", url: "https://www.youtube.com", category: "Video", color: "#FF0000", icon: ICONS.youtube },
+        { name: "Telegram", url: "https://telegram.org", category: "Messaging", color: "#26A5E4", icon: ICONS.telegram },
+        { name: "LinkedIn", url: "https://www.linkedin.com", category: "Professional", color: "#0A66C2", icon: ICONS.linkedin },
+        { name: "Snapchat", url: "https://www.snapchat.com", category: "Messaging & Media", color: "#E6C200", icon: ICONS.snapchat },
+        { name: "Pinterest", url: "https://www.pinterest.com", category: "Visual Discovery", color: "#E60023", icon: ICONS.pinterest },
+        { name: "Reddit", url: "https://www.reddit.com", category: "Community", color: "#FF4500", icon: ICONS.reddit },
+        { name: "Discord", url: "https://discord.com", category: "Community & Chat", color: "#5865F2", icon: ICONS.discord },
+        { name: "Threads", url: "https://www.threads.net", category: "Microblogging", color: "#101010", icon: ICONS.threads },
+        { name: "Bluesky", url: "https://bsky.app", category: "Decentralized", color: "#0285FF", icon: ICONS.bluesky },
+        { name: "Mastodon", url: "https://joinmastodon.org", category: "Decentralized", color: "#6364FF", icon: ICONS.mastodon },
+        { name: "WeChat", url: "https://www.wechat.com", category: "Messaging", color: "#07C160", icon: ICONS.wechat },
+        { name: "LINE", url: "https://line.me", category: "Messaging", color: "#00C300", icon: ICONS.line },
+        { name: "KakaoTalk", url: "https://www.kakaocorp.com/page/service/service/KakaoTalk", category: "Messaging", color: "#3C1E1E", icon: null },
+        { name: "VK", url: "https://vk.com", category: "Social Network", color: "#0077FF", icon: ICONS.vk },
+        { name: "Twitch", url: "https://www.twitch.tv", category: "Live Streaming", color: "#9146FF", icon: ICONS.twitch },
+
+        // Messaging & Communication
+        { name: "Messenger", url: "https://www.messenger.com", category: "Messaging", color: "#0084FF", icon: null },
+        { name: "Signal", url: "https://signal.org", category: "Private Messaging", color: "#3A76F0", icon: ICONS.signal },
+        { name: "Viber", url: "https://www.viber.com", category: "Messaging", color: "#7360F2", icon: null },
+        { name: "Skype", url: "https://www.skype.com", category: "Video & Chat", color: "#00AFF0", icon: null },
+        { name: "QQ", url: "https://im.qq.com", category: "Messaging", color: "#12B7F5", icon: null },
+        { name: "Zalo", url: "https://zalo.me", category: "Messaging", color: "#0068FF", icon: null },
+        { name: "Kik", url: "https://www.kik.com", category: "Messaging", color: "#82BC23", icon: null },
+        { name: "Threema", url: "https://threema.ch", category: "Private Messaging", color: "#3FE669", icon: null },
+        { name: "Element", url: "https://element.io", category: "Decentralized Chat", color: "#0DBD8B", icon: null },
+        { name: "Session", url: "https://getsession.org", category: "Private Messaging", color: "#00F782", icon: null },
+        { name: "Wire", url: "https://wire.com", category: "Secure Messaging", color: "#1C1E21", icon: null },
+        { name: "GroupMe", url: "https://groupme.com", category: "Group Messaging", color: "#00AFF0", icon: null },
+        { name: "Slack", url: "https://slack.com", category: "Team Collaboration", color: "#4A154B", icon: ICONS.slack },
+        { name: "Microsoft Teams", url: "https://www.microsoft.com/microsoft-teams", category: "Collaboration", color: "#6264A7", icon: null },
+        { name: "Guilded", url: "https://www.guilded.gg", category: "Gaming Chat", color: "#F5C400", icon: null },
+        { name: "TeamSpeak", url: "https://www.teamspeak.com", category: "Voice Chat", color: "#2580C3", icon: null },
+        { name: "IMO", url: "https://imo.im", category: "Video & Chat", color: "#0099FF", icon: null },
+        { name: "Botim", url: "https://botim.me", category: "Video & Chat", color: "#00A8E8", icon: null },
+
+        // Video, Streaming & Audio
+        { name: "Vimeo", url: "https://vimeo.com", category: "Video", color: "#1AB7EA", icon: ICONS.vimeo },
+        { name: "Dailymotion", url: "https://www.dailymotion.com", category: "Video", color: "#0066DC", icon: null },
+        { name: "Rumble", url: "https://rumble.com", category: "Video", color: "#85C742", icon: null },
+        { name: "Kick", url: "https://kick.com", category: "Live Streaming", color: "#53FC18", icon: null },
+        { name: "Bilibili", url: "https://www.bilibili.com", category: "Video & Anime", color: "#00A1D6", icon: null },
+        { name: "Douyin", url: "https://www.douyin.com", category: "Short Video", color: "#161823", icon: null },
+        { name: "Kuaishou", url: "https://www.kuaishou.com", category: "Short Video", color: "#FF4906", icon: null },
+        { name: "Likee", url: "https://likee.video", category: "Short Video", color: "#FF2D55", icon: null },
+        { name: "Triller", url: "https://triller.co", category: "Short Video", color: "#FF0050", icon: null },
+        { name: "Bigo Live", url: "https://www.bigo.tv", category: "Live Streaming", color: "#00D4C5", icon: null },
+        { name: "YouNow", url: "https://www.younow.com", category: "Live Streaming", color: "#57D963", icon: null },
+        { name: "Niconico", url: "https://www.nicovideo.jp", category: "Video", color: "#252525", icon: null },
+        { name: "PeerTube", url: "https://joinpeertube.org", category: "Decentralized Video", color: "#F1680D", icon: null },
+        { name: "Odysee", url: "https://odysee.com", category: "Video", color: "#EF1970", icon: null },
+        { name: "Clubhouse", url: "https://www.clubhouse.com", category: "Social Audio", color: "#F3D34A", icon: null },
+        { name: "Spotify", url: "https://open.spotify.com", category: "Music & Podcasts", color: "#1DB954", icon: ICONS.spotify },
+        { name: "SoundCloud", url: "https://soundcloud.com", category: "Audio Community", color: "#FF5500", icon: null },
+        { name: "Bandcamp", url: "https://bandcamp.com", category: "Music Community", color: "#1DA0C3", icon: null },
+        { name: "Mixcloud", url: "https://www.mixcloud.com", category: "Audio & DJs", color: "#5000FF", icon: null },
+        { name: "Last.fm", url: "https://www.last.fm", category: "Music Social", color: "#D51007", icon: null },
+
+        // Blogging, Publishing & Microblogging
+        { name: "Tumblr", url: "https://www.tumblr.com", category: "Microblogging", color: "#35465C", icon: ICONS.tumblr },
+        { name: "Medium", url: "https://medium.com", category: "Publishing", color: "#000000", icon: ICONS.medium },
+        { name: "Substack", url: "https://substack.com", category: "Newsletters", color: "#FF6719", icon: ICONS.substack },
+        { name: "WordPress.com", url: "https://wordpress.com", category: "Blogging", color: "#21759B", icon: null },
+        { name: "Blogger", url: "https://www.blogger.com", category: "Blogging", color: "#FF5722", icon: null },
+        { name: "Ghost", url: "https://ghost.org", category: "Publishing", color: "#15171A", icon: null },
+        { name: "Weibo", url: "https://weibo.com", category: "Microblogging", color: "#E6162D", icon: null },
+        { name: "Truth Social", url: "https://truthsocial.com", category: "Microblogging", color: "#5448EE", icon: null },
+        { name: "Gab", url: "https://gab.com", category: "Microblogging", color: "#21CF7A", icon: null },
+        { name: "GETTR", url: "https://gettr.com", category: "Microblogging", color: "#E5002B", icon: null },
+        { name: "Parler", url: "https://parler.com", category: "Microblogging", color: "#892E5E", icon: null },
+        { name: "Minds", url: "https://www.minds.com", category: "Open Social", color: "#FED12F", icon: null },
+        { name: "MeWe", url: "https://mewe.com", category: "Social Network", color: "#007BA7", icon: null },
+        { name: "Diaspora", url: "https://diasporafoundation.org", category: "Decentralized", color: "#222222", icon: null },
+        { name: "Pixelfed", url: "https://pixelfed.org", category: "Decentralized Photo", color: "#1D4ED8", icon: null },
+        { name: "Lemmy", url: "https://join-lemmy.org", category: "Link Aggregator", color: "#00BC8C", icon: null },
+        { name: "Kbin", url: "https://kbin.pub", category: "Fediverse", color: "#6D28D9", icon: null },
+        { name: "Farcaster", url: "https://www.farcaster.xyz", category: "Web3 Social", color: "#855DCD", icon: null },
+        { name: "Lens", url: "https://www.lens.xyz", category: "Web3 Social", color: "#00501E", icon: null },
+
+        // Photo, Design & Creative Portfolios
+        { name: "Flickr", url: "https://www.flickr.com", category: "Photography", color: "#0063DC", icon: null },
+        { name: "500px", url: "https://500px.com", category: "Photography", color: "#0099E5", icon: null },
+        { name: "VSCO", url: "https://vsco.co", category: "Photography", color: "#1E1E1E", icon: null },
+        { name: "Behance", url: "https://www.behance.net", category: "Design Portfolio", color: "#1769FF", icon: ICONS.behance },
+        { name: "Dribbble", url: "https://dribbble.com", category: "Design Community", color: "#EA4C89", icon: ICONS.dribbble },
+        { name: "DeviantArt", url: "https://www.deviantart.com", category: "Art Community", color: "#05CC47", icon: null },
+        { name: "ArtStation", url: "https://www.artstation.com", category: "Digital Art", color: "#13AFF0", icon: null },
+        { name: "Pixiv", url: "https://www.pixiv.net", category: "Illustration", color: "#0096FA", icon: null },
+        { name: "BeReal", url: "https://bereal.com", category: "Photo Sharing", color: "#111111", icon: null },
+        { name: "Lemon8", url: "https://www.lemon8-app.com", category: "Lifestyle & Photo", color: "#F7D000", icon: null },
+        { name: "Xiaohongshu", url: "https://www.xiaohongshu.com", category: "Lifestyle & Social", color: "#FF2442", icon: null },
+        { name: "Locket", url: "https://locket.camera", category: "Photo Widget", color: "#F59E0B", icon: null },
+
+        // Community, Q&A & Regional Networks
+        { name: "Quora", url: "https://www.quora.com", category: "Q&A Knowledge", color: "#B92B27", icon: ICONS.quora },
+        { name: "Nextdoor", url: "https://nextdoor.com", category: "Neighborhood", color: "#8ED500", icon: null },
+        { name: "Zhihu", url: "https://www.zhihu.com", category: "Q&A Community", color: "#0066FF", icon: null },
+        { name: "Douban", url: "https://www.douban.com", category: "Culture & Reviews", color: "#007722", icon: null },
+        { name: "Mixi", url: "https://mixi.jp", category: "Social Network", color: "#D1AD5A", icon: null },
+        { name: "Ameba", url: "https://ameblo.jp", category: "Blogging & Social", color: "#2D8C3C", icon: null },
+        { name: "Naver Cafe", url: "https://section.cafe.naver.com", category: "Community", color: "#03C75A", icon: null },
+        { name: "BAND", url: "https://band.us", category: "Group Community", color: "#21C531", icon: null },
+        { name: "Odnoklassniki", url: "https://ok.ru", category: "Social Network", color: "#EE8208", icon: null },
+        { name: "Xing", url: "https://www.xing.com", category: "Professional", color: "#006567", icon: null },
+        { name: "Viadeo", url: "https://www.viadeo.com", category: "Professional", color: "#F07355", icon: null },
+        { name: "ResearchGate", url: "https://www.researchgate.net", category: "Academic", color: "#00CCBB", icon: null },
+        { name: "Academia.edu", url: "https://www.academia.edu", category: "Academic", color: "#41454A", icon: null },
+
+        // Developer, Creator, Gaming & Lifestyle
+        { name: "GitHub", url: "https://github.com", category: "Developer Social", color: "#181717", icon: ICONS.github },
+        { name: "Dev.to", url: "https://dev.to", category: "Developer Community", color: "#0A0A0A", icon: null },
+        { name: "Hashnode", url: "https://hashnode.com", category: "Tech Blogging", color: "#2962FF", icon: null },
+        { name: "Product Hunt", url: "https://www.producthunt.com", category: "Tech & Startups", color: "#FF6154", icon: null },
+        { name: "Hacker News", url: "https://news.ycombinator.com", category: "Tech Forum", color: "#FF6600", icon: null },
+        { name: "Stack Overflow", url: "https://stackoverflow.com", category: "Developer Q&A", color: "#F48024", icon: null },
+        { name: "Patreon", url: "https://www.patreon.com", category: "Creator Membership", color: "#FF424D", icon: ICONS.patreon },
+        { name: "Ko-fi", url: "https://ko-fi.com", category: "Creator Support", color: "#FF5E5B", icon: null },
+        { name: "Steam Community", url: "https://steamcommunity.com", category: "Gaming", color: "#171A21", icon: ICONS.steam },
+        { name: "Goodreads", url: "https://www.goodreads.com", category: "Books & Reading", color: "#553B08", icon: null },
+        { name: "Letterboxd", url: "https://letterboxd.com", category: "Film Social", color: "#202830", icon: null },
+        { name: "Strava", url: "https://www.strava.com", category: "Fitness Social", color: "#FC4C02", icon: null },
+        { name: "Untappd", url: "https://untappd.com", category: "Social Discovery", color: "#FFC000", icon: null },
+        { name: "Ravelry", url: "https://www.ravelry.com", category: "Crafting Community", color: "#EE6E62", icon: null },
+        { name: "Couchsurfing", url: "https://www.couchsurfing.com", category: "Travel Community", color: "#ED6504", icon: null },
+        { name: "Meetup", url: "https://www.meetup.com", category: "Local Events", color: "#ED1C40", icon: null },
+
+        // Dating & Relationships
+        { name: "Tinder", url: "https://tinder.com", category: "Dating", color: "#FF4458", icon: ICONS.tinder },
+        { name: "Bumble", url: "https://bumble.com", category: "Dating & Networking", color: "#FFC629", icon: null },
+        { name: "Hinge", url: "https://hinge.co", category: "Dating", color: "#1A1A1A", icon: null },
+        { name: "OkCupid", url: "https://www.okcupid.com", category: "Dating", color: "#0500FF", icon: null },
+        { name: "Match", url: "https://www.match.com", category: "Dating", color: "#1065F2", icon: null },
+        { name: "Badoo", url: "https://badoo.com", category: "Dating", color: "#783BF9", icon: null },
+        { name: "Grindr", url: "https://www.grindr.com", category: "Dating", color: "#F5C400", icon: null },
+        { name: "Coffee Meets Bagel", url: "https://coffeemeetsbagel.com", category: "Dating", color: "#3B5998", icon: null },
+        { name: "Plenty of Fish", url: "https://www.pof.com", category: "Dating", color: "#00B2A9", icon: null },
+        { name: "Happn", url: "https://www.happn.com", category: "Dating", color: "#0084B4", icon: null }
+      ];
+
+      /* ======================================================================
+         3. LEGAL CONTENT DEFINITIONS
+         ====================================================================== */
+      const LEGAL_DOCS = {
+        "privacy": {
+          title: "Privacy Policy",
+          updated: "Last updated: November 14, 2026",
+          html: `
+            <h3>1. Overview &amp; Zero Server Data Collection</h3>
+            <p>Arc - Social Media ("we", "our", or "the Service") is designed with privacy as a foundational principle. This application operates entirely on the client side within your web browser. We do not operate backend servers that collect, transmit, store, or process your personal data, search queries, or browsing activity.</p>
+
+            <h3>2. Cookies and Local Storage</h3>
+            <p>Arc - Social Media does not use tracking cookies, advertising pixels, or third-party analytics scripts. To provide core functionality, the application uses your browser's built-in <code>localStorage</code> and Cache Storage solely on your device for:</p>
+            <ul>
+              <li><strong>Favourites Persistence:</strong> Saving the list of social media platforms you mark as favourites so they remain available between sessions.</li>
+              <li><strong>Offline Functionality:</strong> Caching the single-page application shell via a local Service Worker so the directory loads reliably offline.</li>
+            </ul>
+
+            <h3>3. Third-Party Links and External Platforms</h3>
+            <p>Our directory provides outbound links to external social media networks and websites. Once you click an "Open App" link and leave Arc - Social Media, you are subject to the privacy policies, terms, and data collection practices of those independent third-party platforms. We encourage you to review their policies before creating accounts or sharing personal information.</p>
+
+            <h3>4. Children's Privacy</h3>
+            <p>Arc - Social Media does not knowingly collect any personal information from anyone, including children under the age of 13 (or the applicable age of digital consent in your jurisdiction). Many third-party social networks listed in this directory maintain minimum age requirements (typically 13+ or 16+); parents and guardians should supervise minors' access to external platforms.</p>
+
+            <h3>5. Your Rights and Data Control</h3>
+            <p>Because all application preferences are stored locally on your own device, you retain complete control over your data at all times. You may view, modify, or permanently erase your saved favourites by toggling hearts in the app or clearing your browser's site data and cache.</p>
+
+            <h3>6. Data Security</h3>
+            <p>Since no personal information is transmitted over the internet to our servers, there is zero risk of server-side data breaches involving your Arc - Social Media preferences. We recommend keeping your device and web browser updated to protect local storage data.</p>
+
+            <h3>7. Policy Updates</h3>
+            <p>We may update this Privacy Policy from time to time to reflect improvements to the Progressive Web App or changes in legal requirements. Any revisions will be reflected by the "Last updated" date at the top of this notice.</p>
+
+            <h3>8. Contact Details</h3>
+            <p>If you have questions or feedback regarding privacy practices for Arc - Social Media, please contact us at <strong>privacy@arc-social.example</strong>.</p>
+          `
+        },
+        "terms-of-use": {
+          title: "Terms of Use",
+          updated: "Last updated: November 14, 2026",
+          html: `
+            <h3>1. Acceptable Use</h3>
+            <p>Arc - Social Media is provided as a personal and informational web directory to help users discover and access social media platforms. You agree to use the Service solely for lawful purposes and in a manner that does not disrupt, damage, or impair the availability or integrity of the application.</p>
+
+            <h3>2. Intellectual Property Rights</h3>
+            <p>The Arc - Social Media brand name, visual design, layout, custom code, and original graphics are the intellectual property of Arc - Social Media and are protected by applicable copyright and intellectual property laws. You may not copy, redistribute, or commercially exploit the application's source design without prior written permission.</p>
+
+            <h3>3. Third-Party Trademarks</h3>
+            <p>All platform names, brand marks, icons, and logos displayed in the directory (including, without limitation, Facebook, Instagram, X, TikTok, WhatsApp, Telegram, LinkedIn, YouTube, Discord, and all other listed services) are the registered or unregistered trademarks of their respective owners. They are used strictly for identification and navigational reference purposes.</p>
+
+            <h3>4. No Affiliation or Endorsement</h3>
+            <p>Arc - Social Media is an independent directory. We are not affiliated with, sponsored by, endorsed by, or officially connected to any of the social media platforms listed in this application. Inclusion in the directory does not constitute an endorsement or recommendation of any platform's content, security, or policies.</p>
+
+            <h3>5. Disclaimers</h3>
+            <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not guarantee uninterrupted access to external third-party platforms.</p>
+
+            <h3>6. Limitation of Liability</h3>
+            <p>To the fullest extent permitted by applicable law, Arc - Social Media and its creators shall not be liable for any direct, indirect, incidental, consequential, or special damages arising out of your use of the directory or your interactions, accounts, or transactions on any third-party platform accessed through our links.</p>
+
+            <h3>7. Termination of Access</h3>
+            <p>We reserve the right to modify, suspend, or discontinue the Service, or restrict access to any portion of the directory, at any time and without prior notice or liability.</p>
+          `
+        },
+        "terms-conditions": {
+          title: "Terms and Conditions",
+          updated: "Last updated: November 14, 2026",
+          html: `
+            <h3>1. Acceptance of Terms</h3>
+            <p>By accessing, installing, or using the Arc - Social Media Progressive Web App, you confirm that you have read, understood, and agreed to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please discontinue use of the application.</p>
+
+            <h3>2. Service Description</h3>
+            <p>Arc - Social Media is a curated, client-side web directory cataloging global social media, messaging, video, professional, community, and dating platforms. The application provides instant search filtering, local bookmarking ("Favourites"), and direct external links to official platform destinations.</p>
+
+            <h3>3. User Responsibilities</h3>
+            <p>When using Arc - Social Media and navigating to external platforms, you are solely responsible for:</p>
+            <ul>
+              <li>Verifying that you meet the minimum age and eligibility requirements of any third-party platform you visit.</li>
+              <li>Complying with local laws and the terms of service of each external network you access.</li>
+              <li>Maintaining the security of your own device, browser, and third-party account credentials.</li>
+            </ul>
+
+            <h3>4. Third-Party Content and Links</h3>
+            <p>Arc - Social Media acts exclusively as an index of outbound links. We have no control over the content, availability, moderation practices, or privacy standards of external websites and mobile applications, and we assume no responsibility for them.</p>
+
+            <h3>5. Accuracy of Information</h3>
+            <p>While we strive to keep platform names, categories, and official URLs accurate and up to date, social media platforms frequently rebrand, change domain names, or alter regional availability. We make no representation or warranty regarding the completeness or ongoing accuracy of directory entries.</p>
+
+            <h3>6. Changes to the Service and Terms</h3>
+            <p>We may add or remove listed platforms, enhance features, or revise these Terms and Conditions at our discretion. Continued use of Arc - Social Media following any update constitutes your acceptance of the revised terms.</p>
+
+            <h3>7. Governing Law</h3>
+            <p>These Terms and Conditions, and any dispute or claim arising out of or in connection with them or the use of Arc - Social Media, shall be governed by and construed in accordance with the laws of the <strong>Republic of South Africa</strong>, without regard to conflict of law principles.</p>
+
+            <h3>8. Contact Information</h3>
+            <p>For general inquiries, directory corrections, or legal notices, please reach out to <strong>legal@arc-social.example</strong>.</p>
+          `
+        }
+      };
+
+      /* ======================================================================
+         4. STATE MANAGEMENT & LOCALSTORAGE
+         ====================================================================== */
+      const STORAGE_KEY = "arc_social_favourites_v1";
+
+      function loadFavourites() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : [];
+          return Array.isArray(parsed) ? new Set(parsed) : new Set();
+        } catch (err) {
+          return new Set();
+        }
+      }
+
+      function saveFavourites(favSet) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(favSet)));
+        } catch (err) {
+          // Ignore storage quota errors in restricted/private modes
+        }
+      }
+
+      const state = {
+        searchQuery: "",
+        activeView: "all", // "all" | "favourites"
+        favourites: loadFavourites(),
+        lastFocusedElement: null
+      };
+
+      /* ======================================================================
+         5. DOM REFERENCES
+         ====================================================================== */
+      const els = {
+        grid: document.getElementById("platform-grid"),
+        searchInput: document.getElementById("search-input"),
+        clearSearchBtn: document.getElementById("clear-search"),
+        tabAll: document.getElementById("tab-all"),
+        tabFav: document.getElementById("tab-fav"),
+        allCount: document.getElementById("all-count"),
+        favCount: document.getElementById("fav-count"),
+        resultsMeta: document.getElementById("results-meta"),
+        emptyState: document.getElementById("empty-state"),
+        emptyTitle: document.getElementById("empty-title"),
+        emptyDesc: document.getElementById("empty-desc"),
+        emptyActionBtn: document.getElementById("empty-action-btn"),
+        installBtn: document.getElementById("install-btn"),
+        yearSpan: document.getElementById("year"),
+        modalBackdrop: document.getElementById("legal-modal-backdrop"),
+        modalTitle: document.getElementById("modal-title"),
+        modalUpdated: document.getElementById("modal-updated"),
+        modalBody: document.getElementById("modal-body"),
+        modalCloseBtn: document.getElementById("modal-close-btn"),
+        modalDoneBtn: document.getElementById("modal-done-btn")
+      };
+
+      /* ======================================================================
+         6. HELPER FUNCTIONS & RENDERING
+         ====================================================================== */
+      function getInitials(name) {
+        const words = name.replace(/[^a-zA-Z0-9\s]/g, "").trim().split(/\s+/);
+        if (words.length >= 2) {
+          return (words[0][0] + words[1][0]).toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+      }
+
+      function getContrastTextColor(hexColor) {
+        const hex = hexColor.replace("#", "");
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.72 ? "#0F172A" : "#FFFFFF";
+      }
+
+      function updateCounts() {
+        els.allCount.textContent = PLATFORMS.length;
+        els.favCount.textContent = state.favourites.size;
+      }
+
+      function renderDirectory() {
+        const query = state.searchQuery.trim().toLowerCase();
+
+        const filtered = PLATFORMS.filter((platform) => {
+          const matchesView =
+            state.activeView === "all" || state.favourites.has(platform.name);
+          if (!matchesView) return false;
+
+          if (!query) return true;
+          return (
+            platform.name.toLowerCase().includes(query) ||
+            platform.category.toLowerCase().includes(query)
+          );
+        });
+
+        // Update status metadata
+        if (state.activeView === "favourites") {
+          els.resultsMeta.textContent =
+            filtered.length === 1
+              ? "1 favourite platform"
+              : `${filtered.length} favourite platforms`;
+        } else if (query) {
+          els.resultsMeta.textContent =
+            filtered.length === 1
+              ? `1 match for "${state.searchQuery.trim()}"`
+              : `${filtered.length} matches for "${state.searchQuery.trim()}"`;
+        } else {
+          els.resultsMeta.textContent = `Showing all ${filtered.length} platforms`;
+        }
+
+        // Clear grid
+        els.grid.innerHTML = "";
+
+        // Handle empty / no-results states
+        if (filtered.length === 0) {
+          els.grid.style.display = "none";
+          els.emptyState.classList.add("visible");
+
+          if (state.activeView === "favourites" && state.favourites.size === 0 && !query) {
+            els.emptyTitle.textContent = "No favourites saved yet";
+            els.emptyDesc.textContent =
+              "Tap the heart icon on any platform card to pin your go-to networks here for instant access.";
+            els.emptyActionBtn.textContent = "Browse All Platforms";
+            els.emptyActionBtn.onclick = () => switchView("all");
+          } else {
+            els.emptyTitle.textContent = "No matching platforms";
+            els.emptyDesc.textContent = query
+              ? `We couldn't find any platforms matching "${state.searchQuery.trim()}".`
+              : "No saved favourites match your current filter.";
+            els.emptyActionBtn.textContent = "Clear Search";
+            els.emptyActionBtn.onclick = () => {
+              state.searchQuery = "";
+              els.searchInput.value = "";
+              els.clearSearchBtn.classList.remove("visible");
+              renderDirectory();
+              els.searchInput.focus();
+            };
+          }
+          return;
+        }
+
+        els.emptyState.classList.remove("visible");
+        els.grid.style.display = "grid";
+
+        const fragment = document.createDocumentFragment();
+
+        filtered.forEach((platform) => {
+          const isFav = state.favourites.has(platform.name);
+          const textColor = getContrastTextColor(platform.color);
+
+          const card = document.createElement("article");
+          card.className = "platform-card";
+
+          // Favourite toggle button
+          const favBtn = document.createElement("button");
+          favBtn.type = "button";
+          favBtn.className = "fav-btn";
+          favBtn.setAttribute("aria-pressed", String(isFav));
+          favBtn.setAttribute(
+            "aria-label",
+            isFav
+              ? `Remove ${platform.name} from favourites`
+              : `Add ${platform.name} to favourites`
+          );
+          favBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          `;
+          favBtn.addEventListener("click", () => toggleFavourite(platform.name));
+
+          // Logo container (SVG or styled letter badge fallback)
+          const logoBox = document.createElement("div");
+          logoBox.className = "platform-logo";
+          logoBox.style.backgroundColor = platform.color;
+          logoBox.style.color = textColor;
+          logoBox.setAttribute("aria-hidden", "true");
+          logoBox.innerHTML = platform.icon ? platform.icon : getInitials(platform.name);
+
+          // Platform name
+          const title = document.createElement("h2");
+          title.className = "platform-name";
+          title.textContent = platform.name;
+          title.title = platform.name;
+
+          // Category label
+          const category = document.createElement("span");
+          category.className = "platform-category";
+          category.textContent = platform.category;
+
+          // Open App external link
+          const link = document.createElement("a");
+          link.className = "open-app-link";
+          link.href = platform.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.setAttribute("aria-label", `Open ${platform.name} in a new tab`);
+          link.innerHTML = `
+            <span>Open App</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          `;
+
+          card.appendChild(favBtn);
+          card.appendChild(logoBox);
+          card.appendChild(title);
+          card.appendChild(category);
+          card.appendChild(link);
+          fragment.appendChild(card);
+        });
+
+        els.grid.appendChild(fragment);
+      }
+
+      function toggleFavourite(platformName) {
+        if (state.favourites.has(platformName)) {
+          state.favourites.delete(platformName);
+        } else {
+          state.favourites.add(platformName);
+        }
+        saveFavourites(state.favourites);
+        updateCounts();
+        renderDirectory();
+      }
+
+      function switchView(view) {
+        state.activeView = view;
+        els.tabAll.setAttribute("aria-selected", String(view === "all"));
+        els.tabFav.setAttribute("aria-selected", String(view === "favourites"));
+        renderDirectory();
+      }
+
+      /* ======================================================================
+         7. EVENT LISTENERS (SEARCH, TABS, LEGAL MODALS)
+         ====================================================================== */
+      els.searchInput.addEventListener("input", (e) => {
+        state.searchQuery = e.target.value;
+        els.clearSearchBtn.classList.toggle("visible", state.searchQuery.length > 0);
+        renderDirectory();
+      });
+
+      els.clearSearchBtn.addEventListener("click", () => {
+        state.searchQuery = "";
+        els.searchInput.value = "";
+        els.clearSearchBtn.classList.remove("visible");
+        renderDirectory();
+        els.searchInput.focus();
+      });
+
+      els.tabAll.addEventListener("click", () => switchView("all"));
+      els.tabFav.addEventListener("click", () => switchView("favourites"));
+
+      // Legal Modal Handlers
+      function openLegalModal(key) {
+        const doc = LEGAL_DOCS[key];
+        if (!doc) return;
+
+        state.lastFocusedElement = document.activeElement;
+        els.modalTitle.textContent = doc.title;
+        els.modalUpdated.textContent = doc.updated;
+        els.modalBody.innerHTML = doc.html;
+        els.modalBody.scrollTop = 0;
+
+        els.modalBackdrop.classList.add("open");
+        els.modalBackdrop.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        els.modalCloseBtn.focus();
+      }
+
+      function closeLegalModal() {
+        if (!els.modalBackdrop.classList.contains("open")) return;
+        els.modalBackdrop.classList.remove("open");
+        els.modalBackdrop.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        if (state.lastFocusedElement && typeof state.lastFocusedElement.focus === "function") {
+          state.lastFocusedElement.focus();
+        }
+      }
+
+      document.querySelectorAll("[data-legal]").forEach((btn) => {
+        btn.addEventListener("click", () => openLegalModal(btn.getAttribute("data-legal")));
+      });
+
+      els.modalCloseBtn.addEventListener("click", closeLegalModal);
+      els.modalDoneBtn.addEventListener("click", closeLegalModal);
+
+      els.modalBackdrop.addEventListener("click", (e) => {
+        if (e.target === els.modalBackdrop) {
+          closeLegalModal();
+        }
+      });
+
+      // Keyboard & ESC support + Focus Trap inside modal
+      document.addEventListener("keydown", (e) => {
+        if (!els.modalBackdrop.classList.contains("open")) return;
+
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeLegalModal();
+          return;
+        }
+
+        if (e.key === "Tab") {
+          const focusable = els.modalBackdrop.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusable.length === 0) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      });
+
+      /* ======================================================================
+         8. PWA SETUP: PROGRAMMATIC ICONS, INLINE MANIFEST & SERVICE WORKER
+         ====================================================================== */
+      function generateAppIconDataURL(size) {
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+
+        // Brand blue background (#0066FF)
+        ctx.fillStyle = "#0066FF";
+        ctx.fillRect(0, 0, size, size);
+
+        // Centered white medium-sized dot
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size * 0.22, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fill();
+
+        return canvas.toDataURL("image/png");
+      }
+
+      function initPWA() {
+        const icon192 = generateAppIconDataURL(192);
+        const icon512 = generateAppIconDataURL(512);
+
+        // Set Favicon and Apple Touch Icon
+        document.getElementById("favicon").href = icon192;
+        document.getElementById("apple-touch-icon").href = icon192;
+
+        // Build Inline Web App Manifest via Blob URL
+        const manifest = {
+          name: "Arc - Social Media",
+          short_name: "Arc",
+          description: "Global directory of 100+ social media platforms, messaging apps, and communities.",
+          start_url: window.location.href,
+          scope: "./",
+          display: "standalone",
+          background_color: "#F8FAFC",
+          theme_color: "#0066FF",
+          orientation: "portrait-primary",
+          icons: [
+            {
+              src: icon192,
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "any maskable"
+            },
+            {
+              src: icon512,
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any maskable"
+            }
+          ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {
+          type: "application/manifest+json"
+        });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        document.getElementById("manifest-link").href = manifestURL;
+
+        // Register Inline Service Worker via Blob URL for offline caching
+        if ("serviceWorker" in navigator) {
+          const swCode = `
+            const CACHE_NAME = "arc-social-media-shell-v1";
+            const APP_URL = ${JSON.stringify(window.location.href)};
+
+            self.addEventListener("install", (event) => {
+              event.waitUntil(
+                caches.open(CACHE_NAME).then((cache) => {
+                  return cache.addAll([APP_URL]).catch(() => {});
+                })
+              );
+              self.skipWaiting();
+            });
+
+            self.addEventListener("activate", (event) => {
+              event.waitUntil(
+                caches.keys().then((keys) =>
+                  Promise.all(
+                    keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
+                  )
+                )
+              );
+              self.clients.claim();
+            });
+
+            self.addEventListener("fetch", (event) => {
+              if (event.request.method !== "GET") return;
+              event.respondWith(
+                caches.match(event.request).then((cached) => {
+                  const networkFetch = fetch(event.request)
+                    .then((response) => {
+                      if (response && response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+                      }
+                      return response;
+                    })
+                    .catch(() => cached);
+                  return cached || networkFetch;
+                })
+              );
+            });
+          `;
+
+          try {
+            const swBlob = new Blob([swCode], { type: "application/javascript" });
+            const swURL = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swURL).catch(() => {
+              // Browsers restrict Blob SWs on file:// origins; works over HTTPS/localhost
+            });
+          } catch (err) {
+            // Safe fallback if SW registration is unsupported
+          }
+        }
+      }
+
+      // Install App Prompt Handling
+      let deferredPrompt = null;
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        els.installBtn.classList.add("visible");
+      });
+
+      els.installBtn.addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice && choice.outcome === "accepted") {
+          els.installBtn.classList.remove("visible");
+        }
+        deferredPrompt = null;
+      });
+
+      window.addEventListener("appinstalled", () => {
+        deferredPrompt = null;
+        els.installBtn.classList.remove("visible");
+      });
+
+      /* ======================================================================
+         9. INITIALIZATION
+         ====================================================================== */
+      els.yearSpan.textContent = new Date().getFullYear();
+      updateCounts();
+      renderDirectory();
+      initPWA();
+    })();
+  </script>
+</body>
+</html>
