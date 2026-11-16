@@ -1,3 +1,0 @@
-Arcknowledge Student Kit Version 3.0
-
-Upload index.html, sw.js, manifest.json and icon.svg to the same HTTPS directory. Open index.html. PWA installation/offline caching require HTTPS or localhost and a supported browser. External Tailwind, fonts, icons and destination sites still require internet. All original directory resources and favourites code are retained. Tools save data in this browser only. No live admissions, bursary deadlines, push notifications, AI API, or cloud accounts are claimed. For production, compile Tailwind locally, verify external directory links, and audit the legal text.
