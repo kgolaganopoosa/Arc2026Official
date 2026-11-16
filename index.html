@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-52T7J6LQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcknowledge | The Ultimate South African Student Kit & Campus Hub</title>
+    <!-- Link to PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121316">
+    <link class="apple-touch-icon" href="icon.svg">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ramp: {
+                            lime: '#C2F012', // Ramp's signature neon lime
+                            limeHover: '#b1de0e',
+                            dark: '#121316', // Dark background
+                            cardDark: '#1C1E22',
+                            lightBg: '#F9FAFB',
+                            border: '#E5E7EB',
+                            darkBorder: '#2D3036',
+                            textDark: '#0D0E10',
+                            textMuted: '#6B7280'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F9FAFB;
+            color: #0D0E10;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+<style>
+.v3-panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:20px}.v3-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.v3-tool{border:1px solid #e5e7eb;background:#fff;border-radius:14px;padding:16px;text-align:left;font-weight:700;cursor:pointer}.v3-tool:hover,.v3-tool:focus-visible{border-color:#92b600;box-shadow:0 0 0 2px #c2f01255}.v3-btn{background:#121316;color:#c2f012;border:0;border-radius:10px;padding:10px 15px;font-weight:700;cursor:pointer}.v3-field{width:100%;border:1px solid #d1d5db;border-radius:9px;padding:10px;background:white;color:#111}.v3-label{display:block;font-size:12px;font-weight:700;margin:8px 0 4px}.v3-result{background:#f3f7e6;border-radius:12px;padding:12px;margin-top:12px}.v3-item{padding:10px 0;border-bottom:1px solid #eee}.v3-muted{font-size:12px;color:#64748b}.v3-chip{border:1px solid #d1d5db;border-radius:999px;padding:6px 10px;background:#fff;cursor:pointer}.v3-dialog{position:fixed;inset:0;z-index:100;background:#000b;display:flex;align-items:center;justify-content:center;padding:15px}.v3-dialog[hidden]{display:none}.v3-dialog-inner{background:#fff;border-radius:18px;padding:20px;width:min(650px,100%);max-height:88vh;overflow:auto}.v3-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.v3-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.v3-h{font-size:20px;font-weight:800}.v3-tag{font-size:11px;background:#c2f012;padding:3px 8px;border-radius:6px}.v3-list{max-height:340px;overflow:auto}.v3-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.v3-notice{font-size:12px;color:#475569;margin-top:8px}#v3Dashboard{scroll-margin-top:90px}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #8aaa00;outline-offset:2px}@media(max-width:480px){.v3-panel{padding:14px}.v3-h{font-size:17px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important}}
+</style>
+</head>
+<body class="bg-ramp-lightBg text-ramp-textDark min-h-screen flex flex-col pb-20 sm:pb-24">
+
+    <!-- Header / Navigation -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-ramp-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-ramp-lime text-ramp-dark flex items-center justify-center w-10 h-10 rounded-lg font-black text-xl tracking-tight shadow-sm">
+                    A
+                </div>
+                <div>
+                    <span class="font-bold text-xl tracking-tight text-ramp-dark">Arcknowledge</span>
+                    <span class="text-[10px] block text-ramp-textMuted font-bold tracking-widest uppercase -mt-1">Student Kit SA</span>
+                </div>
+            </div>
+            <button id="headerFavoritesButton" onclick="toggleFavoritesView()" aria-pressed="false" class="flex items-center gap-1.5 rounded-lg border border-ramp-border px-2 sm:px-3 py-2 text-xs sm:text-sm font-bold text-ramp-dark hover:border-ramp-dark transition-colors">
+                <i class="fa-solid fa-heart text-rose-500"></i>
+                <span id="headerFavoritesLabel">Favorites (0)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+
+        <!-- Hero Search Section -->
+        <div class="bg-ramp-dark rounded-2xl p-6 sm:p-10 text-white relative overflow-hidden shadow-xl border border-ramp-darkBorder">
+            <!-- Ramp Design Glow Accents -->
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-ramp-lime/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-2xl">
+                <span class="bg-ramp-lime/15 text-ramp-lime text-xs font-bold px-3 py-1 rounded-full border border-ramp-lime/20 uppercase tracking-widest mb-3 inline-block">
+                    The Ultimate Student Kit
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3 text-white">
+                    Equip your academic journey with the ultimate South African student kit.
+                </h1>
+                <p class="text-gray-400 text-sm sm:text-base mb-6 leading-relaxed">
+                    Looking for universities, TVET colleges, bursaries, student accommodation, textbooks, or tech deals? Arcknowledge connects you instantly to original, official sources tailored for students.
+                </p>
+
+                <!-- Dynamic Search -->
+                <div class="relative">
+                    <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        oninput="filterCategories()"
+                        placeholder="Search names, tags, subjects, locations, or services..." 
+                        class="w-full pl-12 pr-4 py-3.5 bg-ramp-cardDark border border-ramp-darkBorder text-white rounded-xl font-medium focus:ring-2 focus:ring-ramp-lime focus:border-ramp-lime outline-none transition-all shadow-inner placeholder:text-gray-500"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <section id="v3Dashboard" class="v3-panel" aria-label="Student dashboard"><div class="v3-top"><div><span class="v3-tag">VERSION 3.0</span><h2 class="v3-h" style="margin-top:8px">My Student Dashboard</h2><p class="v3-muted">Your student tools, organised in one place.</p></div><button class="v3-btn" data-v3="profile">My Profile</button></div><div id="v3ProfileSummary" class="v3-result" style="margin:14px 0"></div><div class="v3-grid" id="v3Tools"></div></section><section class="v3-panel" id="v3Discovery"><div class="v3-top"><h2 class="v3-h">Discover resources</h2><span class="v3-muted" id="v3ResourceCount"></span></div><div class="v3-two"><div><label class="v3-label" for="v3Province">Province</label><select class="v3-field" id="v3Province"><option value="">All provinces</option><option value="GP">Gauteng</option><option value="WC">Western Cape</option><option value="KZN">KwaZulu-Natal</option><option value="EC">Eastern Cape</option><option value="LP">Limpopo</option><option value="MP">Mpumalanga</option><option value="NW">North West</option><option value="FS">Free State</option><option value="NC">Northern Cape</option></select></div><div><label class="v3-label" for="v3Category">Category</label><select class="v3-field" id="v3Category"><option value="">All categories</option></select></div></div><div class="v3-actions"><button class="v3-btn" id="v3Find">Find matching resources</button><button class="v3-chip" id="v3Clear">Clear filters</button></div><div id="v3Matches" class="v3-list" aria-live="polite"></div><p class="v3-notice">Filters use the tags and regional labels available in the original directory. Missing province labels are not treated as verified locations.</p></section><dialog id="v3Modal" class="v3-dialog" aria-label="Student tool"><div class="v3-dialog-inner"><div class="v3-top"><h2 id="v3ModalTitle" class="v3-h"></h2><button class="v3-chip" id="v3Close" aria-label="Close tool">✕ Close</button></div><div id="v3ModalBody" style="margin-top:14px"></div></div></dialog>
+<!-- Dynamic Category Explorer & Accordion Container -->
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center justify-between border-b border-ramp-border pb-3">
+                <h2 class="font-bold text-lg text-ramp-dark flex items-center gap-2">
+                    <i class="fa-solid fa-shapes text-ramp-dark"></i> Student Kit Categories & Portals
+                </h2>
+                <span id="categoryCount" class="text-xs bg-gray-200/70 text-gray-700 font-semibold px-2.5 py-1 rounded-md">35 Categories Loaded</span>
+            </div>
+
+            <!-- Categories Accordion Dropdown List -->
+            <div class="flex flex-col gap-3.5" id="categoriesAccordionContainer">
+                <!-- Javascript will dynamically inject collapsible dropdowns here -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="bg-ramp-dark text-gray-400 py-12 mt-12 border-t border-ramp-darkBorder">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-ramp-lime text-ramp-dark flex items-center justify-center w-8 h-8 rounded-lg font-bold text-md">
+                            A
+                        </div>
+                        <span class="font-extrabold text-lg text-white">Arcknowledge</span>
+                    </div>
+                    <p class="text-sm text-gray-400 max-w-sm leading-relaxed">
+                        South Africa's premiere student kit platform, pointing you to official, safe links for education, funding, housing, transport, and student essentials.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white text-xs uppercase tracking-widest mb-4">Legals & Frameworks</h4>
+                    <div class="flex flex-col gap-2.5 text-sm">
+                        <button onclick="openModal('privacy')" class="text-left hover:text-ramp-lime transition-colors cursor-pointer"><i class="fa-solid fa-shield-halved mr-2 text-ramp-lime"></i> Privacy Policy (POPIA compliant)</button>
+                        <button onclick="openModal('terms')" class="text-left hover:text-ramp-lime transition-colors cursor-pointer"><i class="fa-solid fa-file-contract mr-2 text-ramp-lime"></i> Terms of Use</button>
+                        <button onclick="openModal('conditions')" class="text-left hover:text-ramp-lime transition-colors cursor-pointer"><i class="fa-solid fa-handshake mr-2 text-ramp-lime"></i> Terms & Conditions</button>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white text-xs uppercase tracking-widest mb-4">Disclaimer & Safety</h4>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Arcknowledge is an aggregator referencing official platform domain pathways. We do not process payments, accept credentials, or store private user metadata. Verify URLs before performing sensitive actions.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t border-ramp-darkBorder pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+                <p>&copy; 2026 Arcknowledge. Created with youthy excellence. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <span class="hover:text-gray-300 cursor-pointer">South Africa</span>
+                    <span>&middot;</span>
+                    <span class="hover:text-gray-300 cursor-pointer">Version 2.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Persistent Floating Bottom Menu -->
+    <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-lg bg-ramp-dark/90 backdrop-blur-md border border-ramp-darkBorder rounded-2xl shadow-2xl px-4 sm:px-6 py-3 flex items-center justify-between text-white">
+        <!-- Left: Home Button -->
+        <button onclick="scrollToTop()" class="flex flex-col items-center justify-center gap-1 hover:text-ramp-lime transition-colors cursor-pointer">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[10px] font-bold tracking-wide">Home</span>
+        </button>
+
+        <!-- Center: Search Button -->
+        <button onclick="focusSearch()" class="flex flex-col items-center justify-center gap-1 hover:text-ramp-lime transition-colors cursor-pointer">
+            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+            <span class="text-[10px] font-bold tracking-wide">Search</span>
+        </button>
+
+        <button id="bottomFavoritesButton" onclick="toggleFavoritesView()" aria-pressed="false" class="flex flex-col items-center justify-center gap-1 hover:text-ramp-lime transition-colors cursor-pointer">
+            <i class="fa-solid fa-heart text-lg"></i>
+            <span id="bottomFavoritesLabel" class="text-[10px] font-bold tracking-wide">Favorites (0)</span>
+        </button>
+
+        <!-- Right: Notifications Button with Counter -->
+        <button onclick="handleNotificationClick()" class="relative flex flex-col items-center justify-center gap-1 hover:text-ramp-lime transition-colors cursor-pointer">
+            <div class="relative inline-block">
+                <i class="fa-solid fa-bell text-lg"></i>
+                <span id="notifBadge" class="absolute -top-1.5 -right-2 bg-ramp-lime text-ramp-dark font-black text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-ramp-dark">
+                    1
+                </span>
+            </div>
+            <span class="text-[10px] font-bold tracking-wide">Alerts</span>
+        </button>
+    </div>
+
+    <!-- Notification Popup Window Modal -->
+    <div id="notifModal" class="fixed inset-0 bg-ramp-dark/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="relative bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-ramp-border flex flex-col items-center">
+            <!-- Close icon button -->
+            <button onclick="closeNotifModal()" class="absolute top-4 right-4 text-gray-400 hover:text-ramp-dark transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <!-- Lime Speech Bubble Component -->
+            <div class="relative bg-ramp-lime text-black font-semibold text-sm rounded-2xl p-5 shadow-sm leading-relaxed border border-ramp-limeHover">
+                Thanks for choosing Arcknowledge Student Kit!
+                
+                <!-- Speech Bubble Tail pointing downward -->
+                <div class="absolute -bottom-2 left-8 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-ramp-lime"></div>
+            </div>
+
+            <!-- Dismiss Action Button -->
+            <button onclick="closeNotifModal()" class="mt-6 w-full bg-ramp-dark text-ramp-lime py-2.5 rounded-xl font-bold text-xs hover:bg-black transition-colors shadow-md">
+                Got it
+            </button>
+        </div>
+    </div>
+
+    <!-- Universal Modal Overlay -->
+    <div id="modalOverlay" class="fixed inset-0 bg-ramp-dark/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border border-ramp-border">
+            <div class="p-6 border-b border-ramp-border flex items-center justify-between bg-gray-50">
+                <h3 id="modalTitle" class="font-bold text-lg text-ramp-dark">Legal Documents</h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-ramp-dark transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto text-sm text-gray-600 leading-relaxed space-y-4 custom-scrollbar" id="modalBody">
+                <!-- Content injected dynamically -->
+            </div>
+            <div class="p-4 border-t border-ramp-border bg-gray-50 text-right">
+                <button onclick="closeModal()" class="px-5 py-2 bg-ramp-dark text-ramp-lime rounded-xl font-bold hover:bg-black transition-colors shadow-md">
+                    I Understand & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic PWA Slide-up Install Banner -->
+    <div id="pwaInstallBanner" class="fixed bottom-20 left-4 right-4 md:left-auto md:right-6 md:max-w-md bg-ramp-dark border border-ramp-darkBorder text-white p-4 rounded-2xl shadow-2xl z-50 flex items-center gap-4 transition-all duration-300 transform translate-y-24 opacity-0 hidden">
+        <!-- Circular PWA App Icon Design -->
+        <div class="w-12 h-12 bg-ramp-lime rounded-xl flex items-center justify-center shrink-0 text-ramp-dark font-black text-xl">
+            A
+        </div>
+        <div class="flex-1">
+            <h4 class="font-bold text-sm text-white">Install Arcknowledge Student Kit</h4>
+            <p class="text-xs text-gray-400">Access local South African student directories directly from your home screen.</p>
+        </div>
+        <div class="flex gap-2 shrink-0">
+            <button id="pwaCloseBtn" class="px-3 py-1.5 text-xs text-gray-400 hover:text-white transition-colors">
+                Maybe Later
+            </button>
+            <button id="pwaInstallBtn" class="bg-ramp-lime hover:bg-ramp-limeHover text-ramp-dark text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-md">
+                Install
+            </button>
+        </div>
+    </div>
+
+    <!-- App Logic Script -->
+    <script>
+        const directoryData = [
+            {
+                id: "uni",
+                name: "Universities",
+                icon: "fa-university",
+                desc: "Official South African public universities.",
+                tags: ["higher education", "campus", "degree", "admissions", "applications", "tertiary study"],
+                badge: "Higher Ed",
+                links: [
+                    { name: "University of Cape Town (UCT)", url: "https://www.uct.ac.za", target: "_blank", badge: "WC", type: "Public Uni", tags: ["cape town", "western cape", "admissions"] },
+                    { name: "University of the Witwatersrand (Wits)", url: "https://www.wits.ac.za", target: "_blank", badge: "GP", type: "Public Uni", tags: ["wits", "witwatersrand", "joburg", "johannesburg", "gauteng"] },
+                    { name: "University of Pretoria (UP)", url: "https://www.up.ac.za", target: "_blank", badge: "GP", type: "Public Uni" },
+                    { name: "Stellenbosch University (SU)", url: "https://www.sun.ac.za", target: "_blank", badge: "WC", type: "Public Uni" },
+                    { name: "University of Johannesburg (UJ)", url: "https://www.uj.ac.za", target: "_blank", badge: "GP", type: "Public Uni" },
+                    { name: "University of KwaZulu-Natal (UKZN)", url: "https://www.ukzn.ac.za", target: "_blank", badge: "KZN", type: "Public Uni" },
+                    { name: "University of South Africa (UNISA)", url: "https://www.unisa.ac.za", target: "_blank", badge: "Distance", type: "Public Uni" },
+                    { name: "North-West University (NWU)", url: "https://www.nwu.ac.za", target: "_blank", badge: "NW/GP", type: "Public Uni" },
+                    { name: "University of the Free State (UFS)", url: "https://www.ufs.ac.za", target: "_blank", badge: "FS", type: "Public Uni" },
+                    { name: "University of the Western Cape (UWC)", url: "https://www.uwc.ac.za", target: "_blank", badge: "WC", type: "Public Uni" },
+                    { name: "Nelson Mandela University (NMU)", url: "https://www.mandela.ac.za", target: "_blank", badge: "EC", type: "Public Uni" },
+                    { name: "Rhodes University (RU)", url: "https://www.ru.ac.za", target: "_blank", badge: "EC", type: "Public Uni" },
+                    { name: "University of Fort Hare (UFH)", url: "https://www.ufh.ac.za", target: "_blank", badge: "EC", type: "Public Uni" },
+                    { name: "University of Limpopo (UL)", url: "https://www.ul.ac.za", target: "_blank", badge: "LP", type: "Public Uni" },
+                    { name: "University of Venda (Univen)", url: "https://www.univen.ac.za", target: "_blank", badge: "LP", type: "Public Uni" },
+                    { name: "Sefako Makgatho Health Sciences University (SMU)", url: "https://www.smu.ac.za", target: "_blank", badge: "GP", type: "Public Uni" },
+                    { name: "Tshwane University of Technology (TUT)", url: "https://www.tut.ac.za", target: "_blank", badge: "GP", type: "Public Uni" },
+                    { name: "Cape Peninsula University of Technology (CPUT)", url: "https://www.cput.ac.za", target: "_blank", badge: "WC", type: "Public Uni" },
+                    { name: "Durban University of Technology (DUT)", url: "https://www.dut.ac.za", target: "_blank", badge: "KZN", type: "Public Uni" },
+                    { name: "Central University of Technology (CUT)", url: "https://www.cut.ac.za", target: "_blank", badge: "FS", type: "Public Uni" },
+                    { name: "Vaal University of Technology (VUT)", url: "https://www.vut.ac.za", target: "_blank", badge: "GP", type: "Public Uni" },
+                    { name: "University of Mpumalanga (UMP)", url: "https://www.ump.ac.za", target: "_blank", badge: "MP", type: "Public Uni" },
+                    { name: "Sol Plaatje University (SPU)", url: "https://www.spu.ac.za", target: "_blank", badge: "NC", type: "Public Uni" },
+                    { name: "Walter Sisulu University (WSU)", url: "https://www.wsu.ac.za", target: "_blank", badge: "EC", type: "Public Uni" },
+                    { name: "University of Zululand (UniZulu)", url: "https://www.unizulu.ac.za", target: "_blank", badge: "KZN", type: "Public Uni" },
+                    { name: "Mangosuthu University of Technology (MUT)", url: "https://www.mut.ac.za", target: "_blank", badge: "KZN", type: "Public Uni" }
+                ]
+            },
+            {
+                id: "private-college",
+                name: "Private Colleges",
+                icon: "fa-graduation-cap",
+                desc: "Leading private higher education providers and colleges in South Africa.",
+                badge: "Private Ed",
+                links: [
+                    { name: "Varsity College", url: "https://www.varsitycollege.co.za", target: "_blank", badge: "IIE", type: "Private College" },
+                    { name: "Rosebank College", url: "https://www.rosebankcollege.co.za", target: "_blank", badge: "IIE", type: "Private College" },
+                    { name: "Boston City Campus", url: "https://www.boston.co.za", target: "_blank", badge: "Boston", type: "Private College" },
+                    { name: "Damelin College", url: "https://www.damelin.co.za", target: "_blank", badge: "Damelin", type: "Private College" },
+                    { name: "MANCOSA", url: "https://www.mancosa.co.za", target: "_blank", badge: "MANCOSA", type: "Business School" },
+                    { name: "Milpark Education", url: "https://www.milpark.ac.za", target: "_blank", badge: "Milpark", type: "Private University" },
+                    { name: "Stadio Higher Education", url: "https://stadio.ac.za", target: "_blank", badge: "Stadio", type: "Private Uni" },
+                    { name: "Eduvos (Pearson Institute)", url: "https://www.eduvos.com", target: "_blank", badge: "Eduvos", type: "Private College" },
+                    { name: "CTU Training Solutions", url: "https://ctutraining.ac.za", target: "_blank", badge: "CTU", type: "IT & Design" },
+                    { name: "Richfield Graduate Institute", url: "https://www.richfield.ac.za", target: "_blank", badge: "Richfield", type: "Tech & Business" },
+                    { name: "AIE (Academic Institute of Excellence)", url: "https://www.aie.ac", target: "_blank", badge: "AIE", type: "Tech & Drafting" },
+                    { name: "Vega School", url: "https://www.vegaschool.com", target: "_blank", badge: "IIE", type: "Design & Brand" },
+                    { name: "AFDA Film School", url: "https://www.afda.co.za", target: "_blank", badge: "AFDA", type: "Creative Arts" },
+                    { name: "SACAP (Applied Psychology)", url: "https://www.psychologyschool.co.za", target: "_blank", badge: "SACAP", type: "Psychology" },
+                    { name: "Inscape Education Group", url: "https://www.inscape.ac", target: "_blank", badge: "Inscape", type: "Design" },
+                    { name: "Regent Business School", url: "https://www.regent.ac.za", target: "_blank", badge: "Regent", type: "Business School" },
+                    { name: "IMM Graduate School", url: "https://www.imm.ac.za", target: "_blank", badge: "IMM", type: "Marketing & Media" },
+                    { name: "Red & Yellow Creative School", url: "https://www.redandyellow.co.za", target: "_blank", badge: "R&Y", type: "Creative School" },
+                    { name: "Oxbridge Academy", url: "https://www.oxbridgeacademy.edu.za", target: "_blank", badge: "Distance", type: "Online College" },
+                    { name: "Lyceum College", url: "https://www.lyceum.co.za", target: "_blank", badge: "Distance", type: "Distance Learning" },
+                    { name: "Regenesys Business School", url: "https://www.regenesys.net", target: "_blank", badge: "Regenesys", type: "Business School" },
+                    { name: "The Independent Institute of Education", url: "https://www.iie.ac.za", target: "_blank", badge: "IIE", type: "Education Group" },
+                    { name: "Damelin Correspondence College", url: "https://www.damelin.co.za", target: "_blank", badge: "Damelin", type: "Distance Learning" },
+                    { name: "Boston City Campus Distance Learning", url: "https://www.boston.co.za", target: "_blank", badge: "Boston", type: "Distance Learning" }
+                ]
+            },
+            {
+                id: "tvet",
+                name: "TVET Colleges",
+                icon: "fa-gears",
+                desc: "Technical and Vocational Training hubs for skills development.",
+                badge: "Vocational",
+                links: [
+                    { name: "Buffalo City TVET College", url: "https://www.buffalocitycollege.co.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "Eastcape Midlands TVET College", url: "https://www.emcol.co.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "Ingwe TVET College", url: "https://www.ingwecollege.co.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "King Hintsa TVET College", url: "https://www.kinghintsa.edu.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "King Sabata Dalindyebo TVET College", url: "https://www.ksdcollege.edu.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "Lovedale TVET College", url: "https://www.lovedalecollege.co.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "OR Tambo Inland TVET College", url: "https://www.ortamboinlandcollege.co.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "Port Elizabeth TVET College", url: "https://www.pecollege.co.za", target: "_blank", badge: "EC", type: "Public TVET" },
+                    { name: "Flavius Mareka TVET College", url: "https://www.flaviusmareka.net", target: "_blank", badge: "FS", type: "Public TVET" },
+                    { name: "Goldfields TVET College", url: "https://www.goldfieldstvet.edu.za", target: "_blank", badge: "FS", type: "Public TVET" },
+                    { name: "Maluti TVET College", url: "https://www.maluticollege.co.za", target: "_blank", badge: "FS", type: "Public TVET" },
+                    { name: "Motheo TVET College", url: "https://www.motheotvet.co.za", target: "_blank", badge: "FS", type: "Public TVET" },
+                    { name: "Central Johannesburg TVET College", url: "https://www.cjcollege.co.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Ekurhuleni East TVET College", url: "https://www.eec.edu.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Ekurhuleni West TVET College", url: "https://www.ewc.edu.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Sedibeng TVET College", url: "https://www.sedibengcollege.co.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "South West Gauteng TVET College", url: "https://www.swgc.co.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Tshwane North TVET College", url: "https://www.tnc.edu.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Tshwane South TVET College", url: "https://www.tsc.edu.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Western TVET College", url: "https://www.westerncollege.co.za", target: "_blank", badge: "GP", type: "Public TVET" },
+                    { name: "Capricorn TVET College", url: "https://www.capricorncollege.edu.za", target: "_blank", badge: "LP", type: "Public TVET" },
+                    { name: "Lephalale TVET College", url: "https://www.lephalalecollege.co.za", target: "_blank", badge: "LP", type: "Public TVET" },
+                    { name: "Mopani South East TVET College", url: "https://www.mopani.edu.za", target: "_blank", badge: "LP", type: "Public TVET" },
+                    { name: "Sekhukhune TVET College", url: "https://www.sekhukhunecollege.co.za", target: "_blank", badge: "LP", type: "Public TVET" },
+                    { name: "Vhembe TVET College", url: "https://www.vhembecollege.co.za", target: "_blank", badge: "LP", type: "Public TVET" },
+                    { name: "Waterberg TVET College", url: "https://www.waterbergcollege.co.za", target: "_blank", badge: "LP", type: "Public TVET" },
+                    { name: "Elangeni TVET College", url: "https://www.elangeni.edu.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Esayidi TVET College", url: "https://www.esayidi.edu.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Majuba TVET College", url: "https://www.majuba.edu.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Mnambithi TVET College", url: "https://www.mnambithi.edu.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Thekwini TVET College", url: "https://www.thekwini.edu.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Umfolozi TVET College", url: "https://www.umfolozi.edu.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Coastal TVET College", url: "https://www.coastalcollege.co.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Mthashana TVET College", url: "https://www.mthashanacollege.co.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Boland TVET College", url: "https://www.bolandcollege.edu.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "College of Cape Town", url: "https://www.cct.edu.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "False Bay TVET College", url: "https://www.falsebaycollege.co.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "George TVET College", url: "https://www.georgecollege.co.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "South Cape TVET College", url: "https://www.southcapecollege.co.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "West Coast TVET College", url: "https://www.westcoastcollege.co.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "Northlink TVET College", url: "https://www.northlink.co.za", target: "_blank", badge: "WC", type: "Public TVET" },
+                    { name: "Gert Sibande TVET College", url: "https://www.gertsibandecollege.co.za", target: "_blank", badge: "MP", type: "Public TVET" },
+                    { name: "Nkangala TVET College", url: "https://www.ntc.edu.za", target: "_blank", badge: "MP", type: "Public TVET" },
+                    { name: "Orbit TVET College", url: "https://www.orbitcollege.co.za", target: "_blank", badge: "NW", type: "Public TVET" },
+                    { name: "Taletso TVET College", url: "https://www.taletso.edu.za", target: "_blank", badge: "NW", type: "Public TVET" },
+                    { name: "Vuselela TVET College", url: "https://www.vuselela.edu.za", target: "_blank", badge: "NW", type: "Public TVET" },
+                    { name: "Northern Cape Rural TVET College", url: "https://www.ncruralcollege.co.za", target: "_blank", badge: "NC", type: "Public TVET" },
+                    { name: "Northern Cape Urban TVET College", url: "https://www.ncurbancollege.co.za", target: "_blank", badge: "NC", type: "Public TVET" },
+                    { name: "Umzimkhulu TVET College", url: "https://www.umzimkhulucollege.co.za", target: "_blank", badge: "KZN", type: "Public TVET" },
+                    { name: "Mthatha TVET College", url: "https://www.mthathacollege.co.za", target: "_blank", badge: "EC", type: "Public TVET" }
+                ]
+            },
+            {
+                id: "online-school",
+                name: "Online Schools",
+                icon: "fa-laptop-code",
+                desc: "Primary, high-school, and hybrid online learning options in South Africa.",
+                badge: "Virtual Ed",
+                links: [
+                    { name: "UCT Online High School", url: "https://www.uctonlinehighschool.com", target: "_blank", badge: "South Africa", type: "Curriculum" },
+                    { name: "Teneo Online School", url: "https://www.teneoschool.co.za", target: "_blank", badge: "South Africa", type: "Live Lessons" },
+                    { name: "Curro Online", url: "https://www.curro.co.za/schools/curro-online/", target: "_blank", badge: "South Africa", type: "CAPS Curriculum" },
+                    { name: "CambriLearn South Africa", url: "https://www.cambrilearn.com", target: "_blank", badge: "International", type: "British & CAPS" },
+                    { name: "Brainline Cloud School", url: "https://brainline.com", target: "_blank", badge: "South Africa", type: "IEB Curriculum" },
+                    { name: "Impaq Homeschooling", url: "https://www.impaq.co.za", target: "_blank", badge: "South Africa", type: "CAPS Curriculum" },
+                    { name: "Oxbridge Academy", url: "https://www.oxbridgeacademy.edu.za", target: "_blank", badge: "South Africa", type: "Distance Learning" },
+                    { name: "Matric College", url: "https://www.matric.co.za", target: "_blank", badge: "South Africa", type: "Matric Support" },
+                    { name: "Bellview Institute of Distance Learning", url: "https://www.bellviewinstitute.co.za", target: "_blank", badge: "South Africa", type: "Distance Education" },
+                    { name: "Lyceum College", url: "https://www.lyceum.co.za", target: "_blank", badge: "South Africa", type: "Distance Learning" },
+                    { name: "Skills Academy", url: "https://www.skillsacademy.co.za", target: "_blank", badge: "South Africa", type: "Online Training" },
+                    { name: "UNISA Online Learning", url: "https://www.unisa.ac.za", target: "_blank", badge: "South Africa", type: "Open Distance Learning" },
+                    { name: "Stadio Online Learning", url: "https://stadio.ac.za", target: "_blank", badge: "South Africa", type: "Hybrid Learning" },
+                    { name: "MANCOSA Online", url: "https://www.mancosa.co.za", target: "_blank", badge: "South Africa", type: "Flexible Study" },
+                    { name: "Eduvos Online", url: "https://www.eduvos.com", target: "_blank", badge: "South Africa", type: "Digital Campus" },
+                    { name: "Damelin Correspondence College", url: "https://www.damelin.co.za", target: "_blank", badge: "South Africa", type: "Distance Education" },
+                    { name: "Milpark Education Online", url: "https://www.milpark.ac.za", target: "_blank", badge: "South Africa", type: "Flexible Study" },
+                    { name: "The Independent Institute of Education Online", url: "https://www.iie.ac.za", target: "_blank", badge: "South Africa", type: "Online Campus" },
+                    { name: "Crimson Global Academy", url: "https://www.crimsonglobalacademy.com", target: "_blank", badge: "Global", type: "AP & A-Levels" },
+                    { name: "K12 International Academy", url: "https://www.icademy.com", target: "_blank", badge: "Global", type: "US Curriculum" },
+                    { name: "Wolsey Hall Oxford", url: "https://wolseyhall.org.uk", target: "_blank", badge: "Global", type: "Home Study" }
+                ]
+            },
+            {
+                id: "bursary",
+                name: "Bursaries & Student Loans",
+                icon: "fa-hand-holding-dollar",
+                desc: "Tuition funding, student aid schemes, and crowd-sourced fees.",
+                tags: ["scholarships", "financial aid", "student funding", "tuition", "fees", "grants", "loans", "nsfas"],
+                badge: "Financing",
+                links: [
+                    { name: "NSFAS Application Portal", url: "https://www.nsfas.org.za", target: "_blank", badge: "Government", type: "Financial Aid", tags: ["allowance", "application", "student aid", "funding"] },
+                    { name: "Funza Lushaka (Teaching)", url: "http://www.funzalushaka.doe.gov.za", target: "_blank", badge: "Teaching", type: "Bursary Scheme" },
+                    { name: "ISFAP Funding Portal", url: "https://www.isfap.co.za", target: "_blank", badge: "Missing Middle", type: "Support" },
+                    { name: "Fundi Student Loans", url: "https://www.fundi.co.za", target: "_blank", badge: "Private", type: "Study Loan" },
+                    { name: "Feenix Crowdfunding", url: "https://feenix.org", target: "_blank", badge: "Community", type: "Crowdfunding" },
+                    { name: "Bursaries South Africa Guide", url: "https://www.bursariesportal.co.za", target: "_blank", badge: "Directory", type: "Database" },
+                    { name: "SA Bursaries Portal", url: "https://www.zabursaries.co.za", target: "_blank", badge: "Updates", type: "Database" },
+                    { name: "Nedbank Bursary Programme", url: "https://jobs.nedbank.co.za", target: "_blank", badge: "Corporate", type: "Bursary" },
+                    { name: "Standard Bank Bursaries", url: "https://www.standardbank.com", target: "_blank", badge: "Corporate", type: "Bursary" },
+                    { name: "FirstRand Foundation Bursary", url: "https://www.firstrand.co.za", target: "_blank", badge: "Corporate", type: "Bursary" },
+                    { name: "National Student Financial Aid Scheme (NSFAS)", url: "https://www.nsfas.org.za", target: "_blank", badge: "Government", type: "Full Tuition Support" },
+                    { name: "Department of Basic Education Bursaries", url: "https://www.education.gov.za", target: "_blank", badge: "Government", type: "Education Funding" },
+                    { name: "Student Hero Funding", url: "https://www.studenthero.co.za", target: "_blank", badge: "Private", type: "Student Loan" },
+                    { name: "Capitec Student Finance", url: "https://www.capitecbank.co.za", target: "_blank", badge: "Bank", type: "Education Finance" },
+                    { name: "Absa Student Loans", url: "https://www.absa.co.za", target: "_blank", badge: "Bank", type: "Study Loan" },
+                    { name: "Nedbank Student Loans", url: "https://www.nedbank.co.za", target: "_blank", badge: "Bank", type: "Study Loan" },
+                    { name: "African Bank Education Finance", url: "https://www.africanbank.co.za", target: "_blank", badge: "Bank", type: "Education Finance" },
+                    { name: "SASFA Student Support", url: "https://www.sasfa.org.za", target: "_blank", badge: "Support", type: "Funding Guide" },
+                    { name: "StudyTrust Bursaries", url: "https://www.studytrust.org.za", target: "_blank", badge: "Foundation", type: "Bursary" },
+                    { name: "The SANDF Education Bursary", url: "https://www.dod.mil.za", target: "_blank", badge: "Public Sector", type: "Bursary" },
+                    { name: "Fasset Bursaries", url: "https://www.fasset.org.za", target: "_blank", badge: "Sector", type: "Skills Funding" }
+                ]
+            },
+            {
+                id: "accommodation",
+                name: "Student Accommodation",
+                icon: "fa-hotel",
+                desc: "Accredited private student housing and off-campus digs.",
+                tags: ["housing", "residence", "res", "digs", "rent", "rooms", "flat", "roommates", "student living"],
+                badge: "Housing",
+                links: [
+                    { name: "DigsConnect Room Finder", url: "https://www.digsconnect.com", target: "_blank", badge: "National", type: "Aggregator", tags: ["digs", "rooms", "rentals", "roommates", "housing"] },
+                    { name: "South Point Accommodation", url: "https://www.staysouthpoint.co.za", target: "_blank", badge: "Gauteng/KZN/EC", type: "Student Residence" },
+                    { name: "Respublica Student Living", url: "https://www.respublica.co.za", target: "_blank", badge: "GP/WC/KZN", type: "Student Residence" },
+                    { name: "Campus Key Homes", url: "https://www.campuskey.co.za", target: "_blank", badge: "National", type: "Premium Living" },
+                    { name: "Varsity Lodge Portfolio", url: "https://www.varsity-lodge.co.za", target: "_blank", badge: "GP/WC/FS", type: "Affordable Beds" },
+                    { name: "Adowa Infrastructure Living", url: "https://adowa.co.za", target: "_blank", badge: "GP/EC", type: "Modern Digs" },
+                    { name: "MyDomain Student Living", url: "https://www.mydomainliving.co.za", target: "_blank", badge: "Western Cape", type: "Co-Living Space" },
+                    { name: "The Student Accommodation (TSA)", url: "https://thestudentaccommodation.co.za", target: "_blank", badge: "National", type: "Database" },
+                    { name: "Student Housing South Africa", url: "https://www.studenthousing.co.za", target: "_blank", badge: "National", type: "Housing Platform" },
+                    { name: "University Residence Finder", url: "https://www.residencefinder.co.za", target: "_blank", badge: "National", type: "Residence Search" },
+                    { name: "UniHabitat Student Living", url: "https://www.unihabitat.co.za", target: "_blank", badge: "National", type: "Shared Housing" },
+                    { name: "The Roommate Hub", url: "https://www.roommatehub.co.za", target: "_blank", badge: "National", type: "Room Share" },
+                    { name: "OffCampus Student Housing", url: "https://www.offcampus.co.za", target: "_blank", badge: "National", type: "Private Rentals" },
+                    { name: "Nestify Student Homes", url: "https://www.nestify.co.za", target: "_blank", badge: "National", type: "Student Rentals" }
+                ]
+            },
+            {
+                id: "furniture",
+                name: "Furniture Stores",
+                icon: "fa-couch",
+                desc: "South African furniture, homeware, and décor stores for student rooms and homes.",
+                badge: "Home",
+                links: [
+                    { name: "Woolworths Home", url: "https://www.woolworths.co.za", target: "_blank", badge: "South Africa", type: "Furniture & Home" },
+                    { name: "Mr Price Home", url: "https://www.mrpricehome.com", target: "_blank", badge: "South Africa", type: "Homeware" },
+                    { name: "Homechoice", url: "https://www.homechoice.co.za", target: "_blank", badge: "South Africa", type: "Furniture & Appliances" },
+                    { name: "Furniture City", url: "https://www.furniturecity.co.za", target: "_blank", badge: "South Africa", type: "Furniture Retail" },
+                    { name: "Coricraft", url: "https://www.coricraft.co.za", target: "_blank", badge: "South Africa", type: "Furniture & Décor" },
+                    { name: "Mokoko", url: "https://www.mokoko.co.za", target: "_blank", badge: "South Africa", type: "Furniture & Design" },
+                    { name: "The Bed Shop", url: "https://thebedshop.co.za", target: "_blank", badge: "South Africa", type: "Beds & Furniture" },
+                    { name: "N Furniture", url: "https://www.nfurniture.co.za", target: "_blank", badge: "South Africa", type: "Furniture Outlet" },
+                    { name: "HOMETECH", url: "https://www.hometech.co.za", target: "_blank", badge: "South Africa", type: "Home Furnishings" },
+                    { name: "AFA Furniture", url: "https://www.afafurniture.co.za", target: "_blank", badge: "South Africa", type: "Furniture & Appliances" },
+                    { name: "Moffett Furniture", url: "https://www.moffettfurniture.com", target: "_blank", badge: "South Africa", type: "Furniture Stores" },
+                    { name: "Casa Italia", url: "https://www.casa-italia.co.za", target: "_blank", badge: "South Africa", type: "Furniture & Décor" },
+                    { name: "Furniture Warehouse", url: "https://www.furniturewarehouse.co.za", target: "_blank", badge: "South Africa", type: "Furniture Retail" },
+                    { name: "Harris Furniture", url: "https://www.harrismatthews.co.za", target: "_blank", badge: "South Africa", type: "Furniture Stores" },
+                    { name: "The Furniture Warehouse", url: "https://www.thefurniturewarehouse.co.za", target: "_blank", badge: "South Africa", type: "Furniture Outlet" }
+                ]
+            },
+            {
+                id: "textbook",
+                name: "Textbook Stores",
+                icon: "fa-book-open",
+                desc: "New, used, and digital textbook outlets.",
+                tags: ["books", "study materials", "academic resources", "used books", "e-books", "learning materials"],
+                badge: "Books",
+                links: [
+                    { name: "Van Schaik Bookstore", url: "https://www.vanschaik.com", target: "_blank", badge: "National", type: "Retail Store" },
+                    { name: "Wize Books Portal", url: "https://www.wizebooks.co.za", target: "_blank", badge: "Online/PTA", type: "Niche Academic" },
+                    { name: "Takealot Textbooks Dept.", url: "https://www.takealot.com/books-co-za/textbooks", target: "_blank", badge: "Online Only", type: "E-Commerce" },
+                    { name: "Snapplify Digital Books", url: "https://snapplify.com", target: "_blank", badge: "Global/SA", type: "Digital Reader" },
+                    { name: "Sherwood Books Online", url: "https://www.sherwoodbooks.co.za", target: "_blank", badge: "KZN/Online", type: "Academic Supplier" },
+                    { name: "Protea Books", url: "https://www.proteabooks.com", target: "_blank", badge: "National", type: "Publishing/Sales" },
+                    { name: "Bookdealers (Used)", url: "https://bookdealers.co.za", target: "_blank", badge: "Gauteng/Online", type: "Second-Hand" },
+                    { name: "Exclusive Books", url: "https://www.exclusivebooks.co.za", target: "_blank", badge: "National", type: "Book Retailer" },
+                    { name: "Loot Online Books", url: "https://www.loot.co.za", target: "_blank", badge: "Online", type: "Books & Stationery" },
+                    { name: "Kalahari Books", url: "https://www.kalahari.com", target: "_blank", badge: "Online", type: "Academic & Fiction" },
+                    { name: "The Learning Store", url: "https://www.thelearningstore.co.za", target: "_blank", badge: "Online", type: "Educational Resources" },
+                    { name: "Cambridge University Press SA", url: "https://www.cambridge.org/za", target: "_blank", badge: "Educational", type: "School Books" },
+                    { name: "Oxford University Press South Africa", url: "https://global.oup.com/africa/", target: "_blank", badge: "Educational", type: "Academic Books" }
+                ]
+            },
+            {
+                id: "study-tools",
+                name: "Study & Productivity Tools",
+                icon: "fa-pen-to-square",
+                desc: "Tools for research, writing, referencing, and organising coursework.",
+                tags: ["assignments", "essays", "citations", "referencing", "productivity", "note taking", "office software"],
+                badge: "Study Smarter",
+                links: [
+                    { name: "Google Scholar", url: "https://scholar.google.com", target: "_blank", badge: "Research", type: "Academic Search" },
+                    { name: "Zotero", url: "https://www.zotero.org", target: "_blank", badge: "Free Tool", type: "Reference Manager" },
+                    { name: "Microsoft 365 Education", url: "https://www.microsoft.com/en-us/education/products/office", target: "_blank", badge: "Education", type: "Office Suite" },
+                    { name: "Overleaf", url: "https://www.overleaf.com", target: "_blank", badge: "Free Tier", type: "Collaborative Writing" },
+                    { name: "LibreOffice", url: "https://www.libreoffice.org", target: "_blank", badge: "Free & Open Source", type: "Office Suite" }
+                ]
+            },
+            {
+                id: "open-learning",
+                name: "Free Learning & Research Resources",
+                icon: "fa-book-open-reader",
+                desc: "Open educational materials, online lessons, and African research.",
+                tags: ["free courses", "open access", "study help", "tutorials", "academic papers", "journals", "textbooks"],
+                badge: "Open Learning",
+                links: [
+                    { name: "Siyavula", url: "https://www.siyavula.com", target: "_blank", badge: "South Africa", type: "Open Textbooks & Practice" },
+                    { name: "OpenStax", url: "https://openstax.org", target: "_blank", badge: "Free Textbooks", type: "Open Education" },
+                    { name: "Khan Academy", url: "https://www.khanacademy.org", target: "_blank", badge: "Free Learning", type: "Online Lessons" },
+                    { name: "SciELO South Africa", url: "https://www.scielo.org.za", target: "_blank", badge: "South Africa", type: "Open Access Research" },
+                    { name: "African Journals Online", url: "https://www.ajol.info", target: "_blank", badge: "Africa", type: "Research Journals" }
+                ]
+            },
+            {
+                id: "student-wellbeing",
+                name: "Student Health & Wellbeing",
+                icon: "fa-heart-pulse",
+                desc: "Mental health support and trusted public health information.",
+                tags: ["counselling", "counseling", "mental health", "wellness", "support", "stress", "health services"],
+                badge: "Wellbeing",
+                links: [
+                    { name: "Higher Health", url: "https://higherhealth.ac.za", target: "_blank", badge: "South Africa", type: "Student Health & Wellness" },
+                    { name: "South African Depression and Anxiety Group (SADAG)", url: "https://www.sadag.org", target: "_blank", badge: "South Africa", type: "Mental Health Support" },
+                    { name: "Lifeline South Africa", url: "https://lifelinesa.co.za", target: "_blank", badge: "South Africa", type: "Counselling & Support" },
+                    { name: "National Department of Health", url: "https://www.health.gov.za", target: "_blank", badge: "Government", type: "Health Information" }
+                ]
+            },
+            {
+                id: "social-media",
+                name: "Social Media Platforms",
+                icon: "fa-share-nodes",
+                desc: "Stay connected, share moments, and network with global communities.",
+                badge: "Socials",
+                links: [
+                    { name: "TikTok", url: "https://www.tiktok.com", target: "_blank", badge: "Entertainment", type: "Video Sharing" },
+                    { name: "Instagram", url: "https://www.instagram.com", target: "_blank", badge: "Lifestyle", type: "Photo & Reels" },
+                    { name: "X (formerly Twitter)", url: "https://x.com", target: "_blank", badge: "Real-Time", type: "Microblogging" },
+                    { name: "Facebook South Africa", url: "https://www.facebook.com", target: "_blank", badge: "Community", type: "Social Network" },
+                    { name: "LinkedIn Career Network", url: "https://www.linkedin.com", target: "_blank", badge: "Networking", type: "Professional Hub" },
+                    { name: "Pinterest Ideas", url: "https://www.pinterest.com", target: "_blank", badge: "Inspiration", type: "Visual Board" },
+                    { name: "Reddit Forums", url: "https://www.reddit.com", target: "_blank", badge: "Communities", type: "Discussions" },
+                    { name: "Snapchat", url: "https://www.snapchat.com", target: "_blank", badge: "Stories", type: "Short-Form Media" },
+                    { name: "Threads", url: "https://www.threads.net", target: "_blank", badge: "Text Sharing", type: "Microblogging" },
+                    { name: "Telegram", url: "https://telegram.org", target: "_blank", badge: "Channels", type: "Messaging & Groups" },
+                    { name: "Discord", url: "https://discord.com", target: "_blank", badge: "Communities", type: "Voice & Chat" },
+                    { name: "WhatsApp", url: "https://www.whatsapp.com", target: "_blank", badge: "Messaging", type: "Community Chats" },
+                    { name: "BeReal", url: "https://bereal.com", target: "_blank", badge: "Daily Moments", type: "Photo Sharing" },
+                    { name: "Tumblr", url: "https://www.tumblr.com", target: "_blank", badge: "Creative", type: "Microblogging" }
+                ]
+            },
+            {
+                id: "app-stores",
+                name: "App Stores",
+                icon: "fa-mobile-screen-button",
+                desc: "Official app marketplaces for downloading mobile apps, games, and digital tools.",
+                badge: "Apps",
+                links: [
+                    { name: "Google Play Store", url: "https://play.google.com", target: "_blank", badge: "Android", type: "App Marketplace" },
+                    { name: "Apple App Store", url: "https://www.apple.com/app-store/", target: "_blank", badge: "iOS", type: "App Marketplace" },
+                    { name: "Microsoft Store", url: "https://apps.microsoft.com", target: "_blank", badge: "Windows", type: "App Marketplace" },
+                    { name: "Samsung Galaxy Store", url: "https://www.samsung.com/za/apps/galaxy-store/", target: "_blank", badge: "Samsung", type: "App Marketplace" },
+                    { name: "Huawei AppGallery", url: "https://appgallery.huawei.com", target: "_blank", badge: "Huawei", type: "App Marketplace" },
+                    { name: "Amazon Appstore", url: "https://www.amazon.com/appstore", target: "_blank", badge: "Amazon", type: "App Marketplace" },
+                    { name: "Aptoide", url: "https://en.aptoide.com", target: "_blank", badge: "Alternative Android", type: "App Marketplace" },
+                    { name: "F-Droid", url: "https://f-droid.org", target: "_blank", badge: "Open Source", type: "App Marketplace" },
+                    { name: "GetJar", url: "https://www.getjar.com", target: "_blank", badge: "Classic Mobile", type: "App Marketplace" },
+                    { name: "APKMirror", url: "https://www.apkmirror.com", target: "_blank", badge: "APK Downloads", type: "App Archive" },
+                    { name: "Uptodown", url: "https://en.uptodown.com", target: "_blank", badge: "Android Apps", type: "App Marketplace" },
+                    { name: "Aurora Store", url: "https://auroraoss.com", target: "_blank", badge: "Anonymous Play", type: "App Marketplace" }
+                ]
+            },
+            {
+                id: "barbershop",
+                name: "Barbershops & Salons",
+                icon: "fa-scissors",
+                desc: "South African barbershops, salons, beauty studios, and grooming services.",
+                badge: "Grooming",
+                links: [
+                    { name: "Toni & Guy South Africa", url: "https://www.toniandguy.co.za", target: "_blank", badge: "National", type: "Salon" },
+                    { name: "Nail Bar South Africa", url: "https://www.nailbar.co.za", target: "_blank", badge: "National", type: "Beauty Salon" },
+                    { name: "The Barber Shop", url: "https://www.thebarbershop.co.za", target: "_blank", badge: "National", type: "Barbershop" },
+                    { name: "Mizani Salon", url: "https://www.mizani.co.za", target: "_blank", badge: "National", type: "Hair Salon" },
+                    { name: "Sassoon SA", url: "https://www.sassoon.co.za", target: "_blank", badge: "National", type: "Hair Salon" },
+                    { name: "Hair & Beauty South Africa", url: "https://www.hairandbeauty.co.za", target: "_blank", badge: "National", type: "Beauty Directory" },
+                    { name: "Barber Shop SA", url: "https://www.barbershopsa.co.za", target: "_blank", badge: "National", type: "Barbershop" },
+                    { name: "The Great Barber", url: "https://www.thegreatbarber.co.za", target: "_blank", badge: "National", type: "Barbershop" },
+                    { name: "Avenue Salons", url: "https://www.avenuesalons.co.za", target: "_blank", badge: "National", type: "Salon" },
+                    { name: "Mooiriver Salon", url: "https://www.mooiriversalon.co.za", target: "_blank", badge: "National", type: "Salon" },
+                    { name: "The Cut Barbers", url: "https://www.thecutbarbers.co.za", target: "_blank", badge: "National", type: "Barbershop" },
+                    { name: "Fades & Co", url: "https://www.fadesandco.co.za", target: "_blank", badge: "National", type: "Barbershop" },
+                    { name: "The Groom Room", url: "https://www.thegroomroom.co.za", target: "_blank", badge: "National", type: "Grooming Studio" },
+                    { name: "The Hair Lounge", url: "https://www.thehairlounge.co.za", target: "_blank", badge: "National", type: "Salon" },
+                    { name: "City Cuts Salon", url: "https://www.citycuts.co.za", target: "_blank", badge: "National", type: "Hair Salon" }
+                ]
+            },
+            {
+                id: "restaurants",
+                name: "Restaurants",
+                icon: "fa-utensils",
+                desc: "South African restaurants, food delivery platforms, and dining discovery sites.",
+                badge: "Food",
+                links: [
+                    { name: "Restaurant Guru South Africa", url: "https://www.restaurantguru.com", target: "_blank", badge: "Dining Discovery", type: "Restaurant Directory" },
+                    { name: "Eat Out South Africa", url: "https://www.eatout.co.za", target: "_blank", badge: "Restaurant Guide", type: "Dining Guide" },
+                    { name: "Food24", url: "https://www.food24.com", target: "_blank", badge: "Food News", type: "Food Portal" },
+                    { name: "SA Restaurant Directory", url: "https://www.sarestaurantdirectory.com", target: "_blank", badge: "Local Listings", type: "Directory" },
+                    { name: "Zomato South Africa", url: "https://www.zomato.com/za", target: "_blank", badge: "Food Discovery", type: "Restaurant Finder" },
+                    { name: "Uber Eats South Africa", url: "https://www.ubereats.com/za", target: "_blank", badge: "Food Delivery", type: "Delivery App" },
+                    { name: "Mr D Food", url: "https://www.mrdfood.com", target: "_blank", badge: "Food Delivery", type: "Delivery App" },
+                    { name: "OrderIn South Africa", url: "https://www.orderin.co.za", target: "_blank", badge: "Local Delivery", type: "Food App" },
+                    { name: "The Fork South Africa", url: "https://www.thefork.com/za", target: "_blank", badge: "Restaurant Booking", type: "Booking Platform" },
+                    { name: "DinePlan South Africa", url: "https://www.dineplan.com", target: "_blank", badge: "Table Booking", type: "Reservation Platform" },
+                    { name: "OpenTable South Africa", url: "https://www.opentable.com", target: "_blank", badge: "Online Reservations", type: "Booking Platform" },
+                    { name: "Mugg & Bean", url: "https://www.muggandbean.co.za", target: "_blank", badge: "Cafe & Grill", type: "Restaurant Chain" },
+                    { name: "Nando's South Africa", url: "https://www.nandos.co.za", target: "_blank", badge: "Peri-Peri", type: "Restaurant Chain" },
+                    { name: "Wimpy South Africa", url: "https://www.wimpy.co.za", target: "_blank", badge: "Breakfast & Burgers", type: "Restaurant Chain" },
+                    { name: "Debonairs Pizza", url: "https://www.debonairspizza.co.za", target: "_blank", badge: "Pizza Delivery", type: "Restaurant Chain" }
+                ]
+            },
+            {
+                id: "ai-assistant",
+                name: "AI Assistants",
+                icon: "fa-brain",
+                desc: "Generative artificial intelligence search and text systems.",
+                badge: "AI Tools",
+                links: [
+                    { name: "Grok (xAI)", url: "https://grok.com", target: "_blank", badge: "xAI", type: "Conversational AI" },
+                    { name: "ChatGPT (OpenAI)", url: "https://chatgpt.com", target: "_blank", badge: "OpenAI", type: "Conversational" },
+                    { name: "Claude AI (Anthropic)", url: "https://claude.ai", target: "_blank", badge: "Anthropic", type: "Analytical Writing" },
+                    { name: "Gemini AI (Google)", url: "https://gemini.google.com", target: "_blank", badge: "Google Ecosystem", type: "Multimodal Assistant" },
+                    { name: "Microsoft Copilot", url: "https://copilot.microsoft.com", target: "_blank", badge: "Microsoft", type: "Productivity AI" },
+                    { name: "Perplexity AI Search", url: "https://www.perplexity.ai", target: "_blank", badge: "Research Engine", type: "Answers with Sources" },
+                    { name: "DeepSeek AI", url: "https://www.deepseek.com", target: "_blank", badge: "DeepSeek", type: "Reasoning Engine" },
+                    { name: "Poe AI Aggregator", url: "https://poe.com", target: "_blank", badge: "Quora Hub", type: "Multi-Bot Access" },
+                    { name: "You.com AI Search", url: "https://you.com", target: "_blank", badge: "Search + AI", type: "Assistant" },
+                    { name: "Pi by Inflection", url: "https://pi.ai", target: "_blank", badge: "Inflection", type: "Companion AI" },
+                    { name: "Character.AI", url: "https://character.ai", target: "_blank", badge: "Creative", type: "Roleplay AI" }
+                ]
+            },
+            {
+                id: "search-engine",
+                name: "Search Engines",
+                icon: "fa-globe",
+                desc: "Core entryways to index and crawl global web resources.",
+                badge: "Discovery",
+                links: [
+                    { name: "Google South Africa", url: "https://www.google.co.za", target: "_blank", badge: "Global Standard", type: "Search Engine" },
+                    { name: "DuckDuckGo Privacy Search", url: "https://duckduckgo.com", target: "_blank", badge: "Privacy Focused", type: "Search Engine" },
+                    { name: "Microsoft Bing", url: "https://www.bing.com", target: "_blank", badge: "Enterprise", type: "Search Engine" },
+                    { name: "Ecosia (Tree Planting)", url: "https://www.ecosia.org", target: "_blank", badge: "Eco-Friendly", type: "Search Engine" },
+                    { name: "Yahoo! Search", url: "https://search.yahoo.com", target: "_blank", badge: "Traditional", type: "Web Search" },
+                    { name: "Baidu Engine", url: "https://www.baidu.com", target: "_blank", badge: "East Asian", type: "Web Portal" },
+                    { name: "Yandex Global", url: "https://yandex.com", target: "_blank", badge: "Eastern Europe", type: "Search Engine" }
+                ]
+            },
+            {
+                id: "tech-store",
+                name: "Laptop & Gadget Stores",
+                icon: "fa-laptop",
+                desc: "Where to find hardware, accessories, and stationery.",
+                badge: "Shopping",
+                links: [
+                    { name: "Takealot Gadgets Dept", url: "https://www.takealot.com", target: "_blank", badge: "E-Commerce", type: "General Marketplace" },
+                    { name: "Amazon South Africa", url: "https://www.amazon.co.za", target: "_blank", badge: "E-Commerce", type: "Global Launch" },
+                    { name: "Incredible Connection", url: "https://www.incredible.co.za", target: "_blank", badge: "National Retail", type: "Brick & Mortar" },
+                    { name: "Evetech PC Builder Hub", url: "https://www.evetech.co.za", target: "_blank", badge: "Centurion/Online", type: "Custom Desktops" },
+                    { name: "Wootware South Africa", url: "https://www.wootware.co.za", target: "_blank", badge: "Somerset/Online", type: "Components Store" },
+                    { name: "Matrix Warehouse", url: "https://matrixwarehouse.co.za", target: "_blank", badge: "National Franchise", type: "Computer Hardware" },
+                    { name: "Rebel Tech Enterprise", url: "https://www.rebeltech.co.za", target: "_blank", badge: "Online Store", type: "Computer Hardware" },
+                    { name: "Chaos Computers", url: "https://www.chaoscomputers.co.za", target: "_blank", badge: "Cape Town/Online", type: "Custom Systems" },
+                    { name: "Titan Ice Technologies", url: "https://www.titanice.co.za", target: "_blank", badge: "Pretoria/Online", type: "Tech Components" }
+                ]
+            },
+            {
+                id: "bank",
+                name: "Banks & Digital Wallets",
+                icon: "fa-building-columns",
+                desc: "Direct pathways to banking platforms & app portals.",
+                badge: "Fintech",
+                links: [
+                    { name: "Capitec Bank Portal", url: "https://www.capitecbank.co.za", target: "_blank", badge: "Retail Leader", type: "National Bank" },
+                    { name: "FNB App & Web Banking", url: "https://www.fnb.co.za", target: "_blank", badge: "Innovative Solutions", type: "National Bank" },
+                    { name: "Standard Bank SA", url: "https://www.standardbank.co.za", target: "_blank", badge: "Blue Bank", type: "National Bank" },
+                    { name: "Nedbank Online Banking", url: "https://www.nedbank.co.za", target: "_blank", badge: "Green Bank", type: "National Bank" },
+                    { name: "Absa Group South Africa", url: "https://www.absa.co.za", target: "_blank", badge: "Red Bank", type: "National Bank" },
+                    { name: "TymeBank (Fully Digital)", url: "https://www.tymebank.co.za", target: "_blank", badge: "Digital First", type: "Neobank" },
+                    { name: "Discovery Bank", url: "https://www.discovery.co.za/bank/home", target: "_blank", badge: "Vitality Rewards", type: "Shared-Value Bank" },
+                    { name: "Investec Bank Private Portal", url: "https://www.investec.com", target: "_blank", badge: "Specialist Wealth", type: "Private Bank" },
+                    { name: "Bankzer Digital Payments", url: "https://www.bankzer.co.za", target: "_blank", badge: "Fintech", type: "Digital Wallet" }
+                ]
+            },
+            {
+                id: "forex-investments",
+                name: "Forex Brokers & Bitcoin Investments",
+                icon: "fa-chart-line",
+                desc: "South African forex brokers, trading platforms, and cryptocurrency investment options.",
+                badge: "Investments",
+                links: [
+                    { name: "Easy Equities", url: "https://www.easyequities.co.za", target: "_blank", badge: "Local Investing", type: "Broker/Platform" },
+                    { name: "SAXO Markets South Africa", url: "https://www.home.saxo/za", target: "_blank", badge: "Global Trading", type: "Forex Broker" },
+                    { name: "AVA Trade", url: "https://www.avatrade.co.za", target: "_blank", badge: "CFD & Forex", type: "Broker" },
+                    { name: "IG Markets South Africa", url: "https://www.ig.com/za", target: "_blank", badge: "Global Markets", type: "Broker" },
+                    { name: "CMC Markets South Africa", url: "https://www.cmcmarkets.com/za", target: "_blank", badge: "Spread Betting", type: "Broker" },
+                    { name: "Plus500 South Africa", url: "https://www.plus500.co.za", target: "_blank", badge: "Online Trading", type: "Broker" },
+                    { name: "Pepperstone South Africa", url: "https://pepperstone.com/za/", target: "_blank", badge: "Forex & CFDs", type: "Broker" },
+                    { name: "Luno", url: "https://www.luno.com/za", target: "_blank", badge: "Bitcoin & Crypto", type: "Crypto Exchange" },
+                    { name: "VALR", url: "https://www.valr.com", target: "_blank", badge: "Crypto Exchange", type: "Crypto Platform" },
+                    { name: "Coinbase South Africa", url: "https://www.coinbase.com", target: "_blank", badge: "Global Crypto", type: "Crypto Exchange" },
+                    { name: "Capitex", url: "https://www.capitex.com", target: "_blank", badge: "Crypto & Forex", type: "Trading Platform" },
+                    { name: "AltCoinTrader", url: "https://www.altcointrader.co.za", target: "_blank", badge: "Local Crypto", type: "Crypto Exchange" },
+                    { name: "AvaTrade South Africa", url: "https://www.avatrade.co.za", target: "_blank", badge: "Forex & CFDs", type: "Broker" },
+                    { name: "FXCM South Africa", url: "https://www.fxcm.com/za", target: "_blank", badge: "Online Trading", type: "Broker" },
+                    { name: "eToro South Africa", url: "https://www.etoro.com", target: "_blank", badge: "Social Investing", type: "Broker" }
+                ]
+            },
+            {
+                id: "grocery",
+                name: "Grocery Stores",
+                icon: "fa-basket-shopping",
+                desc: "Direct channels to physical pantries and fast delivery apps.",
+                badge: "Daily Need",
+                links: [
+                    { name: "Checkers Sixty60 App", url: "https://www.checkers.co.za/sixty60.html", target: "_blank", badge: "Sixty60 App", type: "Fast Grocery Delivery" },
+                    { name: "Pick n Pay asap! Store", url: "https://www.pnp.co.za/asap", target: "_blank", badge: "PnP asap!", type: "Fast Grocery Delivery" },
+                    { name: "Woolies Dash Platform", url: "https://www.woolworths.co.za", target: "_blank", badge: "Woolworths Dash", type: "Premium Delivery" },
+                    { name: "Spar2U Home Deliveries", url: "https://www.spar.co.za/SPAR2U", target: "_blank", badge: "Spar2U", type: "Store to Door Delivery" },
+                    { name: "Uber Eats Grocery & Food", url: "https://www.ubereats.com/za", target: "_blank", badge: "Uber Eats", type: "On-Demand App" },
+                    { name: "Mr D Food & Groceries", url: "https://www.mrdfood.com", target: "_blank", badge: "Takealot Group", type: "On-Demand App" },
+                    { name: "Makro Grocery Deliveries", url: "https://www.makro.co.za", target: "_blank", badge: "Massmart", type: "Wholesale Delivery" },
+                    { name: "Boxer Superstores Portal", url: "https://www.boxer.co.za", target: "_blank", badge: "Budget Friendly", type: "National Supermarket" }
+                ]
+            },
+            {
+                id: "clothing",
+                name: "Online Clothing Stores",
+                icon: "fa-shirt",
+                desc: "Trending modern styles, boots, and dynamic streetwear.",
+                badge: "Fashion",
+                links: [
+                    { name: "Superbalist Fashion Portal", url: "https://superbalist.com", target: "_blank", badge: "South Africa", type: "Online Fashion Store" },
+                    { name: "Zando Fashion Hub", url: "https://www.zando.co.za", target: "_blank", badge: "South Africa", type: "Online Fashion Store" },
+                    { name: "Bash South Africa", url: "https://bash.com", target: "_blank", badge: "Foschini Group", type: "Multi-Brand Mall" },
+                    { name: "The Runway Online", url: "https://www.runway.sale", target: "_blank", badge: "South Africa", type: "Designer Sales" },
+                    { name: "Mr Price", url: "https://www.mrprice.com/za/", target: "_blank", badge: "South Africa", type: "Fashion Brand" },
+                    { name: "Woolworths Fashion", url: "https://www.woolworths.co.za", target: "_blank", badge: "South Africa", type: "Fashion Brand" },
+                    { name: "Truworths", url: "https://www.truworths.co.za", target: "_blank", badge: "South Africa", type: "Fashion Brand" },
+                    { name: "Pep Stores", url: "https://www.pep.co.za", target: "_blank", badge: "South Africa", type: "Budget Fashion" },
+                    { name: "Sportscene", url: "https://www.sportscene.co.za", target: "_blank", badge: "South Africa", type: "Streetwear & Sneakers" },
+                    { name: "Shein South Africa", url: "https://za.shein.com", target: "_blank", badge: "International", type: "Fast Fashion Store" },
+                    { name: "Temu South Africa", url: "https://www.temu.com", target: "_blank", badge: "International", type: "Mega Marketplace" },
+                    { name: "Zara South Africa Portal", url: "https://www.zara.com/za/", target: "_blank", badge: "Premium Street", type: "Global Retail" },
+                    { name: "H&M South Africa Online", url: "https://za.hm.com", target: "_blank", badge: "Trendy Wear", type: "Global Retail" },
+                    { name: "Cotton On South Africa", url: "https://cottonon.com/ZA/", target: "_blank", badge: "Casual Basics", type: "Global Retail" },
+                    { name: "Foschini", url: "https://www.foschini.co.za", target: "_blank", badge: "South Africa", type: "Fashion Brand" },
+                    { name: "Edgars", url: "https://www.edgars.co.za", target: "_blank", badge: "South Africa", type: "Fashion Brand" }
+                ]
+            },
+            {
+                id: "music-streaming",
+                name: "Music Streaming Platforms",
+                icon: "fa-music",
+                desc: "Listen to local South African tunes, Amapiano mixes, and global playlists.",
+                badge: "Music",
+                links: [
+                    { name: "Spotify", url: "https://www.spotify.com", target: "_blank", badge: "Global Leader", type: "Audio Streaming" },
+                    { name: "Apple Music", url: "https://www.apple.com/music/", target: "_blank", badge: "Premium Sound", type: "Audio Streaming" },
+                    { name: "YouTube Music", url: "https://music.youtube.com", target: "_blank", badge: "Google Service", type: "Music Videos/Audio" },
+                    { name: "Deezer South Africa", url: "https://www.deezer.com", target: "_blank", badge: "HiFi Playback", type: "Audio Streaming" },
+                    { name: "Tidal Music", url: "https://tidal.com", target: "_blank", badge: "Audiophile Sound", type: "Hi-Res Audio" },
+                    { name: "Qobuz High-Res", url: "https://www.qobuz.com", target: "_blank", badge: "Hi-Res Quality", type: "Niche Premium" },
+                    { name: "SoundCloud Platform", url: "https://soundcloud.com", target: "_blank", badge: "Indie Artists", type: "Social Audio Hub" }
+                ]
+            },
+            {
+                id: "movie-streaming",
+                name: "Movie & Series Streaming",
+                icon: "fa-film",
+                desc: "Enjoy blockbusters, local movies, soapies, and television productions.",
+                badge: "Movies",
+                links: [
+                    { name: "Netflix South Africa", url: "https://www.netflix.com/za/", target: "_blank", badge: "Global Leader", type: "Video Streaming" },
+                    { name: "Showmax South Africa", url: "https://www.showmax.com", target: "_blank", badge: "MultiChoice Local", type: "Local/Live Sports" },
+                    { name: "Amazon Prime Video", url: "https://www.primevideo.com", target: "_blank", badge: "Amazon Prime", type: "Video Streaming" },
+                    { name: "Disney+ South Africa", url: "https://www.disneyplus.com", target: "_blank", badge: "Marvel & Pixels", type: "Video Streaming" },
+                    { name: "Apple TV+ Engine", url: "https://tv.apple.com", target: "_blank", badge: "Apple Originals", type: "Video Streaming" },
+                    { name: "eVOD (eMedia)", url: "https://www.evod.co.za", target: "_blank", badge: "Local Soapies", type: "Free/Premium SVOD" },
+                    { name: "DStv Stream App", url: "https://www.dstv.co.za", target: "_blank", badge: "MultiChoice Stream", type: "Premium Live TV" }
+                ]
+            },
+            {
+                id: "fm-stations",
+                name: "FM Stations",
+                icon: "fa-radio",
+                desc: "South African FM radio stations across news, music, sports, and talk formats.",
+                badge: "Radio",
+                links: [
+                    { name: "5FM", url: "https://www.5fm.co.za", target: "_blank", badge: "Music & Hits", type: "Commercial FM" },
+                    { name: "Metro FM", url: "https://www.metrofm.co.za", target: "_blank", badge: "Urban Music", type: "Commercial FM" },
+                    { name: "YFM", url: "https://www.yfm.co.za", target: "_blank", badge: "Youth Culture", type: "Commercial FM" },
+                    { name: "Radio 702", url: "https://www.702.co.za", target: "_blank", badge: "Talk & News", type: "Commercial FM" },
+                    { name: "Cape Talk", url: "https://www.capetalk.co.za", target: "_blank", badge: "News & Debate", type: "Talk Radio" },
+                    { name: "Kaya FM", url: "https://www.kayafm.co.za", target: "_blank", badge: "Urban Lifestyle", type: "Commercial FM" },
+                    { name: "Ukhozi FM", url: "https://www.ukhozifm.co.za", target: "_blank", badge: "Zulu Language", type: "Public Broadcaster" },
+                    { name: "Lesedi FM", url: "https://www.lesedifm.co.za", target: "_blank", badge: "Sotho Language", type: "Public Broadcaster" },
+                    { name: "Thobela FM", url: "https://www.thobelafm.co.za", target: "_blank", badge: "Sepedi Language", type: "Public Broadcaster" },
+                    { name: "Motsweding FM", url: "https://www.motswedingfm.co.za", target: "_blank", badge: "Setswana", type: "Public Broadcaster" },
+                    { name: "Motsweding FM", url: "https://www.motswedingfm.co.za", target: "_blank", badge: "Setswana", type: "Public Broadcaster" },
+                    { name: "RSG", url: "https://www.rsg.co.za", target: "_blank", badge: "Afrikaans", type: "Public Broadcaster" },
+                    { name: "East Coast Radio", url: "https://www.ecr.co.za", target: "_blank", badge: "KZN Hits", type: "Commercial FM" },
+                    { name: "Good Hope FM", url: "https://www.goodhopefm.co.za", target: "_blank", badge: "Cape Town", type: "Commercial FM" },
+                    { name: "OFM", url: "https://www.ofm.co.za", target: "_blank", badge: "Free State", type: "Regional FM" }
+                ]
+            },
+            {
+                id: "transport",
+                name: "Transportation & Rides",
+                icon: "fa-train-subway",
+                desc: "Local urban transit systems, ridesharing services, and timelines.",
+                tags: ["commute", "bus", "train", "taxi", "rideshare", "e-hailing", "public transport"],
+                badge: "Commute",
+                links: [
+                    { name: "Gautrain Travel Portal", url: "https://www.gautrain.co.za", target: "_blank", badge: "Gauteng Rail", type: "High-Speed Rail" },
+                    { name: "Uber South Africa", url: "https://www.uber.com/za/en/", target: "_blank", badge: "Global App", type: "E-Hailing Rides" },
+                    { name: "Bolt e-Hailing App", url: "https://bolt.eu/en-za/", target: "_blank", badge: "Affordable App", type: "E-Hailing Rides" },
+                    { name: "inDrive ridesharing", url: "https://indrive.com/en/", target: "_blank", badge: "Negotiate Fair", type: "E-Hailing Rides" },
+                    { name: "Metrorail Passenger Services", url: "https://www.metrorail.co.za", target: "_blank", badge: "Government PRASA", type: "Urban Rail" },
+                    { name: "Golden Arrow Bus Services", url: "https://www.gabs.co.za", target: "_blank", badge: "Cape Town", type: "Public Bus Service" },
+                    { name: "Rea Vaya Bus Transit", url: "https://www.reavaya.org.za", target: "_blank", badge: "Johannesburg BRT", type: "Public Bus Service" },
+                    { name: "MyCiTi Bus Transit", url: "https://www.myciti.org.za", target: "_blank", badge: "Cape Town BRT", type: "Public Bus Service" }
+                ]
+            },
+            {
+                id: "flight",
+                name: "Online Flight Outlets",
+                icon: "fa-plane",
+                desc: "Domestic and international airways flying local paths.",
+                badge: "Travel",
+                links: [
+                    { name: "FlySafair Flights", url: "https://www.flysafair.co.za", target: "_blank", badge: "Low-Cost Leader", type: "Airline" },
+                    { name: "Travelstart Booking Engine", url: "https://www.travelstart.co.za", target: "_blank", badge: "Online Aggregator", type: "Search & Book" },
+                    { name: "Airlink Aviation", url: "https://www.flyairlink.com", target: "_blank", badge: "Southern Africa Network", type: "Airline" },
+                    { name: "South African Airways (SAA)", url: "https://www.flysaa.com", target: "_blank", badge: "National Carrier", type: "Airline" },
+                    { name: "LIFT Airline", url: "https://www.lift.co.za", target: "_blank", badge: "Modern Fleet", type: "Airline" },
+                    { name: "CemAir Local Aviation", url: "https://www.flycemair.co.za", target: "_blank", badge: "Domestic Routes", type: "Airline" },
+                    { name: "Qatar Airways Portal", url: "https://www.qatarairways.com", target: "_blank", badge: "International Luxury", type: "Airline" },
+                    { name: "Emirates Airline South Africa", url: "https://www.emirates.com/za/english/", target: "_blank", badge: "International Link", type: "Airline" }
+                ]
+            },
+            {
+                id: "resorts",
+                name: "Resorts, Lodges & Tourist Attractions",
+                icon: "fa-campground",
+                desc: "Top resorts, safari lodges, game reserves, and iconic South African attractions.",
+                badge: "Explore SA",
+                links: [
+                    { name: "South African Tourism", url: "https://www.southafrica.net", target: "_blank", badge: "Official Portal", type: "Tourism Guide" },
+                    { name: "SANParks", url: "https://www.sanparks.org", target: "_blank", badge: "National Parks", type: "Protected Areas" },
+                    { name: "Kruger National Park", url: "https://www.krugerpark.co.za", target: "_blank", badge: "Big Five Safari", type: "Safari Destination" },
+                    { name: "Table Mountain National Park", url: "https://www.sanparks.org/parks/table_mountain", target: "_blank", badge: "Cape Town Icon", type: "Nature Attraction" },
+                    { name: "Cape Town Tourism", url: "https://www.capetown.travel", target: "_blank", badge: "City Escapes", type: "Tourism Board" },
+                    { name: "Durban Tourism", url: "https://www.durbantourism.co.za", target: "_blank", badge: "Beach & Culture", type: "Tourism Board" },
+                    { name: "Garden Route Tourism", url: "https://www.gardenroute.co.za", target: "_blank", badge: "Coast & Forest", type: "Holiday Region" },
+                    { name: "Stellenbosch Tourism", url: "https://www.stellenboschtourism.com", target: "_blank", badge: "Wine Country", type: "Travel Region" },
+                    { name: "Drakensberg Tourism", url: "https://www.drakensbergtourism.com", target: "_blank", badge: "Mountain Escape", type: "Scenic Region" },
+                    { name: "Addo Elephant National Park", url: "https://www.sanparks.org/parks/addo", target: "_blank", badge: "Elephants & Game", type: "Wildlife Attraction" },
+                    { name: "Boulders Beach", url: "https://www.capetown.travel/attractions/boulders-beach", target: "_blank", badge: "Penguins", type: "Beach Attraction" },
+                    { name: "Sabi Sands Game Reserve", url: "https://www.sabisands.com", target: "_blank", badge: "Luxury Safari", type: "Game Reserve" },
+                    { name: "MalaMala Game Reserve", url: "https://www.malamala.com", target: "_blank", badge: "Exclusive Bush Lodge", type: "Private Reserve" },
+                    { name: "Bushmans Kloof", url: "https://www.bushmanskloof.com", target: "_blank", badge: "Luxury Retreat", type: "Lodge" },
+                    { name: "Tswalu Kalahari Reserve", url: "https://www.tswalu.com", target: "_blank", badge: "Desert Luxury", type: "Private Reserve" },
+                    { name: "Singita", url: "https://www.singita.com", target: "_blank", badge: "High-End Safari", type: "Lodge Collection" },
+                    { name: "The Plettenberg", url: "https://www.theplettenberg.co.za", target: "_blank", badge: "Coastal Resort", type: "Resort" },
+                    { name: "Sun City Resort", url: "https://www.suncity.co.za", target: "_blank", badge: "Entertainment Resort", type: "Resort" },
+                    { name: "Mokopane Lodges", url: "https://www.mokopanelodges.co.za", target: "_blank", badge: "Bush Getaway", type: "Lodge Directory" }
+                ]
+            },
+            {
+                id: "hotel",
+                name: "Hotel & Lodge Bookings",
+                icon: "fa-bed",
+                desc: "Local getaway lodges, hotels, and dynamic Airbnbs.",
+                badge: "Stays",
+                links: [
+                    { name: "Booking.com South Africa", url: "https://www.booking.com", target: "_blank", badge: "Global Leader", type: "Accommodation Finder" },
+                    { name: "LekkeSlaap Holiday Rentals", url: "https://www.lekkeslaap.co.za", target: "_blank", badge: "Local Focus", type: "Accommodation Finder" },
+                    { name: "Airbnb South Africa", url: "https://www.airbnb.co.za", target: "_blank", badge: "Self-Catering", type: "Home Rentals" },
+                    { name: "SafariNow Destinations", url: "https://www.safarinow.com", target: "_blank", badge: "Bush & Beach", type: "Holiday Portal" },
+                    { name: "TravelGround Bookings", url: "https://www.travelground.com", target: "_blank", badge: "Local Focus", type: "Accommodation Finder" },
+                    { name: "Agoda Hotel Bookings", url: "https://www.agoda.com", target: "_blank", badge: "Global Listings", type: "Hotel Finder" },
+                    { name: "Southern Sun Hotel Group", url: "https://www.southernsun.com", target: "_blank", badge: "Premium Resorts", type: "Hospitality Chain" },
+                    { name: "City Lodge Hotels Portfolio", url: "https://clhg.com", target: "_blank", badge: "Business Stays", type: "Hospitality Chain" }
+                ]
+            },
+            {
+                id: "events",
+                name: "Festivals & Events",
+                icon: "fa-champagne-glasses",
+                desc: "Major South African concert hubs, local turn-ups, and ticket sellers.",
+                badge: "Going Out",
+                links: [
+                    { name: "Howler Event Ticketing", url: "https://www.howler.co.za", target: "_blank", badge: "Social & Club", type: "Ticket Agent" },
+                    { name: "Quicket Ticket Engine", url: "https://www.quicket.co.za", target: "_blank", badge: "Independent Events", type: "Ticket Agent" },
+                    { name: "Computicket Box Office", url: "https://computicket.com", target: "_blank", badge: "National Outlets", type: "Ticket Agent" },
+                    { name: "Ticketmaster South Africa", url: "https://www.ticketmaster.co.za", target: "_blank", badge: "Stadium Concerts", type: "Ticket Agent" },
+                    { name: "Webtickets Online Portal", url: "https://www.webtickets.co.za", target: "_blank", badge: "Museums & Shows", type: "Ticket Agent" },
+                    { name: "Ultra South Africa Festival", url: "https://ultrasouthafrica.com", target: "_blank", badge: "Dance Festival", type: "Official Site" },
+                    { name: "Rocking the Daisies", url: "https://www.rockingthedaisies.com", target: "_blank", badge: "Music Festival", type: "Festival" },
+                    { name: "Oppikoppi", url: "https://www.oppikoppi.co.za", target: "_blank", badge: "Music Festival", type: "Festival" },
+                    { name: "Cape Town International Jazz Festival", url: "https://www.ctjazzfest.co.za", target: "_blank", badge: "Jazz Festival", type: "Festival" },
+                    { name: "Fame Week Africa", url: "https://www.fameweekafrica.com", target: "_blank", badge: "Creative Expo", type: "Event" },
+                    { name: "Comic Con Africa", url: "https://comicconafrica.co.za", target: "_blank", badge: "Pop Culture", type: "Convention" },
+                    { name: "Rage Expo", url: "https://www.rageexpo.co.za", target: "_blank", badge: "Gaming & Tech", type: "Expo" },
+                    { name: "Design Indaba", url: "https://www.designindaba.com", target: "_blank", badge: "Design Festival", type: "Festival" },
+                    { name: "House of Vans", url: "https://www.houseofvans.com", target: "_blank", badge: "Lifestyle", type: "Event" }
+                ]
+            },
+            {
+                id: "jobs",
+                name: "Job Portals",
+                icon: "fa-briefcase",
+                desc: "Career aggregators and entry-level talent avenues.",
+                badge: "Careers",
+                links: [
+                    { name: "Pnet Professional Search", url: "https://www.pnet.co.za", target: "_blank", badge: "Professional", type: "Job Board" },
+                    { name: "Careers24 Portal", url: "https://www.careers24.com", target: "_blank", badge: "Media24 Hub", type: "Job Board" },
+                    { name: "Indeed South Africa Hub", url: "https://za.indeed.com", target: "_blank", badge: "Global Crawler", type: "Search Engine" },
+                    { name: "LinkedIn Career Directory", url: "https://www.linkedin.com", target: "_blank", badge: "Social Professional", type: "Talent Platform" },
+                    { name: "JobMail Classify", url: "https://www.jobmail.co.za", target: "_blank", badge: "Vibrant Listings", type: "Job Board" },
+                    { name: "BestJobs South Africa", url: "https://www.bestjobs.co.za", target: "_blank", badge: "National Database", type: "Job Board" },
+                    { name: "Gumtree Jobs Section", url: "https://www.gumtree.co.za/s-jobs/v1c8p1", target: "_blank", badge: "Classifieds", type: "Micro Job Site" },
+                    { name: "SA Gov Careers (DPSA)", url: "https://www.dpsa.gov.za/dpsa2g/vacancies.asp", target: "_blank", badge: "Public Sector", type: "Circular" },
+                    { name: "CareerJunction", url: "https://www.careerjunction.co.za", target: "_blank", badge: "Regional", type: "Job Board" },
+                    { name: "RecruitAGraduate", url: "https://www.recruitagraduate.co.za", target: "_blank", badge: "Graduate", type: "Graduate Jobs" },
+                    { name: "Jobs in SA", url: "https://www.jobsinsa.co.za", target: "_blank", badge: "National", type: "Job Board" },
+                    { name: "GoJobs", url: "https://www.gojobs.co.za", target: "_blank", badge: "National", type: "Job Search" },
+                    { name: "The Careers Portal", url: "https://www.careersportal.co.za", target: "_blank", badge: "Education", type: "Career Platform" },
+                    { name: "EduPeople", url: "https://www.edup.epeople.co.za", target: "_blank", badge: "Education", type: "Teaching Jobs" },
+                    { name: "Jobvine", url: "https://www.jobvine.co.za", target: "_blank", badge: "Community", type: "Job Board" }
+                ]
+            },
+            {
+                id: "cars",
+                name: "Car Companies",
+                icon: "fa-car",
+                desc: "Popular automotive dealerships, brands, and vehicle hubs.",
+                badge: "Motors",
+                links: [
+                    { name: "Toyota South Africa", url: "https://www.toyota.co.za", target: "_blank", badge: "Toyota", type: "Manufacturer" },
+                    { name: "Volkswagen (VW) South Africa", url: "https://www.vw.co.za", target: "_blank", badge: "VW", type: "Manufacturer" },
+                    { name: "Suzuki Auto South Africa", url: "https://www.suzukiauto.co.za", target: "_blank", badge: "Suzuki", type: "Manufacturer" },
+                    { name: "Ford South Africa", url: "https://www.ford.co.za", target: "_blank", badge: "Ford", type: "Manufacturer" },
+                    { name: "Hyundai South Africa", url: "https://www.hyundai.co.za", target: "_blank", badge: "Hyundai", type: "Manufacturer" },
+                    { name: "Nissan South Africa", url: "https://www.nissan.co.za", target: "_blank", badge: "Nissan", type: "Manufacturer" },
+                    { name: "BMW South Africa", url: "https://www.bmw.co.za", target: "_blank", badge: "BMW", type: "Manufacturer" },
+                    { name: "Mercedes-Benz South Africa", url: "https://www.mercedes-benz.co.za", target: "_blank", badge: "Mercedes", type: "Manufacturer" },
+                    { name: "Kia South Africa", url: "https://www.kia.co.za", target: "_blank", badge: "Kia", type: "Manufacturer" },
+                    { name: "Mazda South Africa", url: "https://www.mazda.co.za", target: "_blank", badge: "Mazda", type: "Manufacturer" },
+                    { name: "Peugeot South Africa", url: "https://www.peugeot.co.za", target: "_blank", badge: "Peugeot", type: "Manufacturer" },
+                    { name: "Renault South Africa", url: "https://www.renault.co.za", target: "_blank", badge: "Renault", type: "Manufacturer" },
+                    { name: "Mitsubishi Motors SA", url: "https://www.mitsubishisa.co.za", target: "_blank", badge: "Mitsubishi", type: "Manufacturer" },
+                    { name: "Isuzu South Africa", url: "https://www.isuzu.co.za", target: "_blank", badge: "Isuzu", type: "Manufacturer" },
+                    { name: "AutoTrader Platform", url: "https://www.autotrader.co.za", target: "_blank", badge: "Aggregator", type: "Marketplace" },
+                    { name: "WeBuyCars Dealership", url: "https://www.webuycars.co.za", target: "_blank", badge: "WBC", type: "Buyers & Sellers" },
+                    { name: "Cars.co.za", url: "https://www.cars.co.za", target: "_blank", badge: "Marketplace", type: "Vehicle Listings" },
+                    { name: "AutoPedigree", url: "https://www.autopedigree.co.za", target: "_blank", badge: "Dealer Network", type: "Vehicle Platform" }
+                ]
+            },
+            {
+                id: "property",
+                name: "Property & Housing",
+                icon: "fa-house-chimney",
+                desc: "Buy, sell, rent, or lease flats, houses, and industrial buildings.",
+                badge: "Real Estate",
+                links: [
+                    { name: "Property24 Real Estate Hub", url: "https://www.property24.com", target: "_blank", badge: "National Leader", type: "Search Engine" },
+                    { name: "Private Property Listings", url: "https://www.privateproperty.co.za", target: "_blank", badge: "National Portal", type: "Search Engine" },
+                    { name: "Gumtree Property Finder", url: "https://www.gumtree.co.za/s-property/v1c2p1", target: "_blank", badge: "Classifieds", type: "Peer Listings" },
+                    { name: "ImmoAfrica Portal", url: "https://www.immoafrica.co.za", target: "_blank", badge: "National listings", type: "Search Engine" },
+                    { name: "Pam Golding Properties", url: "https://www.pamgolding.co.za", target: "_blank", badge: "Premium Agency", type: "Estate Agency" },
+                    { name: "Seeff Property Group", url: "https://www.seeff.com", target: "_blank", badge: "National Agency", type: "Estate Agency" },
+                    { name: "RE/MAX South Africa", url: "https://www.remax.co.za", target: "_blank", badge: "Global Agency", type: "Estate Agency" },
+                    { name: "HousingHub", url: "https://www.housinghub.co.za", target: "_blank", badge: "National", type: "Property Portal" },
+                    { name: "Home24 South Africa", url: "https://www.home24.co.za", target: "_blank", badge: "National", type: "Home & Decor" },
+                    { name: "Lightstone Property", url: "https://www.lightstone.co.za", target: "_blank", badge: "Data", type: "Property Insights" },
+                    { name: "PropData", url: "https://www.propdata.co.za", target: "_blank", badge: "Data", type: "Market Reports" },
+                    { name: "Seeff Rentals", url: "https://www.seeff.com/rentals", target: "_blank", badge: "Rentals", type: "Rental Agency" },
+                    { name: "Rentals.com", url: "https://www.rentals.com", target: "_blank", badge: "Online", type: "Rental Listings" },
+                    { name: "Trafalgar Property Group", url: "https://www.trafalgar.co.za", target: "_blank", badge: "Agency", type: "Property Group" },
+                    { name: "Chas Everitt", url: "https://www.chaseveritt.co.za", target: "_blank", badge: "Agency", type: "Property Group" }
+                ]
+            },
+            {
+                id: "gaming",
+                name: "Gaming Stores & Free Hubs",
+                icon: "fa-gamepad",
+                desc: "Dynamic digital storefronts and repositories of free independent games.",
+                badge: "Entertainment",
+                links: [
+                    { name: "Steam Store Front", url: "https://store.steampowered.com", target: "_blank", badge: "Valve", type: "Desktop App Store" },
+                    { name: "Epic Games Weekly Catalog", url: "https://store.epicgames.com", target: "_blank", badge: "Epic Launcher", type: "Desktop App Store" },
+                    { name: "itch.io Indie Games", url: "https://itch.io", target: "_blank", badge: "Indie Portal", type: "Free Play Library" },
+                    { name: "PlayStation Store South Africa", url: "https://store.playstation.com/en-za/", target: "_blank", badge: "Console Store", type: "Digital Shop" },
+                    { name: "Xbox Store Front", url: "https://www.xbox.com/en-ZA/", target: "_blank", badge: "Console & PC", type: "Digital Shop" },
+                    { name: "Nintendo eShop South Africa", url: "https://www.nintendo.co.za", target: "_blank", badge: "Switch", type: "Digital Shop" },
+                    { name: "GOG (Good Old Games)", url: "https://www.gog.com", target: "_blank", badge: "DRM Free", type: "Desktop App Store" }
+                ]
+            },
+            {
+                id: "expos",
+                name: "Local Expos & Tech Shows",
+                icon: "fa-masks-theater",
+                desc: "Epic live conventions, gaming arenas, comic markets, and design exhibitions.",
+                badge: "Conventions",
+                links: [
+                    { name: "Comic Con Africa", url: "https://comicconafrica.co.za", target: "_blank", badge: "Johannesburg", type: "Pop Culture Expo" },
+                    { name: "Comic Con Cape Town", url: "https://comicconcapetown.co.za", target: "_blank", badge: "Cape Town", type: "Pop Culture Expo" },
+                    { name: "Rage Expo Gaming", url: "https://www.rageexpo.co.za", target: "_blank", badge: "GP Esports", type: "Gaming & Tech Show" },
+                    { name: "Decorex South Africa", url: "https://www.decorex.co.za", target: "_blank", badge: "JHB & CPT", type: "Design & Decor Show" },
+                    { name: "FAME Week Africa", url: "https://www.fameweekafrica.com", target: "_blank", badge: "Cape Town", type: "Creative & Film Expo" },
+                    { name: "Design Indaba", url: "https://www.designindaba.com", target: "_blank", badge: "Cape Town", type: "Design Festival" },
+                    { name: "Africa Tech Festival", url: "https://www.africatechfestival.com", target: "_blank", badge: "Cape Town", type: "Tech Expo" },
+                    { name: "South Africa Innovation Summit", url: "https://www.innovationsummit.co.za", target: "_blank", badge: "National", type: "Innovation Expo" },
+                    { name: "Gamer's Festival SA", url: "https://www.gamersfestival.co.za", target: "_blank", badge: "National", type: "Gaming Event" },
+                    { name: "Cape Town eCommerce Summit", url: "https://www.ecommercesummit.co.za", target: "_blank", badge: "Cape Town", type: "Business Expo" },
+                    { name: "Creative Mornings Cape Town", url: "https://creativemornings.com/cities/cpt", target: "_blank", badge: "Cape Town", type: "Creative Meetup" },
+                    { name: "Soweto Design Week", url: "https://www.sowetodesignweek.co.za", target: "_blank", badge: "Johannesburg", type: "Design Festival" }
+                ]
+            }
+        ];
+
+        // Policies Mock Database
+        const legalDocs = {
+            privacy: {
+                title: "Protection of Personal Information Act (POPIA) Privacy Policy",
+                content: `
+                    <p class="font-bold text-ramp-dark text-md">1. Commitment to Privacy</p>
+                    <p>Arcknowledge operates as a student kit index directory for web references located in South Africa. We respect your constitutional right to privacy and process personal information strictly in compliance with the Protection of Personal Information Act, No. 4 of 2013 ("POPIA").</p>
+                    
+                    <p class="font-bold text-ramp-dark text-md">2. Information We Do Not Collect</p>
+                    <p>Since Arcknowledge is a frontend-only platform, <strong>we do not operate background storage systems or active databases tracking user behavior</strong>. We do not require sign-up accounts, emails, telephone numbers, or demographic variables. We do not use persistent tracking cookies targeting individual personas.</p>
+
+                    <p class="font-bold text-ramp-dark text-md">3. Outbound Link Navigation Disclaimer</p>
+                    <p>Our website contains direct external hyperlinks targeting outer service directories, universities, state institutions, and vendors. Once you engage a link, you bypass the protective walls of Arcknowledge. We carry zero responsibility for how external frameworks register, trace, or harvest your cookies or identity data. Ensure you review their internal safety protocols upon landing.</p>
+                `
+            },
+            terms: {
+                title: "Terms of Use",
+                content: `
+                    <p class="font-bold text-ramp-dark text-md">1. Acceptance of Terms</p>
+                    <p>By using the Arcknowledge student kit portal ("the site"), you agree to abide by these terms of use. If you do not agree to these conditions, you must immediately terminate use of the site.</p>
+                    
+                    <p class="font-bold text-ramp-dark text-md">2. Permitted Use Only</p>
+                    <p>You agree to employ this digital directory solely for personal, research-oriented, and informative goals. You are strictly forbidden from performing scraping scripts, system-level DDoS attacks, high-volume automated inquiries, or frame injection attempts targeting Arcknowledge structures.</p>
+
+                    <p class="font-bold text-ramp-dark text-md">3. Intellectual Property</p>
+                    <p>The code design, design styling configurations, UI compositions, unique layout frameworks, and digital visual asset groupings remain the exclusive intellectual property of Arcknowledge. Brand labels, logos, and target names linked in categories belong strictly to their certified commercial owners.</p>
+                `
+            },
+            conditions: {
+                title: "General Terms & Conditions",
+                content: `
+                    <p class="font-bold text-ramp-dark text-md">1. Directory Information Accuracy</p>
+                    <p>While we make reasonable attempts to verify the legitimacy of official links, Arcknowledge provides all student kit information "as is" and "as available". We offer zero assurances that the channels listed remain free of security breaches, malware, server shutdowns, or broken linkages.</p>
+                    
+                    <p class="font-bold text-ramp-dark text-md">2. Financial Transactions Notice</p>
+                    <p>Under no circumstances does Arcknowledge process financial transactions, bank deposits, loan evaluations, tuition requests, or online retail operations directly. All monetary movements occur on external servers and banking networks. Arcknowledge holds no liability for transaction disputes, online payment mistakes, or financial losses.</p>
+
+                    <p class="font-bold text-ramp-dark text-md">3. Jurisdiction</p>
+                    <p>These guidelines, privacy rules, and functional terms are governed by the laws of the Republic of South Africa. Any disputes rising from directory actions shall be resolved in the magistrate courts under domestic South African legal rules.</p>
+                `
+            }
+        };
+
+        function getSearchableText(...values) {
+            return values.flat(Infinity).filter(value => typeof value === "string").join(" ").toLowerCase();
+        }
+
+        function matchesSearch(searchableText, query) {
+            const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+            return terms.every(term => searchableText.includes(term));
+        }
+
+        const favoritesStorageKey = "arcknowledge-favorites";
+        const favorites = new Set(JSON.parse(localStorage.getItem(favoritesStorageKey) || "[]"));
+        let showingFavorites = false;
+
+        function getFavoriteId(category, link) {
+            return `${category.id}:${link.name}:${link.url}`;
+        }
+
+        function updateFavoritesNavigation() {
+            const count = favorites.size;
+            document.getElementById("headerFavoritesLabel").textContent = `Favorites (${count})`;
+            document.getElementById("bottomFavoritesLabel").textContent = `Favorites (${count})`;
+            for (const id of ["headerFavoritesButton", "bottomFavoritesButton"]) {
+                document.getElementById(id).setAttribute("aria-pressed", String(showingFavorites));
+            }
+        }
+
+        function toggleFavoritesView() {
+            showingFavorites = !showingFavorites;
+            updateFavoritesNavigation();
+            renderCategories(document.getElementById("searchInput").value);
+        }
+
+        function toggleFavorite(categoryId, linkName, linkUrl) {
+            const category = directoryData.find(item => item.id === categoryId);
+            const link = category && category.links.find(item => item.name === linkName && item.url === linkUrl);
+            if (!category || !link) {
+                console.error(`Cannot update favorite: entry not found in category "${categoryId}".`);
+                return;
+            }
+
+            const favoriteId = getFavoriteId(category, link);
+            const updatedFavorites = new Set(favorites);
+            if (updatedFavorites.has(favoriteId)) {
+                updatedFavorites.delete(favoriteId);
+            } else {
+                updatedFavorites.add(favoriteId);
+            }
+
+            try {
+                localStorage.setItem(favoritesStorageKey, JSON.stringify([...updatedFavorites]));
+            } catch (error) {
+                console.error("Unable to save favorites to local storage.", error);
+                alert("Your favorite could not be saved. Check your browser storage settings and try again.");
+                return;
+            }
+
+            favorites.clear();
+            updatedFavorites.forEach(id => favorites.add(id));
+            updateFavoritesNavigation();
+            renderCategories(document.getElementById("searchInput").value);
+        }
+
+        // Render Categories as Dropdown Accordions with Internal Search Bars
+        function renderCategories(filterText = "") {
+            const container = document.getElementById("categoriesAccordionContainer");
+            container.innerHTML = "";
+            
+            const filtered = directoryData.map(cat => {
+                const categoryText = getSearchableText(cat.name, cat.desc, cat.badge, cat.tags);
+                const categoryMatches = matchesSearch(categoryText, filterText);
+                const links = cat.links.filter(link => {
+                    if (showingFavorites && !favorites.has(getFavoriteId(cat, link))) return false;
+                    if (categoryMatches || !filterText) return true;
+                    const linkText = getSearchableText(link.name, link.type, link.badge, link.url, link.tags);
+                    return matchesSearch(linkText, filterText);
+                });
+                return links.length ? { ...cat, links } : null;
+            }).filter(Boolean);
+
+            document.getElementById("categoryCount").innerText = showingFavorites
+                ? `${filtered.length} Favorite Categories`
+                : `${filtered.length} Categories Found`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center text-gray-400 bg-white rounded-2xl border border-ramp-border">
+                        <i class="fa-solid ${showingFavorites ? "fa-heart" : "fa-folder-open"} text-4xl mb-2"></i>
+                        <p class="font-semibold text-ramp-dark">${showingFavorites ? "No favorites yet" : "No matching categories found"}</p>
+                        <p class="text-xs">${showingFavorites ? "Use the heart on any entry to save it here." : 'Try searching another keyword (e.g. "NSFAS", "UCT", "Digs").'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(cat => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "bg-white rounded-2xl border border-ramp-border shadow-sm overflow-hidden transition-all";
+                wrapper.id = `accordion-${cat.id}`;
+
+                // Accordion Header Button
+                const header = document.createElement("button");
+                header.className = "w-full p-4 sm:p-5 flex items-center justify-between gap-4 text-left hover:bg-gray-50/80 transition-colors cursor-pointer outline-none focus:ring-2 focus:ring-ramp-dark";
+                header.onclick = () => toggleAccordion(cat.id);
+
+                header.innerHTML = `
+                    <div class="flex items-center gap-4 overflow-hidden">
+                        <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-ramp-dark shrink-0">
+                            <i class="fa-solid ${cat.icon} text-xl"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-ramp-dark text-base truncate">${cat.name}</span>
+                                <span class="text-[10px] bg-gray-100 text-gray-600 font-bold px-2 py-0.5 rounded shrink-0">${cat.links.length} links</span>
+                            </div>
+                            <p class="text-xs text-ramp-textMuted truncate mt-0.5">${cat.desc}</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-ramp-dark shrink-0 transition-transform duration-300" id="chevron-${cat.id}">
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </div>
+                `;
+
+                // Accordion Body Content (Hidden by default)
+                const body = document.createElement("div");
+                body.className = "hidden border-t border-ramp-border bg-gray-50/50 p-4 sm:p-5 flex flex-col gap-4";
+                body.id = `body-${cat.id}`;
+
+                // Search Bar specific to this category
+                const searchContainer = document.createElement("div");
+                searchContainer.className = "relative";
+                searchContainer.innerHTML = `
+                    <i class="fa fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                    <input 
+                        type="text" 
+                        id="search-${cat.id}" 
+                        oninput="filterCategoryLinks('${cat.id}')"
+                        placeholder="Search within ${cat.name}..." 
+                        class="w-full pl-10 pr-4 py-2.5 bg-white border border-ramp-border text-ramp-dark text-xs rounded-xl font-medium focus:ring-2 focus:ring-ramp-dark outline-none transition-all shadow-sm placeholder:text-gray-400"
+                    >
+                `;
+                const matchingLinks = cat.links.filter(link => matchesSearch(
+                    getSearchableText(link.name, link.type, link.badge, link.url, link.tags),
+                    filterText
+                ));
+                if (filterText && matchingLinks.length > 0) {
+                    searchContainer.querySelector("input").value = filterText;
+                }
+                body.appendChild(searchContainer);
+
+                // Links List Container
+                const linksList = document.createElement("div");
+                linksList.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[350px] overflow-y-auto custom-scrollbar p-1";
+                linksList.id = `links-${cat.id}`;
+
+                cat.links.forEach(lnk => {
+                    const linkCard = document.createElement("div");
+                    linkCard.className = "link-item bg-white border border-ramp-border rounded-xl p-3.5 transition-all shadow-sm flex flex-col justify-between gap-3 hover:border-gray-300";
+                    linkCard.setAttribute("data-search", getSearchableText(lnk.name, lnk.type, lnk.badge, lnk.url, lnk.tags));
+                    const isFavorite = favorites.has(getFavoriteId(cat, lnk));
+                    const favoriteButton = document.createElement("button");
+                    favoriteButton.type = "button";
+                    favoriteButton.className = `favorite-toggle shrink-0 rounded-full p-1.5 transition-colors ${isFavorite ? "text-rose-500" : "text-gray-400 hover:text-rose-500"}`;
+                    favoriteButton.setAttribute("aria-label", `${isFavorite ? "Remove from" : "Add to"} favorites: ${lnk.name}`);
+                    favoriteButton.setAttribute("aria-pressed", String(isFavorite));
+                    favoriteButton.innerHTML = `<i class="fa-${isFavorite ? "solid" : "regular"} fa-heart"></i>`;
+                    favoriteButton.onclick = () => toggleFavorite(cat.id, lnk.name, lnk.url);
+
+                    linkCard.innerHTML = `
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-1">
+                                <h4 class="font-bold text-ramp-dark text-xs sm:text-sm leading-snug">${lnk.name}</h4>
+                                <span class="bg-gray-100 text-ramp-dark text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0">${lnk.badge}</span>
+                            </div>
+                            <span class="text-[10px] text-ramp-textMuted font-medium">${lnk.type}</span>
+                        </div>
+                        <a href="${lnk.url}" target="${lnk.target}" class="w-full bg-white hover:bg-ramp-dark text-ramp-dark hover:text-ramp-lime border border-ramp-border hover:border-ramp-dark text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all text-center shadow-sm">
+                            Visit Official Platform <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                        </a>
+                    `;
+                    linkCard.querySelector(".flex.items-start.justify-between").appendChild(favoriteButton);
+                    linksList.appendChild(linkCard);
+                });
+
+                body.appendChild(linksList);
+                wrapper.appendChild(header);
+                wrapper.appendChild(body);
+                container.appendChild(wrapper);
+            });
+        }
+
+        // Toggle Accordion Dropdown
+        function toggleAccordion(id) {
+            const body = document.getElementById(`body-${id}`);
+            const chevron = document.getElementById(`chevron-${id}`);
+            
+            if (body.classList.contains("hidden")) {
+                body.classList.remove("hidden");
+                chevron.style.transform = "rotate(180deg)";
+            } else {
+                body.classList.add("hidden");
+                chevron.style.transform = "rotate(0deg)";
+            }
+        }
+
+        // Filter individual category links using its internal search bar
+        function filterCategoryLinks(catId) {
+            const query = document.getElementById(`search-${catId}`).value;
+            const linksContainer = document.getElementById(`links-${catId}`);
+            const items = linksContainer.getElementsByClassName("link-item");
+
+            for (let item of items) {
+                if (matchesSearch(item.getAttribute("data-search"), query)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            }
+        }
+
+        // Live Filtering Categories based on main top search bar
+        function filterCategories() {
+            const text = document.getElementById("searchInput").value;
+            renderCategories(text);
+            directoryData.forEach(cat => {
+                const searchInput = document.getElementById(`search-${cat.id}`);
+                if (searchInput && searchInput.value) {
+                    filterCategoryLinks(cat.id);
+                }
+            });
+        }
+
+        // Modal triggers
+        function openModal(type) {
+            const doc = legalDocs[type];
+            if (!doc) return;
+            document.getElementById("modalTitle").innerText = doc.title;
+            document.getElementById("modalBody").innerHTML = doc.content;
+            document.getElementById("modalOverlay").classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function closeModal() {
+            document.getElementById("modalOverlay").classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        // Navigation Menu Interactive Actions
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function focusSearch() {
+            const searchInput = document.getElementById("searchInput");
+            if (searchInput) {
+                searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            }
+        }
+
+        function handleNotificationClick() {
+            const notifBadge = document.getElementById("notifBadge");
+            if (notifBadge) {
+                notifBadge.style.display = "none";
+            }
+            const notifModal = document.getElementById("notifModal");
+            if (notifModal) {
+                notifModal.classList.remove("hidden");
+                document.body.classList.add("overflow-hidden");
+            }
+        }
+
+        function closeNotifModal() {
+            const notifModal = document.getElementById("notifModal");
+            if (notifModal) {
+                notifModal.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+            }
+        }
+
+        // --- PWA Installation Core Logic ---
+        let deferredPrompt;
+        const pwaInstallBanner = document.getElementById('pwaInstallBanner');
+        const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+        const pwaCloseBtn = document.getElementById('pwaCloseBtn');
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker successfully registered!', reg.scope))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+
+        // Listen for standard Browser Install Prompt Event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            pwaInstallBanner.classList.remove('hidden');
+            setTimeout(() => {
+                pwaInstallBanner.classList.remove('translate-y-24', 'opacity-0');
+                pwaInstallBanner.classList.add('translate-y-0', 'opacity-100');
+            }, 100);
+        });
+
+        pwaInstallBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`PWA installer decision: ${outcome}`);
+            deferredPrompt = null;
+            hideInstallBanner();
+        });
+
+        pwaCloseBtn.addEventListener('click', () => {
+            hideInstallBanner();
+        });
+
+        function hideInstallBanner() {
+            pwaInstallBanner.classList.remove('translate-y-0', 'opacity-100');
+            pwaInstallBanner.classList.add('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                pwaInstallBanner.classList.add('hidden');
+            }, 300);
+        }
+
+        window.addEventListener('appinstalled', () => {
+            console.log('Arcknowledge successfully installed into user system.');
+            hideInstallBanner();
+        });
+
+        // Init App
+        updateFavoritesNavigation();
+
+        renderCategories();
+    </script>
+<script>
+(()=>{'use strict';
+const key='arc-student-v3', read=()=>{try{return JSON.parse(localStorage.getItem(key))||{}}catch{return {}}};let state=read();
+const save=()=>{try{localStorage.setItem(key,JSON.stringify(state))}catch(e){alert('Could not save locally. Check browser storage.')}};
+const el=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tools=[['profile','👤','Student profile'],['aps','🧮','APS calculator'],['budget','💰','Budget planner'],['planner','📅','Study planner'],['tracker','🎓','Application tracker'],['course','🔎','Course & institution finder'],['funding','🎯','Bursary finder'],['jobs','💼','Jobs & learnerships'],['cv','📄','CV builder'],['alerts','🔔','Student alerts'],['saved','❤️','Saved resources'],['backup','💾','Backup & restore'],['assistant','✨','Resource assistant']];
+el('v3Tools').innerHTML=tools.map(([id,icon,name])=>`<button class="v3-tool" data-v3="${id}"><span style="font-size:24px">${icon}</span><br>${name}</button>`).join('');
+const summary=()=>{el('v3ProfileSummary').innerHTML=`<strong>${esc(state.profile?.name||'Welcome, student!')}</strong> · ${esc(state.profile?.institution||'Choose your institution')} · ${esc(state.profile?.province||'South Africa')}<div class="v3-muted">${(state.tasks||[]).filter(x=>!x.done).length} pending study tasks · ${(state.applications||[]).length} tracked applications · ${(state.alerts||[]).length} personal reminders</div>`};summary();
+const modal=el('v3Modal'),body=el('v3ModalBody');function open(id){const tool=tools.find(x=>x[0]===id);el('v3ModalTitle').textContent=tool?.[2]||'Student tool';body.innerHTML=views[id]?.()||'<p>Not available.</p>';modal.hidden=false;modal.setAttribute('open','');document.body.style.overflow='hidden';body.querySelector('input,select,textarea,button')?.focus();}
+function close(){modal.hidden=true;modal.removeAttribute('open');document.body.style.overflow='';summary()};el('v3Close').onclick=close;modal.addEventListener('click',e=>{if(e.target===modal)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});document.addEventListener('click',e=>{let b=e.target.closest('[data-v3]');if(b)open(b.dataset.v3)});
+const field=(label,id,value='',type='text')=>`<label class="v3-label" for="${id}">${label}</label><input class="v3-field" id="${id}" type="${type}" value="${esc(value)}">`;
+const select=(label,id,opts,val='')=>`<label class="v3-label" for="${id}">${label}</label><select class="v3-field" id="${id}">${opts.map(x=>`<option value="${esc(x)}" ${x===val?'selected':''}>${esc(x||'Select')}</option>`).join('')}</select>`;
+const btn=(action,label)=>`<button class="v3-btn" data-action="${action}">${label}</button>`;
+const row=(a,idx,type)=>`<div class="v3-item"><strong>${esc(a.title)}</strong><div class="v3-muted">${esc(a.detail||'')} ${a.date?' · '+esc(a.date):''}</div><div class="v3-actions">${type==='task'?`<button class="v3-chip" data-action="done" data-i="${idx}">${a.done?'Reopen':'Mark done'}</button>`:''}<button class="v3-chip" data-action="remove" data-type="${type}" data-i="${idx}">Remove</button></div></div>`;
+const views={
+profile:()=>`${field('Name','pName',state.profile?.name)}${field('Institution','pInstitution',state.profile?.institution)}${select('Province','pProvince',['','Gauteng','Western Cape','KwaZulu-Natal','Eastern Cape','Limpopo','Mpumalanga','North West','Free State','Northern Cape'],state.profile?.province)}${field('Qualification / course','pCourse',state.profile?.course)}${select('Year of study','pYear',['','Grade 12','First year','Second year','Third year','Fourth year','Postgraduate','Other'],state.profile?.year)}<div class="v3-actions">${btn('saveProfile','Save profile')}</div><p class="v3-notice">Profile is saved only in this browser. No account or cloud sync is used.</p>`,
+aps:()=>`<p class="v3-muted">Enter seven matric percentages. This uses a common 7-to-1 scale and excludes Life Orientation from the best six. Universities may calculate APS differently; always check the specific institution.</p><div class="v3-two">${Array.from({length:7},(_,i)=>field('Subject '+(i+1)+(i===6?' (Life Orientation)':''),'aps'+i,'','number')).join('')}</div><div class="v3-actions">${btn('calcAps','Calculate estimated APS')}</div><div id="apsResult" aria-live="polite"></div>`,
+budget:()=>`${field('Monthly income / allowance (R)','bIncome',state.budget?.income||'','number')}${['rent','food','transport','data','books','other'].map(x=>field(x[0].toUpperCase()+x.slice(1)+' (R)','b'+x,state.budget?.[x]||'','number')).join('')}<div class="v3-actions">${btn('calcBudget','Save and calculate')}</div><div id="budgetResult"></div>`,
+planner:()=>`${field('Task / assignment','taskTitle')}${field('Due date','taskDate','','date')}<div class="v3-actions">${btn('addTask','Add task')}</div><div class="v3-list">${(state.tasks||[]).map((x,i)=>row(x,i,'task')).join('')||'<p class="v3-muted">No study tasks yet.</p>'}</div>`,
+tracker:()=>`${field('Institution / application','appTitle')}${select('Status','appStatus',['Planning','Submitted','Awaiting response','Accepted','Declined'])}${field('Deadline (verify on official website)','appDate','','date')}<div class="v3-actions">${btn('addApplication','Track application')}</div><div class="v3-list">${(state.applications||[]).map((x,i)=>row(x,i,'application')).join('')||'<p class="v3-muted">No applications tracked.</p>'}</div><p class="v3-notice">Dates are entered by you, not automatically verified.</p>`,
+course:()=>`${field('Search institution or field of study','courseSearch',state.profile?.course||'')}<div class="v3-actions">${btn('findCourse','Search existing directory')}</div><div id="courseResult" class="v3-list"></div><p class="v3-notice">The existing directory lists institutions, not a verified course catalogue or admission criteria.</p>`,
+funding:()=>`<p>Find existing bursary, scholarship, NSFAS and funding links from the original directory.</p>${field('Search funding name or keyword','fundingSearch')}<div class="v3-actions">${btn('findFunding','Find funding resources')}</div><div id="fundingResult" class="v3-list"></div><p class="v3-notice">Live eligibility, award amounts and deadlines are not available without a verified data feed.</p>`,
+jobs:()=>`<p>Search existing career and employment resources.</p>${field('Search job or learnership keyword','jobSearch')}<div class="v3-actions">${btn('findJobs','Search opportunities portals')}</div><div id="jobResult" class="v3-list"></div><p class="v3-notice">These are directory links, not confirmed live vacancies.</p>`,
+cv:()=>`${field('Full name','cvName',state.cv?.name)}${field('Email','cvEmail',state.cv?.email,'email')}${field('Phone','cvPhone',state.cv?.phone)}${field('Education','cvEducation',state.cv?.education)}<label class="v3-label" for="cvSkills">Skills (comma separated)</label><textarea id="cvSkills" class="v3-field" rows="3">${esc(state.cv?.skills||'')}</textarea><label class="v3-label" for="cvExperience">Experience / projects</label><textarea id="cvExperience" class="v3-field" rows="4">${esc(state.cv?.experience||'')}</textarea><div class="v3-actions">${btn('downloadCv','Download CV as text')}${btn('printCv','Print / save as PDF')}</div>`,
+alerts:()=>`<p class="v3-muted">Create your own reminders. This app does not claim to provide live institution announcements.</p>${field('Reminder','alertTitle')}${field('Date','alertDate','','date')}<div class="v3-actions">${btn('addAlert','Add reminder')}</div><div class="v3-list">${(state.alerts||[]).map((x,i)=>row(x,i,'alert')).join('')||'<p class="v3-muted">No reminders yet.</p>'}</div>`,
+saved:()=>`<p>Saved resources in your existing directory: <strong>${favorites.size}</strong></p><div class="v3-actions">${btn('viewFavorites','Show favourites in directory')}</div><p class="v3-notice">Your existing favourites remain intact and are not migrated or deleted.</p>`,
+backup:()=>`<p>Export your profile, tasks, applications, budget, CV and reminders to a JSON file. Import a previous backup on this device.</p><div class="v3-actions">${btn('export','Export data')}</div><label class="v3-label" for="importFile">Restore a JSON backup</label><input type="file" id="importFile" class="v3-field" accept="application/json,.json"><div class="v3-actions">${btn('import','Import backup')}</div><p class="v3-notice">Import replaces Version 3.0 tool data. Existing directory favourites are unaffected.</p>`,
+assistant:()=>`<p>Try a local resource finder (no external AI service or data sharing).</p>${field('What do you need help finding?','assistantQuery')}<div class="v3-actions">${btn('askAssistant','Find matching resources')}</div><div id="assistantResult" class="v3-list"></div>`};
+const num=id=>Math.max(0,Number(el(id)?.value)||0),value=id=>el(id)?.value.trim()||'';
+function results(target,entries){el(target).innerHTML=entries.length?entries.slice(0,80).map(x=>`<div class="v3-item"><a href="${esc(x.link.url)}" target="_blank" rel="noopener noreferrer" style="color:#344d00;font-weight:700">${esc(x.link.name)} ↗</a><div class="v3-muted">${esc(x.cat.name)} · ${esc(x.link.type||'Resource')}</div></div>`).join(''):'<p class="v3-muted">No matching resources. Try another search.</p>'}
+const all=directoryData.flatMap(cat=>cat.links.map(link=>({cat,link})));const search=(q,categories)=>{const terms=q.toLowerCase().split(/\s+/).filter(Boolean);return all.filter(x=>(!categories||categories.test(x.cat.name+' '+x.cat.id))&&terms.every(t=>[x.cat.name,x.cat.desc,x.link.name,x.link.type,x.link.badge,...(x.link.tags||[]),...(x.cat.tags||[])].join(' ').toLowerCase().includes(t)))};
+function download(name,contents,mime){const blob=new Blob([contents],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+const actions={saveProfile(){state.profile={name:value('pName'),institution:value('pInstitution'),province:value('pProvince'),course:value('pCourse'),year:value('pYear')};save();close()},calcAps(){let vals=Array.from({length:7},(_,i)=>Number(el('aps'+i).value));if(vals.some((x,i)=>el('aps'+i).value===''||x<0||x>100)){el('apsResult').textContent='Enter seven valid percentages between 0 and 100.';return}let levels=vals.slice(0,6).map(x=>x>=80?7:x>=70?6:x>=60?5:x>=50?4:x>=40?3:x>=30?2:1);el('apsResult').innerHTML=`<div class="v3-result">Estimated APS: <strong>${levels.reduce((a,b)=>a+b,0)}</strong> (six subjects excluding Life Orientation). This is not an admission decision.</div>`},calcBudget(){let b={income:num('bIncome')};for(let x of ['rent','food','transport','data','books','other'])b[x]=num('b'+x);state.budget=b;save();let total=Object.keys(b).filter(x=>x!=='income').reduce((n,x)=>n+b[x],0);el('budgetResult').innerHTML=`<div class="v3-result">Expenses: R${total.toFixed(2)} · Remaining: <strong>R${(b.income-total).toFixed(2)}</strong></div>`},addTask(){if(!value('taskTitle'))return alert('Enter a task.');(state.tasks??=[]).push({title:value('taskTitle'),date:value('taskDate'),done:false});save();open('planner')},addApplication(){if(!value('appTitle'))return alert('Enter an application.');(state.applications??=[]).push({title:value('appTitle'),date:value('appDate'),detail:value('appStatus')});save();open('tracker')},addAlert(){if(!value('alertTitle'))return alert('Enter a reminder.');(state.alerts??=[]).push({title:value('alertTitle'),date:value('alertDate')});save();open('alerts')},findCourse(){results('courseResult',search(value('courseSearch'),/universit|college|school|education|tvet/i))},findFunding(){results('fundingResult',search(value('fundingSearch'),/bursar|scholar|fund|loan/i))},findJobs(){results('jobResult',search(value('jobSearch'),/job|career|intern|learn|employment|work/i))},askAssistant(){results('assistantResult',search(value('assistantQuery')))},viewFavorites(){close();if(!showingFavorites)toggleFavoritesView();el('categoriesAccordionContainer').scrollIntoView({behavior:'smooth'})},export(){download('arcknowledge-student-kit-backup.json',JSON.stringify({version:3,data:state},null,2),'application/json')},async import(){const f=el('importFile').files[0];if(!f)return alert('Choose a backup file.');try{const x=JSON.parse(await f.text());if(x.version!==3||!x.data||typeof x.data!=='object'||Array.isArray(x.data))throw Error('Invalid backup');if(!confirm('Replace your current Student Kit tool data?'))return;state=x.data;save();close();alert('Backup restored.')}catch(e){alert('Unable to import: '+e.message)}},downloadCv(){const c=readCv();state.cv=c;save();download('student-cv.txt',cvText(c),'text/plain;charset=utf-8')},printCv(){const c=readCv();state.cv=c;save();const w=window.open('','_blank');if(!w){alert('Allow popups to print the CV.');return}w.document.write('<!doctype html><html><head><title>Student CV</title><style>body{font:16px Arial;max-width:700px;margin:50px auto;white-space:pre-wrap;line-height:1.5}</style></head><body>'+esc(cvText(c))+'</body></html>');w.document.close();w.focus();w.print()}};
+function readCv(){return Object.fromEntries(['name','email','phone','education','skills','experience'].map(x=>[x,value('cv'+x[0].toUpperCase()+x.slice(1))]))}function cvText(c){return `${c.name}\n${c.email} | ${c.phone}\n\nEDUCATION\n${c.education}\n\nSKILLS\n${c.skills}\n\nEXPERIENCE & PROJECTS\n${c.experience}`}
+body.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const action=b.dataset.action;if(action==='remove'){const key={task:'tasks',application:'applications',alert:'alerts'}[b.dataset.type];if(key){state[key].splice(Number(b.dataset.i),1);save();open({tasks:'planner',applications:'tracker',alerts:'alerts'}[key])}}else if(action==='done'){const t=state.tasks[Number(b.dataset.i)];if(t){t.done=!t.done;save();open('planner')}}else actions[action]?.()});
+const catSelect=el('v3Category');catSelect.innerHTML+=[...directoryData].map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');el('v3ResourceCount').textContent=`${directoryData.length} categories · ${all.length} original links`;
+function find(){let cat=catSelect.value,province=el('v3Province').value;let items=all.filter(x=>(!cat||x.cat.id===cat)&&(!province||[x.link.badge,...(x.link.tags||[])].join(' ').toUpperCase().split(/[^A-Z]+/).includes(province)));results('v3Matches',items);el('v3Matches').insertAdjacentHTML('afterbegin',`<p class="v3-muted">${items.length} matching resource(s)</p>`)}el('v3Find').onclick=find;el('v3Clear').onclick=()=>{catSelect.value='';el('v3Province').value='';el('v3Matches').innerHTML=''};
+// The original directory, favorites and modal handlers remain unchanged.
+})();
+</script>
+</body>
+</html>
