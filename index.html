@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arcknowledge — Files v2</title>
+
+  <!-- Google Fonts: Inter & Space Grotesk & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            ink: '#0A0A0A',
+            crimson: '#D90429',
+            crimsonDark: '#B00321',
+            paper: '#FFFFFF',
+            offwhite: '#F8F8F8'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Supabase JS SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- jsPDF for 1672x941 Archival PDF Certificate Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root {
+      --ink: #0A0A0A;
+      --crimson: #D90429;
+      --crimson-dark: #B00321;
+      --paper: #FFFFFF;
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .btn-red {
+      background-color: #D90429;
+      color: #FFFFFF;
+      border: 1.5px solid #0A0A0A;
+      transition: transform 0.14s ease, background-color 0.14s ease;
+    }
+    .btn-red:hover:not(:disabled) {
+      background-color: #B00321;
+      transform: translateY(-1px);
+    }
+    .btn-red:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .btn-red:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-black {
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+      border: 1.5px solid #0A0A0A;
+      transition: transform 0.14s ease, background-color 0.14s ease;
+    }
+    .btn-black:hover:not(:disabled) {
+      background-color: #262626;
+      transform: translateY(-1px);
+    }
+    .btn-black:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .btn-black:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .ratio-1672-941 {
+      aspect-ratio: 1672 / 941;
+      width: 100%;
+    }
+
+    .swiss-card {
+      border: 2px solid #0A0A0A;
+      box-shadow: 5px 5px 0px 0px #0A0A0A;
+    }
+    .swiss-card-red {
+      border: 2px solid #0A0A0A;
+      box-shadow: 5px 5px 0px 0px #D90429;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-crimson selection:text-white">
+
+  <!-- Toast Notification Stack -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-xs sm:max-w-sm w-full pointer-events-none px-2 sm:px-0"></div>
+
+  <!-- NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-xs border-b-2 border-ink">
+    <div class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-1.5">
+      <button type="button" onclick="navigateTo('storefront')" class="flex flex-col items-start text-left leading-none shrink-0 focus:outline-none group">
+        <span class="font-display font-bold text-base sm:text-2xl tracking-tight text-ink group-hover:text-crimson transition-colors">
+          Arcknowledge
+        </span>
+        <span class="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] text-ink/70 mt-0.5 sm:mt-1 font-bold">
+          Files v2
+        </span>
+      </button>
+
+      <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+        <div id="nav-logged-out" class="flex items-center gap-2 sm:gap-4">
+          <button type="button" onclick="navigateTo('storefront')" class="text-xs font-mono uppercase tracking-wider font-bold text-ink hover:text-crimson transition-colors">
+            Gallery
+          </button>
+          <button type="button" onclick="openAuthModal('login')" class="btn-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-xs font-mono uppercase tracking-wider font-bold">
+            Log In
+          </button>
+        </div>
+
+        <div id="nav-logged-in" class="hidden items-center gap-1.5 sm:gap-3">
+          <div class="rounded-full border-2 border-ink bg-white px-2.5 py-1 sm:px-3.5 sm:py-1.5 flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <div class="flex flex-col leading-none">
+              <span class="text-[9px] font-bold uppercase leading-none text-ink">Wallet:</span>
+              <span id="nav-wallet-balance" class="text-[11px] sm:text-xs font-mono font-extrabold leading-tight text-ink mt-0.5">R0.00</span>
+            </div>
+            <button type="button" onclick="toggleWalletDrawer(true)" class="text-[10px] sm:text-xs font-bold underline text-crimson hover:text-ink transition-colors">
+              view
+            </button>
+          </div>
+
+          <button type="button" onclick="navigateTo('profile')" class="btn-black px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-mono uppercase font-bold shrink-0">
+            Profile
+          </button>
+
+          <button type="button" onclick="handleLogout()" class="btn-red px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-mono uppercase font-bold shrink-0">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WALLET VIEW DRAWER -->
+    <div id="wallet-drawer" class="hidden border-t-2 border-ink bg-offwhite">
+      <div class="max-w-5xl mx-auto px-3 sm:px-6 py-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-ink pb-4">
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">ARCKNOWLEDGE COLLECTOR WALLET</span>
+            <div class="flex flex-wrap items-baseline gap-3 mt-1">
+              <span id="drawer-wallet-balance" class="font-display text-2xl sm:text-3xl font-bold text-ink">R0.00</span>
+              <span id="drawer-monthly-cap" class="text-[11px] font-mono bg-white border border-ink px-2.5 py-0.5 rounded-full text-ink">
+                Monthly Limit: R0.00 / R1,000.00
+              </span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="openDepositFlow()" class="btn-red px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+              Deposit Funds
+            </button>
+            <button type="button" onclick="toggleWithdrawalDropdown()" class="btn-black px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold flex items-center gap-1.5">
+              <span>Withdraw</span>
+              <span id="withdraw-dropdown-arrow">▼</span>
+            </button>
+            <button type="button" onclick="toggleWalletDrawer(false)" class="btn-black px-3 py-2 rounded-lg text-xs font-mono font-bold">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div id="withdrawal-dropdown-panel" class="hidden bg-white border-2 border-ink rounded-xl p-4 sm:p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="font-display font-bold text-base sm:text-lg text-ink">Request Bank Withdrawal (Min R50)</h3>
+              <p class="text-xs text-neutral-600">Withdrawals are confirmed by Arcknowledge Admin with a live transaction update message.</p>
+            </div>
+            <span id="withdraw-max-hint" class="text-[11px] font-mono font-bold text-crimson">Available: R0.00</span>
+          </div>
+
+          <form onsubmit="submitWithdrawalRequest(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-[10px] font-mono uppercase font-bold mb-1">Bank Name</label>
+              <input type="text" id="wd-bank-name" required placeholder="e.g. Nedbank / FNB / Capitec" class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-medium" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-mono uppercase font-bold mb-1">Account Holder</label>
+              <input type="text" id="wd-acc-holder" required placeholder="Full Account Holder Name" class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-medium" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-mono uppercase font-bold mb-1">Account Number</label>
+              <input type="text" id="wd-acc-number" required placeholder="e.g. 1330273591" class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-mono" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-mono uppercase font-bold mb-1">Branch Code</label>
+              <input type="text" id="wd-branch-code" required placeholder="e.g. 198765" class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-mono" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-mono uppercase font-bold mb-1">Withdrawal Amount (ZAR, Min R50)</label>
+              <input type="number" id="wd-amount" min="50" step="0.01" required placeholder="50.00" class="w-full border-2 border-ink rounded-lg px-3 py-2 text-xs font-mono font-bold" />
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="btn-red w-full py-2.5 rounded-lg text-xs font-mono uppercase font-bold">
+                Submit Withdrawal Request
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APPLICATION VIEWS -->
+  <main class="flex-grow">
+
+    <!-- VIEW 1: STOREFRONT -->
+    <section id="view-storefront" class="block">
+      <div class="border-b border-ink bg-offwhite">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-crimson inline-block"></span>
+            <span class="font-bold text-ink">1672 × 941 PX • ARCHIVAL PDF EDITION</span>
+          </div>
+          <div class="text-ink/80">
+            BASE PRICE: <strong class="text-ink">R14.00</strong> • MIN INVEST: <strong class="text-ink">R21.00</strong> • MONTHLY CAP: <strong class="text-crimson">R1,000.00</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-7 sm:py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-start">
+
+          <div class="lg:col-span-7 space-y-4">
+            <div class="swiss-card rounded-xl overflow-hidden bg-ink">
+              <div class="ratio-1672-941 relative bg-ink overflow-hidden">
+                <img
+                  id="storefront-artwork-img"
+                  src=""
+                  alt="Arcknowledge Files v2 — 1672x941px Archival Edition"
+                  class="w-full h-full object-cover block"
+                />
+                <div class="absolute bottom-3 left-3 bg-ink/90 text-white border border-white/25 px-2.5 py-1 rounded text-[10px] font-mono uppercase tracking-widest">
+                  1672 × 941 PX • ARCHIVAL PDF EDITION
+                </div>
+              </div>
+            </div>
+
+            <div class="border-2 border-ink rounded-xl p-4 sm:p-5 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">CERTIFIED DIGITAL ARTWORK</span>
+                <h1 id="storefront-artwork-title" class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">
+                  EDITION 01 — SWISS MONOLITH
+                </h1>
+                <p id="storefront-artwork-desc" class="text-xs text-neutral-600 mt-1 leading-relaxed">
+                  High-contrast 1672 × 941px architectural composition issued as a downloadable PDF certificate upon payment verification.
+                </p>
+              </div>
+              <div class="shrink-0 border-t sm:border-t-0 sm:border-l border-neutral-200 pt-3 sm:pt-0 sm:pl-5">
+                <span class="block text-[10px] font-mono uppercase text-neutral-500">STARTING PRICE</span>
+                <span class="font-display text-2xl font-bold text-ink">R14.00</span>
+              </div>
+            </div>
+
+            <div class="border-2 border-ink rounded-xl p-4 bg-offwhite flex items-start gap-3">
+              <span class="bg-crimson text-white font-mono text-[10px] font-bold px-2 py-1 rounded shrink-0 mt-0.5">RULE</span>
+              <p class="text-xs text-ink leading-relaxed">
+                <strong>Reinvestment &amp; Return Policy:</strong> Reinvestment requires a minimum of <strong>R21</strong> (<strong>33%</strong> Gallery Space Booking / <strong>67%</strong> Artwork Purchase Principal). Sell/return PDF after <strong>1 month (30 days)</strong> and 1 month only for <strong>200% interest</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="swiss-card rounded-xl bg-white p-5 sm:p-7">
+              <div class="flex items-center justify-between border-b-2 border-ink pb-4 mb-5">
+                <div>
+                  <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">ACQUIRE EDITION PDF</span>
+                  <h2 class="font-display text-xl sm:text-2xl font-bold text-ink">Buy / Invest Calculator</h2>
+                </div>
+                <span class="bg-ink text-white text-[11px] font-mono font-bold px-2.5 py-1 rounded">+200% / 1 MO</span>
+              </div>
+
+              <div id="storefront-owned-banner" class="hidden border-2 border-crimson bg-rose-50 rounded-xl p-4 mb-5">
+                <span class="inline-block bg-crimson text-white text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded mb-1.5">
+                  ACTIVE OWNERSHIP VERIFIED
+                </span>
+                <p class="text-xs text-ink leading-relaxed mb-3">
+                  Users can purchase an artwork only once per account. Visit your Profile &amp; Wallet to manage your PDF certificate, collect 1-month interest, or deposit funds.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" onclick="navigateTo('profile')" class="btn-black px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+                    Open Profile
+                  </button>
+                  <button type="button" onclick="toggleWalletDrawer(true)" class="btn-red px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+                    Open Wallet
+                  </button>
+                </div>
+              </div>
+
+              <form id="storefront-purchase-form" onsubmit="handlePurchaseInitiation(event)" class="space-y-4">
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <label for="calc-investment-amount" class="text-xs font-mono uppercase font-bold text-ink">
+                      Investment Amount (ZAR)
+                    </label>
+                    <span class="text-[10px] font-mono text-neutral-500">MIN R21 • MAX R1,000</span>
+                  </div>
+
+                  <div class="relative flex items-center">
+                    <span class="absolute left-3.5 font-display font-bold text-xl text-ink select-none">R</span>
+                    <input
+                      type="number"
+                      id="calc-investment-amount"
+                      min="21"
+                      max="1000"
+                      step="1"
+                      value="100"
+                      required
+                      oninput="updateLiveCalculator(this.value)"
+                      class="w-full pl-9 pr-4 py-3 text-xl font-display font-bold border-2 border-ink rounded-xl bg-offwhite text-ink focus:outline-none focus:ring-2 focus:ring-crimson"
+                    />
+                  </div>
+
+                  <div class="grid grid-cols-4 gap-2 mt-2">
+                    <button type="button" onclick="setPresetAmount(21)" class="btn-black py-1.5 rounded-lg text-xs font-mono font-bold">R21</button>
+                    <button type="button" onclick="setPresetAmount(100)" class="btn-black py-1.5 rounded-lg text-xs font-mono font-bold">R100</button>
+                    <button type="button" onclick="setPresetAmount(500)" class="btn-black py-1.5 rounded-lg text-xs font-mono font-bold">R500</button>
+                    <button type="button" onclick="setPresetAmount(1000)" class="btn-black py-1.5 rounded-lg text-xs font-mono font-bold">R1000</button>
+                  </div>
+
+                  <p id="calc-validation-error" class="hidden text-[11px] font-mono text-crimson font-bold mt-1.5">
+                    Amount must be between R21 and R1,000 (ensuring 67% purchase ≥ R14).
+                  </p>
+                </div>
+
+                <div class="border-2 border-ink rounded-xl p-4 bg-offwhite space-y-2">
+                  <div class="flex justify-between items-center text-xs font-mono">
+                    <span class="text-neutral-600">GROSS INVESTMENT</span>
+                    <span id="calc-gross-display" class="font-bold text-ink">R100.00</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs font-mono">
+                    <span class="text-neutral-600">33% GALLERY SPACE BOOKING (OMITTED)</span>
+                    <span id="calc-booking-fee-display" class="font-bold text-neutral-700">-R33.00</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs font-mono">
+                    <span class="text-neutral-600">67% ARTWORK PURCHASE PRINCIPAL</span>
+                    <span id="calc-principal-display" class="font-bold text-ink">R67.00</span>
+                  </div>
+                  <div class="flex justify-between items-center text-xs font-mono">
+                    <span class="text-neutral-600">200% INTEREST (AFTER 1 MONTH)</span>
+                    <span id="calc-interest-display" class="font-bold text-crimson">+R134.00</span>
+                  </div>
+                  <div class="border-t-2 border-ink pt-2.5 flex justify-between items-baseline">
+                    <div>
+                      <span class="block text-xs font-mono uppercase font-bold text-ink">RETURN CASH-IN VALUE</span>
+                      <span class="text-[10px] font-mono text-neutral-500">Sell/return PDF after 1 month</span>
+                    </div>
+                    <span id="calc-cashin-display" class="font-display text-2xl font-bold text-crimson">R201.00</span>
+                  </div>
+                </div>
+
+                <div id="storefront-register-fields" class="space-y-3 pt-1 border-t border-neutral-200">
+                  <p class="text-[11px] font-mono uppercase font-bold text-ink">
+                    INSTANT COLLECTOR REGISTRATION (NO EMAIL VERIFICATION)
+                  </p>
+                  <div>
+                    <label for="reg-email" class="block text-[10px] font-mono uppercase font-bold mb-1">Email Address</label>
+                    <input
+                      type="email"
+                      id="reg-email"
+                      placeholder="you@example.com"
+                      class="w-full border-2 border-ink rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson"
+                    />
+                  </div>
+                  <div>
+                    <label for="reg-pin" class="block text-[10px] font-mono uppercase font-bold mb-1">4-Digit PIN</label>
+                    <input
+                      type="password"
+                      id="reg-pin"
+                      maxlength="4"
+                      inputmode="numeric"
+                      pattern="\d{4}"
+                      placeholder="••••"
+                      class="w-full border-2 border-ink rounded-lg px-3.5 py-2.5 text-base font-mono tracking-[0.45em] focus:outline-none focus:ring-2 focus:ring-crimson"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  id="btn-buy-artwork"
+                  class="btn-red w-full py-3.5 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider"
+                >
+                  Buy / Purchase Artwork →
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: MAKE PAYMENT -->
+    <section id="view-payment" class="hidden py-7 sm:py-12">
+      <div class="max-w-3xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div class="swiss-card rounded-xl bg-white p-6 sm:p-8 space-y-6">
+
+          <div class="flex items-center justify-between border-b-2 border-ink pb-4">
+            <div>
+              <span id="pay-flow-tag" class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">EFT SETTLEMENT</span>
+              <h2 id="pay-flow-heading" class="font-display text-2xl sm:text-3xl font-bold text-ink mt-0.5">Make Payment</h2>
+            </div>
+            <button type="button" onclick="cancelPaymentFlow()" class="btn-black px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+              Cancel
+            </button>
+          </div>
+
+          <p class="text-xs text-neutral-600">
+            Account: <strong id="pay-user-email" class="text-ink font-mono">user@example.com</strong>. Please complete the Nedbank EFT transfer using the exact details and reference provided below.
+          </p>
+
+          <div class="bg-ink text-white rounded-xl p-4 sm:p-5 space-y-2">
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs font-mono uppercase text-neutral-400">EFT AMOUNT TO PAY:</span>
+              <span id="pay-gross-amount" class="font-display text-2xl sm:text-3xl font-bold text-white">R100.00</span>
+            </div>
+            <div class="border-t border-neutral-800 pt-2 grid grid-cols-2 gap-2 text-[11px] font-mono">
+              <div>
+                <span class="text-neutral-400 block">33% Gallery Booking (Omitted):</span>
+                <span id="pay-booking-omitted" class="font-bold text-white">R33.00</span>
+              </div>
+              <div class="text-right">
+                <span class="text-neutral-400 block" id="pay-net-label">67% Artwork Principal:</span>
+                <span id="pay-net-amount" class="font-bold text-crimson">R67.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-mono uppercase tracking-wider font-bold text-ink">
+                Official Nedbank Banking Details
+              </h3>
+              <button type="button" onclick="copyAllBankDetails()" class="btn-black px-3 py-1 rounded text-[10px] font-mono uppercase font-bold">
+                Copy All
+              </button>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex items-center justify-between border border-ink rounded-lg p-3 bg-offwhite">
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-neutral-500">Account holder</span>
+                  <span class="font-mono font-bold text-xs sm:text-sm text-ink">Arcknowledge Files</span>
+                </div>
+                <button type="button" onclick="copySingleDetail('Arcknowledge Files', this)" class="btn-black px-3 py-1.5 rounded text-[11px] font-mono uppercase font-bold">
+                  Copy
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between border border-ink rounded-lg p-3 bg-offwhite">
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-neutral-500">Account number</span>
+                  <span class="font-mono font-bold text-xs sm:text-sm text-ink">1330273591</span>
+                </div>
+                <button type="button" onclick="copySingleDetail('1330273591', this)" class="btn-black px-3 py-1.5 rounded text-[11px] font-mono uppercase font-bold">
+                  Copy
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between border border-ink rounded-lg p-3 bg-offwhite">
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-neutral-500">Account type</span>
+                  <span class="font-mono font-bold text-xs sm:text-sm text-ink">CA</span>
+                </div>
+                <button type="button" onclick="copySingleDetail('CA', this)" class="btn-black px-3 py-1.5 rounded text-[11px] font-mono uppercase font-bold">
+                  Copy
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between border border-ink rounded-lg p-3 bg-offwhite">
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-neutral-500">Bank name</span>
+                  <span class="font-mono font-bold text-xs sm:text-sm text-ink">Nedbank</span>
+                </div>
+                <button type="button" onclick="copySingleDetail('Nedbank', this)" class="btn-black px-3 py-1.5 rounded text-[11px] font-mono uppercase font-bold">
+                  Copy
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between border border-ink rounded-lg p-3 bg-offwhite">
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-neutral-500">Branch code</span>
+                  <span class="font-mono font-bold text-xs sm:text-sm text-ink">198765</span>
+                </div>
+                <button type="button" onclick="copySingleDetail('198765', this)" class="btn-black px-3 py-1.5 rounded text-[11px] font-mono uppercase font-bold">
+                  Copy
+                </button>
+              </div>
+
+              <div class="flex items-center justify-between border-2 border-crimson rounded-lg p-3 bg-rose-50/40">
+                <div>
+                  <span class="block text-[10px] font-mono uppercase text-crimson font-bold">Reference</span>
+                  <span id="pay-reference-display" class="font-mono font-bold text-xs sm:text-sm text-ink">Your first name</span>
+                </div>
+                <button type="button" id="btn-copy-reference" onclick="copySingleDetail('Your first name', this)" class="btn-red px-3 py-1.5 rounded text-[11px] font-mono uppercase font-bold">
+                  Copy
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t-2 border-ink pt-5">
+            <label for="pop-file-input" class="block text-xs font-mono uppercase font-bold text-ink mb-1">
+              Upload Proof of Payment (Required)
+            </label>
+            <p class="text-xs text-neutral-600 mb-3">
+              Accepted formats: <strong>PNG, JPG, JPEG, PDF</strong>. Upload your receipt to enable the confirmation button.
+            </p>
+
+            <div class="border-2 border-dashed border-ink rounded-xl p-5 text-center bg-offwhite relative">
+              <input
+                type="file"
+                id="pop-file-input"
+                accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf"
+                onchange="handleProofFileUpload(event)"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              <div id="pop-empty-state" class="pointer-events-none space-y-1">
+                <div class="w-9 h-9 rounded-full bg-ink text-white mx-auto flex items-center justify-center font-mono text-sm font-bold">↑</div>
+                <p class="text-xs sm:text-sm font-bold text-ink">Tap or drop Proof of Payment here</p>
+                <p class="text-[11px] font-mono text-neutral-500">PNG, JPG, JPEG or PDF</p>
+              </div>
+
+              <div id="pop-selected-state" class="hidden items-center justify-between bg-white border border-ink rounded-lg p-2.5 relative z-10">
+                <div class="flex items-center gap-2 overflow-hidden">
+                  <span id="pop-file-badge" class="bg-crimson text-white text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase shrink-0">PDF</span>
+                  <span id="pop-file-name" class="text-xs font-mono font-bold text-ink truncate">receipt.pdf</span>
+                </div>
+                <button type="button" onclick="clearProofFile()" class="btn-black px-2.5 py-1 rounded text-[10px] font-mono uppercase font-bold shrink-0">
+                  Remove
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              id="btn-submit-payment"
+              disabled
+              onclick="finalizePaymentSubmission()"
+              class="btn-red w-full py-3.5 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider mt-4"
+            >
+              Done with payment
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: PROFILE -->
+    <section id="view-profile" class="hidden py-7 sm:py-12">
+      <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 space-y-7">
+
+        <div class="swiss-card rounded-xl bg-white p-5 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-crimson"></span>
+              <span class="text-[10px] font-mono uppercase tracking-widest font-bold text-crimson">COLLECTOR PROFILE</span>
+              <span id="profile-status-pill" class="bg-ink text-white text-[10px] font-mono uppercase px-2 py-0.5 rounded font-bold">ACTIVE</span>
+            </div>
+            <h1 id="profile-email-display" class="font-display text-xl sm:text-3xl font-bold text-ink mt-1 break-all">
+              collector@example.com
+            </h1>
+            <p class="text-xs font-mono text-neutral-500 mt-1">
+              MONTHLY DEPOSIT/INVESTMENT CAP: <strong id="profile-monthly-usage" class="text-ink">R0.00 / R1,000.00</strong>
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="toggleWalletDrawer(true)" class="btn-red px-4 py-2.5 rounded-lg text-xs font-mono uppercase font-bold">
+              Wallet (R<span id="profile-wallet-btn-val">0.00</span>)
+            </button>
+            <button type="button" onclick="handleLogout()" class="btn-black px-4 py-2.5 rounded-lg text-xs font-mono uppercase font-bold">
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <div id="profile-artwork-card"></div>
+
+        <div class="border-2 border-ink rounded-xl bg-white overflow-hidden">
+          <div class="p-4 sm:p-5 border-b-2 border-ink flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 class="font-display font-bold text-lg sm:text-xl text-ink">Transactions &amp; Booking Fee Ledger</h2>
+              <p class="text-xs text-neutral-600">Shows gross amount, omitted 33% Gallery Booking fee, net credited/payout amount, and Admin updates.</p>
+            </div>
+            <span id="profile-tx-count" class="bg-ink text-white text-[11px] font-mono font-bold px-2.5 py-1 rounded self-start sm:self-auto">
+              0 TRANSACTIONS
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-ink bg-offwhite text-[10px] font-mono uppercase">
+                  <th class="py-3 px-3 sm:px-4">Date &amp; Time</th>
+                  <th class="py-3 px-3 sm:px-4">Type</th>
+                  <th class="py-3 px-3 sm:px-4">Gross</th>
+                  <th class="py-3 px-3 sm:px-4">33% Booking (Omitted)</th>
+                  <th class="py-3 px-3 sm:px-4">Net / Payout</th>
+                  <th class="py-3 px-3 sm:px-4">Status</th>
+                  <th class="py-3 px-3 sm:px-4">Admin Transaction Update</th>
+                </tr>
+              </thead>
+              <tbody id="profile-tx-tbody" class="divide-y divide-neutral-200 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 4: ADMIN CONSOLE -->
+    <section id="view-admin" class="hidden py-7 sm:py-12 bg-offwhite min-h-[82vh]">
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-6">
+
+        <div class="border-2 border-ink rounded-xl bg-ink text-white p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">ARCKNOWLEDGE ROOT CONSOLE</span>
+            <h1 class="font-display text-2xl sm:text-3xl font-bold mt-0.5">Administrator Dashboard</h1>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span id="admin-storage-indicator" class="text-[11px] font-mono uppercase px-3 py-1.5 rounded-lg bg-white/10 border border-white/20">
+              STORAGE: LOCAL FALLBACK
+            </span>
+            <button type="button" onclick="handleAdminLogout()" class="btn-red px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+              Admin Logout
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 border-b-2 border-ink pb-4">
+          <button type="button" onclick="switchAdminTab('users')" id="tab-admin-users" class="btn-red px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            1. Users &amp; Artwork Access
+          </button>
+          <button type="button" onclick="switchAdminTab('proofs')" id="tab-admin-proofs" class="btn-black px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            2. Proofs &amp; Deposits
+          </button>
+          <button type="button" onclick="switchAdminTab('withdrawals')" id="tab-admin-withdrawals" class="btn-black px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            3. Withdrawals
+          </button>
+          <button type="button" onclick="switchAdminTab('artwork')" id="tab-admin-artwork" class="btn-black px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            4. Artwork (1672×941)
+          </button>
+          <button type="button" onclick="switchAdminTab('supabase')" id="tab-admin-supabase" class="btn-black px-3.5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            5. Supabase Config
+          </button>
+        </div>
+
+        <!-- TAB 1: USERS -->
+        <div id="panel-admin-users" class="border-2 border-ink rounded-xl bg-white overflow-hidden">
+          <div class="p-4 sm:p-5 border-b-2 border-ink">
+            <h2 class="font-display font-bold text-lg">Registered Users, PDF Permissions &amp; Account Controls</h2>
+            <p class="text-xs text-neutral-600">Toggle PDF download access, edit account info, fast-forward 1-month maturity, suspend, or delete users.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-ink bg-offwhite text-[10px] font-mono uppercase">
+                  <th class="py-3 px-4">Email &amp; PIN</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Wallet</th>
+                  <th class="py-3 px-4">Purchase / 33% Fee / Cash-In</th>
+                  <th class="py-3 px-4">PDF Access</th>
+                  <th class="py-3 px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-users-tbody" class="divide-y divide-neutral-200 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: PROOFS -->
+        <div id="panel-admin-proofs" class="hidden border-2 border-ink rounded-xl bg-white overflow-hidden">
+          <div class="p-4 sm:p-5 border-b-2 border-ink">
+            <h2 class="font-display font-bold text-lg">Proof of Payments &amp; Deposit Verifications</h2>
+            <p class="text-xs text-neutral-600">Inspect uploaded PoP documents and verify deposits (credits 67% net balance after 33% gallery booking omission).</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-ink bg-offwhite text-[10px] font-mono uppercase">
+                  <th class="py-3 px-4">User</th>
+                  <th class="py-3 px-4">Type</th>
+                  <th class="py-3 px-4">Gross / 33% Fee / Net</th>
+                  <th class="py-3 px-4">Proof File</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Admin Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-proofs-tbody" class="divide-y divide-neutral-200 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: WITHDRAWALS -->
+        <div id="panel-admin-withdrawals" class="hidden border-2 border-ink rounded-xl bg-white overflow-hidden">
+          <div class="p-4 sm:p-5 border-b-2 border-ink">
+            <h2 class="font-display font-bold text-lg">Withdrawal Requests &amp; Payout Confirmation</h2>
+            <p class="text-xs text-neutral-600">Enter a custom transaction update message and confirm user bank withdrawals.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-ink bg-offwhite text-[10px] font-mono uppercase">
+                  <th class="py-3 px-4">User</th>
+                  <th class="py-3 px-4">Amount</th>
+                  <th class="py-3 px-4">Banking Details</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Confirm &amp; Message</th>
+                </tr>
+              </thead>
+              <tbody id="admin-withdrawals-tbody" class="divide-y divide-neutral-200 text-xs"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4: ARTWORK MANAGER (1672 x 941px + URL UPLOAD) -->
+        <div id="panel-admin-artwork" class="hidden border-2 border-ink rounded-xl bg-white p-5 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between border-b-2 border-ink pb-3 mb-5 gap-2">
+            <div>
+              <h2 class="font-display font-bold text-xl">Artwork Manager (1672 × 941px)</h2>
+              <p class="text-xs text-neutral-600">Upload via file, load via image URL, or reset to default Swiss Monolith.</p>
+            </div>
+            <span class="bg-crimson text-white font-mono text-xs font-bold px-3 py-1 rounded">1672 × 941 PX</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <div class="lg:col-span-6 border-2 border-ink rounded-xl overflow-hidden bg-ink">
+              <div class="ratio-1672-941">
+                <img id="admin-artwork-preview" src="" alt="Admin Artwork Preview" class="w-full h-full object-cover" />
+              </div>
+            </div>
+            <div class="lg:col-span-6 space-y-4">
+              <div>
+                <label class="block text-xs font-mono uppercase font-bold mb-1">Edition Title</label>
+                <input type="text" id="admin-art-title-input" class="w-full border border-ink rounded-lg px-3.5 py-2 text-sm font-bold" />
+              </div>
+              <div>
+                <label class="block text-xs font-mono uppercase font-bold mb-1">Edition Description</label>
+                <input type="text" id="admin-art-desc-input" class="w-full border border-ink rounded-lg px-3.5 py-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-mono uppercase font-bold mb-1">Upload Artwork File (PNG/JPG → 1672×941px)</label>
+                <input type="file" accept="image/png,image/jpeg,image/webp" onchange="handleAdminArtworkUpload(event)" class="w-full border border-ink rounded-lg p-2 text-xs font-mono bg-offwhite" />
+              </div>
+              <div>
+                <label class="block text-xs font-mono uppercase font-bold mb-1">Or Load Artwork via Image URL</label>
+                <div class="flex gap-2">
+                  <input type="url" id="admin-art-url-input" placeholder="https://images.unsplash.com/photo-..." class="w-full border border-ink rounded-lg px-3.5 py-2 text-xs font-mono" />
+                  <button type="button" onclick="loadArtworkFromUrlInput()" class="btn-black px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold shrink-0">
+                    Load URL
+                  </button>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2.5 pt-2">
+                <button type="button" onclick="saveAdminArtwork()" class="btn-red px-5 py-3 rounded-xl text-xs font-mono uppercase font-bold">
+                  Publish 1672 × 941px Artwork
+                </button>
+                <button type="button" onclick="resetDefaultArtwork()" class="btn-black px-4 py-3 rounded-xl text-xs font-mono uppercase font-bold">
+                  Reset to Default
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: SUPABASE CONFIG -->
+        <div id="panel-admin-supabase" class="hidden border-2 border-ink rounded-xl bg-white p-5 sm:p-6 space-y-5">
+          <div class="flex flex-wrap items-center justify-between border-b-2 border-ink pb-3 gap-2">
+            <div>
+              <h2 class="font-display font-bold text-xl">Supabase Database Integration</h2>
+              <p class="text-xs text-neutral-600">Connect a live Supabase project or run automatically on the built-in IndexedDB/localStorage engine.</p>
+            </div>
+            <span id="sb-status-badge" class="text-xs font-mono font-bold px-3 py-1 rounded bg-offwhite border border-ink">
+              LOCAL ENGINE ACTIVE
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-mono uppercase font-bold mb-1">Supabase Project URL</label>
+              <input type="text" id="sb-url-field" placeholder="https://xyzcompany.supabase.co" class="w-full border border-ink rounded-lg px-3.5 py-2 text-xs font-mono" />
+            </div>
+            <div>
+              <label class="block text-xs font-mono uppercase font-bold mb-1">Supabase Anon Key</label>
+              <input type="password" id="sb-key-field" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." class="w-full border border-ink rounded-lg px-3.5 py-2 text-xs font-mono" />
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2.5">
+            <button type="button" onclick="saveSupabaseConfig()" class="btn-red px-5 py-2.5 rounded-lg text-xs font-mono uppercase font-bold">
+              Save &amp; Test Connection
+            </button>
+            <button type="button" onclick="clearSupabaseConfig()" class="btn-black px-4 py-2.5 rounded-lg text-xs font-mono uppercase font-bold">
+              Use Built-in Local DB
+            </button>
+          </div>
+
+          <div class="border border-ink rounded-xl p-4 bg-offwhite">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono uppercase font-bold text-ink">SQL Schema for Supabase SQL Editor</span>
+              <button type="button" onclick="copySqlSnippet()" class="btn-black px-3 py-1 rounded text-[10px] font-mono uppercase font-bold">
+                Copy SQL
+              </button>
+            </div>
+            <pre id="sb-sql-snippet" class="text-[11px] font-mono bg-ink text-white p-3.5 rounded-lg overflow-x-auto leading-relaxed">-- Arcknowledge Files v2 Tables
+create table if not exists arc_v2_users (
+  id text primary key,
+  email text unique not null,
+  pin text not null,
+  status text default 'active',
+  wallet_balance numeric default 0,
+  has_purchased boolean default false,
+  purchase_gross numeric default 0,
+  booking_fee_omitted numeric default 0,
+  purchase_principal numeric default 0,
+  cash_in_amount numeric default 0,
+  purchase_date timestamptz,
+  interest_collected boolean default false,
+  pdf_enabled boolean default false,
+  created_at timestamptz default now()
+);
+
+create table if not exists arc_v2_transactions (
+  id text primary key,
+  user_email text not null,
+  tx_type text not null,
+  gross_amount numeric not null,
+  booking_fee numeric default 0,
+  net_amount numeric not null,
+  status text not null,
+  admin_message text,
+  proof_name text,
+  bank_details text,
+  created_at timestamptz default now()
+);
+
+create table if not exists arc_v2_settings (
+  id int primary key default 1,
+  title text,
+  description text,
+  artwork_data_url text
+);</pre>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t-2 border-ink bg-ink text-white">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-9">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-7 border-b border-neutral-800">
+        <div>
+          <div class="font-display font-bold text-xl tracking-tight">Arcknowledge</div>
+          <div class="text-[10px] font-mono uppercase tracking-[0.25em] text-neutral-400 mt-0.5">Files v2</div>
+          <p class="text-xs text-neutral-400 mt-2 max-w-md">
+            Minimalist Swiss digital artwork showcase &amp; 30-day archival return protocol. Certified 1672 × 941px PDF editions.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-xs font-mono uppercase tracking-wider">
+          <button type="button" onclick="openLegalModal('privacy')" class="text-neutral-300 hover:text-crimson transition-colors">
+            Privacy Policy
+          </button>
+          <button type="button" onclick="openLegalModal('terms')" class="text-neutral-300 hover:text-crimson transition-colors">
+            Terms of Use
+          </button>
+          <button type="button" onclick="openLegalModal('conditions')" class="text-neutral-300 hover:text-crimson transition-colors">
+            Terms &amp; Conditions
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-400">
+        <div>© 2026 Arcknowledge Files v2. All rights reserved.</div>
+        <button type="button" onclick="openAdminLoginModal()" class="btn-red px-4 py-1.5 rounded-lg text-[11px] font-mono uppercase tracking-wider font-bold">
+          Admin Login
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: AUTH -->
+  <div id="modal-auth" class="hidden fixed inset-0 z-50 bg-ink/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white swiss-card-red rounded-xl max-w-md w-full p-6 sm:p-7 relative">
+      <button type="button" onclick="closeModal('modal-auth')" class="btn-black absolute top-4 right-4 w-8 h-8 rounded-lg font-mono text-xs font-bold">
+        ✕
+      </button>
+
+      <div class="grid grid-cols-3 border-2 border-ink rounded-lg overflow-hidden mb-5 text-[10px] sm:text-[11px] font-mono uppercase font-bold">
+        <button type="button" id="auth-tab-login" onclick="setAuthMode('login')" class="py-2.5 bg-ink text-white">
+          Log In
+        </button>
+        <button type="button" id="auth-tab-register" onclick="setAuthMode('register')" class="py-2.5 bg-white text-ink border-x border-ink">
+          Register
+        </button>
+        <button type="button" id="auth-tab-reset" onclick="setAuthMode('reset')" class="py-2.5 bg-white text-ink">
+          Reset PIN
+        </button>
+      </div>
+
+      <h3 id="auth-modal-title" class="font-display text-xl sm:text-2xl font-bold text-ink mb-1">Log In to Your Profile</h3>
+      <p id="auth-modal-subtitle" class="text-xs text-neutral-600 mb-5">
+        Enter your registered email address and 4-digit PIN. Login persists until you log out.
+      </p>
+
+      <form onsubmit="submitAuthModal(event)" class="space-y-4">
+        <div>
+          <label for="modal-auth-email" class="block text-[10px] font-mono uppercase font-bold mb-1">Email Address</label>
+          <input
+            type="email"
+            id="modal-auth-email"
+            required
+            placeholder="collector@example.com"
+            class="w-full border-2 border-ink rounded-lg px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson"
+          />
+        </div>
+
+        <div id="modal-auth-pin-wrapper">
+          <label for="modal-auth-pin" class="block text-[10px] font-mono uppercase font-bold mb-1">4-Digit PIN</label>
+          <input
+            type="password"
+            id="modal-auth-pin"
+            maxlength="4"
+            inputmode="numeric"
+            pattern="\d{4}"
+            placeholder="••••"
+            class="w-full border-2 border-ink rounded-lg px-3.5 py-2.5 text-lg font-mono tracking-[0.45em] focus:outline-none focus:ring-2 focus:ring-crimson"
+          />
+        </div>
+
+        <div id="modal-pin-revealed-box" class="hidden border-2 border-crimson bg-rose-50 rounded-lg p-3.5 text-center">
+          <span class="block text-[10px] font-mono uppercase font-bold text-crimson">ASSOCIATED 4-DIGIT PIN</span>
+          <span id="modal-pin-revealed-value" class="font-mono text-2xl sm:text-3xl font-extrabold tracking-[0.35em] text-ink block mt-1">----</span>
+        </div>
+
+        <button type="submit" id="modal-auth-submit-btn" class="btn-red w-full py-3 rounded-xl font-display font-bold text-sm uppercase tracking-wider">
+          Log In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: DEPOSIT -->
+  <div id="modal-deposit" class="hidden fixed inset-0 z-50 bg-ink/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white swiss-card rounded-xl max-w-md w-full p-6 sm:p-7 relative">
+      <button type="button" onclick="closeModal('modal-deposit')" class="btn-black absolute top-4 right-4 w-8 h-8 rounded-lg font-mono text-xs font-bold">
+        ✕
+      </button>
+
+      <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">WALLET FUNDING</span>
+      <h3 class="font-display text-2xl font-bold text-ink mt-0.5 mb-2">Deposit Funds</h3>
+      <p id="deposit-modal-limit-note" class="text-xs text-neutral-600 mb-4">
+        Min R21 • Max R1,000/month. 33% is allocated to Gallery Space Booking and 67% is credited to your Wallet upon Admin verification.
+      </p>
+
+      <form onsubmit="proceedWalletDepositToPayment(event)" class="space-y-4">
+        <div>
+          <label for="deposit-amount-input" class="block text-[10px] font-mono uppercase font-bold mb-1">Deposit Amount (ZAR)</label>
+          <div class="relative flex items-center">
+            <span class="absolute left-3.5 font-display font-bold text-xl text-ink">R</span>
+            <input
+              type="number"
+              id="deposit-amount-input"
+              min="21"
+              max="1000"
+              step="1"
+              value="100"
+              required
+              oninput="updateDepositLivePreview(this.value)"
+              class="w-full pl-9 pr-4 py-2.5 text-xl font-display font-bold border-2 border-ink rounded-lg bg-offwhite"
+            />
+          </div>
+        </div>
+
+        <div class="border border-ink rounded-lg p-3 bg-offwhite space-y-1.5 text-xs font-mono">
+          <div class="flex justify-between">
+            <span class="text-neutral-600">33% Gallery Space Booking (Omitted):</span>
+            <span id="dep-preview-fee" class="font-bold text-ink">-R33.00</span>
+          </div>
+          <div class="flex justify-between border-t border-neutral-300 pt-1.5">
+            <span class="font-bold text-ink">67% Net Wallet Credit:</span>
+            <span id="dep-preview-net" class="font-bold text-crimson">+R67.00</span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-red w-full py-3 rounded-xl font-display font-bold text-sm uppercase tracking-wider">
+          Continue to Banking Details →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADMIN LOGIN -->
+  <div id="modal-admin-login" class="hidden fixed inset-0 z-50 bg-ink/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white swiss-card-red rounded-xl max-w-md w-full p-6 sm:p-7 relative">
+      <button type="button" onclick="closeModal('modal-admin-login')" class="btn-black absolute top-4 right-4 w-8 h-8 rounded-lg font-mono text-xs font-bold">
+        ✕
+      </button>
+
+      <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">ROOT ACCESS</span>
+      <h3 class="font-display text-2xl font-bold text-ink mt-0.5 mb-2">Admin Login</h3>
+      <p class="text-xs text-neutral-600 mb-5">Enter administrator password to access user management, proof verification, payouts, and artwork settings.</p>
+
+      <form onsubmit="submitAdminLogin(event)" class="space-y-4">
+        <div>
+          <label for="admin-password-input" class="block text-[10px] font-mono uppercase font-bold mb-1">Administrator Password</label>
+          <input
+            type="password"
+            id="admin-password-input"
+            required
+            placeholder="••••••••••••"
+            class="w-full border-2 border-ink rounded-lg px-3.5 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-crimson"
+          />
+        </div>
+        <button type="submit" class="btn-black w-full py-3 rounded-xl font-display font-bold text-sm uppercase tracking-wider">
+          Authenticate Admin
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADMIN EDIT USER -->
+  <div id="modal-admin-edit-user" class="hidden fixed inset-0 z-50 bg-ink/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white swiss-card rounded-xl max-w-lg w-full p-6 sm:p-7 relative">
+      <button type="button" onclick="closeModal('modal-admin-edit-user')" class="btn-black absolute top-4 right-4 w-8 h-8 rounded-lg font-mono text-xs font-bold">
+        ✕
+      </button>
+
+      <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">MODIFY COLLECTOR RECORD</span>
+      <h3 class="font-display text-2xl font-bold text-ink mt-0.5 mb-4">Edit User Account</h3>
+
+      <form onsubmit="saveAdminEditedUser(event)" class="space-y-3.5">
+        <input type="hidden" id="edit-u-id" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-mono uppercase font-bold mb-1">Email Address</label>
+            <input type="email" id="edit-u-email" required class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-mono" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono uppercase font-bold mb-1">4-Digit PIN</label>
+            <input type="text" id="edit-u-pin" maxlength="4" pattern="\d{4}" required class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-mono" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono uppercase font-bold mb-1">Wallet Balance (R)</label>
+            <input type="number" step="0.01" id="edit-u-wallet" required class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-mono" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono uppercase font-bold mb-1">Gross Purchase Amount (R)</label>
+            <input type="number" step="0.01" id="edit-u-gross" required class="w-full border border-ink rounded-lg px-3 py-2 text-xs font-mono" />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5 pt-2">
+          <input type="checkbox" id="edit-u-mature" class="w-4 h-4 accent-crimson" />
+          <label for="edit-u-mature" class="text-xs font-mono font-bold text-ink">
+            Fast-Forward 1-Month Maturity (Enable "Collect Investment Interest" button)
+          </label>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3">
+          <button type="button" onclick="closeModal('modal-admin-edit-user')" class="btn-black px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            Cancel
+          </button>
+          <button type="submit" class="btn-red px-5 py-2 rounded-lg text-xs font-mono uppercase font-bold">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: PROOF VIEWER -->
+  <div id="modal-pop-viewer" class="hidden fixed inset-0 z-50 bg-ink/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border-2 border-ink rounded-xl max-w-2xl w-full p-5 sm:p-6 max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3 mb-4">
+        <div>
+          <span class="text-[10px] font-mono uppercase text-crimson font-bold">UPLOADED RECEIPT</span>
+          <h3 id="pop-viewer-title" class="font-display font-bold text-lg text-ink">Proof of Payment</h3>
+        </div>
+        <button type="button" onclick="closeModal('modal-pop-viewer')" class="btn-black px-3 py-1.5 rounded-lg text-xs font-mono font-bold">
+          Close ✕
+        </button>
+      </div>
+      <div id="pop-viewer-body" class="flex-grow overflow-auto bg-offwhite border border-ink rounded-lg p-4 flex items-center justify-center min-h-[260px]">
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: LEGAL -->
+  <div id="modal-legal" class="hidden fixed inset-0 z-50 bg-ink/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white swiss-card rounded-xl max-w-2xl w-full p-5 sm:p-8 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-3 mb-4">
+        <div>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">ARCKNOWLEDGE FILES V2 // LEGAL</span>
+          <h3 id="legal-modal-title" class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">Legal Documentation</h3>
+        </div>
+        <button type="button" onclick="closeModal('modal-legal')" class="btn-black px-3 py-1.5 rounded-lg text-xs font-mono uppercase font-bold">
+          Close ✕
+        </button>
+      </div>
+      <div id="legal-modal-body" class="overflow-y-auto pr-2 space-y-3.5 text-xs sm:text-sm text-neutral-700 leading-relaxed">
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT ENGINE -->
+  <script>
+    const ADMIN_PASSWORD = '#PetalChain_Computer_26';
+    let supabaseClient = null;
+    let sessionUserEmail = localStorage.getItem('arc_v2_user_session') || null;
+    let sessionAdminActive = localStorage.getItem('arc_v2_admin_session') === 'true';
+    let currentAuthMode = 'login';
+    let activePaymentFlow = { kind: 'artwork_purchase', grossAmount: 100 };
+    let uploadedProofFile = null;
+    let currentCalcGross = 100;
+    let stagedAdminArtwork = null;
+    let siteArtworkConfig = {
+      title: 'EDITION 01 — SWISS MONOLITH',
+      description: 'High-contrast 1672 × 941px architectural composition issued as a downloadable PDF certificate upon payment verification.',
+      artworkDataUrl: ''
+    };
+
+    function initSupabaseAdapter() {
+      const url = localStorage.getItem('arc_v2_sb_url');
+      const key = localStorage.getItem('arc_v2_sb_key');
+      if (url && key && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(url, key);
+          document.getElementById('sb-status-badge').textContent = 'SUPABASE LIVE';
+          document.getElementById('sb-status-badge').className = 'text-xs font-mono font-bold px-3 py-1 rounded bg-rose-50 text-crimson border border-crimson';
+          document.getElementById('admin-storage-indicator').textContent = 'STORAGE: SUPABASE';
+          return;
+        } catch (e) {
+          console.error('Supabase init error:', e);
+        }
+      }
+      supabaseClient = null;
+      document.getElementById('sb-status-badge').textContent = 'LOCAL ENGINE ACTIVE';
+      document.getElementById('sb-status-badge').className = 'text-xs font-mono font-bold px-3 py-1 rounded bg-offwhite border border-ink';
+      document.getElementById('admin-storage-indicator').textContent = 'STORAGE: LOCAL FALLBACK';
+    }
+
+    const DB = {
+      async getUsers() {
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient.from('arc_v2_users').select('*');
+          if (!error && data) return data;
+        }
+        return JSON.parse(localStorage.getItem('arc_v2_users_local') || '[]');
+      },
+      async upsertUser(userObj) {
+        if (supabaseClient) {
+          const { error } = await supabaseClient.from('arc_v2_users').upsert(userObj);
+          if (!error) return userObj;
+        }
+        let list = JSON.parse(localStorage.getItem('arc_v2_users_local') || '[]');
+        const idx = list.findIndex(u => u.id === userObj.id || u.email.toLowerCase() === userObj.email.toLowerCase());
+        if (idx >= 0) list[idx] = { ...list[idx], ...userObj };
+        else list.push(userObj);
+        localStorage.setItem('arc_v2_users_local', JSON.stringify(list));
+        return userObj;
+      },
+      async removeUser(userId) {
+        if (supabaseClient) {
+          await supabaseClient.from('arc_v2_users').delete().eq('id', userId);
+        }
+        let list = JSON.parse(localStorage.getItem('arc_v2_users_local') || '[]');
+        list = list.filter(u => u.id !== userId);
+        localStorage.setItem('arc_v2_users_local', JSON.stringify(list));
+      },
+      async getTransactions() {
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient.from('arc_v2_transactions').select('*').order('created_at', { ascending: false });
+          if (!error && data) return data;
+        }
+        return JSON.parse(localStorage.getItem('arc_v2_txs_local') || '[]');
+      },
+      async upsertTransaction(txObj, proofBlobDataUrl = null) {
+        if (proofBlobDataUrl) {
+          try { localStorage.setItem('pop_' + txObj.id, proofBlobDataUrl); } catch(e){}
+        }
+        if (supabaseClient) {
+          await supabaseClient.from('arc_v2_transactions').upsert(txObj);
+        }
+        let list = JSON.parse(localStorage.getItem('arc_v2_txs_local') || '[]');
+        const idx = list.findIndex(t => t.id === txObj.id);
+        if (idx >= 0) list[idx] = { ...list[idx], ...txObj };
+        else list.unshift(txObj);
+        localStorage.setItem('arc_v2_txs_local', JSON.stringify(list));
+        return txObj;
+      },
+      async getArtworkSettings() {
+        if (supabaseClient) {
+          const { data, error } = await supabaseClient.from('arc_v2_settings').select('*').eq('id', 1).single();
+          if (!error && data) {
+            return {
+              title: data.title || siteArtworkConfig.title,
+              description: data.description || siteArtworkConfig.description,
+              artworkDataUrl: data.artwork_data_url || generateDefaultSwissArtwork()
+            };
+          }
+        }
+        const cached = localStorage.getItem('arc_v2_art_settings');
+        if (cached) {
+          try { return JSON.parse(cached); } catch(e){}
+        }
+        const def = {
+          title: siteArtworkConfig.title,
+          description: siteArtworkConfig.description,
+          artworkDataUrl: generateDefaultSwissArtwork()
+        };
+        return def;
+      },
+      async saveArtworkSettings(settings) {
+        localStorage.setItem('arc_v2_art_settings', JSON.stringify(settings));
+        if (supabaseClient) {
+          await supabaseClient.from('arc_v2_settings').upsert({
+            id: 1,
+            title: settings.title,
+            description: settings.description,
+            artwork_data_url: settings.artworkDataUrl
+          });
+        }
+      }
+    };
+
+    async function fetchBlob(key) {
+      try {
+        const local = localStorage.getItem(key);
+        if (local) return local;
+      } catch(e){}
+      return null;
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto p-4 rounded-xl border-2 border-ink shadow-[4px_4px_0px_0px_#0A0A0A] font-mono text-xs font-bold transition-all transform translate-y-2 opacity-0 flex items-center justify-between gap-3 ${
+        type === 'error' ? 'bg-rose-50 text-crimson border-crimson' : 'bg-ink text-white'
+      }`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+
+    function formatZAR(amount) {
+      return 'R' + Number(amount || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    async function getLoggedInUser() {
+      if (!sessionUserEmail) return null;
+      const users = await DB.getUsers();
+      return users.find(u => u.email.toLowerCase() === sessionUserEmail.toLowerCase()) || null;
+    }
+
+    async function syncNavigationUI() {
+      const user = await getLoggedInUser();
+      const loggedOutDiv = document.getElementById('nav-logged-out');
+      const loggedInDiv = document.getElementById('nav-logged-in');
+      const ownedBanner = document.getElementById('storefront-owned-banner');
+      const regFields = document.getElementById('storefront-register-fields');
+
+      if (user) {
+        loggedOutDiv.classList.add('hidden');
+        loggedOutDiv.classList.remove('flex');
+        loggedInDiv.classList.remove('hidden');
+        loggedInDiv.classList.add('flex');
+
+        document.getElementById('nav-wallet-balance').textContent = formatZAR(user.wallet_balance);
+        document.getElementById('drawer-wallet-balance').textContent = formatZAR(user.wallet_balance);
+
+        const monthlyUsed = await calculateMonthlyUsage(user);
+        document.getElementById('drawer-monthly-cap').textContent = `Monthly Limit: ${formatZAR(monthlyUsed)} / R1,000.00`;
+        document.getElementById('withdraw-max-hint').textContent = `Available: ${formatZAR(user.wallet_balance)}`;
+
+        if (user.has_purchased) {
+          ownedBanner.classList.remove('hidden');
+          regFields.classList.add('hidden');
+        } else {
+          ownedBanner.classList.add('hidden');
+          regFields.classList.remove('hidden');
+        }
+      } else {
+        loggedOutDiv.classList.remove('hidden');
+        loggedOutDiv.classList.add('flex');
+        loggedInDiv.classList.add('hidden');
+        loggedInDiv.classList.remove('flex');
+        ownedBanner.classList.add('hidden');
+        regFields.classList.remove('hidden');
+      }
+    }
+
+    async function navigateTo(viewName) {
+      ['storefront', 'payment', 'profile', 'admin'].forEach(v => {
+        document.getElementById('view-' + v).classList.add('hidden');
+        document.getElementById('view-' + v).classList.remove('block');
+      });
+
+      document.getElementById('view-' + viewName).classList.remove('hidden');
+      document.getElementById('view-' + viewName).classList.add('block');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      await syncNavigationUI();
+
+      if (viewName === 'profile') {
+        const user = await getLoggedInUser();
+        if (!user) {
+          openAuthModal('login');
+          return;
+        }
+        await renderProfileDashboard();
+      } else if (viewName === 'admin') {
+        if (!sessionAdminActive) {
+          openAdminLoginModal();
+          return;
+        }
+        await renderAdminDashboard();
+      }
+    }
+
+    function generateDefaultSwissArtwork() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1672;
+      canvas.height = 941;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#0A0A0A';
+      ctx.fillRect(0, 0, 1672, 941);
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= 1672; x += 88) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 941); ctx.stroke();
+      }
+      for (let y = 0; y <= 941; y += 88) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1672, y); ctx.stroke();
+      }
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(176, 132, 484, 677);
+
+      ctx.fillStyle = '#D90429';
+      ctx.beginPath();
+      ctx.arc(792, 470, 275, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#0A0A0A';
+      ctx.fillRect(704, 382, 176, 176);
+
+      ctx.fillStyle = '#D90429';
+      ctx.fillRect(176, 132, 484, 24);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 58px "Space Grotesk", sans-serif';
+      ctx.fillText('ARCKNOWLEDGE', 990, 290);
+
+      ctx.fillStyle = '#D90429';
+      ctx.font = 'bold 24px "JetBrains Mono", monospace';
+      ctx.fillText('FILES V2 // ARCHIVAL EDITION 01', 990, 338);
+
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(990, 372); ctx.lineTo(1510, 372); ctx.stroke();
+
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.font = '19px "JetBrains Mono", monospace';
+      ctx.fillText('RESOLUTION: 1672 × 941 PX MASTER', 990, 425);
+      ctx.fillText('ALLOCATION: 33% GALLERY / 67% ARTWORK', 990, 463);
+      ctx.fillText('MATURITY: 1 MONTH (200% INTEREST)', 990, 501);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(990, 745, 520, 64);
+      ctx.fillStyle = '#0A0A0A';
+      ctx.font = 'bold 21px "JetBrains Mono", monospace';
+      ctx.fillText('SWISS MONOLITH // 1672×941 PDF', 1020, 785);
+
+      return canvas.toDataURL('image/png');
+    }
+
+    function updateLiveCalculator(rawVal) {
+      const val = parseFloat(rawVal);
+      const errEl = document.getElementById('calc-validation-error');
+      const buyBtn = document.getElementById('btn-buy-artwork');
+
+      if (isNaN(val) || val < 21 || val > 1000) {
+        errEl.classList.remove('hidden');
+        buyBtn.disabled = true;
+        document.getElementById('calc-gross-display').textContent = isNaN(val) ? 'R0.00' : formatZAR(val);
+        document.getElementById('calc-booking-fee-display').textContent = '-R0.00';
+        document.getElementById('calc-principal-display').textContent = 'R0.00';
+        document.getElementById('calc-interest-display').textContent = '+R0.00';
+        document.getElementById('calc-cashin-display').textContent = 'R0.00';
+        return;
+      }
+
+      errEl.classList.add('hidden');
+      buyBtn.disabled = false;
+      currentCalcGross = val;
+
+      const bookingFee = +(val * 0.33).toFixed(2);
+      const principal = +(val - bookingFee).toFixed(2);
+      const interest = +(principal * 2.0).toFixed(2);
+      const cashIn = +(principal + interest).toFixed(2);
+
+      document.getElementById('calc-gross-display').textContent = formatZAR(val);
+      document.getElementById('calc-booking-fee-display').textContent = '-' + formatZAR(bookingFee);
+      document.getElementById('calc-principal-display').textContent = formatZAR(principal);
+      document.getElementById('calc-interest-display').textContent = '+' + formatZAR(interest);
+      document.getElementById('calc-cashin-display').textContent = formatZAR(cashIn);
+    }
+
+    function setPresetAmount(amt) {
+      const input = document.getElementById('calc-investment-amount');
+      input.value = amt;
+      updateLiveCalculator(amt);
+    }
+
+    async function handlePurchaseInitiation(e) {
+      e.preventDefault();
+      if (isNaN(currentCalcGross) || currentCalcGross < 21 || currentCalcGross > 1000) {
+        showToast('Enter an amount between R21 and R1,000.', 'error');
+        return;
+      }
+
+      let user = await getLoggedInUser();
+
+      if (!user) {
+        const email = document.getElementById('reg-email').value.trim().toLowerCase();
+        const pin = document.getElementById('reg-pin').value.trim();
+
+        if (!email || !/^\d{4}$/.test(pin)) {
+          showToast('Enter a valid email address and 4-digit PIN.', 'error');
+          return;
+        }
+
+        const users = await DB.getUsers();
+        const existing = users.find(u => u.email.toLowerCase() === email);
+
+        if (existing) {
+          if (existing.status === 'suspended') {
+            showToast('This account is suspended.', 'error');
+            return;
+          }
+          if (existing.pin !== pin) {
+            showToast('Email already exists with a different PIN. Use Log In or Reset PIN.', 'error');
+            return;
+          }
+          user = existing;
+        } else {
+          user = await DB.upsertUser({
+            id: 'u_' + Date.now(),
+            email: email,
+            pin: pin,
+            status: 'active',
+            wallet_balance: 0,
+            has_purchased: false,
+            purchase_gross: 0,
+            booking_fee_omitted: 0,
+            purchase_principal: 0,
+            cash_in_amount: 0,
+            purchase_date: null,
+            interest_collected: false,
+            pdf_enabled: false,
+            created_at: new Date().toISOString()
+          });
+        }
+
+        sessionUserEmail = user.email;
+        localStorage.setItem('arc_v2_user_session', user.email);
+        document.getElementById('reg-email').value = '';
+        document.getElementById('reg-pin').value = '';
+        await syncNavigationUI();
+      }
+
+      if (user.has_purchased) {
+        showToast('You have already purchased this artwork once.', 'error');
+        navigateTo('profile');
+        return;
+      }
+
+      activePaymentFlow = { kind: 'artwork_purchase', grossAmount: currentCalcGross };
+      openMakePaymentView(user);
+    }
+
+    function openAuthModal(mode = 'login') {
+      setAuthMode(mode);
+      document.getElementById('modal-auth').classList.remove('hidden');
+    }
+
+    function setAuthMode(mode) {
+      currentAuthMode = mode;
+      const tLogin = document.getElementById('auth-tab-login');
+      const tReg = document.getElementById('auth-tab-register');
+      const tReset = document.getElementById('auth-tab-reset');
+      const title = document.getElementById('auth-modal-title');
+      const subtitle = document.getElementById('auth-modal-subtitle');
+      const pinWrap = document.getElementById('modal-auth-pin-wrapper');
+      const pinInput = document.getElementById('modal-auth-pin');
+      const revealBox = document.getElementById('modal-pin-revealed-box');
+      const submitBtn = document.getElementById('modal-auth-submit-btn');
+
+      [tLogin, tReg, tReset].forEach(el => {
+        el.classList.remove('bg-ink', 'text-white');
+        el.classList.add('bg-white', 'text-ink');
+      });
+      revealBox.classList.add('hidden');
+
+      if (mode === 'login') {
+        tLogin.classList.add('bg-ink', 'text-white');
+        tLogin.classList.remove('bg-white', 'text-ink');
+        title.textContent = 'Log In to Your Profile';
+        subtitle.textContent = 'Enter your registered email address and 4-digit PIN.';
+        pinWrap.classList.remove('hidden');
+        pinInput.required = true;
+        submitBtn.textContent = 'Log In';
+      } else if (mode === 'register') {
+        tReg.classList.add('bg-ink', 'text-white');
+        tReg.classList.remove('bg-white', 'text-ink');
+        title.textContent = 'Register Collector Account';
+        subtitle.textContent = 'No email verification required. Choose an email and 4-digit PIN.';
+        pinWrap.classList.remove('hidden');
+        pinInput.required = true;
+        submitBtn.textContent = 'Create Account';
+      } else {
+        tReset.classList.add('bg-ink', 'text-white');
+        tReset.classList.remove('bg-white', 'text-ink');
+        title.textContent = 'Reset / Retrieve 4-Digit PIN';
+        subtitle.textContent = 'Enter your registered email address to display the 4-digit PIN associated with your account.';
+        pinWrap.classList.add('hidden');
+        pinInput.required = false;
+        submitBtn.textContent = 'Show My 4-Digit PIN';
+      }
+    }
+
+    async function submitAuthModal(e) {
+      e.preventDefault();
+      const email = document.getElementById('modal-auth-email').value.trim().toLowerCase();
+      const pin = document.getElementById('modal-auth-pin').value.trim();
+      const users = await DB.getUsers();
+      const existing = users.find(u => u.email.toLowerCase() === email);
+
+      if (currentAuthMode === 'reset') {
+        if (!existing) {
+          showToast('No account found for that email address.', 'error');
+          return;
+        }
+        document.getElementById('modal-pin-revealed-value').textContent = existing.pin;
+        document.getElementById('modal-pin-revealed-box').classList.remove('hidden');
+        showToast('4-digit PIN retrieved!');
+        return;
+      }
+
+      if (!/^\d{4}$/.test(pin)) {
+        showToast('PIN must be exactly 4 digits.', 'error');
+        return;
+      }
+
+      if (currentAuthMode === 'register') {
+        if (existing) {
+          showToast('Email already registered. Switch to Log In or Reset PIN.', 'error');
+          return;
+        }
+        const created = await DB.upsertUser({
+          id: 'u_' + Date.now(),
+          email: email,
+          pin: pin,
+          status: 'active',
+          wallet_balance: 0,
+          has_purchased: false,
+          purchase_gross: 0,
+          booking_fee_omitted: 0,
+          purchase_principal: 0,
+          cash_in_amount: 0,
+          purchase_date: null,
+          interest_collected: false,
+          pdf_enabled: false,
+          created_at: new Date().toISOString()
+        });
+        sessionUserEmail = created.email;
+        localStorage.setItem('arc_v2_user_session', created.email);
+        document.getElementById('modal-auth-email').value = '';
+        document.getElementById('modal-auth-pin').value = '';
+        closeModal('modal-auth');
+        showToast('Registered & logged in!');
+        navigateTo('profile');
+      } else {
+        if (!existing) {
+          showToast('No account found. Please register first.', 'error');
+          return;
+        }
+        if (existing.status === 'suspended') {
+          showToast('Account is suspended by Administrator.', 'error');
+          return;
+        }
+        if (existing.pin !== pin) {
+          showToast('Incorrect 4-digit PIN.', 'error');
+          return;
+        }
+        sessionUserEmail = existing.email;
+        localStorage.setItem('arc_v2_user_session', existing.email);
+        document.getElementById('modal-auth-email').value = '';
+        document.getElementById('modal-auth-pin').value = '';
+        closeModal('modal-auth');
+        showToast('Welcome back, ' + existing.email);
+        navigateTo('profile');
+      }
+    }
+
+    function handleLogout() {
+      sessionUserEmail = null;
+      localStorage.removeItem('arc_v2_user_session');
+      toggleWalletDrawer(false);
+      syncNavigationUI();
+      navigateTo('storefront');
+      showToast('Logged out.');
+    }
+
+    function openMakePaymentView(user) {
+      const gross = Number(activePaymentFlow.grossAmount);
+      const bookingFee = +(gross * 0.33).toFixed(2);
+      const net = +(gross - bookingFee).toFixed(2);
+      const firstNameHint = user.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '') || 'Your first name';
+
+      document.getElementById('pay-user-email').textContent = user.email;
+      document.getElementById('pay-gross-amount').textContent = formatZAR(gross);
+      document.getElementById('pay-booking-omitted').textContent = formatZAR(bookingFee);
+      document.getElementById('pay-net-amount').textContent = formatZAR(net);
+      document.getElementById('pay-reference-display').textContent = `Your first name (${firstNameHint})`;
+      document.getElementById('btn-copy-reference').setAttribute('onclick', `copySingleDetail('${firstNameHint}', this)`);
+
+      const tag = document.getElementById('pay-flow-tag');
+      const heading = document.getElementById('pay-flow-heading');
+      const netLabel = document.getElementById('pay-net-label');
+      const submitBtn = document.getElementById('btn-submit-payment');
+
+      if (activePaymentFlow.kind === 'artwork_purchase') {
+        tag.textContent = 'EFT SETTLEMENT // ARTWORK PURCHASE';
+        heading.textContent = 'Make Payment';
+        netLabel.textContent = '67% Artwork Principal:';
+        submitBtn.textContent = 'Done with payment';
+      } else {
+        tag.textContent = 'EFT SETTLEMENT // WALLET DEPOSIT';
+        heading.textContent = 'Complete Wallet Deposit';
+        netLabel.textContent = '67% Net Wallet Credit:';
+        submitBtn.textContent = 'Confirm Deposit';
+      }
+
+      clearProofFile();
+      navigateTo('payment');
+    }
+
+    function cancelPaymentFlow() {
+      if (activePaymentFlow.kind === 'wallet_deposit') {
+        navigateTo('profile');
+      } else {
+        navigateTo('storefront');
+      }
+    }
+
+    function copySingleDetail(text, btn) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        const orig = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        showToast(`Copied "${text}"`);
+        setTimeout(() => { btn.textContent = orig; }, 1400);
+      } catch (err) {
+        showToast('Unable to copy.', 'error');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function copyAllBankDetails() {
+      const details = [
+        'Account holder: Arcknowledge Files',
+        'Account number: 1330273591',
+        'Account type: CA',
+        'Bank name: Nedbank',
+        'Branch code: 198765',
+        'Reference: Your first name'
+      ].join('\n');
+      const ta = document.createElement('textarea');
+      ta.value = details;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('All Nedbank banking details copied!');
+    }
+
+    function handleProofFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        clearProofFile();
+        return;
+      }
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!['png', 'jpg', 'jpeg', 'pdf'].includes(ext)) {
+        showToast('Invalid format. Only PNG, JPG, JPEG, or PDF allowed.', 'error');
+        event.target.value = '';
+        clearProofFile();
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedProofFile = {
+          name: file.name,
+          ext: ext,
+          dataUrl: e.target.result
+        };
+
+        document.getElementById('pop-empty-state').classList.add('hidden');
+        const selState = document.getElementById('pop-selected-state');
+        selState.classList.remove('hidden');
+        selState.classList.add('flex');
+        document.getElementById('pop-file-badge').textContent = ext.toUpperCase();
+        document.getElementById('pop-file-name').textContent = file.name;
+        document.getElementById('btn-submit-payment').disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearProofFile() {
+      uploadedProofFile = null;
+      const input = document.getElementById('pop-file-input');
+      if (input) input.value = '';
+      document.getElementById('pop-empty-state').classList.remove('hidden');
+      const selState = document.getElementById('pop-selected-state');
+      selState.classList.add('hidden');
+      selState.classList.remove('flex');
+      document.getElementById('btn-submit-payment').disabled = true;
+    }
+
+    async function finalizePaymentSubmission() {
+      if (!uploadedProofFile) {
+        showToast('Please upload Proof of Payment first.', 'error');
+        return;
+      }
+      const user = await getLoggedInUser();
+      if (!user) {
+        openAuthModal('login');
+        return;
+      }
+
+      const gross = Number(activePaymentFlow.grossAmount);
+      const bookingFee = +(gross * 0.33).toFixed(2);
+      const net = +(gross - bookingFee).toFixed(2);
+
+      if (activePaymentFlow.kind === 'artwork_purchase') {
+        if (user.has_purchased) {
+          showToast('Artwork already purchased once.', 'error');
+          navigateTo('profile');
+          return;
+        }
+
+        const cashIn = +(net * 3.0).toFixed(2);
+        user.has_purchased = true;
+        user.purchase_gross = gross;
+        user.booking_fee_omitted = bookingFee;
+        user.purchase_principal = net;
+        user.cash_in_amount = cashIn;
+        user.purchase_date = new Date().toISOString();
+        user.interest_collected = false;
+        await DB.upsertUser(user);
+
+        await DB.upsertTransaction({
+          id: 'tx_' + Date.now(),
+          user_email: user.email,
+          tx_type: 'Artwork Purchase',
+          gross_amount: gross,
+          booking_fee: bookingFee,
+          net_amount: net,
+          status: 'Pending Admin Verification',
+          admin_message: `Omitted 33% Gallery Booking (${formatZAR(bookingFee)}). Awaiting Admin PoP verification.`,
+          proof_name: uploadedProofFile.name,
+          bank_details: '',
+          created_at: new Date().toISOString()
+        }, uploadedProofFile.dataUrl);
+
+        clearProofFile();
+
+        const savedEmail = user.email;
+        sessionUserEmail = null;
+        localStorage.removeItem('arc_v2_user_session');
+        await syncNavigationUI();
+        navigateTo('storefront');
+        openAuthModal('login');
+        document.getElementById('modal-auth-email').value = savedEmail;
+        showToast('Payment proof submitted! Please log in to your profile.');
+      } else {
+        await DB.upsertTransaction({
+          id: 'tx_' + Date.now(),
+          user_email: user.email,
+          tx_type: 'Deposit',
+          gross_amount: gross,
+          booking_fee: bookingFee,
+          net_amount: net,
+          status: 'Pending Admin Verification',
+          admin_message: `Pending Admin verification. 33% Gallery Booking (${formatZAR(bookingFee)}) omitted; ${formatZAR(net)} will credit upon approval.`,
+          proof_name: uploadedProofFile.name,
+          bank_details: '',
+          created_at: new Date().toISOString()
+        }, uploadedProofFile.dataUrl);
+
+        clearProofFile();
+        showToast('Deposit proof uploaded! Status: Pending Admin Verification.');
+        navigateTo('profile');
+      }
+    }
+
+    function toggleWalletDrawer(forceState = null) {
+      const drawer = document.getElementById('wallet-drawer');
+      if (forceState === true) drawer.classList.remove('hidden');
+      else if (forceState === false) drawer.classList.add('hidden');
+      else drawer.classList.toggle('hidden');
+    }
+
+    function toggleWithdrawalDropdown() {
+      const panel = document.getElementById('withdrawal-dropdown-panel');
+      const arrow = document.getElementById('withdraw-dropdown-arrow');
+      panel.classList.toggle('hidden');
+      arrow.textContent = panel.classList.contains('hidden') ? '▼' : '▲';
+    }
+
+    async function calculateMonthlyUsage(user) {
+      const txs = await DB.getTransactions();
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      let used = 0;
+
+      if (user.has_purchased && user.purchase_date && new Date(user.purchase_date) >= monthStart) {
+        used += Number(user.purchase_gross || 0);
+      }
+      txs.forEach(t => {
+        if (
+          t.user_email.toLowerCase() === user.email.toLowerCase() &&
+          t.tx_type === 'Deposit' &&
+          t.status !== 'Rejected' &&
+          new Date(t.created_at) >= monthStart
+        ) {
+          used += Number(t.gross_amount || 0);
+        }
+      });
+      return used;
+    }
+
+    async function openDepositFlow() {
+      const user = await getLoggedInUser();
+      if (!user) return;
+      const used = await calculateMonthlyUsage(user);
+      const remaining = Math.max(0, 1000 - used);
+      document.getElementById('deposit-modal-limit-note').textContent =
+        `Remaining monthly cap: ${formatZAR(remaining)} of R1,000.00. 33% is allocated to Gallery Space Booking and 67% credits to your Wallet.`;
+      updateDepositLivePreview(document.getElementById('deposit-amount-input').value);
+      document.getElementById('modal-deposit').classList.remove('hidden');
+    }
+
+    function updateDepositLivePreview(raw) {
+      const val = parseFloat(raw) || 0;
+      const fee = +(val * 0.33).toFixed(2);
+      const net = +(val - fee).toFixed(2);
+      document.getElementById('dep-preview-fee').textContent = '-' + formatZAR(fee);
+      document.getElementById('dep-preview-net').textContent = '+' + formatZAR(net);
+    }
+
+    async function proceedWalletDepositToPayment(e) {
+      e.preventDefault();
+      const user = await getLoggedInUser();
+      if (!user) return;
+
+      const amt = parseFloat(document.getElementById('deposit-amount-input').value);
+      if (isNaN(amt) || amt < 21 || amt > 1000) {
+        showToast('Deposit must be between R21 and R1,000.', 'error');
+        return;
+      }
+
+      const used = await calculateMonthlyUsage(user);
+      const remaining = Math.max(0, 1000 - used);
+      if (amt > remaining) {
+        showToast(`Exceeds R1,000 monthly limit. Remaining: ${formatZAR(remaining)}.`, 'error');
+        return;
+      }
+
+      closeModal('modal-deposit');
+      toggleWalletDrawer(false);
+      activePaymentFlow = { kind: 'wallet_deposit', grossAmount: amt };
+      openMakePaymentView(user);
+    }
+
+    async function submitWithdrawalRequest(e) {
+      e.preventDefault();
+      const user = await getLoggedInUser();
+      if (!user) return;
+
+      const bank = document.getElementById('wd-bank-name').value.trim();
+      const holder = document.getElementById('wd-acc-holder').value.trim();
+      const accNum = document.getElementById('wd-acc-number').value.trim();
+      const branch = document.getElementById('wd-branch-code').value.trim();
+      const amt = parseFloat(document.getElementById('wd-amount').value);
+
+      if (isNaN(amt) || amt < 50) {
+        showToast('Minimum withdrawal is R50.', 'error');
+        return;
+      }
+      if (amt > Number(user.wallet_balance || 0)) {
+        showToast('Withdrawal exceeds available wallet balance.', 'error');
+        return;
+      }
+
+      user.wallet_balance = +(Number(user.wallet_balance) - amt).toFixed(2);
+      await DB.upsertUser(user);
+
+      await DB.upsertTransaction({
+        id: 'tx_' + Date.now(),
+        user_email: user.email,
+        tx_type: 'Withdrawal',
+        gross_amount: amt,
+        booking_fee: 0,
+        net_amount: amt,
+        status: 'Pending',
+        admin_message: 'Withdrawal request submitted. Awaiting Admin payout confirmation.',
+        proof_name: '',
+        bank_details: `${bank} | ${holder} | Acc: ${accNum} | Branch: ${branch}`,
+        created_at: new Date().toISOString()
+      });
+
+      e.target.reset();
+      toggleWithdrawalDropdown();
+      showToast('Withdrawal request submitted for Admin confirmation.');
+      await syncNavigationUI();
+      await renderProfileDashboard();
+    }
+
+    function hasOneMonthElapsed(isoDate) {
+      if (!isoDate) return false;
+      const start = new Date(isoDate);
+      const maturity = new Date(start);
+      maturity.setMonth(maturity.getMonth() + 1);
+      return new Date() >= maturity;
+    }
+
+    async function collectInvestmentInterest() {
+      const user = await getLoggedInUser();
+      if (!user || !user.has_purchased || user.interest_collected) return;
+
+      if (!hasOneMonthElapsed(user.purchase_date)) {
+        showToast('1-month holding period has not completed yet.', 'error');
+        return;
+      }
+
+      const payout = Number(user.cash_in_amount || 0);
+      user.wallet_balance = +(Number(user.wallet_balance || 0) + payout).toFixed(2);
+      user.interest_collected = true;
+      await DB.upsertUser(user);
+
+      await DB.upsertTransaction({
+        id: 'tx_' + Date.now(),
+        user_email: user.email,
+        tx_type: 'Interest Collected',
+        gross_amount: payout,
+        booking_fee: 0,
+        net_amount: payout,
+        status: 'Completed',
+        admin_message: `PDF sold/returned at 1-month maturity. ${formatZAR(payout)} (Principal + 200% Interest) added to Wallet.`,
+        proof_name: '',
+        bank_details: '',
+        created_at: new Date().toISOString()
+      });
+
+      showToast(`Collected ${formatZAR(payout)} into your Wallet!`);
+      await syncNavigationUI();
+      await renderProfileDashboard();
+    }
+
+    async function renderProfileDashboard() {
+      const user = await getLoggedInUser();
+      if (!user) {
+        navigateTo('storefront');
+        return;
+      }
+
+      document.getElementById('profile-email-display').textContent = user.email;
+      document.getElementById('profile-status-pill').textContent = (user.status || 'active').toUpperCase();
+      document.getElementById('profile-wallet-btn-val').textContent = Number(user.wallet_balance || 0).toFixed(2);
+
+      const usedMonth = await calculateMonthlyUsage(user);
+      document.getElementById('profile-monthly-usage').textContent = `${formatZAR(usedMonth)} / R1,000.00`;
+
+      const artCard = document.getElementById('profile-artwork-card');
+      if (!user.has_purchased) {
+        artCard.innerHTML = `
+          <div class="border-2 border-ink rounded-xl bg-white p-6 sm:p-8 text-center">
+            <h2 class="font-display font-bold text-xl text-ink mb-2">No Artwork Edition Purchased Yet</h2>
+            <p class="text-xs text-neutral-600 max-w-md mx-auto mb-5">
+              Acquire the 1672 × 941px archival edition (minimum R21 investment: 33% Gallery Booking / 67% Artwork Purchase) to earn 200% interest after 1 month.
+            </p>
+            <button type="button" onclick="navigateTo('storefront')" class="btn-red px-6 py-3 rounded-xl text-xs font-mono uppercase font-bold">
+              Go to Gallery &amp; Purchase →
+            </button>
+          </div>
+        `;
+      } else {
+        const isMature = hasOneMonthElapsed(user.purchase_date);
+        const startObj = new Date(user.purchase_date);
+        const maturityObj = new Date(startObj);
+        maturityObj.setMonth(maturityObj.getMonth() + 1);
+
+        const pdfActionHtml = user.pdf_enabled
+          ? `<button type="button" onclick="downloadArchivalPdfCertificate()" class="btn-red px-5 py-3 rounded-xl text-xs font-mono uppercase font-bold">
+               Download Arcknowledge File (PDF)
+             </button>`
+          : `<span class="inline-flex items-center gap-2 bg-offwhite border-2 border-ink text-ink px-4 py-2.5 rounded-xl text-xs font-mono uppercase font-bold">
+               <span class="w-2 h-2 rounded-full bg-crimson"></span>
+               Awaiting Admin PDF Activation
+             </span>`;
+
+        let maturityActionHtml = '';
+        if (user.interest_collected) {
+          maturityActionHtml = `
+            <span class="bg-ink text-white px-4 py-2.5 rounded-xl text-xs font-mono uppercase font-bold">
+              ✓ 1-Month Interest Collected (${formatZAR(user.cash_in_amount)})
+            </span>
+          `;
+        } else if (isMature) {
+          maturityActionHtml = `
+            <button type="button" onclick="collectInvestmentInterest()" class="btn-red px-5 py-3 rounded-xl text-xs font-mono uppercase font-bold">
+              Collect Investment Interest (+${formatZAR(user.cash_in_amount)})
+            </button>
+          `;
+        } else {
+          maturityActionHtml = `
+            <span class="bg-offwhite border border-ink text-neutral-600 px-4 py-2.5 rounded-xl text-xs font-mono font-bold">
+              Maturity Date: ${maturityObj.toLocaleDateString()} (1 Month)
+            </span>
+          `;
+        }
+
+        artCard.innerHTML = `
+          <div class="border-2 border-ink rounded-xl bg-white p-5 sm:p-7">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b-2 border-ink pb-4">
+              <div>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-crimson font-bold">CERTIFIED EDITION OWNERSHIP</span>
+                <h2 class="font-display font-xl sm:text-2xl font-bold text-ink mt-0.5">Arcknowledge Files v2 — Archival PDF</h2>
+              </div>
+              <span class="${user.pdf_enabled ? 'bg-ink text-white' : 'bg-crimson text-white'} text-[10px] font-mono uppercase font-bold px-3 py-1 rounded self-start sm:self-auto">
+                ${user.pdf_enabled ? 'PDF ENABLED' : 'AWAITING ADMIN PDF ACTIVATION'}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
+              <div class="border border-ink rounded-xl p-3.5 bg-offwhite">
+                <span class="block text-[10px] font-mono uppercase text-neutral-500">TOTAL INVESTED (GROSS)</span>
+                <span class="font-display text-xl font-bold text-ink">${formatZAR(user.purchase_gross)}</span>
+              </div>
+              <div class="border border-ink rounded-xl p-3.5 bg-offwhite">
+                <span class="block text-[10px] font-mono uppercase text-neutral-500">33% GALLERY BOOKING (OMITTED)</span>
+                <span class="font-display text-xl font-bold text-neutral-700">-${formatZAR(user.booking_fee_omitted)}</span>
+              </div>
+              <div class="border border-ink rounded-xl p-3.5 bg-offwhite">
+                <span class="block text-[10px] font-mono uppercase text-neutral-500">67% ARTWORK PURCHASE PRINCIPAL</span>
+                <span class="font-display text-xl font-bold text-ink">${formatZAR(user.purchase_principal)}</span>
+              </div>
+              <div class="border-2 border-crimson rounded-xl p-3.5 bg-rose-50/40">
+                <span class="block text-[10px] font-mono uppercase text-crimson font-bold">CASH-IN AFTER 1 MONTH (200%)</span>
+                <span class="font-display text-2xl font-bold text-crimson">${formatZAR(user.cash_in_amount)}</span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-neutral-200">
+              ${pdfActionHtml}
+              ${maturityActionHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      const allTxs = await DB.getTransactions();
+      const userTxs = allTxs.filter(t => t.user_email.toLowerCase() === user.email.toLowerCase());
+      document.getElementById('profile-tx-count').textContent = `${userTxs.length} TRANSACTION${userTxs.length === 1 ? '' : 'S'}`;
+
+      const tbody = document.getElementById('profile-tx-tbody');
+      if (userTxs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center font-mono text-neutral-500">No transactions recorded yet.</td></tr>`;
+      } else {
+        tbody.innerHTML = userTxs.map(t => {
+          const dt = new Date(t.created_at);
+          const dateStr = dt.toLocaleDateString() + ' ' + dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const badgeClass = (t.status === 'Verified' || t.status === 'Completed' || t.status === 'Confirmed')
+            ? 'bg-ink text-white'
+            : t.status === 'Rejected'
+              ? 'bg-crimson text-white'
+              : 'bg-offwhite border border-ink text-ink';
+
+          return `
+            <tr class="hover:bg-offwhite/70">
+              <td class="py-3 px-3 sm:px-4 font-mono text-neutral-600 whitespace-nowrap">${dateStr}</td>
+              <td class="py-3 px-3 sm:px-4 font-bold text-ink whitespace-nowrap">${t.tx_type}</td>
+              <td class="py-3 px-3 sm:px-4 font-mono font-bold text-ink whitespace-nowrap">${formatZAR(t.gross_amount)}</td>
+              <td class="py-3 px-3 sm:px-4 font-mono text-neutral-700 whitespace-nowrap">
+                ${Number(t.booking_fee) > 0 ? '-' + formatZAR(t.booking_fee) : 'R0.00'}
+              </td>
+              <td class="py-3 px-3 sm:px-4 font-mono font-bold text-crimson whitespace-nowrap">${formatZAR(t.net_amount)}</td>
+              <td class="py-3 px-3 sm:px-4 whitespace-nowrap">
+                <span class="${badgeClass} text-[10px] font-mono uppercase font-bold px-2.5 py-1 rounded">${t.status}</span>
+              </td>
+              <td class="py-3 px-3 sm:px-4 text-neutral-700 min-w-[210px]">${t.admin_message || '—'}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    async function downloadArchivalPdfCertificate() {
+      const user = await getLoggedInUser();
+      if (!user || !user.pdf_enabled) {
+        showToast('PDF download has not been enabled by Admin.', 'error');
+        return;
+      }
+      if (!window.jspdf) {
+        showToast('PDF generator still initializing...', 'error');
+        return;
+      }
+
+      showToast('Generating 1672 × 941px PDF certificate...');
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [1672, 1140]
+      });
+
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 0, 1672, 1140, 'F');
+
+      const artUrl = siteArtworkConfig?.artworkDataUrl || generateDefaultSwissArtwork();
+      doc.addImage(artUrl, 'PNG', 0, 0, 1672, 941);
+
+      doc.setFillColor(10, 10, 10);
+      doc.rect(0, 941, 1672, 199, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(34);
+      doc.text('ARCKNOWLEDGE — FILES V2 // CERTIFIED ARTWORK EDITION', 48, 1002);
+
+      const serialHash = 'ARC-' + btoa(user.email + user.id).replace(/[^A-Z0-9]/gi, '').slice(0, 14).toUpperCase();
+      doc.setFont('courier', 'bold');
+      doc.setFontSize(22);
+      doc.setTextColor(217, 4, 41);
+      doc.text(`COLLECTOR: ${user.email}   |   SERIAL: ${serialHash}`, 48, 1052);
+
+      const maturity = new Date(user.purchase_date || Date.now());
+      maturity.setMonth(maturity.getMonth() + 1);
+      doc.setTextColor(255, 255, 255);
+      doc.text(
+        `GROSS: ${formatZAR(user.purchase_gross)} | 67% PRINCIPAL: ${formatZAR(user.purchase_principal)} | 1-MO CASH-IN (200% INT): ${formatZAR(user.cash_in_amount)} | MATURITY: ${maturity.toDateString()}`,
+        48,
+        1096
+      );
+
+      doc.save(`Arcknowledge-Files-v2-${serialHash}.pdf`);
+    }
+
+    function openAdminLoginModal() {
+      if (sessionAdminActive) {
+        navigateTo('admin');
+        return;
+      }
+      document.getElementById('modal-admin-login').classList.remove('hidden');
+    }
+
+    function submitAdminLogin(e) {
+      e.preventDefault();
+      const pw = document.getElementById('admin-password-input').value;
+      if (pw === ADMIN_PASSWORD) {
+        sessionAdminActive = true;
+        localStorage.setItem('arc_v2_admin_session', 'true');
+        document.getElementById('admin-password-input').value = '';
+        closeModal('modal-admin-login');
+        showToast('Administrator authenticated.');
+        navigateTo('admin');
+      } else {
+        showToast('Incorrect Administrator password.', 'error');
+      }
+    }
+
+    function handleAdminLogout() {
+      sessionAdminActive = false;
+      localStorage.removeItem('arc_v2_admin_session');
+      navigateTo('storefront');
+      showToast('Admin logged out.');
+    }
+
+    function switchAdminTab(tabName) {
+      ['users', 'proofs', 'withdrawals', 'artwork', 'supabase'].forEach(t => {
+        document.getElementById('panel-admin-' + t).classList.add('hidden');
+        const btn = document.getElementById('tab-admin-' + t);
+        btn.classList.remove('btn-red');
+        btn.classList.add('btn-black');
+      });
+      document.getElementById('panel-admin-' + tabName).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-admin-' + tabName);
+      activeBtn.classList.remove('btn-black');
+      activeBtn.classList.add('btn-red');
+    }
+
+    async function renderAdminDashboard() {
+      if (!sessionAdminActive) {
+        navigateTo('storefront');
+        return;
+      }
+
+      const users = await DB.getUsers();
+      const txs = await DB.getTransactions();
+      const art = await DB.getArtworkSettings();
+
+      document.getElementById('admin-artwork-preview').src = art.artworkDataUrl;
+      document.getElementById('admin-art-title-input').value = art.title;
+      document.getElementById('admin-art-desc-input').value = art.description;
+
+      document.getElementById('sb-url-field').value = localStorage.getItem('arc_v2_sb_url') || '';
+      document.getElementById('sb-key-field').value = localStorage.getItem('arc_v2_sb_key') || '';
+
+      const usersTbody = document.getElementById('admin-users-tbody');
+      if (users.length === 0) {
+        usersTbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center font-mono text-neutral-500">No registered users yet.</td></tr>`;
+      } else {
+        usersTbody.innerHTML = users.map(u => {
+          const suspended = u.status === 'suspended';
+          return `
+            <tr class="hover:bg-offwhite/60">
+              <td class="py-3.5 px-4 font-mono">
+                <div class="font-bold text-ink">${u.email}</div>
+                <div class="text-[11px] text-crimson font-bold">PIN: ${u.pin}</div>
+              </td>
+              <td class="py-3.5 px-4">
+                <span class="${suspended ? 'bg-crimson text-white' : 'bg-ink text-white'} text-[10px] font-mono uppercase font-bold px-2 py-1 rounded">
+                  ${u.status || 'active'}
+                </span>
+              </td>
+              <td class="py-3.5 px-4 font-mono font-bold text-ink">${formatZAR(u.wallet_balance)}</td>
+              <td class="py-3.5 px-4 font-mono text-[11px]">
+                ${u.has_purchased
+                  ? `Gross: ${formatZAR(u.purchase_gross)}<br>33% Fee: -${formatZAR(u.booking_fee_omitted)}<br><strong class="text-crimson">Cash-In: ${formatZAR(u.cash_in_amount)}</strong>`
+                  : '<span class="text-neutral-400">No artwork purchased</span>'}
+              </td>
+              <td class="py-3.5 px-4">
+                <button type="button" onclick="adminTogglePdf('${u.id}', ${!u.pdf_enabled})" class="${u.pdf_enabled ? 'btn-red' : 'btn-black'} px-3 py-1.5 rounded text-[10px] font-mono uppercase font-bold">
+                  ${u.pdf_enabled ? 'PDF Enabled' : 'Enable PDF'}
+                </button>
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="flex flex-wrap gap-1.5">
+                  <button type="button" onclick="openAdminEditUser('${u.id}')" class="btn-black px-2.5 py-1 rounded text-[10px] font-mono uppercase font-bold">Edit</button>
+                  <button type="button" onclick="adminToggleSuspend('${u.id}')" class="btn-black px-2.5 py-1 rounded text-[10px] font-mono uppercase font-bold">
+                    ${suspended ? 'Activate' : 'Suspend'}
+                  </button>
+                  <button type="button" onclick="adminDeleteAccount('${u.id}')" class="btn-red px-2.5 py-1 rounded text-[10px] font-mono uppercase font-bold">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      const popTxs = txs.filter(t => t.tx_type === 'Artwork Purchase' || t.tx_type === 'Deposit');
+      const proofsTbody = document.getElementById('admin-proofs-tbody');
+      if (popTxs.length === 0) {
+        proofsTbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center font-mono text-neutral-500">No Proof of Payment uploads yet.</td></tr>`;
+      } else {
+        proofsTbody.innerHTML = popTxs.map(t => {
+          const pending = t.status === 'Pending Admin Verification';
+          return `
+            <tr class="hover:bg-offwhite/60">
+              <td class="py-3.5 px-4 font-mono font-bold text-ink">${t.user_email}</td>
+              <td class="py-3.5 px-4 font-bold">${t.tx_type}</td>
+              <td class="py-3.5 px-4 font-mono text-[11px]">
+                Gross: ${formatZAR(t.gross_amount)}<br>
+                33% Fee: -${formatZAR(t.booking_fee)}<br>
+                <strong class="text-crimson">Net: ${formatZAR(t.net_amount)}</strong>
+              </td>
+              <td class="py-3.5 px-4">
+                <button type="button" onclick="viewUploadedProof('${t.id}', '${t.user_email}', '${t.proof_name || 'Proof'}')" class="btn-black px-3 py-1.5 rounded text-[10px] font-mono uppercase font-bold">
+                  Inspect PoP
+                </button>
+              </td>
+              <td class="py-3.5 px-4">
+                <span class="${pending ? 'bg-offwhite border border-ink text-ink' : 'bg-ink text-white'} text-[10px] font-mono uppercase font-bold px-2.5 py-1 rounded">
+                  ${t.status}
+                </span>
+              </td>
+              <td class="py-3.5 px-4">
+                ${pending ? `
+                  <button type="button" onclick="adminApproveProofTx('${t.id}')" class="btn-red px-3 py-1.5 rounded text-[10px] font-mono uppercase font-bold">
+                    Verify &amp; Approve
+                  </button>
+                ` : '<span class="text-xs font-mono text-neutral-500">Verified ✓</span>'}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      const wdTxs = txs.filter(t => t.tx_type === 'Withdrawal');
+      const wdTbody = document.getElementById('admin-withdrawals-tbody');
+      if (wdTxs.length === 0) {
+        wdTbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center font-mono text-neutral-500">No withdrawal requests yet.</td></tr>`;
+      } else {
+        wdTbody.innerHTML = wdTxs.map(t => {
+          const pending = t.status === 'Pending';
+          return `
+            <tr class="hover:bg-offwhite/60">
+              <td class="py-3.5 px-4 font-mono font-bold text-ink">${t.user_email}</td>
+              <td class="py-3.5 px-4 font-mono font-bold text-crimson">${formatZAR(t.gross_amount)}</td>
+              <td class="py-3.5 px-4 font-mono text-[11px] text-neutral-700">${t.bank_details || '—'}</td>
+              <td class="py-3.5 px-4">
+                <span class="${pending ? 'bg-offwhite border border-ink text-ink' : 'bg-ink text-white'} text-[10px] font-mono uppercase font-bold px-2.5 py-1 rounded">
+                  ${t.status}
+                </span>
+              </td>
+              <td class="py-3.5 px-4">
+                ${pending ? `
+                  <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" id="admin-wd-note-${t.id}" value="EFT processed via Nedbank batch." placeholder="Transaction update message" class="border border-ink rounded px-2.5 py-1 text-xs" />
+                    <button type="button" onclick="adminConfirmWithdrawalTx('${t.id}')" class="btn-red px-3 py-1.5 rounded text-[10px] font-mono uppercase font-bold shrink-0">
+                      Confirm Withdrawal
+                    </button>
+                  </div>
+                ` : `<span class="text-xs text-neutral-700">${t.admin_message}</span>`}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    async function adminTogglePdf(userId, enable) {
+      const users = await DB.getUsers();
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+      user.pdf_enabled = enable;
+      await DB.upsertUser(user);
+      showToast(`PDF download ${enable ? 'ENABLED' : 'DISABLED'} for ${user.email}`);
+      renderAdminDashboard();
+    }
+
+    async function adminToggleSuspend(userId) {
+      const users = await DB.getUsers();
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+      user.status = user.status === 'suspended' ? 'active' : 'suspended';
+      await DB.upsertUser(user);
+      showToast(`User ${user.email} is now ${user.status.toUpperCase()}.`);
+      renderAdminDashboard();
+    }
+
+    async function adminDeleteAccount(userId) {
+      await DB.removeUser(userId);
+      showToast('User account deleted.');
+      renderAdminDashboard();
+    }
+
+    async function openAdminEditUser(userId) {
+      const users = await DB.getUsers();
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+
+      document.getElementById('edit-u-id').value = user.id;
+      document.getElementById('edit-u-email').value = user.email;
+      document.getElementById('edit-u-pin').value = user.pin;
+      document.getElementById('edit-u-wallet').value = user.wallet_balance || 0;
+      document.getElementById('edit-u-gross').value = user.purchase_gross || 0;
+      document.getElementById('edit-u-mature').checked = hasOneMonthElapsed(user.purchase_date);
+      document.getElementById('modal-admin-edit-user').classList.remove('hidden');
+    }
+
+    async function saveAdminEditedUser(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-u-id').value;
+      const users = await DB.getUsers();
+      const user = users.find(u => u.id === id);
+      if (!user) return;
+
+      user.email = document.getElementById('edit-u-email').value.trim().toLowerCase();
+      user.pin = document.getElementById('edit-u-pin').value.trim();
+      user.wallet_balance = parseFloat(document.getElementById('edit-u-wallet').value) || 0;
+
+      const gross = parseFloat(document.getElementById('edit-u-gross').value) || 0;
+      if (gross > 0) {
+        user.has_purchased = true;
+        user.purchase_gross = gross;
+        user.booking_fee_omitted = +(gross * 0.33).toFixed(2);
+        user.purchase_principal = +(gross - user.booking_fee_omitted).toFixed(2);
+        user.cash_in_amount = +(user.purchase_principal * 3.0).toFixed(2);
+        if (!user.purchase_date) user.purchase_date = new Date().toISOString();
+      }
+
+      if (document.getElementById('edit-u-mature').checked && user.has_purchased) {
+        const past = new Date();
+        past.setMonth(past.getMonth() - 1);
+        past.setHours(past.getHours() - 1);
+        user.purchase_date = past.toISOString();
+      }
+
+      await DB.upsertUser(user);
+      closeModal('modal-admin-edit-user');
+      showToast('User account updated.');
+      renderAdminDashboard();
+    }
+
+    async function adminApproveProofTx(txId) {
+      const txs = await DB.getTransactions();
+      const tx = txs.find(t => t.id === txId);
+      if (!tx) return;
+
+      const users = await DB.getUsers();
+      const user = users.find(u => u.email.toLowerCase() === tx.user_email.toLowerCase());
+
+      tx.status = 'Verified';
+      if (tx.tx_type === 'Deposit' && user) {
+        user.wallet_balance = +(Number(user.wallet_balance || 0) + Number(tx.net_amount)).toFixed(2);
+        await DB.upsertUser(user);
+        tx.admin_message = `Deposit verified by Admin. ${formatZAR(tx.net_amount)} credited to Wallet (33% Gallery Booking ${formatZAR(tx.booking_fee)} omitted).`;
+      } else if (tx.tx_type === 'Artwork Purchase' && user) {
+        user.pdf_enabled = true;
+        await DB.upsertUser(user);
+        tx.admin_message = `Artwork purchase verified by Admin. PDF download activated on profile.`;
+      }
+
+      await DB.upsertTransaction(tx);
+      showToast('Transaction verified & user updated!');
+      renderAdminDashboard();
+    }
+
+    async function adminConfirmWithdrawalTx(txId) {
+      const txs = await DB.getTransactions();
+      const tx = txs.find(t => t.id === txId);
+      if (!tx) return;
+
+      const note = document.getElementById('admin-wd-note-' + txId)?.value.trim() || 'Withdrawal confirmed and settled by Admin.';
+      tx.status = 'Confirmed';
+      tx.admin_message = note;
+      await DB.upsertTransaction(tx);
+
+      showToast('Withdrawal confirmed with update message.');
+      renderAdminDashboard();
+    }
+
+    async function viewUploadedProof(txId, email, fileName) {
+      const dataUrl = await fetchBlob('pop_' + txId);
+      document.getElementById('pop-viewer-title').textContent = `${email} — ${fileName}`;
+      const body = document.getElementById('pop-viewer-body');
+
+      if (!dataUrl) {
+        body.innerHTML = `<p class="text-xs font-mono text-neutral-500">No file binary stored for this record.</p>`;
+      } else if (dataUrl.startsWith('data:application/pdf') || fileName.toLowerCase().endsWith('.pdf')) {
+        body.innerHTML = `
+          <div class="w-full space-y-3 text-center">
+            <iframe src="${dataUrl}" class="w-full h-96 border border-ink rounded-lg"></iframe>
+            <a href="${dataUrl}" download="${fileName}" class="btn-red inline-block px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold">Download PDF Proof</a>
+          </div>
+        `;
+      } else {
+        body.innerHTML = `
+          <div class="space-y-3 text-center">
+            <img src="${dataUrl}" alt="Proof of Payment" class="max-h-[60vh] mx-auto border border-ink rounded-lg" />
+            <a href="${dataUrl}" download="${fileName}" class="btn-black inline-block px-4 py-2 rounded-lg text-xs font-mono uppercase font-bold">Download Image Proof</a>
+          </div>
+        `;
+      }
+      document.getElementById('modal-pop-viewer').classList.remove('hidden');
+    }
+
+    function handleAdminArtworkUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = 1672;
+          canvas.height = 941;
+          const ctx = canvas.getContext('2d');
+
+          const scale = Math.max(1672 / img.width, 941 / img.height);
+          const w = img.width * scale;
+          const h = img.height * scale;
+          ctx.fillStyle = '#0A0A0A';
+          ctx.fillRect(0, 0, 1672, 941);
+          ctx.drawImage(img, (1672 - w) / 2, (941 - h) / 2, w, h);
+
+          stagedAdminArtwork = canvas.toDataURL('image/png');
+          document.getElementById('admin-artwork-preview').src = stagedAdminArtwork;
+          showToast(`Fitted (${img.width}×${img.height}) to exact 1672 × 941px.`);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // NEW: Load Artwork via Image URL
+    function loadArtworkFromUrlInput() {
+      const url = document.getElementById('admin-art-url-input').value.trim();
+      if (!url) {
+        showToast('Please enter a valid image URL.', 'error');
+        return;
+      }
+      showToast('Loading artwork from URL...');
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1672;
+        canvas.height = 941;
+        const ctx = canvas.getContext('2d');
+
+        const scale = Math.max(1672 / img.width, 941 / img.height);
+        const w = img.width * scale;
+        const h = img.height * scale;
+        ctx.fillStyle = '#0A0A0A';
+        ctx.fillRect(0, 0, 1672, 941);
+        ctx.drawImage(img, (1672 - w) / 2, (941 - h) / 2, w, h);
+
+        stagedAdminArtwork = canvas.toDataURL('image/png');
+        document.getElementById('admin-artwork-preview').src = stagedAdminArtwork;
+        showToast('Loaded from URL & fitted to 1672 × 941px.');
+      };
+      img.onerror = function() {
+        showToast('Failed to load image from URL (check CORS or URL validity).', 'error');
+      };
+      img.src = url;
+    }
+
+    async function saveAdminArtwork() {
+      const title = document.getElementById('admin-art-title-input').value.trim() || 'EDITION 01 — SWISS MONOLITH';
+      const description = document.getElementById('admin-art-desc-input').value.trim() || 'High-contrast 1672 × 941px architectural composition.';
+      const artworkDataUrl = stagedAdminArtwork || siteArtworkConfig.artworkDataUrl;
+
+      await DB.saveArtworkSettings({ title, description, artworkDataUrl });
+      stagedAdminArtwork = null;
+      await loadStorefrontArtwork();
+      showToast('1672 × 941px artwork published!');
+    }
+
+    async function resetDefaultArtwork() {
+      const defaultArt = generateDefaultSwissArtwork();
+      const title = 'EDITION 01 — SWISS MONOLITH';
+      const description = 'High-contrast 1672 × 941px architectural composition issued as a downloadable PDF certificate upon payment verification.';
+      await DB.saveArtworkSettings({ title, description, artworkDataUrl: defaultArt });
+      stagedAdminArtwork = null;
+      await loadStorefrontArtwork();
+      renderAdminDashboard();
+      showToast('Artwork reset to default 1672 × 941px Swiss Monolith.');
+    }
+
+    async function saveSupabaseConfig() {
+      const url = document.getElementById('sb-url-field').value.trim();
+      const key = document.getElementById('sb-key-field').value.trim();
+      if (!url || !key) {
+        showToast('Enter both Supabase URL and Anon Key.', 'error');
+        return;
+      }
+      localStorage.setItem('arc_v2_sb_url', url);
+      localStorage.setItem('arc_v2_sb_key', key);
+      initSupabaseAdapter();
+      if (supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from('arc_v2_users').select('id').limit(1);
+          if (error) {
+            showToast('Saved credentials (ensure SQL schema tables are created).');
+          } else {
+            showToast('Supabase connection verified & live!');
+          }
+        } catch (e) {
+          showToast('Supabase credentials saved.');
+        }
+      }
+      renderAdminDashboard();
+    }
+
+    function clearSupabaseConfig() {
+      localStorage.removeItem('arc_v2_sb_url');
+      localStorage.removeItem('arc_v2_sb_key');
+      initSupabaseAdapter();
+      showToast('Switched to built-in Local Persistence.');
+      renderAdminDashboard();
+    }
+
+    function copySqlSnippet() {
+      const sql = document.getElementById('sb-sql-snippet').textContent;
+      const ta = document.createElement('textarea');
+      ta.value = sql;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Supabase SQL schema copied!');
+    }
+
+    const LEGAL_DOCS = {
+      privacy: {
+        title: 'Privacy Policy',
+        html: `
+          <p><strong>1. Information We Collect:</strong> Arcknowledge Files v2 collects only essential collector credentials and settlement records: your email address, 4-digit PIN, investment and wallet ledger amounts, banking withdrawal instructions, and uploaded Proof of Payment files (PNG, JPG, JPEG, PDF).</p>
+          <p><strong>2. Purpose of Data Usage:</strong> Collected records are strictly used to maintain persistent session authentication, verify Nedbank EFT transfers, enable your 1672 × 941px archival PDF certificate, calculate 1-month maturity payouts, and fulfill wallet withdrawal requests.</p>
+          <p><strong>3. Storage &amp; Confidentiality:</strong> Data is stored securely via Supabase or your local browser database. We never sell, rent, or distribute user emails, PINs, or payment documents to third parties.</p>
+        `
+      },
+      terms: {
+        title: 'Terms of Use',
+        html: `
+          <p><strong>1. One-Time Artwork Acquisition:</strong> Each collector account may purchase the featured archival artwork edition once. Additional funds up to the R1,000.00 monthly cap may be deposited via the Collector Wallet.</p>
+          <p><strong>2. Account Persistence &amp; PIN Utility:</strong> Your session remains logged in across page reloads until you click Logout. If you forget your 4-digit PIN, you may retrieve it directly via the Reset PIN lookup tab using your registered email.</p>
+          <p><strong>3. Authentic Proof of Payment Submissions:</strong> All uploaded receipts must reflect genuine EFT transfers to Arcknowledge Files. Fraudulent uploads result in immediate account suspension or deletion.</p>
+        `
+      },
+      conditions: {
+        title: 'Terms & Conditions',
+        html: `
+          <p><strong>1. Artwork Base Price &amp; Investment Allocation:</strong> The featured 1672 × 941px artwork starts at a base price of <strong>R14.00</strong>. Investments and deposits require a minimum of <strong>R21.00</strong> up to a maximum of <strong>R1,000.00 per month</strong>. Upon every investment or deposit, <strong>33%</strong> is allocated for booking a space in Arcknowledge Files/Gallery (omitted from principal/wallet balance) and <strong>67%</strong> is allocated to your artwork purchase principal or net wallet credit.</p>
+          <p><strong>2. 1-Month Return Window &amp; 200% Interest:</strong> When you sell/return your certified artwork PDF after <strong>1 month (30 days)</strong> and 1 month only, you earn <strong>200% interest</strong> on your 67% artwork purchase principal, redeemable directly into your Wallet Balance.</p>
+          <p><strong>3. EFT Settlement &amp; Admin Confirmation:</strong> Payments are settled via Nedbank (Account Holder: Arcknowledge Files, Account Number: 1330273591, Branch Code: 198765). Deposits and bank withdrawals require verification and confirmation from Arcknowledge Admin, reflected in your live transaction log.</p>
+        `
+      }
+    };
+
+    function openLegalModal(key) {
+      const doc = LEGAL_DOCS[key];
+      if (!doc) return;
+      document.getElementById('legal-modal-title').textContent = doc.title;
+      document.getElementById('legal-modal-body').innerHTML = doc.html;
+      document.getElementById('modal-legal').classList.remove('hidden');
+    }
+
+    async function loadStorefrontArtwork() {
+      siteArtworkConfig = await DB.getArtworkSettings();
+      document.getElementById('storefront-artwork-img').src = siteArtworkConfig.artworkDataUrl;
+      document.getElementById('storefront-artwork-title').textContent = siteArtworkConfig.title;
+      document.getElementById('storefront-artwork-desc').textContent = siteArtworkConfig.description;
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      initSupabaseAdapter();
+      updateLiveCalculator(100);
+      await loadStorefrontArtwork();
+      await syncNavigationUI();
+    });
+  </script>
+</body>
+</html>
