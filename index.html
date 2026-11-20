@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arcknowledge — One Stop Internet</title>
+  <meta name="description" content="Arcknowledge — One Stop Internet. A curated, searchable global directory of the internet's most essential platforms, tools, and services." />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              black: '#0A0A0C',
+              ink: '#111827',
+              blue: '#0055FF',
+              blueHover: '#0044CC',
+              blueSoft: '#EFF6FF',
+              surface: '#F8FAFC',
+            }
+          },
+          boxShadow: {
+            'glass': '0 20px 50px -12px rgba(10, 10, 12, 0.16), 0 0 0 1px rgba(0, 85, 255, 0.12)',
+            'card': '0 4px 20px -2px rgba(10, 10, 12, 0.04), 0 1px 3px rgba(10, 10, 12, 0.03)',
+            'card-hover': '0 14px 30px -6px rgba(0, 85, 255, 0.10), 0 4px 10px -2px rgba(10, 10, 12, 0.05)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Base Light Theme Enforcement & Custom Scrollbars */
+    :root {
+      color-scheme: light;
+    }
+
+    body {
+      background-color: #FFFFFF;
+      color: #0A0A0C;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Subtle architectural dot grid background */
+    .bg-grid-pattern {
+      background-image: radial-gradient(rgba(0, 85, 255, 0.09) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Frosted Glassmorphism */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+    }
+
+    /* Smooth accordion body reveal */
+    .accordion-content {
+      transition: opacity 0.25s ease;
+    }
+
+    /* Scroll reveal utility */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Highlighted search match */
+    mark.search-hl {
+      background-color: #DBEAFE;
+      color: #0044CC;
+      font-weight: 600;
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F8FAFC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    /* Target flash highlight when jumping from global search */
+    @keyframes targetPulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 85, 255, 0.55); border-color: #0055FF; background-color: #EFF6FF; }
+      70% { box-shadow: 0 0 0 10px rgba(0, 85, 255, 0); border-color: #0055FF; background-color: #EFF6FF; }
+      100% { box-shadow: 0 0 0 0 rgba(0, 85, 255, 0); }
+    }
+    .entry-highlight-flash {
+      animation: targetPulse 1.8s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-white text-[#0A0A0C] antialiased selection:bg-[#0055FF] selection:text-white pb-28">
+
+  <!-- Skip to main content for keyboard & screen reader accessibility -->
+  <a href="#directory-main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#0055FF] focus:text-white focus:rounded-xl focus:font-medium">
+    Skip to directory content
+  </a>
+
+  <!-- ==================== STICKY TOP NAVIGATION BAR ==================== -->
+  <header class="sticky top-0 z-40 glass-panel border-b border-slate-200/80 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+
+        <!-- Brand Mark + Arcknowledge + One Stop Internet directly underneath -->
+        <a href="#top" class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF] rounded-xl p-1 -ml-1" aria-label="Arcknowledge - One Stop Internet Home">
+          <!-- Geometric Blue & Black Logo Mark -->
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#0A0A0C] flex items-center justify-center shadow-sm group-hover:bg-[#0055FF] transition-colors duration-300 shrink-0 relative overflow-hidden">
+            <svg class="w-6 h-6 text-white" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+              <path d="M14 3L24 23H19.4L14 11.8L8.6 23H4L14 3Z" fill="currentColor"/>
+              <circle cx="14" cy="20.5" r="2.7" fill="#3B82F6" class="group-hover:fill-white transition-colors"/>
+            </svg>
+          </div>
+          <div class="flex flex-col leading-none">
+            <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-[#0A0A0C] group-hover:text-[#0055FF] transition-colors">
+              Arcknowledge
+            </span>
+            <span class="text-[11px] sm:text-xs font-normal tracking-wide text-slate-500 mt-1">
+              One Stop Internet
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Horizontal Category Anchor Links -->
+        <nav aria-label="Primary Category Navigation" class="hidden xl:flex items-center gap-1">
+          <a href="#cat-social" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">Social</a>
+          <a href="#cat-ecommerce" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">E-Commerce</a>
+          <a href="#cat-search" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">Search & Portals</a>
+          <a href="#cat-news" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">News & Wikis</a>
+          <a href="#cat-entertainment" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">Entertainment</a>
+          <a href="#cat-business" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">Business & Finance</a>
+          <a href="#cat-maps" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">Maps & Travel</a>
+          <a href="#cat-education" class="px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-[#0055FF] hover:bg-blue-50/80 rounded-lg transition-colors">Education & Nonprofits</a>
+        </nav>
+
+        <!-- Right Controls: Expand/Collapse All + Mobile Menu Trigger -->
+        <div class="flex items-center gap-2">
+          <button id="toggleAllBtn" type="button" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-[#0A0A0C] bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]">
+            <svg class="w-3.5 h-3.5 text-[#0055FF]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/></svg>
+            <span id="toggleAllText">Expand All</span>
+          </button>
+
+          <button id="focusFloatingSearchBtn" type="button" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-[#0055FF] hover:bg-[#0044CC] rounded-xl shadow-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0055FF]" title="Jump to Global Search (/)">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/></svg>
+            <span class="hidden md:inline">Search</span>
+            <kbd class="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white/20 text-white rounded">/</kbd>
+          </button>
+
+          <!-- Mobile / Tablet Hamburger Button -->
+          <button id="mobileMenuBtn" type="button" aria-expanded="false" aria-controls="mobileNavDrawer" aria-label="Toggle category menu" class="xl:hidden p-2.5 rounded-xl text-[#0A0A0C] hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]">
+            <svg id="hamburgerIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg id="closeMenuIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Responsive Mobile / Tablet Navigation Drawer -->
+    <div id="mobileNavDrawer" class="hidden xl:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-lg px-4 pt-3 pb-5 shadow-lg">
+      <div class="max-w-7xl mx-auto">
+        <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2.5 px-1">Jump to Category</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5" id="mobileCategoryLinks">
+          <!-- Populated dynamically -->
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between px-1">
+          <span class="text-xs text-slate-500">Directory Controls</span>
+          <button id="mobileToggleAllBtn" type="button" class="text-xs font-semibold text-[#0055FF] hover:underline">
+            Expand All Categories
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO & BENTO OVERVIEW STRIP ==================== -->
+  <section id="top" class="relative bg-grid-pattern border-b border-slate-200/70 overflow-hidden">
+    <!-- Subtle Royal Blue Ambient Glow -->
+    <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[780px] h-[340px] bg-gradient-to-tr from-blue-500/10 via-blue-400/5 to-transparent rounded-full blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 sm:pt-14 sm:pb-16 relative">
+      <!-- Top Eyebrow Pill -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-[#0055FF] text-xs font-semibold mb-5">
+        <span class="w-2 h-2 rounded-full bg-[#0055FF] animate-pulse"></span>
+        Global Web Index &bull; Curated &amp; Verified Destinations
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+        <div class="lg:col-span-7">
+          <h1 class="font-display font-extrabold text-3xl sm:text-5xl lg:text-[54px] tracking-tight text-[#0A0A0C] leading-[1.08]">
+            The entire useful web, <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#0055FF] to-blue-500">organized in one place.</span>
+          </h1>
+          <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
+            Explore <span id="heroTotalCount" class="font-semibold text-[#0A0A0C]">465+</span> essential global platforms across 8 structured pillars—spanning the Americas, Europe, Africa, Asia, and Oceania. Filter instantly by category, region, or tag.
+          </p>
+        </div>
+
+        <!-- Bento Metrics Cards -->
+        <div class="lg:col-span-5 grid grid-cols-3 gap-3 sm:gap-4">
+          <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-card">
+            <div class="text-xs font-medium text-slate-500">Platforms</div>
+            <div id="bentoPlatformCount" class="font-display font-extrabold text-2xl sm:text-3xl text-[#0A0A0C] mt-1">465+</div>
+            <div class="text-[11px] text-[#0055FF] font-semibold mt-1">Direct links</div>
+          </div>
+          <div class="bg-[#0A0A0C] text-white rounded-2xl p-4 shadow-card">
+            <div class="text-xs font-medium text-slate-400">Pillars</div>
+            <div class="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1">08</div>
+            <div class="text-[11px] text-blue-400 font-semibold mt-1">Core sectors</div>
+          </div>
+          <div class="bg-gradient-to-br from-[#0055FF] to-blue-700 text-white rounded-2xl p-4 shadow-card">
+            <div class="text-xs font-medium text-blue-100">Coverage</div>
+            <div class="font-display font-extrabold text-2xl sm:text-3xl text-white mt-1">6</div>
+            <div class="text-[11px] text-blue-100 font-semibold mt-1">Continents</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick-Jump Bento Strip -->
+      <div class="mt-8 pt-6 border-t border-slate-200/80">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Quick-Jump Pillars</span>
+          <span class="text-xs text-slate-400 hidden sm:inline">Click any pillar to open &amp; filter</span>
+        </div>
+        <div id="quickJumpGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MAIN DIRECTORY ACCORDIONS ==================== -->
+  <main id="directory-main" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
+    <div id="categoriesContainer" class="space-y-5">
+      <!-- 8 Expandable Category Accordion Cards Rendered Dynamically -->
+    </div>
+  </main>
+
+  <!-- ==================== FLOATING GLOBAL SEARCH BAR ==================== -->
+  <div id="floatingSearchWrapper" class="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-2xl" role="search" aria-label="Global Directory Search">
+
+    <!-- Elevated Instant Results Popover (Opens upward above floating bar) -->
+    <div id="globalSearchResults" class="hidden mb-3 glass-panel border border-slate-200/90 rounded-2xl shadow-glass overflow-hidden transition-all" aria-live="polite">
+      <div class="px-4 py-2.5 bg-slate-50/90 border-b border-slate-200/80 flex items-center justify-between">
+        <span id="globalSearchCount" class="text-xs font-semibold text-slate-700">0 matches found</span>
+        <span class="text-[11px] text-slate-500">Click a result to jump &amp; highlight</span>
+      </div>
+      <div id="globalSearchList" class="max-h-[52vh] sm:max-h-[380px] overflow-y-auto divide-y divide-slate-100">
+        <!-- Live search result items injected here -->
+      </div>
+    </div>
+
+    <!-- Floating Search Input Capsule -->
+    <div class="glass-panel border-2 border-[#0A0A0C]/15 focus-within:border-[#0055FF] rounded-2xl shadow-glass px-3.5 sm:px-4 py-2.5 sm:py-3 flex items-center gap-3 transition-all">
+      <div class="w-9 h-9 rounded-xl bg-[#0055FF] text-white flex items-center justify-center shrink-0 shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path stroke-linecap="round" d="M20 20l-3.5-3.5" />
+        </svg>
+      </div>
+
+      <input
+        id="globalSearchInput"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Search 465+ platforms, tags, regions, or URLs across the web..."
+        aria-label="Search across all categories and platforms"
+        class="w-full bg-transparent text-sm sm:text-[15px] text-[#0A0A0C] placeholder-slate-400 focus:outline-none"
+      />
+
+      <button
+        id="globalSearchClear"
+        type="button"
+        aria-label="Clear global search"
+        class="hidden px-2.5 py-1 text-xs font-semibold text-slate-600 hover:text-[#0A0A0C] bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors shrink-0"
+      >
+        Clear
+      </button>
+
+      <kbd id="globalSearchShortcut" class="hidden sm:inline-flex items-center px-2 py-1 text-[11px] font-mono font-semibold text-slate-500 bg-slate-100 border border-slate-200 rounded-lg shrink-0" title="Press / anywhere to search">
+        /
+      </kbd>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-[#0A0A0C] text-white border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-slate-800">
+        <!-- Brand Column -->
+        <div class="md:col-span-5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#0055FF] flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-white" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                <path d="M14 3L24 23H19.4L14 11.8L8.6 23H4L14 3Z" fill="currentColor"/>
+                <circle cx="14" cy="20.5" r="2.7" fill="#FFFFFF"/>
+              </svg>
+            </div>
+            <div class="flex flex-col leading-none">
+              <span class="font-display font-extrabold text-xl tracking-tight text-white">Arcknowledge</span>
+              <span class="text-xs font-normal text-slate-400 mt-1">One Stop Internet</span>
+            </div>
+          </div>
+          <p class="mt-4 text-sm text-slate-400 leading-relaxed max-w-md">
+            An independent, high-speed global web index designed to connect curious minds, professionals, and everyday internet users directly to official platforms worldwide without clutter or algorithmic noise.
+          </p>
+        </div>
+
+        <!-- Directory Quick Links -->
+        <div class="md:col-span-4">
+          <h3 class="font-display font-bold text-xs uppercase tracking-wider text-slate-300 mb-3.5">Directory Pillars</h3>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-400">
+            <li><a href="#cat-social" class="hover:text-white transition-colors">Social &amp; Messaging</a></li>
+            <li><a href="#cat-ecommerce" class="hover:text-white transition-colors">E-Commerce</a></li>
+            <li><a href="#cat-search" class="hover:text-white transition-colors">Search &amp; Portals</a></li>
+            <li><a href="#cat-news" class="hover:text-white transition-colors">News, Blogs &amp; Wikis</a></li>
+            <li><a href="#cat-entertainment" class="hover:text-white transition-colors">Entertainment &amp; Media</a></li>
+            <li><a href="#cat-business" class="hover:text-white transition-colors">Business &amp; Finance</a></li>
+            <li><a href="#cat-maps" class="hover:text-white transition-colors">Maps &amp; Travel</a></li>
+            <li><a href="#cat-education" class="hover:text-white transition-colors">Education &amp; Nonprofits</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal & Governance Links -->
+        <div class="md:col-span-3">
+          <h3 class="font-display font-bold text-xs uppercase tracking-wider text-slate-300 mb-3.5">Governance &amp; Legal</h3>
+          <ul class="space-y-2.5 text-sm">
+            <li>
+              <button type="button" data-modal-open="privacyModal" class="text-slate-300 hover:text-[#60A5FA] font-medium transition-colors underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF] rounded">
+                Privacy Policy
+              </button>
+            </li>
+            <li>
+              <button type="button" data-modal-open="termsUseModal" class="text-slate-300 hover:text-[#60A5FA] font-medium transition-colors underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF] rounded">
+                Terms of Use
+              </button>
+            </li>
+            <li>
+              <button type="button" data-modal-open="termsConditionsModal" class="text-slate-300 hover:text-[#60A5FA] font-medium transition-colors underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF] rounded">
+                Terms &amp; Conditions
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <p>&copy; 2026 Arcknowledge — One Stop Internet. All rights reserved.</p>
+        <p>Client-side architecture &bull; Zero server tracking &bull; All third-party trademarks belong to their respective owners.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== ACCESSIBLE LEGAL MODALS ==================== -->
+
+  <!-- 1. Privacy Policy Modal -->
+  <div id="privacyModal" class="legal-modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+    <div class="modal-backdrop fixed inset-0 bg-[#0A0A0C]/70 backdrop-blur-sm transition-opacity"></div>
+    <div class="modal-panel relative bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden z-10">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#0055FF]">Legal Documentation</span>
+          <h2 id="privacyModalTitle" class="font-display font-extrabold text-xl text-[#0A0A0C]">Privacy Policy</h2>
+        </div>
+        <button type="button" class="modal-close p-2 rounded-xl text-slate-500 hover:text-[#0A0A0C] hover:bg-slate-200/70 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]" aria-label="Close Privacy Policy">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-700 leading-relaxed" tabindex="0">
+        <p class="text-xs text-slate-500"><strong>Effective Date:</strong> November 20, 2026 &bull; <strong>Platform:</strong> Arcknowledge — One Stop Internet</p>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">1. Zero Server-Side Data Collection</h3>
+          <p>Arcknowledge ("we," "our," or "us") operates strictly as a client-side static web directory. We do <strong>not</strong> operate user accounts, login systems, server-side databases, or remote analytics telemetry. Any search queries, category filters, or tag selections you perform are processed exclusively in memory within your local web browser and are never transmitted to or stored on any server controlled by Arcknowledge.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">2. Cookies &amp; Local Browser Storage</h3>
+          <p>We do not set advertising cookies, cross-site tracking pixels, or behavioral profiling identifiers. Your browser may store lightweight, strictly functional UI preferences (such as expanded category states) in local session memory during your visit. You may clear your browser cache or storage at any time without affecting access to the directory.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">3. Third-Party External Websites</h3>
+          <p>Arcknowledge provides direct outbound hyperlinks to hundreds of independent third-party platforms worldwide. Once you click an external link and leave Arcknowledge, this Privacy Policy no longer applies. Each third-party service maintains its own privacy practices, cookie policies, and data processing standards, which we strongly encourage you to review before submitting personal information.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">4. Children's Privacy</h3>
+          <p>Because Arcknowledge does not collect, solicit, or store personal data from any visitor, we do not knowingly collect personal information from children under the age of 13 (or 16 in applicable jurisdictions). Parents and guardians are encouraged to supervise minors when navigating outbound links to general-audience third-party platforms.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">5. International Privacy Rights (GDPR, CCPA/CPRA &amp; POPIA)</h3>
+          <p>We respect global data protection frameworks, including the European Union &amp; UK General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA/CPRA), and South Africa's Protection of Personal Information Act (POPIA). Because we process zero personal data on our servers, there is no personal record held for access, rectification, portability, or deletion requests—your privacy is protected by architectural default.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">6. Security, Policy Updates &amp; Contact</h3>
+          <p>All outbound links curated in Arcknowledge utilize secure HTTPS protocols where supported by the destination platform. We may periodically update this Privacy Policy to reflect improvements to the directory. For privacy inquiries or directory corrections, contact the editorial maintainer at <span class="font-mono text-xs bg-slate-100 px-1.5 py-0.5 rounded">privacy@arcknowledge.org</span>.</p>
+        </section>
+      </div>
+      <div class="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex justify-end">
+        <button type="button" class="modal-close px-5 py-2 bg-[#0A0A0C] hover:bg-[#0055FF] text-white text-xs font-semibold rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]">
+          Close Document
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Terms of Use Modal -->
+  <div id="termsUseModal" class="legal-modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="termsUseModalTitle">
+    <div class="modal-backdrop fixed inset-0 bg-[#0A0A0C]/70 backdrop-blur-sm transition-opacity"></div>
+    <div class="modal-panel relative bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden z-10">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#0055FF]">Legal Documentation</span>
+          <h2 id="termsUseModalTitle" class="font-display font-extrabold text-xl text-[#0A0A0C]">Terms of Use</h2>
+        </div>
+        <button type="button" class="modal-close p-2 rounded-xl text-slate-500 hover:text-[#0A0A0C] hover:bg-slate-200/70 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]" aria-label="Close Terms of Use">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-700 leading-relaxed" tabindex="0">
+        <p class="text-xs text-slate-500"><strong>Last Updated:</strong> November 20, 2026 &bull; <strong>Platform:</strong> Arcknowledge — One Stop Internet</p>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">1. Acceptance &amp; Acceptable Use</h3>
+          <p>By accessing or browsing Arcknowledge — One Stop Internet, you agree to use this web directory solely for lawful informational, research, educational, and navigational purposes. You agree not to interfere with the availability of the interface, attempt unauthorized automated scraping that degrades performance for other users, or misrepresent Arcknowledge as an official agent of any listed platform.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">2. Intellectual Property &amp; Third-Party Trademarks</h3>
+          <p>The Arcknowledge brand name, geometric logo mark, user interface design, taxonomy structure, and original descriptive summaries are the intellectual property of Arcknowledge. All listed platform names, brand marks, domain names, and service titles belong exclusively to their respective corporate or organizational owners and are referenced strictly for nominative identification and navigational indexing.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">3. Disclaimer of Warranties</h3>
+          <p>Arcknowledge is provided on an <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> basis without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose, continuous uptime, or absolute accuracy of third-party domain availability.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">4. Limitation of Liability</h3>
+          <p>To the maximum extent permitted by applicable law, Arcknowledge and its contributors shall not be liable for any direct, indirect, incidental, consequential, or special damages arising out of your use of—or inability to use—this directory or any external website reached through links indexed herein.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">5. Third-Party Links &amp; Regional Availability</h3>
+          <p>Certain platforms listed in our global directory may be subject to regional licensing, regulatory restrictions, or local access limitations depending on your country or network provider. Users remain responsible for complying with local laws when accessing external services.</p>
+        </section>
+      </div>
+      <div class="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex justify-end">
+        <button type="button" class="modal-close px-5 py-2 bg-[#0A0A0C] hover:bg-[#0055FF] text-white text-xs font-semibold rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]">
+          Close Document
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Terms & Conditions Modal -->
+  <div id="termsConditionsModal" class="legal-modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="termsConditionsModalTitle">
+    <div class="modal-backdrop fixed inset-0 bg-[#0A0A0C]/70 backdrop-blur-sm transition-opacity"></div>
+    <div class="modal-panel relative bg-white border border-slate-200 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden z-10">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#0055FF]">Legal Documentation</span>
+          <h2 id="termsConditionsModalTitle" class="font-display font-extrabold text-xl text-[#0A0A0C]">Terms &amp; Conditions</h2>
+        </div>
+        <button type="button" class="modal-close p-2 rounded-xl text-slate-500 hover:text-[#0A0A0C] hover:bg-slate-200/70 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]" aria-label="Close Terms & Conditions">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5 text-sm text-slate-700 leading-relaxed" tabindex="0">
+        <p class="text-xs text-slate-500"><strong>Effective Date:</strong> November 20, 2026 &bull; <strong>Platform:</strong> Arcknowledge — One Stop Internet</p>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">1. General Conditions of Directory Access</h3>
+          <p>These Terms &amp; Conditions govern the relationship between you and Arcknowledge regarding your navigation of our global internet index. Access to Arcknowledge is free of charge and requires no registration.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">2. Accuracy &amp; Currency of Listed Information</h3>
+          <p>While our editorial curators strive to maintain accurate official URLs, concise descriptions, and descriptive tags across every category, internet platforms frequently rebrand, merge, migrate domains, or alter pricing models. Arcknowledge does not guarantee that every entry reflects real-time corporate changes at any exact moment.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">3. No Endorsement or Sponsorship</h3>
+          <p>Inclusion of any website, application, financial institution, news outlet, or marketplace in Arcknowledge is based on global utility, regional significance, and category relevance. Listing does <strong>not</strong> constitute an endorsement, certification, financial recommendation, or partnership by Arcknowledge.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">4. External Link Responsibility</h3>
+          <p>All external links open in a new browser tab with <code class="text-xs bg-slate-100 px-1 py-0.5 rounded">rel="noopener noreferrer"</code> security isolation. Arcknowledge exercises no editorial or technical control over the content, uptime, security practices, or transactions conducted on third-party destinations.</p>
+        </section>
+
+        <section>
+          <h3 class="font-display font-bold text-base text-[#0A0A0C] mb-1.5">5. Modifications, Termination &amp; Governing Law</h3>
+          <p>Arcknowledge reserves the right to add, recategorize, update, or remove any directory entry, feature, or these Terms &amp; Conditions at any time without prior notice. These Terms &amp; Conditions shall be governed by and construed in accordance with general principles of international commercial and digital law, without regard to conflict-of-law provisions.</p>
+        </section>
+      </div>
+      <div class="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex justify-end">
+        <button type="button" class="modal-close px-5 py-2 bg-[#0A0A0C] hover:bg-[#0055FF] text-white text-xs font-semibold rounded-xl transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]">
+          Close Document
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION DATA & LOGIC ==================== -->
+  <script>
+    /**
+     * Arcknowledge — One Stop Internet
+     * Complete Global Directory Dataset (8 Categories, 470+ Verified Global Entries)
+     * Compact tuple format per entry: [Name, URL, Description, [Tags...]]
+     * Hydrated cleanly at boot into structured objects for fast search & lazy DOM rendering.
+     */
+    const RAW_DIRECTORY_DATA = [
+      {
+        id: 'cat-social',
+        shortTitle: 'Social',
+        title: 'Social & Messaging',
+        description: 'Platforms for connecting, sharing posts, communities, and private real-time chat across the globe.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>`,
+        items: [
+          ['WhatsApp', 'https://www.whatsapp.com', 'End-to-end encrypted global messaging, voice, and video calling platform.', ['messaging', 'global', 'encrypted', 'mobile', 'free']],
+          ['Instagram', 'https://www.instagram.com', 'Photo, Reels short-video, and Stories social network for creators and brands.', ['social', 'global', 'photos', 'video', 'creators']],
+          ['Facebook', 'https://www.facebook.com', 'Global social network connecting friends, groups, events, and communities.', ['social', 'global', 'groups', 'communities', 'free']],
+          ['X (Twitter)', 'https://x.com', 'Real-time public conversation, breaking news, and microblogging network.', ['microblogging', 'global', 'news', 'real-time', 'social']],
+          ['TikTok', 'https://www.tiktok.com', 'Short-form mobile video platform powered by algorithmic discovery.', ['short-video', 'global', 'creators', 'entertainment', 'mobile']],
+          ['LinkedIn', 'https://www.linkedin.com', 'World’s largest professional networking, career, and B2B publishing platform.', ['professional', 'global', 'networking', 'careers', 'b2b']],
+          ['Reddit', 'https://www.reddit.com', 'Interest-based community forums, discussions, and user-curated news.', ['forums', 'global', 'communities', 'discussions', 'free']],
+          ['Discord', 'https://discord.com', 'Voice, video, and text servers built for gaming and interest communities.', ['chat', 'global', 'voice', 'communities', 'gaming']],
+          ['Telegram', 'https://telegram.org', 'Cloud-based instant messaging app with large channels, bots, and file sharing.', ['messaging', 'global', 'channels', 'cloud', 'free']],
+          ['Signal', 'https://signal.org', 'Nonprofit privacy-first encrypted messaging and voice/video calling app.', ['messaging', 'global', 'privacy', 'encrypted', 'nonprofit']],
+          ['Snapchat', 'https://www.snapchat.com', 'Ephemeral visual messaging, AR lenses, and Stories platform.', ['messaging', 'americas', 'europe', 'ar', 'mobile']],
+          ['Pinterest', 'https://www.pinterest.com', 'Visual discovery and bookmarking engine for ideas, design, and recipes.', ['visual', 'global', 'inspiration', 'bookmarks', 'social']],
+          ['Threads', 'https://www.threads.net', 'Text-based public conversation app integrated with the Instagram ecosystem.', ['microblogging', 'global', 'social', 'fediverse', 'mobile']],
+          ['Bluesky', 'https://bsky.app', 'Decentralized microblogging social network built on the AT Protocol.', ['microblogging', 'decentralized', 'open-source', 'global', 'social']],
+          ['Mastodon', 'https://joinmastodon.org', 'Federated, open-source microblogging network free of central corporate control.', ['microblogging', 'fediverse', 'open-source', 'privacy', 'europe']],
+          ['WeChat', 'https://www.wechat.com', 'All-in-one Chinese messaging, social Moments, and mini-program ecosystem.', ['messaging', 'asia', 'china', 'super-app', 'mobile']],
+          ['LINE', 'https://line.me', 'Leading instant messaging and sticker social platform in Japan, Taiwan, and Thailand.', ['messaging', 'asia', 'japan', 'stickers', 'mobile']],
+          ['KakaoTalk', 'https://www.kakaocorp.com/page/service/service/KakaoTalk', 'South Korea’s primary mobile messaging, group chat, and social platform.', ['messaging', 'asia', 'south-korea', 'mobile', 'social']],
+          ['Viber', 'https://www.viber.com', 'Cross-platform encrypted calling and messaging popular across Eastern Europe and Asia.', ['messaging', 'europe', 'asia', 'voip', 'encrypted']],
+          ['Tencent QQ', 'https://im.qq.com', 'Long-standing Chinese desktop and mobile instant messaging and social portal.', ['messaging', 'asia', 'china', 'desktop', 'social']],
+          ['Douyin', 'https://www.douyin.com', 'China’s leading short-form video and social commerce platform.', ['short-video', 'asia', 'china', 'creators', 'mobile']],
+          ['Xiaohongshu (RedNote)', 'https://www.xiaohongshu.com', 'Chinese lifestyle, travel, and product discovery social community.', ['lifestyle', 'asia', 'china', 'reviews', 'visual']],
+          ['Weibo', 'https://weibo.com', 'Major Chinese microblogging and celebrity/public news social network.', ['microblogging', 'asia', 'china', 'news', 'social']],
+          ['VK (VKontakte)', 'https://vk.com', 'Largest social networking, messaging, and media platform in Eastern Europe.', ['social', 'europe', 'communities', 'messaging', 'free']],
+          ['OK.ru (Odnoklassniki)', 'https://ok.ru', 'Social network for reconnecting with classmates, family, and regional groups.', ['social', 'europe', 'communities', 'free']],
+          ['Tumblr', 'https://www.tumblr.com', 'Microblogging and creative fandom publishing platform for multimedia posts.', ['microblogging', 'global', 'fandom', 'creative', 'blogs']],
+          ['Quora', 'https://www.quora.com', 'Global question-and-answer knowledge sharing social platform.', ['q-and-a', 'global', 'knowledge', 'discussions', 'free']],
+          ['Nextdoor', 'https://nextdoor.com', 'Hyperlocal neighborhood social network for local recommendations and alerts.', ['local', 'americas', 'europe', 'neighborhood', 'free']],
+          ['Meetup', 'https://www.meetup.com', 'Platform for organizing and joining local in-person and online interest groups.', ['events', 'global', 'communities', 'networking', 'local']],
+          ['Clubhouse', 'https://www.clubhouse.com', 'Drop-in social audio rooms and live voice conversations.', ['audio', 'global', 'voice', 'social', 'mobile']],
+          ['BeReal', 'https://bereal.com', 'Authentic daily photo-sharing app capturing unfiltered dual-camera moments.', ['photos', 'europe', 'global', 'mobile', 'social']],
+          ['Lemon8', 'https://www.lemon8-app.com', 'Visual lifestyle, fashion, and wellness community app by ByteDance.', ['lifestyle', 'global', 'visual', 'creators', 'mobile']],
+          ['Twitch', 'https://www.twitch.tv', 'Interactive live-streaming social community for gamers and creators.', ['live-streaming', 'global', 'gaming', 'chat', 'creators']],
+          ['Substack Notes', 'https://substack.com/notes', 'Short-form social feed connecting writers and readers across Substack.', ['writing', 'global', 'newsletters', 'social', 'creators']],
+          ['Farcaster', 'https://www.farcaster.xyz', 'Sufficiently decentralized social protocol and client network.', ['decentralized', 'web3', 'microblogging', 'global', 'open-source']],
+          ['Lens Protocol', 'https://www.lens.xyz', 'Open social graph enabling portable creator profiles and communities.', ['decentralized', 'web3', 'social', 'open-source', 'creators']],
+          ['Element (Matrix)', 'https://element.io', 'Open-source, federated, end-to-end encrypted team and community chat.', ['messaging', 'open-source', 'privacy', 'encrypted', 'europe']],
+          ['Slack', 'https://slack.com', 'Channel-based messaging and collaboration hub for teams and communities.', ['chat', 'global', 'workplace', 'communities', 'freemium']],
+          ['Microsoft Teams', 'https://www.microsoft.com/microsoft-teams', 'Enterprise and personal video conferencing, chat, and workspace hub.', ['chat', 'global', 'video-calls', 'enterprise', 'freemium']],
+          ['GroupMe', 'https://groupme.com', 'Simple group text messaging app popular with students and clubs.', ['messaging', 'americas', 'groups', 'mobile', 'free']],
+          ['Kik', 'https://www.kik.com', 'Username-based mobile messenger for interest groups and chat.', ['messaging', 'americas', 'mobile', 'chat', 'free']],
+          ['Zalo', 'https://zalo.me', 'Vietnam’s dominant instant messaging, voice call, and social platform.', ['messaging', 'asia', 'vietnam', 'mobile', 'social']],
+          ['imo', 'https://imo.im', 'Lightweight international video calling and instant messaging app.', ['messaging', 'global', 'asia', 'middle-east', 'voip']],
+          ['Threema', 'https://threema.ch', 'Swiss-engineered anonymous, end-to-end encrypted messenger.', ['messaging', 'europe', 'switzerland', 'privacy', 'encrypted']],
+          ['Session', 'https://getsession.org', 'Onion-routed private messenger requiring no phone number or email.', ['messaging', 'oceania', 'privacy', 'encrypted', 'open-source']],
+          ['Wire', 'https://wire.com', 'European enterprise and personal encrypted collaboration messenger.', ['messaging', 'europe', 'encrypted', 'enterprise', 'privacy']],
+          ['Guilded', 'https://www.guilded.gg', 'Feature-rich chat, voice, and tournament platform for gaming guilds.', ['chat', 'global', 'gaming', 'voice', 'communities']],
+          ['Revolt', 'https://revolt.chat', 'Open-source, user-first community chat platform inspired by Discord.', ['chat', 'open-source', 'privacy', 'communities', 'free']],
+          ['Amino', 'https://aminoapps.com', 'Mobile network of fandom communities, chats, and wikis.', ['fandom', 'global', 'communities', 'mobile', 'chat']],
+          ['Badoo', 'https://badoo.com', 'Global social discovery and dating network active across Europe and Latin America.', ['dating', 'europe', 'americas', 'social', 'freemium']],
+          ['Tinder', 'https://tinder.com', 'Location-based social dating and matchmaking mobile platform.', ['dating', 'global', 'mobile', 'social', 'freemium']],
+          ['Bumble', 'https://bumble.com', 'Social connection app for dating, friendships (BFF), and networking.', ['dating', 'global', 'networking', 'mobile', 'freemium']],
+          ['Hinge', 'https://hinge.co', 'Prompt-driven relationship-focused dating platform.', ['dating', 'americas', 'europe', 'mobile', 'freemium']],
+          ['Grindr', 'https://www.grindr.com', 'Global LGBTQ+ social networking and location-based chat app.', ['social', 'global', 'lgbtq', 'mobile', 'chat']],
+          ['MeWe', 'https://mewe.com', 'Ad-free, privacy-focused social network with groups and pages.', ['social', 'americas', 'privacy', 'groups', 'freemium']],
+          ['Minds', 'https://www.minds.com', 'Open-source social networking platform rewarding creators.', ['social', 'open-source', 'creators', 'global', 'freemium']],
+          ['Pixelfed', 'https://pixelfed.org', 'Ad-free, federated photo sharing built on ActivityPub.', ['photos', 'fediverse', 'open-source', 'privacy', 'free']],
+          ['PeerTube', 'https://joinpeertube.org', 'Decentralized, federated video hosting and social streaming network.', ['video', 'fediverse', 'open-source', 'europe', 'free']],
+          ['Zulip', 'https://zulip.com', 'Open-source threaded team chat built for distributed communities.', ['chat', 'open-source', 'workplace', 'global', 'freemium']],
+          ['Rocket.Chat', 'https://www.rocket.chat', 'Open-source omnichannel communications and team chat platform.', ['chat', 'open-source', 'americas', 'enterprise', 'self-hosted']]
+        ]
+      },
+      {
+        id: 'cat-ecommerce',
+        shortTitle: 'E-Commerce',
+        title: 'E-Commerce & Marketplaces',
+        description: 'Global online stores, peer-to-peer marketplaces, and retail platforms with carts, logistics, and payments.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>`,
+        items: [
+          ['Amazon', 'https://www.amazon.com', 'World’s largest online retail marketplace, cloud, and Prime logistics hub.', ['marketplace', 'global', 'retail', 'fast-delivery', 'b2c']],
+          ['Alibaba.com', 'https://www.alibaba.com', 'Leading global B2B wholesale sourcing and manufacturing marketplace.', ['b2b', 'global', 'asia', 'china', 'wholesale']],
+          ['AliExpress', 'https://www.aliexpress.com', 'Cross-border B2C retail marketplace shipping globally from China.', ['marketplace', 'global', 'asia', 'affordable', 'b2c']],
+          ['eBay', 'https://www.ebay.com', 'Global online auction and fixed-price consumer-to-consumer marketplace.', ['auctions', 'global', 'secondhand', 'collectibles', 'c2c']],
+          ['Walmart', 'https://www.walmart.com', 'Omnichannel retail giant offering groceries, electronics, and marketplace goods.', ['retail', 'americas', 'groceries', 'marketplace', 'b2c']],
+          ['Target', 'https://www.target.com', 'US department store retailer with same-day pickup and online marketplace.', ['retail', 'americas', 'home', 'apparel', 'b2c']],
+          ['Shopify', 'https://www.shopify.com', 'Global commerce infrastructure powering millions of independent online stores.', ['saas', 'global', 'storefronts', 'payments', 'b2b']],
+          ['Etsy', 'https://www.etsy.com', 'Global marketplace for handmade, vintage, and independent craft goods.', ['handmade', 'global', 'vintage', 'creators', 'marketplace']],
+          ['Temu', 'https://www.temu.com', 'Ultra-affordable cross-border e-commerce marketplace for everyday goods.', ['marketplace', 'global', 'affordable', 'mobile', 'b2c']],
+          ['SHEIN', 'https://www.shein.com', 'Global online fast-fashion, beauty, and lifestyle retail platform.', ['fashion', 'global', 'apparel', 'mobile', 'b2c']],
+          ['Mercado Libre', 'https://www.mercadolibre.com', 'Latin America’s largest e-commerce marketplace and fintech ecosystem.', ['marketplace', 'americas', 'latin-america', 'fintech', 'b2c']],
+          ['Rakuten', 'https://www.rakuten.co.jp', 'Japan’s premier e-commerce marketplace, loyalty points, and digital hub.', ['marketplace', 'asia', 'japan', 'loyalty', 'b2c']],
+          ['Flipkart', 'https://www.flipkart.com', 'India’s leading homegrown e-commerce marketplace for electronics and fashion.', ['marketplace', 'asia', 'india', 'electronics', 'b2c']],
+          ['JD.com', 'https://www.jd.com', 'Chinese B2C e-commerce powerhouse renowned for direct logistics and electronics.', ['retail', 'asia', 'china', 'electronics', 'fast-delivery']],
+          ['Pinduoduo', 'https://www.pinduoduo.com', 'Social-commerce group-buying marketplace dominating Chinese agriculture and retail.', ['social-commerce', 'asia', 'china', 'groceries', 'mobile']],
+          ['Taobao', 'https://www.taobao.com', 'China’s massive consumer-to-consumer and small-business online shopping mall.', ['marketplace', 'asia', 'china', 'c2c', 'b2c']],
+          ['Tmall', 'https://www.tmall.com', 'Alibaba’s flagship B2C platform for official international and Chinese brands.', ['retail', 'asia', 'china', 'brands', 'b2c']],
+          ['Shopee', 'https://shopee.com', 'Leading mobile-first e-commerce marketplace across Southeast Asia and Taiwan.', ['marketplace', 'asia', 'southeast-asia', 'mobile', 'b2c']],
+          ['Lazada', 'https://www.lazada.com', 'Major Southeast Asian e-commerce platform serving six regional markets.', ['marketplace', 'asia', 'southeast-asia', 'retail', 'b2c']],
+          ['Tokopedia', 'https://www.tokopedia.com', 'Indonesia’s largest digital marketplace connecting merchants and consumers.', ['marketplace', 'asia', 'indonesia', 'b2c', 'c2c']],
+          ['Bukalapak', 'https://www.bukalapak.com', 'Indonesian e-commerce platform empowering warungs and online sellers.', ['marketplace', 'asia', 'indonesia', 'sme', 'b2c']],
+          ['Zalando', 'https://www.zalando.com', 'Europe’s leading online platform for fashion, footwear, and lifestyle.', ['fashion', 'europe', 'apparel', 'retail', 'b2c']],
+          ['ASOS', 'https://www.asos.com', 'UK-based global online fashion and cosmetic retailer for young adults.', ['fashion', 'europe', 'uk', 'apparel', 'b2c']],
+          ['OTTO', 'https://www.otto.de', 'Germany’s largest online retailer and curated lifestyle marketplace.', ['retail', 'europe', 'germany', 'home', 'fashion']],
+          ['Allegro', 'https://allegro.pl', 'Poland’s dominant e-commerce marketplace expanding across Central Europe.', ['marketplace', 'europe', 'poland', 'b2c', 'c2c']],
+          ['Cdiscount', 'https://www.cdiscount.com', 'Major French online retailer for electronics, appliances, and home goods.', ['retail', 'europe', 'france', 'electronics', 'b2c']],
+          ['Bol.com', 'https://www.bol.com', 'Leading online retail marketplace in the Netherlands and Belgium.', ['marketplace', 'europe', 'benelux', 'books', 'retail']],
+          ['Takealot', 'https://www.takealot.com', 'South Africa’s largest online retail store with nationwide pickup points.', ['retail', 'africa', 'south-africa', 'electronics', 'b2c']],
+          ['Jumia', 'https://www.jumia.com.ng', 'Pan-African e-commerce marketplace operating across Nigeria, Kenya, Egypt, and more.', ['marketplace', 'africa', 'pan-african', 'retail', 'b2c']],
+          ['Konga', 'https://www.konga.com', 'Major Nigerian online mall with integrated KongaPay and logistics.', ['marketplace', 'africa', 'nigeria', 'retail', 'b2c']],
+          ['Kilimall', 'https://www.kilimall.co.ke', 'East African online shopping platform serving Kenya and Uganda.', ['marketplace', 'africa', 'kenya', 'affordable', 'b2c']],
+          ['Noon', 'https://www.noon.com', 'Middle East’s leading digital marketplace across UAE, Saudi Arabia, and Egypt.', ['marketplace', 'middle-east', 'uae', 'fast-delivery', 'b2c']],
+          ['Namshi', 'https://www.namshi.com', 'Premier online fashion and beauty destination in the Gulf region.', ['fashion', 'middle-east', 'uae', 'apparel', 'b2c']],
+          ['Kogan', 'https://www.kogan.com', 'Australian online retail and digital marketplace for tech and home goods.', ['retail', 'oceania', 'australia', 'electronics', 'b2c']],
+          ['Trade Me', 'https://www.trademe.co.nz', 'New Zealand’s leading online auction, classifieds, and retail marketplace.', ['auctions', 'oceania', 'new-zealand', 'c2c', 'classifieds']],
+          ['Craigslist', 'https://www.craigslist.org', 'Classic hyperlocal classified advertisements site for goods, housing, and jobs.', ['classifieds', 'americas', 'global', 'local', 'c2c']],
+          ['Facebook Marketplace', 'https://www.facebook.com/marketplace', 'Local peer-to-peer buying and selling integrated into Facebook.', ['classifieds', 'global', 'local', 'secondhand', 'c2c']],
+          ['OfferUp', 'https://offerup.com', 'Mobile-first local peer-to-peer marketplace for secondhand goods in the US.', ['classifieds', 'americas', 'local', 'secondhand', 'mobile']],
+          ['Mercari', 'https://www.mercari.com', 'Popular Japanese and US mobile marketplace for buying and selling pre-owned items.', ['secondhand', 'asia', 'japan', 'americas', 'c2c']],
+          ['Poshmark', 'https://poshmark.com', 'Social commerce marketplace for secondhand fashion, shoes, and accessories.', ['fashion', 'americas', 'secondhand', 'social-commerce', 'c2c']],
+          ['Depop', 'https://www.depop.com', 'Gen-Z social fashion resale marketplace for streetwear and vintage.', ['fashion', 'europe', 'global', 'secondhand', 'vintage']],
+          ['Vinted', 'https://www.vinted.com', 'Europe’s largest peer-to-peer marketplace for secondhand clothing with zero seller fees.', ['fashion', 'europe', 'secondhand', 'c2c', 'sustainable']],
+          ['StockX', 'https://stockx.com', 'Live bid/ask marketplace for authenticated sneakers, streetwear, and collectibles.', ['sneakers', 'global', 'authenticated', 'collectibles', 'marketplace']],
+          ['GOAT', 'https://www.goat.com', 'Global platform for authenticated sneakers, luxury apparel, and accessories.', ['sneakers', 'global', 'authenticated', 'fashion', 'marketplace']],
+          ['Grailed', 'https://www.grailed.com', 'Curated community marketplace for menswear, designer archive, and streetwear.', ['fashion', 'global', 'menswear', 'secondhand', 'curated']],
+          ['Reverb', 'https://reverb.com', 'Largest online marketplace dedicated to new, used, and vintage musical instruments.', ['music-gear', 'global', 'instruments', 'secondhand', 'marketplace']],
+          ['Chrono24', 'https://www.chrono24.com', 'Global marketplace for buying and selling luxury and vintage watches.', ['watches', 'global', 'europe', 'luxury', 'authenticated']],
+          ['Wayfair', 'https://www.wayfair.com', 'Online home goods, furniture, and decor superstore.', ['furniture', 'americas', 'europe', 'home', 'b2c']],
+          ['IKEA', 'https://www.ikea.com', 'Global Swedish flat-pack furniture and home accessories online store.', ['furniture', 'global', 'europe', 'home', 'b2c']],
+          ['The Home Depot', 'https://www.homedepot.com', 'North America’s largest home improvement, hardware, and appliance retailer.', ['hardware', 'americas', 'home', 'tools', 'b2c']],
+          ['Best Buy', 'https://www.bestbuy.com', 'Leading consumer electronics, computing, and appliance retailer.', ['electronics', 'americas', 'tech', 'retail', 'b2c']],
+          ['Newegg', 'https://www.newegg.com', 'Tech-focused online retailer specializing in PC components and hardware.', ['electronics', 'americas', 'pc-parts', 'tech', 'b2c']],
+          ['B&H Photo Video', 'https://www.bhphotovideo.com', 'Premier retailer for professional photography, cinema, and audio gear.', ['cameras', 'americas', 'global', 'audio', 'pro-gear']],
+          ['Chewy', 'https://www.chewy.com', 'Online pet food, pharmacy, and supplies retailer with autoship.', ['pets', 'americas', 'subscription', 'retail', 'b2c']],
+          ['Instacart', 'https://www.instacart.com', 'Same-day grocery delivery and pickup marketplace across North America.', ['groceries', 'americas', 'fast-delivery', 'marketplace', 'mobile']],
+          ['Carvana', 'https://www.carvana.com', 'Online used car retailer offering financing, trade-ins, and home delivery.', ['automotive', 'americas', 'cars', 'retail', 'b2c']],
+          ['AutoTrader', 'https://www.autotrader.com', 'Major automotive marketplace connecting car buyers with dealers and private sellers.', ['automotive', 'americas', 'europe', 'cars', 'classifieds']],
+          ['Gumtree', 'https://www.gumtree.com', 'Trusted local classifieds marketplace across the UK, Australia, and South Africa.', ['classifieds', 'europe', 'oceania', 'africa', 'local']],
+          ['Coupang', 'https://www.coupang.com', 'South Korea’s e-commerce leader famous for overnight Rocket Delivery.', ['marketplace', 'asia', 'south-korea', 'fast-delivery', 'b2c']],
+          ['Trendyol', 'https://www.trendyol.com', 'Turkey and MENA’s fastest-growing fashion and general e-commerce platform.', ['marketplace', 'middle-east', 'europe', 'fashion', 'b2c']]
+        ]
+      },
+      {
+        id: 'cat-search',
+        shortTitle: 'Search & Portals',
+        title: 'Search Engines & Web Portals',
+        description: 'Web search engines, AI answer engines, privacy search tools, and regional multi-service web portals.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>`,
+        items: [
+          ['Google', 'https://www.google.com', 'World’s most widely used search engine indexing the global web.', ['search', 'global', 'ai', 'maps', 'free']],
+          ['Microsoft Bing', 'https://www.bing.com', 'Microsoft’s web search engine with Copilot AI integration and visual search.', ['search', 'global', 'ai', 'rewards', 'free']],
+          ['Yahoo', 'https://www.yahoo.com', 'Pioneer web portal combining search, mail, finance, sports, and news.', ['portal', 'global', 'mail', 'finance', 'news']],
+          ['DuckDuckGo', 'https://duckduckgo.com', 'Privacy-focused search engine that never tracks searches or profiles users.', ['search', 'global', 'privacy', 'no-tracking', 'free']],
+          ['Baidu', 'https://www.baidu.com', 'China’s dominant search engine, maps, encyclopedia, and AI portal.', ['search', 'asia', 'china', 'ai', 'portal']],
+          ['Yandex', 'https://yandex.com', 'Major Eurasian search engine and portal offering mail, maps, and translation.', ['search', 'europe', 'portal', 'maps', 'mail']],
+          ['Naver', 'https://www.naver.com', 'South Korea’s leading search engine, webtoon, news, and blog portal.', ['search', 'asia', 'south-korea', 'portal', 'news']],
+          ['Daum', 'https://www.daum.net', 'Major South Korean web portal offering search, email, news, and Kakao integration.', ['portal', 'asia', 'south-korea', 'mail', 'news']],
+          ['Sogou', 'https://www.sogou.com', 'Chinese search engine known for WeChat article search and input tools.', ['search', 'asia', 'china', 'social-search', 'free']],
+          ['360 Search (So.com)', 'https://www.so.com', 'Major Chinese web search engine operated by Qihoo 360.', ['search', 'asia', 'china', 'security', 'free']],
+          ['Brave Search', 'https://search.brave.com', 'Independent, privacy-preserving search engine with its own web index and AI summaries.', ['search', 'global', 'privacy', 'independent-index', 'ai']],
+          ['Ecosia', 'https://www.ecosia.org', 'Eco-friendly search engine dedicating ad profits to global reforestation projects.', ['search', 'europe', 'global', 'sustainability', 'nonprofit']],
+          ['Startpage', 'https://www.startpage.com', 'Dutch privacy search engine delivering Google results without user tracking.', ['search', 'europe', 'privacy', 'no-tracking', 'free']],
+          ['Qwant', 'https://www.qwant.com', 'European privacy-respecting search engine hosted in France under EU data laws.', ['search', 'europe', 'france', 'privacy', 'free']],
+          ['Perplexity AI', 'https://www.perplexity.ai', 'Conversational AI answer engine providing cited, real-time web research.', ['ai-search', 'global', 'research', 'citations', 'freemium']],
+          ['You.com', 'https://you.com', 'AI-powered customizable search engine and productivity assistant.', ['ai-search', 'global', 'productivity', 'freemium']],
+          ['Phind', 'https://www.phind.com', 'Technical AI search engine tailored for software developers and engineers.', ['ai-search', 'global', 'developers', 'coding', 'freemium']],
+          ['Wolfram|Alpha', 'https://www.wolframalpha.com', 'Computational knowledge engine answering math, science, and data queries.', ['computational', 'global', 'math', 'science', 'freemium']],
+          ['SearXNG', 'https://docs.searxng.org', 'Free, self-hostable open-source privacy metasearch engine aggregating 70+ sources.', ['metasearch', 'open-source', 'privacy', 'self-hosted', 'free']],
+          ['Mojeek', 'https://www.mojeek.com', 'UK-based independent crawler search engine with zero tracking.', ['search', 'europe', 'uk', 'independent-index', 'privacy']],
+          ['Swisscows', 'https://swisscows.com', 'Family-friendly, zero-tracking semantic search engine hosted in Switzerland.', ['search', 'europe', 'switzerland', 'privacy', 'family-safe']],
+          ['MetaGer', 'https://metager.org', 'German nonprofit privacy metasearch engine powered by renewable energy.', ['metasearch', 'europe', 'germany', 'privacy', 'nonprofit']],
+          ['Kagi', 'https://kagi.com', 'Ad-free, subscription-based fast search engine with customizable rankings.', ['search', 'global', 'ad-free', 'paid', 'privacy']],
+          ['AOL', 'https://www.aol.com', 'Classic American web portal featuring news, AOL Mail, and lifestyle coverage.', ['portal', 'americas', 'mail', 'news', 'free']],
+          ['MSN', 'https://www.msn.com', 'Microsoft’s global web portal aggregating news, weather, finance, and sports.', ['portal', 'global', 'news', 'weather', 'finance']],
+          ['Yahoo! JAPAN', 'https://www.yahoo.co.jp', 'Japan’s most visited web portal for news, auctions, weather, and search.', ['portal', 'asia', 'japan', 'news', 'search']],
+          ['Mail.ru', 'https://mail.ru', 'Major Eastern European web portal combining email, search, cloud, and news.', ['portal', 'europe', 'mail', 'cloud', 'news']],
+          ['Rambler', 'https://www.rambler.ru', 'One of the earliest Eastern European search engines and media portals.', ['portal', 'europe', 'search', 'news', 'mail']],
+          ['Seznam.cz', 'https://www.seznam.cz', 'Czech Republic’s flagship web portal, search engine, maps, and email hub.', ['portal', 'europe', 'czechia', 'search', 'maps']],
+          ['Nate', 'https://www.nate.com', 'South Korean web portal offering search, news, and NateOn messaging.', ['portal', 'asia', 'south-korea', 'news', 'search']],
+          ['Proton', 'https://proton.me', 'Swiss privacy ecosystem offering encrypted Mail, Calendar, Drive, and VPN.', ['privacy', 'europe', 'switzerland', 'mail', 'encrypted']],
+          ['GMX', 'https://www.gmx.com', 'European web portal and free email provider with cloud storage.', ['portal', 'europe', 'germany', 'mail', 'free']],
+          ['WEB.DE', 'https://web.de', 'Major German web portal offering email, news, and digital identity services.', ['portal', 'europe', 'germany', 'mail', 'news']],
+          ['Orange Portail', 'https://www.orange.fr', 'French telecom web portal featuring national news, mail, and TV.', ['portal', 'europe', 'france', 'news', 'mail']],
+          ['T-Online', 'https://www.t-online.de', 'One of Germany’s highest-reach news, email, and service web portals.', ['portal', 'europe', 'germany', 'news', 'mail']],
+          ['Libero.it', 'https://www.libero.it', 'Leading Italian web portal providing webmail, news, and local guides.', ['portal', 'europe', 'italy', 'mail', 'news']],
+          ['Virgilio.it', 'https://www.virgilio.it', 'Classic Italian web portal and local directory for news and city services.', ['portal', 'europe', 'italy', 'local', 'news']],
+          ['SAPO', 'https://www.sapo.pt', 'Portugal’s pioneering search engine, news, and digital services portal.', ['portal', 'europe', 'portugal', 'news', 'search']],
+          ['Terra', 'https://www.terra.com.br', 'Major Latin American web portal covering news, sports, and entertainment.', ['portal', 'americas', 'brazil', 'news', 'sports']],
+          ['UOL (Universo Online)', 'https://www.uol.com.br', 'Brazil’s largest Portuguese-language web portal, news, and email hub.', ['portal', 'americas', 'brazil', 'news', 'mail']],
+          ['Globo.com', 'https://www.globo.com', 'Brazil’s premier media and entertainment web portal.', ['portal', 'americas', 'brazil', 'media', 'news']],
+          ['Rediff.com', 'https://www.rediff.com', 'Indian news, information, entertainment, and Rediffmail web portal.', ['portal', 'asia', 'india', 'mail', 'news']],
+          ['Indiatimes', 'https://www.indiatimes.com', 'Digital portal of The Times Group covering Indian news and lifestyle.', ['portal', 'asia', 'india', 'news', 'lifestyle']],
+          ['Sina', 'https://www.sina.com.cn', 'Major Chinese online media and information portal.', ['portal', 'asia', 'china', 'news', 'finance']],
+          ['Sohu', 'https://www.sohu.com', 'Chinese internet portal offering news, search, and entertainment.', ['portal', 'asia', 'china', 'news', 'media']],
+          ['NetEase (163.com)', 'https://www.163.com', 'Chinese web portal known for 163 Mail, news, gaming, and music.', ['portal', 'asia', 'china', 'mail', 'news']],
+          ['QQ.com (Tencent Portal)', 'https://www.qq.com', 'One of China’s highest-traffic news, sports, and entertainment portals.', ['portal', 'asia', 'china', 'news', 'sports']],
+          ['Infoseek', 'https://www.infoseek.co.jp', 'Japanese web portal operated by Rakuten featuring news and tools.', ['portal', 'asia', 'japan', 'news', 'free']],
+          ['Lycos', 'https://www.lycos.com', 'Historic web search engine and portal offering search and email.', ['search', 'americas', 'portal', 'classic', 'free']],
+          ['Ask.com', 'https://www.ask.com', 'Question-and-answer focused web search and lifestyle discovery portal.', ['search', 'americas', 'q-and-a', 'portal', 'free']],
+          ['Dogpile', 'https://www.dogpile.com', 'Metasearch engine combining results from Google, Bing, and Yahoo.', ['metasearch', 'americas', 'search', 'free']],
+          ['Carrot2', 'https://search.carrot2.org', 'Open-source clustering search engine organizing results into visual topics.', ['search', 'open-source', 'clustering', 'research', 'free']],
+          ['Internet Archive Search', 'https://archive.org/search', 'Deep search across billions of archived web pages, books, audio, and video.', ['archive', 'global', 'research', 'nonprofit', 'free']],
+          ['Yep', 'https://yep.com', 'Privacy-focused search engine sharing ad revenue directly with content creators.', ['search', 'global', 'privacy', 'creators', 'free']],
+          ['Presearch', 'https://presearch.com', 'Community-powered decentralized search engine with customizable nodes.', ['search', 'decentralized', 'privacy', 'global', 'free']],
+          ['Marginalia Search', 'https://search.marginalia.nu', 'Independent search engine prioritizing non-commercial, text-heavy indie web pages.', ['search', 'europe', 'indie-web', 'independent-index', 'free']]
+        ]
+      },
+      {
+        id: 'cat-news',
+        shortTitle: 'News & Wikis',
+        title: 'News, Blogs & Wikis',
+        description: 'Global journalism, investigative reporting, independent newsletters, tech publications, and collaborative wikis.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>`,
+        items: [
+          ['Wikipedia', 'https://www.wikipedia.org', 'World’s largest free, multilingual collaborative encyclopedia.', ['wiki', 'global', 'encyclopedia', 'nonprofit', 'free']],
+          ['BBC News', 'https://www.bbc.com/news', 'British public service broadcaster delivering global breaking news and analysis.', ['news', 'europe', 'uk', 'global', 'free']],
+          ['Reuters', 'https://www.reuters.com', 'International news agency renowned for financial, political, and wire reporting.', ['news', 'global', 'wire', 'finance', 'freemium']],
+          ['Associated Press (AP)', 'https://apnews.com', 'Independent global news cooperative providing fact-based breaking coverage.', ['news', 'americas', 'global', 'wire', 'free']],
+          ['The New York Times', 'https://www.nytimes.com', 'Award-winning international journalism, investigations, and opinion.', ['news', 'americas', 'journalism', 'subscription', 'global']],
+          ['The Guardian', 'https://www.theguardian.com', 'Reader-funded British global newspaper covering politics, climate, and culture.', ['news', 'europe', 'uk', 'global', 'free']],
+          ['The Washington Post', 'https://www.washingtonpost.com', 'Major US newspaper known for political reporting and investigative journalism.', ['news', 'americas', 'politics', 'subscription']],
+          ['Al Jazeera', 'https://www.aljazeera.com', 'Global news network offering in-depth Middle East and international coverage.', ['news', 'middle-east', 'global', 'broadcast', 'free']],
+          ['CNN', 'https://www.cnn.com', '24-hour global breaking news, video reporting, and political analysis.', ['news', 'americas', 'global', 'broadcast', 'free']],
+          ['Bloomberg', 'https://www.bloomberg.com', 'Global business, financial markets, economics, and technology news.', ['finance-news', 'global', 'markets', 'business', 'subscription']],
+          ['Financial Times', 'https://www.ft.com', 'International daily newspaper focused on global business and economic affairs.', ['finance-news', 'europe', 'uk', 'markets', 'subscription']],
+          ['The Wall Street Journal', 'https://www.wsj.com', 'US business-focused international daily newspaper and market analysis.', ['finance-news', 'americas', 'markets', 'business', 'subscription']],
+          ['The Economist', 'https://www.economist.com', 'Weekly international affairs, economics, science, and technology publication.', ['magazine', 'europe', 'uk', 'economics', 'subscription']],
+          ['Forbes', 'https://www.forbes.com', 'Global business magazine covering entrepreneurship, wealth, and leadership.', ['business', 'americas', 'global', 'finance-news', 'free']],
+          ['Business Insider', 'https://www.businessinsider.com', 'Digital business, tech, and market news publication.', ['business', 'americas', 'tech-news', 'markets', 'freemium']],
+          ['CNBC', 'https://www.cnbc.com', 'Real-time stock market coverage, business news, and personal finance.', ['finance-news', 'americas', 'markets', 'broadcast', 'free']],
+          ['NPR', 'https://www.npr.org', 'American nonprofit public media organization for news and cultural storytelling.', ['news', 'americas', 'audio', 'nonprofit', 'free']],
+          ['PBS NewsHour', 'https://www.pbs.org/newshour', 'US public broadcasting in-depth nightly news and policy analysis.', ['news', 'americas', 'broadcast', 'nonprofit', 'free']],
+          ['Deutsche Welle (DW)', 'https://www.dw.com', 'Germany’s international broadcaster delivering news in 30+ languages.', ['news', 'europe', 'germany', 'global', 'free']],
+          ['France 24', 'https://www.france24.com', 'French state-owned international news network covering world events.', ['news', 'europe', 'france', 'global', 'free']],
+          ['Euronews', 'https://www.euronews.com', 'Pan-European multilingual news channel covering EU and global affairs.', ['news', 'europe', 'pan-european', 'broadcast', 'free']],
+          ['Le Monde', 'https://www.lemonde.fr', 'France’s newspaper of record for domestic and international journalism.', ['news', 'europe', 'france', 'freemium']],
+          ['Der Spiegel', 'https://www.spiegel.de', 'Germany’s premier investigative news magazine and digital portal.', ['news', 'europe', 'germany', 'investigative', 'freemium']],
+          ['El País', 'https://elpais.com', 'Leading Spanish-language daily newspaper across Spain and Latin America.', ['news', 'europe', 'spain', 'latin-america', 'freemium']],
+          ['Corriere della Sera', 'https://www.corriere.it', 'Historic Milan-based Italian daily newspaper.', ['news', 'europe', 'italy', 'freemium']],
+          ['The Asahi Shimbun', 'https://www.asahi.com/ajw', 'One of Japan’s largest and most respected national newspapers.', ['news', 'asia', 'japan', 'freemium']],
+          ['The Japan Times', 'https://www.japantimes.co.jp', 'Japan’s largest and oldest English-language daily newspaper.', ['news', 'asia', 'japan', 'english', 'freemium']],
+          ['South China Morning Post', 'https://www.scmp.com', 'Hong Kong-based newspaper covering China, Asia, and global trade.', ['news', 'asia', 'hong-kong', 'china', 'freemium']],
+          ['The Straits Times', 'https://www.straitstimes.com', 'Singapore’s flagship English-language daily newspaper.', ['news', 'asia', 'singapore', 'southeast-asia', 'freemium']],
+          ['The Hindu', 'https://www.thehindu.com', 'Leading Indian national daily known for policy and analytical journalism.', ['news', 'asia', 'india', 'freemium']],
+          ['The Times of India', 'https://timesofindia.indiatimes.com', 'India’s largest English-language daily newspaper and digital news hub.', ['news', 'asia', 'india', 'free']],
+          ['News24', 'https://www.news24.com', 'South Africa’s largest digital breaking news and investigative publication.', ['news', 'africa', 'south-africa', 'freemium']],
+          ['Daily Maverick', 'https://www.dailymaverick.co.za', 'Independent South African investigative journalism and opinion publication.', ['news', 'africa', 'south-africa', 'investigative', 'free']],
+          ['Mail & Guardian', 'https://mg.co.za', 'Renowned South African weekly newspaper for investigative reporting and culture.', ['news', 'africa', 'south-africa', 'investigative', 'freemium']],
+          ['Premium Times', 'https://www.premiumtimesng.com', 'Leading Nigerian investigative online newspaper.', ['news', 'africa', 'nigeria', 'investigative', 'free']],
+          ['Punch Nigeria', 'https://punchng.com', 'Widely read Nigerian daily newspaper covering politics and business.', ['news', 'africa', 'nigeria', 'free']],
+          ['The Sydney Morning Herald', 'https://www.smh.com.au', 'Australia’s oldest continuously published newspaper.', ['news', 'oceania', 'australia', 'freemium']],
+          ['ABC News Australia', 'https://www.abc.net.au/news', 'Australian public broadcaster providing national and Asia-Pacific news.', ['news', 'oceania', 'australia', 'broadcast', 'free']],
+          ['CBC News', 'https://www.cbc.ca/news', 'Canadian public broadcasting national and regional news service.', ['news', 'americas', 'canada', 'broadcast', 'free']],
+          ['The Globe and Mail', 'https://www.theglobeandmail.com', 'Canada’s national newspaper covering politics, business, and world news.', ['news', 'americas', 'canada', 'subscription']],
+          ['Medium', 'https://medium.com', 'Open publishing platform for essays, thought leadership, and storytelling.', ['blogs', 'global', 'writing', 'creators', 'freemium']],
+          ['Substack', 'https://substack.com', 'Subscription newsletter and independent publishing platform for writers.', ['newsletters', 'global', 'blogs', 'creators', 'freemium']],
+          ['Ghost', 'https://ghost.org', 'Open-source modern publishing and membership platform for independent media.', ['blogs', 'open-source', 'newsletters', 'cms', 'global']],
+          ['WordPress.com', 'https://wordpress.com', 'Managed hosting and publishing platform powering millions of blogs and sites.', ['blogs', 'global', 'cms', 'publishing', 'freemium']],
+          ['Blogger', 'https://www.blogger.com', 'Google’s free, easy-to-use personal blogging and web publishing tool.', ['blogs', 'global', 'publishing', 'free']],
+          ['Hashnode', 'https://hashnode.com', 'Free developer blogging platform with custom domain support and tech community.', ['blogs', 'global', 'developers', 'coding', 'free']],
+          ['DEV Community (Dev.to)', 'https://dev.to', 'Constructive, inclusive social blogging community for software developers.', ['blogs', 'global', 'developers', 'open-source', 'free']],
+          ['Hacker News', 'https://news.ycombinator.com', 'Y Combinator’s social news aggregator for startups, computer science, and tech.', ['tech-news', 'global', 'startups', 'developers', 'free']],
+          ['TechCrunch', 'https://techcrunch.com', 'Leading technology media property covering startups, venture capital, and gadgets.', ['tech-news', 'americas', 'global', 'startups', 'free']],
+          ['The Verge', 'https://www.theverge.com', 'Technology, science, art, and culture journalism and product reviews.', ['tech-news', 'americas', 'reviews', 'culture', 'free']],
+          ['WIRED', 'https://www.wired.com', 'In-depth journalism on how emerging technology shapes culture, economy, and politics.', ['tech-news', 'americas', 'global', 'magazine', 'freemium']],
+          ['Ars Technica', 'https://arstechnica.com', 'Deep technical journalism covering IT, science policy, space, and gaming.', ['tech-news', 'americas', 'science', 'deep-dives', 'freemium']],
+          ['Mashable', 'https://mashable.com', 'Global digital culture, entertainment, and consumer tech news site.', ['tech-news', 'global', 'culture', 'entertainment', 'free']],
+          ['Engadget', 'https://www.engadget.com', 'Consumer electronics news, gadget reviews, and buying guides.', ['tech-news', 'americas', 'gadgets', 'reviews', 'free']],
+          ['Fandom', 'https://www.fandom.com', 'World’s largest fan-maintained wiki network for games, movies, and TV.', ['wiki', 'global', 'entertainment', 'gaming', 'free']],
+          ['wikiHow', 'https://www.wikihow.com', 'Collaborative how-to manual with illustrated step-by-step guides.', ['wiki', 'global', 'how-to', 'guides', 'free']],
+          ['Encyclopædia Britannica', 'https://www.britannica.com', 'Fact-checked general knowledge encyclopedia edited by subject scholars.', ['encyclopedia', 'global', 'education', 'reference', 'freemium']],
+          ['Wikimedia Commons', 'https://commons.wikimedia.org', 'Media repository of 100M+ freely usable educational images, sounds, and videos.', ['wiki', 'global', 'open-media', 'nonprofit', 'free']],
+          ['Wiktionary', 'https://www.wiktionary.org', 'Free multilingual dictionary, thesaurus, and etymology wiki.', ['wiki', 'global', 'dictionary', 'languages', 'free']],
+          ['Wikiquote', 'https://www.wikiquote.org', 'Free online compendium of sourced quotations from notable people and works.', ['wiki', 'global', 'reference', 'nonprofit', 'free']]
+        ]
+      },
+      {
+        id: 'cat-entertainment',
+        shortTitle: 'Entertainment',
+        title: 'Entertainment & Media',
+        description: 'Video and music streaming, gaming storefronts, live broadcasts, podcasts, and visual art communities.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        items: [
+          ['YouTube', 'https://www.youtube.com', 'World’s largest video sharing, live streaming, and creator platform.', ['video', 'global', 'creators', 'music', 'freemium']],
+          ['Netflix', 'https://www.netflix.com', 'Global subscription streaming service for films, series, and documentaries.', ['streaming', 'global', 'movies', 'tv', 'subscription']],
+          ['Spotify', 'https://open.spotify.com', 'Global audio streaming platform for music, podcasts, and audiobooks.', ['music', 'global', 'podcasts', 'audio', 'freemium']],
+          ['Disney+', 'https://www.disneyplus.com', 'Streaming home for Disney, Pixar, Marvel, Star Wars, and National Geographic.', ['streaming', 'global', 'movies', 'family', 'subscription']],
+          ['Amazon Prime Video', 'https://www.primevideo.com', 'Global on-demand movies, Amazon Originals, and live sports streaming.', ['streaming', 'global', 'movies', 'sports', 'subscription']],
+          ['Apple Music', 'https://music.apple.com', 'Lossless and Spatial Audio music streaming catalog with curated radio.', ['music', 'global', 'lossless', 'audio', 'subscription']],
+          ['Apple TV+', 'https://tv.apple.com', 'Ad-free streaming service featuring original series and films.', ['streaming', 'global', 'originals', 'movies', 'subscription']],
+          ['Max (HBO)', 'https://www.max.com', 'Streaming platform featuring HBO originals, Warner Bros. films, and sports.', ['streaming', 'americas', 'europe', 'movies', 'subscription']],
+          ['Hulu', 'https://www.hulu.com', 'US streaming service offering next-day network TV, originals, and live TV.', ['streaming', 'americas', 'tv', 'movies', 'subscription']],
+          ['Peacock', 'https://www.peacocktv.com', 'NBCUniversal’s streaming service for TV shows, films, and live Premier League.', ['streaming', 'americas', 'sports', 'tv', 'freemium']],
+          ['Paramount+', 'https://www.paramountplus.com', 'Streaming platform for CBS, Paramount Pictures, Nickelodeon, and live sports.', ['streaming', 'global', 'movies', 'sports', 'subscription']],
+          ['Crunchyroll', 'https://www.crunchyroll.com', 'World’s largest dedicated anime streaming, manga, and community platform.', ['anime', 'global', 'asia', 'streaming', 'freemium']],
+          ['Bilibili', 'https://www.bilibili.com', 'China’s premier video community for anime, gaming, tech, and creator culture.', ['video', 'asia', 'china', 'anime', 'gaming']],
+          ['iQIYI', 'https://www.iq.com', 'Major Chinese online video platform for Asian dramas, variety shows, and films.', ['streaming', 'asia', 'china', 'dramas', 'freemium']],
+          ['Youku', 'https://www.youku.com', 'Alibaba’s flagship Chinese video streaming and entertainment platform.', ['streaming', 'asia', 'china', 'tv', 'freemium']],
+          ['Tencent Video (WeTV)', 'https://wetv.vip', 'Leading Chinese and international Asian drama and entertainment streamer.', ['streaming', 'asia', 'china', 'dramas', 'freemium']],
+          ['Rakuten Viki', 'https://www.viki.com', 'Global streaming platform for Korean, Chinese, and Japanese dramas with fan subtitles.', ['streaming', 'global', 'asia', 'dramas', 'freemium']],
+          ['MUBI', 'https://mubi.com', 'Curated streaming service and cinema magazine for independent and auteur films.', ['cinema', 'global', 'indie-film', 'curated', 'subscription']],
+          ['The Criterion Channel', 'https://www.criterionchannel.com', 'Streaming library of classic, world, and restoration cinema.', ['cinema', 'americas', 'classics', 'curated', 'subscription']],
+          ['Tubi', 'https://tubitv.com', 'Free ad-supported streaming service with thousands of movies and TV series.', ['streaming', 'americas', 'oceania', 'ad-supported', 'free']],
+          ['Pluto TV', 'https://pluto.tv', 'Free ad-supported linear live TV channels and on-demand movies.', ['streaming', 'global', 'live-tv', 'ad-supported', 'free']],
+          ['The Roku Channel', 'https://therokuchannel.roku.com', 'Free live TV and on-demand entertainment streaming portal.', ['streaming', 'americas', 'europe', 'live-tv', 'free']],
+          ['Plex', 'https://www.plex.tv', 'Personal media server organizer plus free ad-supported movies and live TV.', ['media-server', 'global', 'streaming', 'freemium']],
+          ['Vimeo', 'https://vimeo.com', 'High-definition ad-free video hosting and collaboration tool for filmmakers.', ['video', 'global', 'filmmakers', 'creators', 'freemium']],
+          ['Dailymotion', 'https://www.dailymotion.com', 'French-born global video discovery and publisher streaming platform.', ['video', 'europe', 'global', 'news', 'free']],
+          ['SoundCloud', 'https://soundcloud.com', 'Open audio platform for independent musicians, DJs, and emerging tracks.', ['music', 'global', 'indie-music', 'creators', 'freemium']],
+          ['Bandcamp', 'https://bandcamp.com', 'Artist-first music store and community supporting direct album & merch sales.', ['music', 'global', 'indie-music', 'marketplace', 'fair-trade']],
+          ['TIDAL', 'https://tidal.com', 'Artist-led HiRes FLAC music streaming platform with high artist payouts.', ['music', 'global', 'lossless', 'audio', 'subscription']],
+          ['Deezer', 'https://www.deezer.com', 'French global music streaming service with Flow personalized radio and HiFi.', ['music', 'europe', 'global', 'audio', 'freemium']],
+          ['Qobuz', 'https://www.qobuz.com', 'French high-resolution 24-bit music streaming and lossless download store.', ['music', 'europe', 'global', 'lossless', 'audiophile']],
+          ['Pandora', 'https://www.pandora.com', 'Personalized internet radio powered by the Music Genome Project.', ['radio', 'americas', 'music', 'freemium']],
+          ['iHeartRadio', 'https://www.iheart.com', 'Free broadcast radio streaming, podcasts, and live music events.', ['radio', 'americas', 'oceania', 'podcasts', 'free']],
+          ['Audible', 'https://www.audible.com', 'World’s largest producer and provider of spoken-word audiobooks and originals.', ['audiobooks', 'global', 'podcasts', 'subscription']],
+          ['Pocket Casts', 'https://pocketcasts.com', 'Cross-platform podcast discovery and listening app with powerful playback tools.', ['podcasts', 'global', 'oceania', 'audio', 'freemium']],
+          ['Overcast', 'https://overcast.fm', 'Independent iOS and web podcast player featuring Smart Speed and Voice Boost.', ['podcasts', 'global', 'audio', 'freemium']],
+          ['Steam', 'https://store.steampowered.com', 'Premier PC gaming digital distribution platform, community, and workshop.', ['gaming', 'global', 'pc-games', 'storefront', 'freemium']],
+          ['Epic Games Store', 'https://store.epicgames.com', 'Digital PC/Mac game storefront famous for weekly free games and Unreal Engine.', ['gaming', 'global', 'pc-games', 'storefront', 'free-games']],
+          ['GOG.com', 'https://www.gog.com', 'DRM-free PC gaming storefront curating classic and modern titles.', ['gaming', 'europe', 'poland', 'drm-free', 'pc-games']],
+          ['itch.io', 'https://itch.io', 'Open marketplace for independent video games, game jams, and creative assets.', ['gaming', 'global', 'indie-games', 'creators', 'freemium']],
+          ['Roblox', 'https://www.roblox.com', 'Global user-generated 3D gaming and virtual creation platform.', ['gaming', 'global', 'ugc', 'multiplayer', 'free']],
+          ['PlayStation Store', 'https://store.playstation.com', 'Official digital game store and cloud network for PlayStation consoles.', ['gaming', 'global', 'console', 'sony', 'storefront']],
+          ['Xbox Cloud Gaming', 'https://www.xbox.com/play', 'Microsoft’s game streaming and digital ecosystem across console, PC, and mobile.', ['gaming', 'global', 'cloud-gaming', 'console', 'subscription']],
+          ['Nintendo eShop', 'https://www.nintendo.com/store', 'Official digital storefront for Nintendo Switch games and franchises.', ['gaming', 'global', 'asia', 'japan', 'console']],
+          ['NVIDIA GeForce NOW', 'https://www.nvidia.com/geforce-now', 'Cloud gaming service streaming PC games you own at high frame rates.', ['gaming', 'global', 'cloud-gaming', 'pc-games', 'freemium']],
+          ['Kick', 'https://kick.com', 'Creator-friendly live-streaming platform with high subscription revenue share.', ['live-streaming', 'global', 'oceania', 'gaming', 'creators']],
+          ['DeviantArt', 'https://www.deviantart.com', 'Long-standing online art community showcasing digital illustration and photography.', ['art', 'global', 'illustration', 'community', 'freemium']],
+          ['ArtStation', 'https://www.artstation.com', 'Leading showcase platform for game, film, and 3D concept artists.', ['art', 'global', '3d-art', 'portfolios', 'gaming']],
+          ['Behance', 'https://www.behance.net', 'Adobe’s global creative portfolio network for graphic design, UI/UX, and illustration.', ['design', 'global', 'portfolios', 'creative', 'free']],
+          ['Dribbble', 'https://dribbble.com', 'Community for UI/UX designers, brand illustrators, and digital product creators.', ['design', 'global', 'ui-ux', 'portfolios', 'freemium']],
+          ['500px', 'https://500px.com', 'Global photography community and licensing marketplace for photographers.', ['photography', 'global', 'portfolios', 'visual', 'freemium']],
+          ['Flickr', 'https://www.flickr.com', 'Massive photo management and Creative Commons photography community.', ['photography', 'global', 'creative-commons', 'archive', 'freemium']],
+          ['Unsplash', 'https://unsplash.com', 'Free high-resolution photography library contributed by global photographers.', ['photography', 'global', 'stock-photos', 'royalty-free', 'free']],
+          ['Pexels', 'https://www.pexels.com', 'Free stock photos and videos shared by talented creators worldwide.', ['photography', 'europe', 'stock-photos', 'video', 'free']],
+          ['Pixabay', 'https://pixabay.com', 'Vibrant community sharing royalty-free images, vectors, music, and sound effects.', ['stock-media', 'europe', 'royalty-free', 'vectors', 'free']],
+          ['GIPHY', 'https://giphy.com', 'Largest search engine and library for animated GIFs and stickers.', ['gifs', 'global', 'memes', 'visual', 'free']],
+          ['Letterboxd', 'https://letterboxd.com', 'Social film discovery platform for logging, rating, and reviewing movies.', ['cinema', 'oceania', 'new-zealand', 'reviews', 'social']],
+          ['IMDb', 'https://www.imdb.com', 'World’s most authoritative database for movies, TV shows, cast, and ratings.', ['cinema', 'global', 'database', 'reviews', 'free']],
+          ['Rotten Tomatoes', 'https://www.rottentomatoes.com', 'Review aggregation platform tracking critic and audience Tomatometer scores.', ['cinema', 'americas', 'reviews', 'tv', 'free']],
+          ['MyAnimeList', 'https://myanimelist.net', 'Global anime and manga database, tracking list, and fan community.', ['anime', 'global', 'asia', 'manga', 'database']],
+          ['BandLab', 'https://www.bandlab.com', 'Cloud-based digital audio workstation (DAW) and social music creation platform.', ['music', 'asia', 'singapore', 'daw', 'free']]
+        ]
+      },
+      {
+        id: 'cat-business',
+        shortTitle: 'Business & Finance',
+        title: 'Business, Productivity & Finance',
+        description: 'Cloud collaboration suites, project management, banking, global payments, investing, and accounting tools.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+        items: [
+          ['Google Workspace', 'https://workspace.google.com', 'Cloud productivity suite featuring Gmail, Docs, Sheets, Drive, and Meet.', ['productivity', 'global', 'cloud', 'collaboration', 'saas']],
+          ['Microsoft 365', 'https://www.microsoft.com/microsoft-365', 'Enterprise and personal productivity suite with Word, Excel, PowerPoint, and OneDrive.', ['productivity', 'global', 'office', 'enterprise', 'saas']],
+          ['Notion', 'https://www.notion.so', 'All-in-one connected workspace for notes, wikis, docs, and project databases.', ['workspace', 'global', 'notes', 'wikis', 'freemium']],
+          ['Zoom', 'https://zoom.us', 'Global video conferencing, webinars, and cloud phone communications platform.', ['video-calls', 'global', 'meetings', 'enterprise', 'freemium']],
+          ['Asana', 'https://asana.com', 'Work management platform helping teams orchestrate projects and company goals.', ['project-management', 'global', 'workflows', 'saas', 'freemium']],
+          ['Trello', 'https://trello.com', 'Visual Kanban board tool for organizing tasks, workflows, and team checklists.', ['project-management', 'global', 'kanban', 'productivity', 'freemium']],
+          ['Monday.com', 'https://monday.com', 'Customizable Work OS for project tracking, CRM, and operational workflows.', ['project-management', 'global', 'middle-east', 'workflows', 'saas']],
+          ['Jira', 'https://www.atlassian.com/software/jira', 'Industry-standard agile issue tracking and software project management tool.', ['project-management', 'oceania', 'australia', 'agile', 'developers']],
+          ['Confluence', 'https://www.atlassian.com/software/confluence', 'Team workspace and knowledge management wiki integrated with Jira.', ['wikis', 'oceania', 'australia', 'documentation', 'enterprise']],
+          ['Linear', 'https://linear.app', 'High-speed issue tracking and product roadmap system built for modern software teams.', ['project-management', 'global', 'developers', 'agile', 'saas']],
+          ['ClickUp', 'https://clickup.com', 'All-in-one productivity platform combining tasks, docs, goals, and whiteboards.', ['project-management', 'global', 'productivity', 'freemium']],
+          ['Airtable', 'https://www.airtable.com', 'Low-code relational database and spreadsheet hybrid for operational apps.', ['database', 'global', 'no-code', 'spreadsheets', 'freemium']],
+          ['Miro', 'https://miro.com', 'Collaborative online visual whiteboard for workshops, diagramming, and brainstorming.', ['whiteboard', 'global', 'design', 'collaboration', 'freemium']],
+          ['Figma', 'https://www.figma.com', 'Collaborative browser-based interface design, prototyping, and dev handoff tool.', ['design', 'global', 'ui-ux', 'prototyping', 'freemium']],
+          ['Canva', 'https://www.canva.com', 'Accessible online graphic design, presentation, and video creation suite.', ['design', 'oceania', 'australia', 'templates', 'freemium']],
+          ['Adobe Creative Cloud', 'https://www.adobe.com/creativecloud.html', 'Industry-standard suite for photography, video editing, vector art, and PDFs.', ['design', 'global', 'creative', 'pdf', 'subscription']],
+          ['Salesforce', 'https://www.salesforce.com', 'World’s #1 cloud Customer Relationship Management (CRM) and enterprise platform.', ['crm', 'global', 'sales', 'enterprise', 'saas']],
+          ['HubSpot', 'https://www.hubspot.com', 'Inbound marketing, sales CRM, and customer service software platform.', ['crm', 'global', 'marketing', 'sales', 'freemium']],
+          ['Zendesk', 'https://www.zendesk.com', 'Omnichannel customer support ticketing and help center software.', ['support', 'global', 'helpdesk', 'enterprise', 'saas']],
+          ['Intercom', 'https://www.intercom.com', 'AI-first customer messaging and in-app support platform.', ['support', 'europe', 'ireland', 'chat', 'saas']],
+          ['Mailchimp', 'https://mailchimp.com', 'Email marketing automation and audience management platform for businesses.', ['marketing', 'global', 'email', 'automation', 'freemium']],
+          ['Stripe', 'https://stripe.com', 'Global online payment processing infrastructure and financial APIs for internet businesses.', ['payments', 'global', 'fintech', 'developers', 'b2b']],
+          ['PayPal', 'https://www.paypal.com', 'Global digital wallet, online checkout, and peer-to-peer money transfer network.', ['payments', 'global', 'wallet', 'transfers', 'fintech']],
+          ['Wise', 'https://wise.com', 'Low-cost international money transfers and multi-currency borderless accounts.', ['transfers', 'europe', 'uk', 'global', 'fx']],
+          ['Revolut', 'https://www.revolut.com', 'Global digital neobank offering multi-currency cards, crypto, and stock trading.', ['neobank', 'europe', 'uk', 'global', 'fintech']],
+          ['Square (Block)', 'https://squareup.com', 'Point-of-sale hardware, retail payments, and small business commerce tools.', ['payments', 'americas', 'pos', 'retail', 'fintech']],
+          ['Adyen', 'https://www.adyen.com', 'Enterprise global payment acquiring and unified commerce financial platform.', ['payments', 'europe', 'netherlands', 'enterprise', 'fintech']],
+          ['Klarna', 'https://www.klarna.com', 'Swedish fintech providing Buy Now Pay Later (BNPL) and shopping payments.', ['bnpl', 'europe', 'sweden', 'payments', 'fintech']],
+          ['Paystack', 'https://paystack.com', 'Modern online and offline payment infrastructure powering African businesses.', ['payments', 'africa', 'nigeria', 'south-africa', 'fintech']],
+          ['Flutterwave', 'https://flutterwave.com', 'Pan-African payments technology company enabling cross-border commerce.', ['payments', 'africa', 'pan-african', 'fintech', 'b2b']],
+          ['M-Pesa', 'https://www.safaricom.co.ke/personal/m-pesa', 'Africa’s pioneering mobile phone-based money transfer and microfinancing service.', ['mobile-money', 'africa', 'kenya', 'transfers', 'fintech']],
+          ['Alipay', 'https://global.alipay.com', 'World’s leading mobile digital payment and lifestyle platform by Ant Group.', ['payments', 'asia', 'china', 'mobile-money', 'wallet']],
+          ['WeChat Pay', 'https://pay.weixin.qq.com', 'Ubiquitous mobile payment and digital wallet integrated inside WeChat.', ['payments', 'asia', 'china', 'mobile-money', 'wallet']],
+          ['JPMorgan Chase', 'https://www.chase.com', 'Major US consumer and commercial banking, credit card, and wealth portal.', ['banking', 'americas', 'finance', 'credit-cards']],
+          ['Bank of America', 'https://www.bankofamerica.com', 'Full-service US retail banking, Merrill investing, and business finance.', ['banking', 'americas', 'finance', 'investing']],
+          ['HSBC', 'https://www.hsbc.com', 'International banking and wealth management institution spanning Europe and Asia.', ['banking', 'europe', 'asia', 'global', 'finance']],
+          ['Barclays', 'https://www.barclays.co.uk', 'British universal bank providing retail, corporate, and investment banking.', ['banking', 'europe', 'uk', 'finance']],
+          ['Standard Bank', 'https://www.standardbank.co.za', 'Africa’s largest banking group by assets serving 20 sub-Saharan countries.', ['banking', 'africa', 'south-africa', 'pan-african', 'finance']],
+          ['FNB (First National Bank)', 'https://www.fnb.co.za', 'Award-winning South African digital retail and commercial bank.', ['banking', 'africa', 'south-africa', 'digital-banking', 'finance']],
+          ['Capitec Bank', 'https://www.capitecbank.co.za', 'South Africa’s largest digital retail bank focused on simplified, affordable banking.', ['banking', 'africa', 'south-africa', 'digital-banking', 'finance']],
+          ['Nubank', 'https://nubank.com.br', 'Latin America’s largest digital neobank serving Brazil, Mexico, and Colombia.', ['neobank', 'americas', 'brazil', 'latin-america', 'fintech']],
+          ['Robinhood', 'https://robinhood.com', 'Commission-free retail stock, ETF, options, and crypto investing app.', ['investing', 'americas', 'stocks', 'retail-trading', 'fintech']],
+          ['Fidelity Investments', 'https://www.fidelity.com', 'Comprehensive brokerage, retirement planning, and index fund institution.', ['investing', 'americas', 'retirement', 'brokerage', 'wealth']],
+          ['Charles Schwab', 'https://www.schwab.com', 'Full-service brokerage, wealth management, and banking institution.', ['investing', 'americas', 'brokerage', 'wealth']],
+          ['Vanguard', 'https://investor.vanguard.com', 'Client-owned investment giant famous for low-cost index funds and ETFs.', ['investing', 'americas', 'index-funds', 'retirement', 'wealth']],
+          ['Interactive Brokers', 'https://www.interactivebrokers.com', 'Global electronic trading platform providing access to 150+ world markets.', ['investing', 'global', 'brokerage', 'global-markets', 'pro-trading']],
+          ['Coinbase', 'https://www.coinbase.com', 'Publicly traded cryptocurrency exchange and self-custody wallet ecosystem.', ['crypto', 'americas', 'global', 'exchange', 'fintech']],
+          ['Binance', 'https://www.binance.com', 'World’s largest cryptocurrency exchange by global trading volume.', ['crypto', 'global', 'exchange', 'web3', 'trading']],
+          ['Kraken', 'https://www.kraken.com', 'Security-focused cryptocurrency exchange serving retail and institutional traders.', ['crypto', 'americas', 'europe', 'exchange', 'security']],
+          ['QuickBooks', 'https://quickbooks.intuit.com', 'Cloud accounting, invoicing, and payroll software for small businesses.', ['accounting', 'americas', 'global', 'invoicing', 'saas']],
+          ['Xero', 'https://www.xero.com', 'New Zealand-born global cloud accounting platform for small businesses and advisors.', ['accounting', 'oceania', 'new-zealand', 'global', 'saas']],
+          ['FreshBooks', 'https://www.freshbooks.com', 'Invoicing and accounting software built for freelancers and service agencies.', ['accounting', 'americas', 'canada', 'freelancers', 'invoicing']],
+          ['Gusto', 'https://gusto.com', 'Modern cloud payroll, employee benefits, and HR management platform.', ['hr', 'americas', 'payroll', 'benefits', 'saas']],
+          ['Rippling', 'https://www.rippling.com', 'Unified workforce platform managing global HR, IT devices, and payroll.', ['hr', 'global', 'payroll', 'it-management', 'enterprise']],
+          ['Deel', 'https://www.deel.com', 'Global payroll, Employer of Record (EOR), and international contractor compliance.', ['hr', 'global', 'remote-work', 'payroll', 'compliance']],
+          ['DocuSign', 'https://www.docusign.com', 'Leading electronic signature and digital contract lifecycle management platform.', ['e-signature', 'global', 'contracts', 'legal-tech', 'saas']],
+          ['Dropbox', 'https://www.dropbox.com', 'Cloud file synchronization, storage, and document sharing workspace.', ['cloud-storage', 'global', 'file-sharing', 'productivity', 'freemium']],
+          ['Box', 'https://www.box.com', 'Enterprise cloud content management, security, and workflow collaboration.', ['cloud-storage', 'global', 'enterprise', 'security', 'saas']],
+          ['1Password', 'https://1password.com', 'Enterprise and personal password manager and passkey security vault.', ['security', 'americas', 'canada', 'passwords', 'subscription']],
+          ['Bitwarden', 'https://bitwarden.com', 'Open-source, end-to-end encrypted password manager across all devices.', ['security', 'open-source', 'passwords', 'privacy', 'freemium']]
+        ]
+      },
+      {
+        id: 'cat-maps',
+        shortTitle: 'Maps & Travel',
+        title: 'Maps, Travel & Local Services',
+        description: 'Turn-by-turn navigation, public transit planners, ride-hailing, flights, accommodations, and food delivery.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
+        items: [
+          ['Google Maps', 'https://maps.google.com', 'Global satellite maps, real-time traffic navigation, Street View, and local reviews.', ['maps', 'global', 'navigation', 'local-reviews', 'free']],
+          ['Apple Maps', 'https://maps.apple.com', 'Detailed 3D city maps, turn-by-turn transit navigation, and Look Around.', ['maps', 'global', 'navigation', 'transit', 'free']],
+          ['Waze', 'https://www.waze.com', 'Community-driven GPS navigation app with real-time hazard and traffic alerts.', ['navigation', 'global', 'traffic', 'driving', 'free']],
+          ['OpenStreetMap', 'https://www.openstreetmap.org', 'Collaborative, open-data editable world map built by global contributors.', ['maps', 'global', 'open-source', 'open-data', 'free']],
+          ['Bing Maps', 'https://www.bing.com/maps', 'Microsoft’s global mapping platform featuring aerial imagery and route planning.', ['maps', 'global', 'navigation', 'aerial', 'free']],
+          ['HERE WeGo', 'https://wego.here.com', 'European-engineered offline and online GPS navigation and automotive mapping.', ['navigation', 'europe', 'offline-maps', 'driving', 'free']],
+          ['Mapbox', 'https://www.mapbox.com', 'Custom vector maps, navigation SDKs, and location data platform for developers.', ['maps', 'global', 'developers', 'apis', 'freemium']],
+          ['Citymapper', 'https://citymapper.com', 'Real-time multimodal urban public transit planner for major world cities.', ['transit', 'europe', 'americas', 'asia', 'commute']],
+          ['Moovit', 'https://moovitapp.com', 'World’s #1 urban mobility and public transit schedule app across 100+ countries.', ['transit', 'global', 'middle-east', 'bus-train', 'free']],
+          ['Rome2Rio', 'https://www.rome2rio.com', 'Door-to-door global multimodal travel planner comparing flights, trains, and ferries.', ['travel-planner', 'oceania', 'australia', 'global', 'transit']],
+          ['Uber', 'https://www.uber.com', 'Global on-demand ride-hailing, courier, and urban mobility platform.', ['ride-hailing', 'global', 'mobility', 'mobile', 'transport']],
+          ['Lyft', 'https://www.lyft.com', 'North American ride-hailing, bike-share, and scooter mobility network.', ['ride-hailing', 'americas', 'mobility', 'mobile', 'transport']],
+          ['Bolt', 'https://bolt.eu', 'European super-app for ride-hailing, e-scooters, car-sharing, and food delivery.', ['ride-hailing', 'europe', 'africa', 'mobility', 'delivery']],
+          ['Grab', 'https://www.grab.com', 'Southeast Asia’s leading super-app for rides, food delivery, and digital payments.', ['ride-hailing', 'asia', 'southeast-asia', 'super-app', 'delivery']],
+          ['Gojek', 'https://www.gojek.com', 'Indonesian on-demand multi-service platform for motorcycle rides, food, and logistics.', ['ride-hailing', 'asia', 'indonesia', 'super-app', 'delivery']],
+          ['DiDi', 'https://web.didiglobal.com', 'Leading mobile transportation and ride-hailing platform in China and Latin America.', ['ride-hailing', 'asia', 'china', 'latin-america', 'mobility']],
+          ['Cabify', 'https://cabify.com', 'Spanish and Latin American urban ride-hailing and sustainable mobility app.', ['ride-hailing', 'europe', 'spain', 'latin-america', 'mobility']],
+          ['FREE NOW', 'https://www.free-now.com', 'European multi-mobility app connecting licensed taxis, e-bikes, and car sharing.', ['ride-hailing', 'europe', 'taxis', 'mobility']],
+          ['Careem', 'https://www.careem.com', 'Middle East’s Everything App for rides, food delivery, and digital payments.', ['ride-hailing', 'middle-east', 'super-app', 'delivery']],
+          ['inDrive', 'https://indrive.com', 'Global peer-to-peer ride-hailing app where passengers and drivers negotiate fares.', ['ride-hailing', 'global', 'latin-america', 'africa', 'mobility']],
+          ['Airbnb', 'https://www.airbnb.com', 'Global marketplace for vacation home rentals, boutique stays, and local experiences.', ['stays', 'global', 'rentals', 'travel', 'marketplace']],
+          ['Booking.com', 'https://www.booking.com', 'World’s leading online travel agency for hotels, apartments, and airport taxis.', ['hotels', 'europe', 'global', 'travel', 'bookings']],
+          ['Expedia', 'https://www.expedia.com', 'Full-service online travel booking platform for flights, hotels, and vacation packages.', ['travel', 'americas', 'global', 'hotels', 'flights']],
+          ['Hotels.com', 'https://www.hotels.com', 'Global hotel and accommodation booking platform with One Key loyalty rewards.', ['hotels', 'global', 'travel', 'loyalty']],
+          ['Agoda', 'https://www.agoda.com', 'Leading Asian and global digital travel platform for hotels, homes, and flights.', ['hotels', 'asia', 'singapore', 'global', 'travel']],
+          ['Trip.com', 'https://www.trip.com', 'International one-stop travel service provider for flights, hotels, and high-speed rail.', ['travel', 'asia', 'china', 'global', 'flights']],
+          ['Hostelworld', 'https://www.hostelworld.com', 'World’s leading hostel-focused booking platform for budget and solo backpackers.', ['hostels', 'europe', 'ireland', 'budget-travel', 'backpackers']],
+          ['Vrbo', 'https://www.vrbo.com', 'Vacation rental marketplace specializing in whole-home family beach and cabin stays.', ['stays', 'americas', 'europe', 'rentals', 'family']],
+          ['KAYAK', 'https://www.kayak.com', 'Travel metasearch engine comparing hundreds of flight, hotel, and car rental sites.', ['metasearch', 'global', 'flights', 'hotels', 'car-rental']],
+          ['Skyscanner', 'https://www.skyscanner.net', 'Global flight, hotel, and car hire comparison search engine with flexible date tools.', ['flights', 'europe', 'uk', 'global', 'metasearch']],
+          ['Google Flights', 'https://www.google.com/travel/flights', 'Fast flight search and price-tracking tool powered by Google’s travel graph.', ['flights', 'global', 'price-alerts', 'travel', 'free']],
+          ['Momondo', 'https://www.momondo.com', 'Danish travel fare aggregator uncovering budget flights and multi-city routes.', ['flights', 'europe', 'denmark', 'budget-travel', 'metasearch']],
+          ['Hopper', 'https://hopper.com', 'AI-driven mobile travel app predicting optimal times to book flights and hotels.', ['flights', 'americas', 'canada', 'price-prediction', 'mobile']],
+          ['Tripadvisor', 'https://www.tripadvisor.com', 'World’s largest travel guidance platform with over a billion traveler reviews.', ['reviews', 'global', 'restaurants', 'attractions', 'travel']],
+          ['Yelp', 'https://www.yelp.com', 'Crowd-sourced local business directory and review hub for restaurants and services.', ['local-reviews', 'americas', 'europe', 'restaurants', 'free']],
+          ['Foursquare', 'https://foursquare.com', 'Location intelligence and city guide discovery platform for local spots.', ['local-reviews', 'americas', 'location-data', 'city-guides']],
+          ['Zomato', 'https://www.zomato.com', 'India’s leading restaurant discovery, table reservation, and food delivery platform.', ['food-delivery', 'asia', 'india', 'restaurants', 'reviews']],
+          ['OpenTable', 'https://www.opentable.com', 'Online restaurant reservation service connecting diners with 50,000+ restaurants.', ['reservations', 'americas', 'global', 'restaurants', 'free']],
+          ['TheFork (LaFourchette)', 'https://www.thefork.com', 'Europe’s leading online restaurant booking platform with dining discounts.', ['reservations', 'europe', 'france', 'restaurants', 'discounts']],
+          ['Uber Eats', 'https://www.ubereats.com', 'Global online food and grocery ordering and delivery platform.', ['food-delivery', 'global', 'groceries', 'mobile']],
+          ['DoorDash', 'https://www.doordash.com', 'North America’s largest local restaurant and convenience delivery marketplace.', ['food-delivery', 'americas', 'groceries', 'mobile']],
+          ['Deliveroo', 'https://deliveroo.co.uk', 'UK-headquartered online food and grocery delivery service across Europe and Asia.', ['food-delivery', 'europe', 'uk', 'asia', 'mobile']],
+          ['Just Eat Takeaway', 'https://www.justeattakeaway.com', 'Major European and international online food ordering marketplace.', ['food-delivery', 'europe', 'netherlands', 'global', 'mobile']],
+          ['Grubhub', 'https://www.grubhub.com', 'US online and mobile food-ordering marketplace connecting diners with local eateries.', ['food-delivery', 'americas', 'restaurants', 'mobile']],
+          ['Glovo', 'https://glovoapp.com', 'Spanish on-demand multi-category courier app delivering food, groceries, and retail.', ['food-delivery', 'europe', 'spain', 'africa', 'courier']],
+          ['Wolt', 'https://wolt.com', 'Finnish local commerce and food delivery platform across Northern and Central Europe.', ['food-delivery', 'europe', 'finland', 'groceries', 'mobile']],
+          ['foodpanda', 'https://www.foodpanda.com', 'Leading online food and grocery delivery platform across Asia-Pacific.', ['food-delivery', 'asia', 'southeast-asia', 'groceries', 'mobile']],
+          ['Meituan', 'https://www.meituan.com', 'China’s giant local services super-app for food delivery, hotels, and cinema tickets.', ['food-delivery', 'asia', 'china', 'super-app', 'local']],
+          ['Swiggy', 'https://www.swiggy.com', 'India’s on-demand food delivery and Instamart quick-commerce platform.', ['food-delivery', 'asia', 'india', 'quick-commerce', 'mobile']],
+          ['Mr D Food', 'https://www.mrdfood.com', 'South Africa’s leading homegrown restaurant and convenience delivery app.', ['food-delivery', 'africa', 'south-africa', 'restaurants', 'mobile']],
+          ['Checkers Sixty60', 'https://www.sixty60.co.za', 'South Africa’s pioneer 60-minute on-demand grocery and retail delivery service.', ['groceries', 'africa', 'south-africa', 'quick-commerce', 'mobile']],
+          ['GetYourGuide', 'https://www.getyourguide.com', 'Berlin-based online booking marketplace for guided tours, skip-the-line tickets, and activities.', ['tours', 'europe', 'germany', 'global', 'attractions']],
+          ['Klook', 'https://www.klook.com', 'Asia’s leading travel experiences, theme park tickets, and rail pass booking platform.', ['tours', 'asia', 'hong-kong', 'attractions', 'rail']],
+          ['Viator', 'https://www.viator.com', 'Tripadvisor company offering 300,000+ bookable tours and excursions worldwide.', ['tours', 'global', 'attractions', 'travel']],
+          ['Trainline', 'https://www.thetrainline.com', 'Europe’s leading independent train and coach ticket booking app and website.', ['rail', 'europe', 'uk', 'transit', 'bookings']],
+          ['FlixBus', 'https://www.flixbus.com', 'Affordable intercity long-distance bus and rail network across Europe and the Americas.', ['bus-travel', 'europe', 'germany', 'americas', 'budget-travel']]
+        ]
+      },
+      {
+        id: 'cat-education',
+        shortTitle: 'Education & Nonprofits',
+        title: 'Education, Portfolios & Nonprofits',
+        description: 'MOOCs, coding academies, academic repositories, developer/creative portfolios, crowdfunding, and humanitarian NGOs.',
+        icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>`,
+        items: [
+          ['Coursera', 'https://www.coursera.org', 'Global online learning platform offering university courses, certificates, and degrees.', ['courses', 'global', 'universities', 'certificates', 'freemium']],
+          ['edX', 'https://www.edx.org', 'Online university-level courses and MicroMasters founded by Harvard and MIT.', ['courses', 'global', 'universities', 'certificates', 'freemium']],
+          ['Khan Academy', 'https://www.khanacademy.org', 'Nonprofit educational platform providing free K-12 math, science, and humanities lessons.', ['education', 'global', 'nonprofit', 'k-12', 'free']],
+          ['Udemy', 'https://www.udemy.com', 'Global marketplace of 200,000+ practical video courses on coding, business, and design.', ['courses', 'global', 'skills', 'marketplace', 'paid']],
+          ['Udacity', 'https://www.udacity.com', 'Tech-focused Nanodegree programs in AI, data science, cloud, and autonomous systems.', ['courses', 'global', 'tech', 'ai', 'paid']],
+          ['Skillshare', 'https://www.skillshare.com', 'Online creative learning community for illustration, photography, design, and video.', ['courses', 'global', 'creative', 'design', 'subscription']],
+          ['Pluralsight', 'https://www.pluralsight.com', 'Enterprise technology workforce skill development and cloud certification platform.', ['courses', 'global', 'developers', 'cloud', 'subscription']],
+          ['Codecademy', 'https://www.codecademy.com', 'Interactive browser-based coding lessons in Python, JavaScript, SQL, and web dev.', ['coding', 'global', 'interactive', 'developers', 'freemium']],
+          ['freeCodeCamp', 'https://www.freecodecamp.org', 'Donor-supported nonprofit teaching full-stack web development and data science for free.', ['coding', 'global', 'nonprofit', 'open-source', 'free']],
+          ['The Odin Project', 'https://www.theodinproject.com', 'Free open-source full-stack JavaScript and Ruby on Rails curriculum.', ['coding', 'global', 'open-source', 'web-dev', 'free']],
+          ['LeetCode', 'https://leetcode.com', 'Platform for practicing algorithmic coding challenges and technical interview prep.', ['coding', 'global', 'algorithms', 'interviews', 'freemium']],
+          ['HackerRank', 'https://www.hackerrank.com', 'Developer coding practice platform and technical skills assessment hub.', ['coding', 'global', 'developers', 'assessments', 'freemium']],
+          ['Duolingo', 'https://www.duolingo.com', 'World’s most popular gamified language-learning app supporting 40+ languages.', ['languages', 'global', 'gamified', 'mobile', 'freemium']],
+          ['Babbel', 'https://www.babbel.com', 'European subscription language-learning platform focused on conversational fluency.', ['languages', 'europe', 'germany', 'subscription']],
+          ['Rosetta Stone', 'https://www.rosettastone.com', 'Immersive visual-audio language learning software.', ['languages', 'americas', 'global', 'immersion', 'paid']],
+          ['Quizlet', 'https://quizlet.com', 'Digital flashcards, practice tests, and spaced-repetition study sets for students.', ['study-tools', 'global', 'flashcards', 'students', 'freemium']],
+          ['AnkiWeb', 'https://ankiweb.net', 'Open-source spaced-repetition flashcard ecosystem favored by medical and language learners.', ['study-tools', 'global', 'open-source', 'flashcards', 'free']],
+          ['Kahoot!', 'https://kahoot.com', 'Norwegian game-based learning and live classroom trivia quiz platform.', ['education', 'europe', 'norway', 'quizzes', 'freemium']],
+          ['Brilliant', 'https://brilliant.org', 'Interactive visual problem-solving courses in math, logic, and computer science.', ['stem', 'global', 'math', 'interactive', 'subscription']],
+          ['MasterClass', 'https://www.masterclass.com', 'Cinematic online classes taught by world-renowned filmmakers, chefs, and authors.', ['courses', 'global', 'creative', 'celebrity', 'subscription']],
+          ['Domestika', 'https://www.domestika.org', 'Fast-growing creative community and craft/design course platform across Europe and LatAm.', ['courses', 'europe', 'spain', 'latin-america', 'creative']],
+          ['FutureLearn', 'https://www.futurelearn.com', 'British digital education platform partnering with global universities and cultural institutions.', ['courses', 'europe', 'uk', 'universities', 'freemium']],
+          ['Alison', 'https://alison.com', 'Irish social enterprise offering free workplace skill courses and diplomas worldwide.', ['courses', 'europe', 'ireland', 'vocational', 'free']],
+          ['MIT OpenCourseWare', 'https://ocw.mit.edu', 'Free, openly licensed publication of virtually all MIT undergraduate and graduate course materials.', ['universities', 'americas', 'open-education', 'stem', 'free']],
+          ['Stanford Online', 'https://online.stanford.edu', 'Stanford University’s portal for free and executive online courses in AI and engineering.', ['universities', 'americas', 'ai', 'engineering', 'freemium']],
+          ['Harvard Online', 'https://www.harvardonline.harvard.edu', 'Harvard University’s digital learning hub including CS50 and executive programs.', ['universities', 'americas', 'cs50', 'freemium']],
+          ['Google Scholar', 'https://scholar.google.com', 'Freely accessible academic search engine indexing scholarly papers, theses, and citations.', ['research', 'global', 'academic', 'citations', 'free']],
+          ['ResearchGate', 'https://www.researchgate.net', 'European professional network for scientists and researchers to share papers.', ['research', 'europe', 'germany', 'academic', 'free']],
+          ['Academia.edu', 'https://www.academia.edu', 'Platform for academics to share research papers and monitor citation impact.', ['research', 'global', 'academic', 'papers', 'freemium']],
+          ['arXiv', 'https://arxiv.org', 'Open-access repository of electronic preprints in physics, math, CS, and AI.', ['research', 'global', 'open-access', 'preprints', 'free']],
+          ['JSTOR', 'https://www.jstor.org', 'Digital library of academic journals, books, and primary historical sources.', ['research', 'global', 'journals', 'humanities', 'freemium']],
+          ['Internet Archive', 'https://archive.org', 'Nonprofit digital library offering free access to millions of books, movies, and Wayback Machine.', ['archive', 'global', 'nonprofit', 'books', 'free']],
+          ['Project Gutenberg', 'https://www.gutenberg.org', 'Oldest digital library offering 70,000+ free public-domain eBooks.', ['books', 'global', 'public-domain', 'literature', 'free']],
+          ['GitHub', 'https://github.com', 'World’s leading open-source code hosting, developer portfolio, and Git collaboration platform.', ['portfolios', 'global', 'developers', 'open-source', 'freemium']],
+          ['GitLab', 'https://about.gitlab.com', 'Complete DevSecOps platform and open-core Git repository host.', ['portfolios', 'global', 'developers', 'devops', 'freemium']],
+          ['CodePen', 'https://codepen.io', 'Social development environment and front-end portfolio showcase for HTML, CSS, and JS.', ['portfolios', 'global', 'front-end', 'design', 'freemium']],
+          ['Replit', 'https://replit.com', 'Browser-based collaborative IDE and instant deployment platform for coding projects.', ['coding', 'global', 'ide', 'portfolios', 'freemium']],
+          ['Read.cv', 'https://read.cv', 'Minimalist mindful professional profile and creative portfolio network.', ['portfolios', 'global', 'design', 'resumes', 'freemium']],
+          ['Contra', 'https://contra.com', 'Commission-free independent freelancer portfolio and project discovery network.', ['portfolios', 'global', 'freelancers', 'design', 'freemium']],
+          ['Squarespace', 'https://www.squarespace.com', 'Design-driven website builder and portfolio hosting platform for creatives.', ['portfolios', 'global', 'website-builder', 'design', 'paid']],
+          ['Wix', 'https://www.wix.com', 'Cloud-based visual website builder for portfolios, small businesses, and studios.', ['portfolios', 'global', 'middle-east', 'website-builder', 'freemium']],
+          ['Webflow', 'https://webflow.com', 'Visual web development platform generating clean production HTML/CSS for portfolios.', ['portfolios', 'global', 'no-code', 'web-design', 'freemium']],
+          ['Framer', 'https://www.framer.com', 'Interactive canvas-based website builder favored by designers for modern portfolios.', ['portfolios', 'europe', 'netherlands', 'web-design', 'freemium']],
+          ['Wikimedia Foundation', 'https://wikimediafoundation.org', 'Nonprofit organization supporting Wikipedia and free open-knowledge projects globally.', ['nonprofit', 'global', 'open-knowledge', 'advocacy', 'charity']],
+          ['GoFundMe', 'https://www.gofundme.com', 'World’s largest personal fundraising and community relief crowdfunding platform.', ['crowdfunding', 'global', 'fundraising', 'charity', 'community']],
+          ['Kickstarter', 'https://www.kickstarter.com', 'Global crowdfunding platform for creative projects in games, design, film, and tech.', ['crowdfunding', 'global', 'creators', 'startups', 'projects']],
+          ['Indiegogo', 'https://www.indiegogo.com', 'International crowdfunding launchpad for hardware tech innovations and indie films.', ['crowdfunding', 'global', 'tech', 'creators', 'projects']],
+          ['Patreon', 'https://www.patreon.com', 'Membership platform enabling fans to fund independent creators, podcasters, and artists.', ['creators', 'global', 'memberships', 'crowdfunding', 'subscription']],
+          ['Ko-fi', 'https://ko-fi.com', 'Creator-friendly tipping, commissions, and membership page with 0% platform fees on donations.', ['creators', 'europe', 'uk', 'tipping', 'freemium']],
+          ['Buy Me a Coffee', 'https://www.buymeacoffee.com', 'Simple creator support page for accepting tips, memberships, and digital extras.', ['creators', 'global', 'tipping', 'freemium']],
+          ['charity: water', 'https://www.charitywater.org', 'Nonprofit bringing clean, safe drinking water to communities in developing nations.', ['nonprofit', 'global', 'water', 'humanitarian', 'charity']],
+          ['Doctors Without Borders (MSF)', 'https://www.msf.org', 'International humanitarian medical organization providing emergency aid worldwide.', ['nonprofit', 'europe', 'global', 'medical', 'humanitarian']],
+          ['International Red Cross (ICRC)', 'https://www.icrc.org', 'Independent humanitarian institution protecting victims of armed conflict and disasters.', ['nonprofit', 'europe', 'switzerland', 'global', 'humanitarian']],
+          ['UNICEF', 'https://www.unicef.org', 'United Nations agency advocating for children’s rights, health, and education globally.', ['nonprofit', 'global', 'children', 'un', 'humanitarian']],
+          ['World Wide Fund for Nature (WWF)', 'https://www.worldwildlife.org', 'Leading global conservation nonprofit protecting wildlife and ecosystems.', ['nonprofit', 'global', 'environment', 'conservation', 'charity']],
+          ['Amnesty International', 'https://www.amnesty.org', 'Global human rights movement campaigning against injustice worldwide.', ['nonprofit', 'europe', 'uk', 'human-rights', 'advocacy']],
+          ['Kiva', 'https://www.kiva.org', 'Microfinance nonprofit allowing individuals to crowdfund loans for global entrepreneurs.', ['nonprofit', 'global', 'microfinance', 'africa', 'asia']],
+          ['GlobalGiving', 'https://www.globalgiving.org', 'Global crowdfunding community connecting donors with vetted grassroots nonprofits.', ['nonprofit', 'global', 'fundraising', 'grassroots', 'charity']]
+        ]
+      }
+    ];
+
+    /**
+     * Hydrate compact tuples into clean structured objects with deterministic IDs & domains
+     */
+    const DIRECTORY_DATA = RAW_DIRECTORY_DATA.map((cat) => {
+      const entries = cat.items.map((tuple, idx) => {
+        const [name, url, description, tags] = tuple;
+        let domain = '';
+        try {
+          domain = new URL(url).hostname.replace(/^www\./, '');
+        } catch (e) {
+          domain = url;
+        }
+        return {
+          id: `${cat.id}-item-${idx}`,
+          categoryId: cat.id,
+          categoryTitle: cat.title,
+          name,
+          url,
+          domain,
+          description,
+          tags
+        };
+      });
+      return {
+        id: cat.id,
+        shortTitle: cat.shortTitle,
+        title: cat.title,
+        description: cat.description,
+        icon: cat.icon,
+        entries
+      };
+    });
+
+    // Flatten all entries for instant global search
+    const ALL_ENTRIES = DIRECTORY_DATA.flatMap(c => c.entries);
+
+    // Application State
+    const state = {
+      openCategories: new Set(['cat-social']), // Open first category by default for immediate visual richness
+      catFilters: {}, // { [catId]: { query: '', activeTag: null } }
+      globalQuery: '',
+      lastFocusedBeforeModal: null
+    };
+
+    // Initialize filter state per category
+    DIRECTORY_DATA.forEach(cat => {
+      state.catFilters[cat.id] = { query: '', activeTag: null };
+    });
+
+    /**
+     * Utility: Escape HTML to prevent XSS when rendering highlighted search text
+     */
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Utility: Highlight matching substrings safely
+     */
+    function highlightMatch(text, query) {
+      const safeText = escapeHTML(text);
+      if (!query || !query.trim()) return safeText;
+      const escapedQuery = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`(${escapedQuery})`, 'gi');
+      return safeText.replace(regex, '<mark class="search-hl">$1</mark>');
+    }
+
+    /**
+     * Utility: Debounce function for smooth typing performance
+     */
+    function debounce(fn, delay = 140) {
+      let timer = null;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    }
+
+    /**
+     * Utility: Compute top useful tags for a category
+     */
+    function getCategoryTopTags(entries, limit = 14) {
+      const counts = new Map();
+      entries.forEach(entry => {
+        entry.tags.forEach(tag => {
+          counts.set(tag, (counts.get(tag) || 0) + 1);
+        });
+      });
+      return Array.from(counts.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, limit)
+        .map(([tag]) => tag);
+    }
+
+    /**
+     * Render Hero Counters, Quick-Jump Bento Strip, and Mobile Nav Links
+     */
+    function renderChrome() {
+      const totalCount = ALL_ENTRIES.length;
+      document.getElementById('heroTotalCount').textContent = `${totalCount}`;
+      document.getElementById('bentoPlatformCount').textContent = `${totalCount}`;
+
+      const quickJumpGrid = document.getElementById('quickJumpGrid');
+      const mobileLinks = document.getElementById('mobileCategoryLinks');
+
+      quickJumpGrid.innerHTML = DIRECTORY_DATA.map(cat => `
+        <button
+          type="button"
+          data-jump-cat="${cat.id}"
+          class="group text-left bg-white hover:bg-[#0055FF] border border-slate-200/90 hover:border-[#0055FF] rounded-2xl p-3 shadow-card hover:shadow-card-hover transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]"
+        >
+          <div class="flex items-center justify-between text-[#0055FF] group-hover:text-white transition-colors">
+            <span class="w-7 h-7 rounded-lg bg-blue-50 group-hover:bg-white/20 flex items-center justify-center">
+              ${cat.icon.replace('w-6 h-6', 'w-4 h-4')}
+            </span>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 group-hover:bg-white/20 group-hover:text-white transition-colors">
+              ${cat.entries.length}
+            </span>
+          </div>
+          <div class="font-display font-bold text-xs text-[#0A0A0C] group-hover:text-white mt-2.5 truncate">
+            ${escapeHTML(cat.shortTitle)}
+          </div>
+        </button>
+      `).join('');
+
+      mobileLinks.innerHTML = DIRECTORY_DATA.map(cat => `
+        <a
+          href="#${cat.id}"
+          data-mobile-jump="${cat.id}"
+          class="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-blue-50 text-sm font-medium text-[#0A0A0C] hover:text-[#0055FF] transition-colors"
+        >
+          <span class="flex items-center gap-2.5">
+            <span class="text-[#0055FF]">${cat.icon.replace('w-6 h-6', 'w-4 h-4')}</span>
+            <span>${escapeHTML(cat.title)}</span>
+          </span>
+          <span class="text-xs font-semibold text-slate-400">${cat.entries.length}</span>
+        </a>
+      `).join('');
+    }
+
+    /**
+     * Render all 8 Category Accordion Shells
+     */
+    function renderCategoryShells() {
+      const container = document.getElementById('categoriesContainer');
+
+      container.innerHTML = DIRECTORY_DATA.map(cat => {
+        const isOpen = state.openCategories.has(cat.id);
+        const topTags = getCategoryTopTags(cat.entries, 14);
+
+        return `
+          <article
+            id="${cat.id}"
+            class="reveal-item scroll-mt-24 bg-white border border-slate-200/90 rounded-[22px] shadow-card hover:border-slate-300/90 transition-all overflow-hidden"
+          >
+            <!-- Accordion Header Button -->
+            <button
+              type="button"
+              id="header-${cat.id}"
+              aria-expanded="${isOpen}"
+              aria-controls="panel-${cat.id}"
+              data-accordion-toggle="${cat.id}"
+              class="w-full text-left px-5 sm:px-7 py-5 sm:py-6 flex items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#0055FF]"
+            >
+              <div class="flex items-start sm:items-center gap-4 min-w-0">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0055FF] to-blue-700 text-white flex items-center justify-center shrink-0 shadow-sm">
+                  ${cat.icon}
+                </div>
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-2.5">
+                    <h2 class="font-display font-extrabold text-lg sm:text-2xl text-[#0A0A0C] tracking-tight">
+                      ${escapeHTML(cat.title)}
+                    </h2>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#0055FF] border border-blue-200/70">
+                      ${cat.entries.length} platforms
+                    </span>
+                  </div>
+                  <p class="text-xs sm:text-sm text-slate-600 mt-1 line-clamp-2 sm:line-clamp-1">
+                    ${escapeHTML(cat.description)}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Expand Chevron -->
+              <div class="w-10 h-10 rounded-xl border border-slate-200 bg-white flex items-center justify-center shrink-0 text-[#0A0A0C] transition-transform duration-300 ${isOpen ? 'rotate-180 bg-[#0A0A0C] text-white border-[#0A0A0C]' : ''}" id="chevron-${cat.id}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
+            </button>
+
+            <!-- Expandable Accordion Panel (Lazy populated when opened) -->
+            <div
+              id="panel-${cat.id}"
+              role="region"
+              aria-labelledby="header-${cat.id}"
+              class="accordion-content border-t border-slate-200/80 bg-[#F8FAFC]/70 ${isOpen ? '' : 'hidden'}"
+            >
+              <!-- Per-Category Search Bar & Tag Filter Bar -->
+              <div class="px-5 sm:px-7 py-5 bg-white border-b border-slate-200/70 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <!-- Category Search Input -->
+                  <div class="relative flex-1 max-w-xl">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/>
+                    </svg>
+                    <input
+                      type="search"
+                      id="cat-search-${cat.id}"
+                      data-cat-search="${cat.id}"
+                      placeholder="Filter ${escapeHTML(cat.title)} by name, region, or tag..."
+                      aria-label="Filter ${escapeHTML(cat.title)}"
+                      class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl text-[#0A0A0C] placeholder-slate-400 focus:bg-white focus:border-[#0055FF] focus:outline-none focus:ring-2 focus:ring-[#0055FF]/20 transition-all"
+                    />
+                  </div>
+
+                  <!-- Live Filtered Result Count + Clear Filters Button -->
+                  <div class="flex items-center justify-between md:justify-end gap-3">
+                    <span id="cat-count-${cat.id}" class="text-xs font-semibold text-slate-600">
+                      Showing ${cat.entries.length} of ${cat.entries.length}
+                    </span>
+                    <button
+                      type="button"
+                      id="cat-clear-${cat.id}"
+                      data-cat-clear="${cat.id}"
+                      class="hidden px-3 py-1.5 text-xs font-semibold text-[#0055FF] bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]"
+                    >
+                      Clear filters
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Clickable Tag Chips -->
+                <div class="flex items-center gap-1.5 flex-wrap" role="group" aria-label="Filter ${escapeHTML(cat.title)} by tag">
+                  <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mr-1">Tags:</span>
+                  ${topTags.map(tag => `
+                    <button
+                      type="button"
+                      data-cat-tag="${cat.id}"
+                      data-tag-value="${escapeHTML(tag)}"
+                      aria-pressed="false"
+                      class="tag-chip px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-[#0055FF] border border-transparent transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]"
+                    >
+                      #${escapeHTML(tag)}
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Entries Bento Grid -->
+              <div id="cat-grid-${cat.id}" class="p-5 sm:p-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+                <!-- Populated lazily when accordion opens -->
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      // Render entries immediately for initially open categories
+      state.openCategories.forEach(catId => renderCategoryEntries(catId));
+    }
+
+    /**
+     * Render filtered entry cards inside a specific category accordion
+     */
+    function renderCategoryEntries(catId) {
+      const category = DIRECTORY_DATA.find(c => c.id === catId);
+      if (!category) return;
+
+      const filterState = state.catFilters[catId];
+      const q = filterState.query.trim().toLowerCase();
+      const activeTag = filterState.activeTag;
+
+      const filtered = category.entries.filter(entry => {
+        const matchesTag = !activeTag || entry.tags.includes(activeTag);
+        if (!matchesTag) return false;
+        if (!q) return true;
+        return (
+          entry.name.toLowerCase().includes(q) ||
+          entry.description.toLowerCase().includes(q) ||
+          entry.domain.toLowerCase().includes(q) ||
+          entry.tags.some(t => t.toLowerCase().includes(q))
+        );
+      });
+
+      // Update live count & clear button visibility
+      const countEl = document.getElementById(`cat-count-${catId}`);
+      const clearBtn = document.getElementById(`cat-clear-${catId}`);
+      if (countEl) {
+        countEl.textContent = `Showing ${filtered.length} of ${category.entries.length}`;
+      }
+      if (clearBtn) {
+        if (q || activeTag) {
+          clearBtn.classList.remove('hidden');
+        } else {
+          clearBtn.classList.add('hidden');
+        }
+      }
+
+      // Sync tag chip active states
+      const panelEl = document.getElementById(`panel-${catId}`);
+      if (panelEl) {
+        panelEl.querySelectorAll('.tag-chip').forEach(chip => {
+          const isSelected = chip.dataset.tagValue === activeTag;
+          chip.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+          if (isSelected) {
+            chip.className = 'tag-chip px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#0055FF] text-white border border-[#0055FF] shadow-sm transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]';
+          } else {
+            chip.className = 'tag-chip px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-[#0055FF] border border-transparent transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]';
+          }
+        });
+      }
+
+      const gridEl = document.getElementById(`cat-grid-${catId}`);
+      if (!gridEl) return;
+
+      if (filtered.length === 0) {
+        gridEl.innerHTML = `
+          <div class="col-span-full py-12 px-4 text-center bg-white border border-dashed border-slate-300 rounded-2xl">
+            <p class="font-display font-bold text-base text-[#0A0A0C]">No matching platforms in ${escapeHTML(category.title)}</p>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">Try adjusting your search term or clearing the active tag filter.</p>
+            <button type="button" data-cat-clear="${catId}" class="mt-4 px-4 py-2 bg-[#0055FF] text-white text-xs font-semibold rounded-xl hover:bg-[#0044CC] transition-colors">
+              Reset Category Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      gridEl.innerHTML = filtered.map(entry => {
+        const initials = entry.name.replace(/[^a-zA-Z0-9]/g, '').slice(0, 2).toUpperCase() || 'WEB';
+        return `
+          <div
+            id="${entry.id}"
+            class="group bg-white border border-slate-200/90 hover:border-[#0055FF]/50 rounded-2xl p-4 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <!-- Crisp Monogram Badge + Favicon Fallback -->
+                  <div class="w-10 h-10 rounded-xl bg-slate-900 group-hover:bg-[#0055FF] text-white font-display font-bold text-xs flex items-center justify-center shrink-0 transition-colors relative overflow-hidden">
+                    <span>${escapeHTML(initials)}</span>
+                  </div>
+                  <div class="min-w-0">
+                    <a
+                      href="${escapeHTML(entry.url)}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-display font-bold text-[15px] text-[#0A0A0C] group-hover:text-[#0055FF] transition-colors inline-flex items-center gap-1.5 max-w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF] rounded"
+                    >
+                      <span class="truncate">${highlightMatch(entry.name, filterState.query)}</span>
+                    </a>
+                    <div class="text-[11px] font-mono text-slate-400 truncate">
+                      ${highlightMatch(entry.domain, filterState.query)}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- External Launch Icon Button -->
+                <a
+                  href="${escapeHTML(entry.url)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open ${escapeHTML(entry.name)} in new tab"
+                  title="Visit ${escapeHTML(entry.name)}"
+                  class="w-8 h-8 rounded-xl bg-slate-100 group-hover:bg-[#0055FF] text-slate-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0055FF]"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                  </svg>
+                </a>
+              </div>
+
+              <!-- One-line / Concise Description -->
+              <p class="mt-3 text-xs sm:text-[13px] text-slate-600 leading-relaxed line-clamp-2">
+                ${highlightMatch(entry.description, filterState.query)}
+              </p>
+            </div>
+
+            <!-- Clickable Tag Pills inside Entry Card -->
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center gap-1.5 flex-wrap">
+              ${entry.tags.map(tag => `
+                <button
+                  type="button"
+                  data-cat-tag="${catId}"
+                  data-tag-value="${escapeHTML(tag)}"
+                  class="px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors ${
+                    activeTag === tag
+                      ? 'bg-[#0055FF] text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-[#0055FF]'
+                  }"
+                >
+                  #${escapeHTML(tag)}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /**
+     * Toggle Accordion Open/Close State
+     */
+    function setCategoryOpen(catId, shouldOpen) {
+      const panel = document.getElementById(`panel-${catId}`);
+      const header = document.getElementById(`header-${catId}`);
+      const chevron = document.getElementById(`chevron-${catId}`);
+      if (!panel || !header || !chevron) return;
+
+      if (shouldOpen) {
+        state.openCategories.add(catId);
+        panel.classList.remove('hidden');
+        header.setAttribute('aria-expanded', 'true');
+        chevron.classList.add('rotate-180', 'bg-[#0A0A0C]', 'text-white', 'border-[#0A0A0C]');
+        renderCategoryEntries(catId);
+      } else {
+        state.openCategories.delete(catId);
+        panel.classList.add('hidden');
+        header.setAttribute('aria-expanded', 'false');
+        chevron.classList.remove('rotate-180', 'bg-[#0A0A0C]', 'text-white', 'border-[#0A0A0C]');
+      }
+      syncExpandAllButtons();
+    }
+
+    function syncExpandAllButtons() {
+      const allOpen = state.openCategories.size === DIRECTORY_DATA.length;
+      const label = allOpen ? 'Collapse All' : 'Expand All';
+      const desktopText = document.getElementById('toggleAllText');
+      const mobileBtn = document.getElementById('mobileToggleAllBtn');
+      if (desktopText) desktopText.textContent = label;
+      if (mobileBtn) mobileBtn.textContent = allOpen ? 'Collapse All Categories' : 'Expand All Categories';
+    }
+
+    /**
+     * Jump to a Category (and optionally highlight a specific entry)
+     */
+    function jumpToCategoryAndEntry(catId, entryId = null) {
+      // Clear category filters so the target entry is guaranteed to be visible
+      state.catFilters[catId] = { query: '', activeTag: null };
+      const catSearchInput = document.getElementById(`cat-search-${catId}`);
+      if (catSearchInput) catSearchInput.value = '';
+
+      setCategoryOpen(catId, true);
+
+      requestAnimationFrame(() => {
+        const targetEl = entryId ? document.getElementById(entryId) : document.getElementById(catId);
+        if (targetEl) {
+          const headerOffset = 96;
+          const elementPosition = targetEl.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top: elementPosition - headerOffset,
+            behavior: 'smooth'
+          });
+
+          if (entryId) {
+            targetEl.classList.remove('entry-highlight-flash');
+            void targetEl.offsetWidth; // trigger reflow
+            targetEl.classList.add('entry-highlight-flash');
+            const link = targetEl.querySelector('a');
+            if (link) link.focus({ preventScroll: true });
+          }
+        }
+      });
+    }
+
+    /**
+     * Global Floating Search Logic
+     */
+    function performGlobalSearch(rawQuery) {
+      const q = rawQuery.trim().toLowerCase();
+      state.globalQuery = rawQuery;
+
+      const resultsBox = document.getElementById('globalSearchResults');
+      const resultsList = document.getElementById('globalSearchList');
+      const countLabel = document.getElementById('globalSearchCount');
+      const clearBtn = document.getElementById('globalSearchClear');
+      const shortcutHint = document.getElementById('globalSearchShortcut');
+
+      if (!q) {
+        resultsBox.classList.add('hidden');
+        clearBtn.classList.add('hidden');
+        shortcutHint.classList.remove('hidden');
+        return;
+      }
+
+      clearBtn.classList.remove('hidden');
+      shortcutHint.classList.add('hidden');
+      resultsBox.classList.remove('hidden');
+
+      // Score matches so exact name matches appear at the top
+      const matches = [];
+      for (let i = 0; i < ALL_ENTRIES.length; i++) {
+        const entry = ALL_ENTRIES[i];
+        const nameLower = entry.name.toLowerCase();
+        const domainLower = entry.domain.toLowerCase();
+        const descLower = entry.description.toLowerCase();
+        const tagMatch = entry.tags.some(t => t.toLowerCase().includes(q));
+
+        let score = 0;
+        if (nameLower === q) score = 100;
+        else if (nameLower.startsWith(q)) score = 80;
+        else if (nameLower.includes(q)) score = 60;
+        else if (domainLower.includes(q)) score = 45;
+        else if (tagMatch) score = 35;
+        else if (descLower.includes(q)) score = 20;
+
+        if (score > 0) {
+          matches.push({ entry, score });
+        }
+      }
+
+      matches.sort((a, b) => b.score - a.score || a.entry.name.localeCompare(b.entry.name));
+
+      countLabel.textContent = `${matches.length} ${matches.length === 1 ? 'match' : 'matches'} across 8 pillars`;
+
+      if (matches.length === 0) {
+        resultsList.innerHTML = `
+          <div class="p-6 text-center">
+            <p class="font-display font-bold text-sm text-[#0A0A0C]">No platforms found for "${escapeHTML(rawQuery)}"</p>
+            <p class="text-xs text-slate-500 mt-1">Try searching by category keyword (e.g. "banking", "anime", "africa", "open-source", "flights").</p>
+          </div>
+        `;
+        return;
+      }
+
+      const displaySlice = matches.slice(0, 40);
+      resultsList.innerHTML = displaySlice.map(({ entry }) => `
+        <button
+          type="button"
+          data-global-hit-cat="${entry.categoryId}"
+          data-global-hit-entry="${entry.id}"
+          class="w-full text-left px-4 py-3 hover:bg-blue-50/90 transition-colors flex items-start justify-between gap-3 focus:outline-none focus-visible:bg-blue-50"
+        >
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-display font-bold text-sm text-[#0A0A0C]">
+                ${highlightMatch(entry.name, rawQuery)}
+              </span>
+              <span class="text-[11px] font-mono text-slate-400">
+                ${highlightMatch(entry.domain, rawQuery)}
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">
+                ${escapeHTML(entry.categoryTitle)}
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 mt-0.5 line-clamp-1">
+              ${highlightMatch(entry.description, rawQuery)}
+            </p>
+            <div class="flex items-center gap-1 mt-1.5 flex-wrap">
+              ${entry.tags.slice(0, 4).map(t => `
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-50/80 text-[#0055FF] font-medium">
+                  #${highlightMatch(t, rawQuery)}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+          <span class="text-xs font-semibold text-[#0055FF] shrink-0 self-center">
+            Locate &rarr;
+          </span>
+        </button>
+      `).join('');
+    }
+
+    /**
+     * Accessible Modal Focus Trapping & Keyboard Management
+     */
+    function openLegalModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      state.lastFocusedBeforeModal = document.activeElement;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      const closeBtn = modal.querySelector('.modal-close');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeAllModals() {
+      document.querySelectorAll('.legal-modal').forEach(modal => {
+        modal.classList.add('hidden');
+      });
+      document.body.style.overflow = '';
+      if (state.lastFocusedBeforeModal && typeof state.lastFocusedBeforeModal.focus === 'function') {
+        state.lastFocusedBeforeModal.focus();
+      }
+    }
+
+    /**
+     * Event Listeners & Scroll-Reveal Observer Setup
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      renderChrome();
+      renderCategoryShells();
+
+      // Scroll-reveal IntersectionObserver
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.06 });
+
+      document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+
+      // Global search handlers
+      const globalInput = document.getElementById('globalSearchInput');
+      const globalClear = document.getElementById('globalSearchClear');
+      const debouncedGlobalSearch = debounce((val) => performGlobalSearch(val), 110);
+
+      globalInput.addEventListener('input', (e) => {
+        debouncedGlobalSearch(e.target.value);
+      });
+
+      globalInput.addEventListener('focus', () => {
+        if (globalInput.value.trim()) {
+          document.getElementById('globalSearchResults').classList.remove('hidden');
+        }
+      });
+
+      globalClear.addEventListener('click', () => {
+        globalInput.value = '';
+        performGlobalSearch('');
+        globalInput.focus();
+      });
+
+      document.getElementById('focusFloatingSearchBtn').addEventListener('click', () => {
+        globalInput.focus();
+      });
+
+      // Close floating search popover when clicking outside
+      document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('floatingSearchWrapper');
+        if (!wrapper.contains(e.target)) {
+          document.getElementById('globalSearchResults').classList.add('hidden');
+        }
+      });
+
+      // Delegated clicks across the entire document
+      document.addEventListener('click', (e) => {
+        // 1. Accordion header toggle
+        const toggleBtn = e.target.closest('[data-accordion-toggle]');
+        if (toggleBtn) {
+          const catId = toggleBtn.dataset.accordionToggle;
+          setCategoryOpen(catId, !state.openCategories.has(catId));
+          return;
+        }
+
+        // 2. Quick-jump bento pill
+        const jumpBtn = e.target.closest('[data-jump-cat]');
+        if (jumpBtn) {
+          jumpToCategoryAndEntry(jumpBtn.dataset.jumpCat);
+          return;
+        }
+
+        // 3. Mobile menu category link
+        const mobileJump = e.target.closest('[data-mobile-jump]');
+        if (mobileJump) {
+          e.preventDefault();
+          document.getElementById('mobileNavDrawer').classList.add('hidden');
+          document.getElementById('hamburgerIcon').classList.remove('hidden');
+          document.getElementById('closeMenuIcon').classList.add('hidden');
+          document.getElementById('mobileMenuBtn').setAttribute('aria-expanded', 'false');
+          jumpToCategoryAndEntry(mobileJump.dataset.mobileJump);
+          return;
+        }
+
+        // 4. Desktop header anchor links
+        const navAnchor = e.target.closest('header nav a[href^="#cat-"]');
+        if (navAnchor) {
+          e.preventDefault();
+          const catId = navAnchor.getAttribute('href').slice(1);
+          jumpToCategoryAndEntry(catId);
+          return;
+        }
+
+        // 5. Global search result hit
+        const hitBtn = e.target.closest('[data-global-hit-cat]');
+        if (hitBtn) {
+          const catId = hitBtn.dataset.globalHitCat;
+          const entryId = hitBtn.dataset.globalHitEntry;
+          document.getElementById('globalSearchResults').classList.add('hidden');
+          jumpToCategoryAndEntry(catId, entryId);
+          return;
+        }
+
+        // 6. Per-category tag chip toggle
+        const tagBtn = e.target.closest('[data-cat-tag]');
+        if (tagBtn) {
+          const catId = tagBtn.dataset.catTag;
+          const tagValue = tagBtn.dataset.tagValue;
+          const current = state.catFilters[catId].activeTag;
+          state.catFilters[catId].activeTag = current === tagValue ? null : tagValue;
+          renderCategoryEntries(catId);
+          return;
+        }
+
+        // 7. Per-category clear filters button
+        const catClearBtn = e.target.closest('[data-cat-clear]');
+        if (catClearBtn) {
+          const catId = catClearBtn.dataset.catClear;
+          state.catFilters[catId] = { query: '', activeTag: null };
+          const input = document.getElementById(`cat-search-${catId}`);
+          if (input) input.value = '';
+          renderCategoryEntries(catId);
+          return;
+        }
+
+        // 8. Legal modal triggers
+        const modalTrigger = e.target.closest('[data-modal-open]');
+        if (modalTrigger) {
+          openLegalModal(modalTrigger.dataset.modalOpen);
+          return;
+        }
+
+        // 9. Legal modal close buttons or backdrop
+        if (e.target.closest('.modal-close') || e.target.classList.contains('modal-backdrop')) {
+          closeAllModals();
+          return;
+        }
+      });
+
+      // Delegated per-category live search input
+      const debouncedCatFilter = debounce((catId, value) => {
+        state.catFilters[catId].query = value;
+        renderCategoryEntries(catId);
+      }, 110);
+
+      document.getElementById('categoriesContainer').addEventListener('input', (e) => {
+        const searchInput = e.target.closest('[data-cat-search]');
+        if (searchInput) {
+          debouncedCatFilter(searchInput.dataset.catSearch, searchInput.value);
+        }
+      });
+
+      // Expand / Collapse All controls
+      const handleExpandCollapseAll = () => {
+        const shouldOpenAll = state.openCategories.size < DIRECTORY_DATA.length;
+        DIRECTORY_DATA.forEach(cat => setCategoryOpen(cat.id, shouldOpenAll));
+      };
+      document.getElementById('toggleAllBtn').addEventListener('click', handleExpandCollapseAll);
+      document.getElementById('mobileToggleAllBtn').addEventListener('click', handleExpandCollapseAll);
+
+      // Mobile Navigation Drawer Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileNavDrawer');
+      mobileMenuBtn.addEventListener('click', () => {
+        const isHidden = mobileDrawer.classList.toggle('hidden');
+        mobileMenuBtn.setAttribute('aria-expanded', String(!isHidden));
+        document.getElementById('hamburgerIcon').classList.toggle('hidden', !isHidden);
+        document.getElementById('closeMenuIcon').classList.toggle('hidden', isHidden);
+      });
+
+      // Global Keyboard Shortcuts ('/' to search, 'Escape' to close modals/popovers, Tab trap in modals)
+      document.addEventListener('keydown', (e) => {
+        const activeModal = document.querySelector('.legal-modal:not(.hidden)');
+
+        if (e.key === 'Escape') {
+          if (activeModal) {
+            closeAllModals();
+            return;
+          }
+          const resultsBox = document.getElementById('globalSearchResults');
+          if (!resultsBox.classList.contains('hidden')) {
+            resultsBox.classList.add('hidden');
+            globalInput.blur();
+          }
+        }
+
+        // Focus trap inside active modal
+        if (e.key === 'Tab' && activeModal) {
+          const focusables = activeModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (focusables.length > 0) {
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        }
+
+        // '/' shortcut to focus global floating search
+        if (e.key === '/' && !activeModal) {
+          const tag = document.activeElement?.tagName;
+          if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+            e.preventDefault();
+            globalInput.focus();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
