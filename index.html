@@ -1,0 +1,4020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+================================================================================
+ARCKNOWLEDGE - STUDENT KIT SA
+Mobile-First South African Student Resource Portal & Wallet Platform
+================================================================================
+SETUP INSTRUCTIONS:
+1. Run `supabase_setup.sql` inside your Supabase Project's SQL Editor.
+2. In Supabase Dashboard -> Authentication -> Providers -> Email, toggle OFF
+   "Confirm email" if you want students to log in immediately upon sign-up.
+3. Open this `index.html` file in a modern browser (or serve via HTTPS / localhost
+   for full PWA Service Worker installation support).
+4. Scroll to the bottom footer and click "Admin".
+5. Log in with the admin password: #PetalChain_25
+6. Navigate to the "Connection" tab inside the Admin Dashboard, enter your
+   Supabase Project URL and Anon Public Key, and click "Test Connection" & Save.
+   (Pre-configured defaults can also be saved in localStorage via that tab).
+================================================================================
+-->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="Arcknowledge - Student Kit SA: Essential South African universities, bursaries, NSFAS, accommodation, jobs, discounts, and student tools in one place." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Student Kit SA" />
+  <title>Arcknowledge — Student Kit SA</title>
+
+  <!-- Inline SVG Favicon & Apple Touch Icon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f172a'/%3E%3Cpath d='M50 18L15 35l35 17 35-17-35-17zm-22 25v18c0 9 10 16 22 16s22-7 22-16V43L50 54 28 43z' fill='%2310b981'/%3E%3C/svg%3E" />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Supabase JS v2 SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-alt: #f1f5f9;
+      --ink: #0f172a;
+      --ink-muted: #475569;
+      --ink-light: #64748b;
+      --border: #e2e8f0;
+      --border-strong: #0f172a;
+      --emerald: #059669;
+      --emerald-light: #ecfdf5;
+      --emerald-dark: #047857;
+      --gold: #d97706;
+      --gold-light: #fffbeb;
+      --red: #dc2626;
+      --red-light: #fef2f2;
+      --blue: #2563eb;
+      --blue-light: #eff6ff;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, .brand-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    /* SA Flag Top Accent Bar */
+    .sa-flag-bar {
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(90deg, #de3831 0%, #de3831 20%, #ffffff 20%, #ffffff 23%, #007a4d 23%, #007a4d 45%, #ffb612 45%, #ffb612 52%, #000000 52%, #000000 65%, #002395 65%, #002395 100%);
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand-link {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--emerald);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    /* Wallet Button: rounded corners, black stroke, live balance */
+    .wallet-wrapper {
+      position: relative;
+    }
+
+    .wallet-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #000000;
+      border-radius: 10px;
+      padding: 7px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .wallet-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .wallet-btn:active {
+      transform: scale(0.97);
+    }
+
+    .wallet-dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 190px;
+      background: var(--surface);
+      border: 1.5px solid var(--ink);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 110;
+    }
+
+    .wallet-dropdown.open {
+      display: flex;
+    }
+
+    .wallet-drop-btn {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .wallet-drop-btn.deposit:hover {
+      background: var(--emerald-light);
+      border-color: var(--emerald);
+      color: var(--emerald-dark);
+    }
+
+    .wallet-drop-btn.withdraw:hover {
+      background: var(--blue-light);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* Burger Button & Menu */
+    .burger-wrapper {
+      position: relative;
+    }
+
+    .burger-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .burger-btn:hover {
+      background: var(--surface-alt);
+    }
+
+    .burger-line {
+      width: 18px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+    }
+
+    .burger-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      width: 215px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 110;
+    }
+
+    .burger-menu.open {
+      display: flex;
+    }
+
+    .menu-item {
+      width: 100%;
+      padding: 10px 12px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.15s;
+    }
+
+    .menu-item:hover {
+      background: var(--surface-alt);
+    }
+
+    .menu-item.danger {
+      color: var(--red);
+    }
+
+    .menu-item.danger:hover {
+      background: var(--red-light);
+    }
+
+    .menu-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    /* PWA Install Banner */
+    .pwa-bar {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .pwa-bar.visible {
+      display: flex;
+    }
+
+    .pwa-install-btn {
+      background: var(--emerald);
+      color: #fff;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    /* MAIN CONTAINER */
+    .main-container {
+      flex: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARDS & BUTTONS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #1e293b;
+    }
+
+    .btn-emerald {
+      background: var(--emerald);
+      color: #ffffff;
+    }
+
+    .btn-emerald:hover:not(:disabled) {
+      background: var(--emerald-dark);
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: var(--ink);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--surface-alt);
+      border-color: var(--ink);
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: #ffffff;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* FORMS */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: var(--ink);
+      background: #ffffff;
+      transition: border-color 0.15s;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--emerald);
+    }
+
+    .form-hint {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+      margin-top: 4px;
+    }
+
+    .error-banner {
+      background: var(--red-light);
+      border: 1px solid #fecaca;
+      color: var(--red);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .error-banner.visible {
+      display: block;
+    }
+
+    /* HERO / UNLOCK BANNER */
+    .hero-box {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hero-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .hero-desc {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-bottom: 18px;
+      max-width: 640px;
+    }
+
+    .unlock-cta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .unlock-btn-hero {
+      background: #10b981;
+      color: #062c22;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      transition: transform 0.12s, background 0.15s;
+    }
+
+    .unlock-btn-hero:hover {
+      background: #34d399;
+    }
+
+    .unlock-btn-hero:active {
+      transform: scale(0.98);
+    }
+
+    /* GLOBAL CATEGORY FILTER */
+    .kit-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .global-search {
+      flex: 1;
+      min-width: 240px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 0.9rem;
+    }
+
+    .kit-stats-pill {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+    }
+
+    /* ACCORDIONS (50+ CATEGORIES) */
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .accordion-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .accordion-item.open {
+      border-color: var(--ink);
+      box-shadow: var(--shadow-md);
+    }
+
+    .accordion-header {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s;
+    }
+
+    .accordion-header:hover {
+      background: #f8fafc;
+    }
+
+    .acc-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .acc-num {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--ink-light);
+      background: var(--surface-alt);
+      padding: 3px 7px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .acc-icon {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .acc-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .acc-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .acc-count {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      background: var(--surface-alt);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .red-padlock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #dc2626;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .acc-chevron {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      transition: transform 0.2s ease;
+    }
+
+    .accordion-item.open .acc-chevron {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+      background: #fcfcfd;
+    }
+
+    .accordion-item.open .accordion-body {
+      display: block;
+    }
+
+    .cat-search-bar {
+      width: 100%;
+      margin: 12px 0;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-size: 0.88rem;
+      background: #ffffff;
+    }
+
+    .cat-search-bar:focus {
+      outline: none;
+      border-color: var(--emerald);
+    }
+
+    /* Locked Overlay Inside Accordion */
+    .locked-gate {
+      background: #fef2f2;
+      border: 1.5px dashed #fca5a5;
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    .locked-gate h4 {
+      color: #991b1b;
+      font-size: 0.98rem;
+      margin-bottom: 4px;
+    }
+
+    .locked-gate p {
+      font-size: 0.84rem;
+      color: #7f1d1d;
+      margin-bottom: 12px;
+    }
+
+    .locked-preview-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .locked-chip {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid #fecaca;
+      color: #7f1d1d;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    /* Unlocked Entries Grid */
+    .entries-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .entries-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .entry-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      transition: border-color 0.15s, transform 0.12s;
+    }
+
+    .entry-card:hover {
+      border-color: var(--emerald);
+      transform: translateY(-1px);
+    }
+
+    .entry-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+
+    .entry-desc {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    .entry-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--emerald-dark);
+      margin-top: 2px;
+    }
+
+    .entry-link:hover {
+      text-decoration: underline;
+    }
+
+    /* BANKING DETAILS CARD (DEPOSIT PAGE) */
+    .bank-card {
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      border: 1px solid #334155;
+    }
+
+    .bank-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+
+    .bank-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 10px;
+    }
+
+    .bank-row:last-child {
+      border-bottom: none;
+    }
+
+    .bank-label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .bank-val-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-align: right;
+    }
+
+    .bank-val {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(16, 185, 129, 0.35);
+      border-color: #34d399;
+    }
+
+    /* FILE UPLOAD DROPZONE */
+    .upload-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .upload-box:hover {
+      border-color: var(--emerald);
+      background: var(--emerald-light);
+    }
+
+    .proof-preview {
+      margin-top: 12px;
+      padding: 12px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: none;
+    }
+
+    .proof-preview.visible {
+      display: block;
+    }
+
+    .proof-preview img {
+      max-width: 100%;
+      max-height: 220px;
+      border-radius: 8px;
+      margin-top: 8px;
+      object-fit: contain;
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-pending {
+      background: var(--gold-light);
+      color: var(--gold);
+      border: 1px solid #fde68a;
+    }
+
+    .badge-approved, .badge-unlocked {
+      background: var(--emerald-light);
+      color: var(--emerald-dark);
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-rejected, .badge-locked {
+      background: var(--red-light);
+      color: var(--red);
+      border: 1px solid #fecaca;
+    }
+
+    /* TABLES */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 11px 13px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      background: var(--surface-alt);
+      font-weight: 700;
+      color: var(--ink-muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ADMIN TABS & METRICS */
+    .admin-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-tab {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .admin-tab.active {
+      background: var(--ink);
+      color: #ffffff;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    @media (min-width: 640px) {
+      .metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .metric-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .metric-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+
+    /* MODALS */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 200;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 86vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 1.05rem;
+    }
+
+    .modal-close {
+      background: var(--surface-alt);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+    }
+
+    .modal-body h4 {
+      color: var(--ink);
+      margin: 14px 0 6px;
+      font-size: 0.95rem;
+    }
+
+    /* TOASTS */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
+      left: 16px;
+      max-width: 400px;
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 300;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideUp 0.2s ease;
+    }
+
+    .toast.success { border-left: 4px solid #10b981; }
+    .toast.error { border-left: 4px solid #ef4444; }
+    .toast.info { border-left: 4px solid #3b82f6; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 24px 16px;
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+    }
+
+    .footer-links button {
+      background: none;
+      border: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .footer-links button:hover {
+      color: var(--emerald-dark);
+      text-decoration: underline;
+    }
+
+    .footer-copy {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sa-flag-bar"></div>
+
+  <!-- PWA Install Prompt Bar -->
+  <div id="pwaBar" class="pwa-bar">
+    <span>📲 Install <strong>Arcknowledge - Student Kit SA</strong> on your phone for quick access</span>
+    <button id="pwaInstallBtn" class="pwa-install-btn">Install App</button>
+    <button id="pwaDismissBtn" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:1rem;">✕</button>
+  </div>
+
+  <!-- NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-link" onclick="navigateTo('kit')">
+        <span class="brand-title">Arcknowledge</span>
+        <span class="brand-subtitle">Student Kit SA</span>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Wallet Button -->
+        <div class="wallet-wrapper">
+          <button id="walletNavBtn" class="wallet-btn" type="button" aria-expanded="false">
+            <span>Wallet: <span id="navBalanceText">R0.00</span></span>
+            <span style="font-size:0.7rem;">▼</span>
+          </button>
+          <div id="walletDropdown" class="wallet-dropdown">
+            <button type="button" class="wallet-drop-btn deposit" onclick="handleWalletAction('deposit')">
+              <span>➕</span> Deposit
+            </button>
+            <button type="button" class="wallet-drop-btn withdraw" onclick="handleWalletAction('withdraw')">
+              <span>💸</span> Withdraw
+            </button>
+          </div>
+        </div>
+
+        <!-- Burger Menu -->
+        <div class="burger-wrapper">
+          <button id="burgerBtn" class="burger-btn" type="button" aria-label="Menu">
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+            <span class="burger-line"></span>
+          </button>
+          <div id="burgerMenu" class="burger-menu">
+            <button type="button" class="menu-item" onclick="navigateTo('kit')">
+              <span>🎒</span> Student Kit (52 Categories)
+            </button>
+            <button type="button" class="menu-item" onclick="requireAuthAndNavigate('profile')">
+              <span>👤</span> Profile
+            </button>
+            <button type="button" class="menu-item" onclick="requireAuthAndNavigate('transactions')">
+              <span>📜</span> Transactions Log
+            </button>
+            <div class="menu-divider"></div>
+            <button type="button" id="menuAuthBtn" class="menu-item danger" onclick="handleMenuAuthClick()">
+              <span>🚪</span> Sign In / Register
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+
+    <!-- VIEW 1: STUDENT KIT (MAIN PAGE) -->
+    <section id="view-kit" class="view active">
+      <div class="hero-box">
+        <div class="hero-badge">🇿🇦 Mzansi's All-in-One Student Directory</div>
+        <h1 class="hero-title">Every University, Bursary, Res, Job Portal & Student Deal in South Africa</h1>
+        <p class="hero-desc">
+          52 curated categories packed with verified South African links, NSFAS & bursary portals, e-hailing, free CV builders, student discounts, and emergency contacts.
+        </p>
+
+        <!-- Dynamic Status / Unlock Bar -->
+        <div id="heroLockBar" class="unlock-cta-bar">
+          <div style="flex:1;min-width:200px;">
+            <div style="font-weight:700;font-size:0.95rem;" id="heroLockHeading">🔒 Student Kit Locked</div>
+            <div style="font-size:0.8rem;color:#cbd5e1;" id="heroLockSub">
+              Pay a once-off R21.00 fee from your wallet to unlock all 52 categories forever.
+            </div>
+          </div>
+          <button id="unlockKitBtn" class="unlock-btn-hero" type="button" onclick="handleUnlockKit()">
+            <span>🔓</span> Unlock Student Kit – R21.00
+          </button>
+        </div>
+      </div>
+
+      <div class="kit-toolbar">
+        <input
+          type="search"
+          id="globalCategorySearch"
+          class="global-search"
+          placeholder="Filter categories or search across all 52 topics (e.g. NSFAS, Capitec, UCT)..."
+          oninput="renderCategories()"
+        />
+        <span class="kit-stats-pill" id="kitStatusBadge">Status: Locked</span>
+      </div>
+
+      <div id="categoriesContainer" class="accordion-list"></div>
+    </section>
+
+    <!-- VIEW 2: AUTHENTICATION (SIGN IN / SIGN UP) -->
+    <section id="view-auth" class="view">
+      <div style="max-width:440px;margin:0 auto;">
+        <div class="card">
+          <div style="display:flex;gap:8px;margin-bottom:18px;background:var(--surface-alt);padding:4px;border-radius:10px;">
+            <button type="button" id="tabSignIn" class="btn btn-primary" style="flex:1;" onclick="switchAuthMode('signin')">Sign In</button>
+            <button type="button" id="tabSignUp" class="btn" style="flex:1;background:transparent;color:var(--ink);" onclick="switchAuthMode('signup')">Create Account</button>
+          </div>
+
+          <h2 id="authHeading" style="font-size:1.3rem;margin-bottom:4px;">Welcome back</h2>
+          <p id="authSubheading" style="font-size:0.86rem;color:var(--ink-muted);margin-bottom:16px;">
+            Sign in to access your wallet and Student Kit SA.
+          </p>
+
+          <div id="authError" class="error-banner"></div>
+
+          <form id="authForm" onsubmit="handleAuthSubmit(event)">
+            <div id="signUpNameGroup" class="form-group" style="display:none;">
+              <label class="form-label" for="authName">Full Name</label>
+              <input type="text" id="authName" class="form-control" placeholder="e.g. Thabo Mokoena" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="authEmail">Email Address</label>
+              <input type="email" id="authEmail" class="form-control" placeholder="student@example.co.za" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="authPassword">Password</label>
+              <input type="password" id="authPassword" class="form-control" placeholder="Minimum 6 characters" minlength="6" required />
+            </div>
+
+            <button type="submit" id="authSubmitBtn" class="btn btn-emerald btn-block">Sign In</button>
+          </form>
+
+          <div style="margin-top:14px;text-align:center;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="navigateTo('kit')">← Back to Student Kit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: PROFILE PAGE -->
+    <section id="view-profile" class="view">
+      <div style="max-width:560px;margin:0 auto;">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <h2 style="font-size:1.3rem;">Student Profile</h2>
+            <button type="button" class="btn btn-outline btn-sm" onclick="navigateTo('kit')">← Back</button>
+          </div>
+
+          <div style="display:grid;gap:12px;">
+            <div style="padding:12px;background:var(--surface-alt);border-radius:10px;">
+              <div style="font-size:0.75rem;color:var(--ink-light);font-weight:700;text-transform:uppercase;">Full Name</div>
+              <div id="profileName" style="font-size:1.05rem;font-weight:700;margin-top:2px;">—</div>
+            </div>
+
+            <div style="padding:12px;background:var(--surface-alt);border-radius:10px;">
+              <div style="font-size:0.75rem;color:var(--ink-light);font-weight:700;text-transform:uppercase;">Email Address</div>
+              <div id="profileEmail" style="font-size:1rem;font-weight:600;margin-top:2px;">—</div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="padding:12px;background:var(--surface-alt);border-radius:10px;">
+                <div style="font-size:0.75rem;color:var(--ink-light);font-weight:700;text-transform:uppercase;">Wallet Balance</div>
+                <div id="profileBalance" style="font-size:1.25rem;font-weight:800;color:var(--emerald-dark);margin-top:2px;">R0.00</div>
+              </div>
+
+              <div style="padding:12px;background:var(--surface-alt);border-radius:10px;">
+                <div style="font-size:0.75rem;color:var(--ink-light);font-weight:700;text-transform:uppercase;">Account Status</div>
+                <div id="profileStatus" style="margin-top:4px;">
+                  <span class="badge badge-locked">Locked</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;">
+            <button type="button" class="btn btn-emerald" style="flex:1;" onclick="navigateTo('deposit')">➕ Deposit Funds</button>
+            <button type="button" class="btn btn-outline" style="flex:1;" onclick="navigateTo('withdraw')">💸 Withdraw Funds</button>
+            <button type="button" id="profileUnlockBtn" class="btn btn-primary btn-block" onclick="handleUnlockKit()">
+              🔓 Unlock Student Kit – R21.00
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: DEPOSIT PAGE -->
+    <section id="view-deposit" class="view">
+      <div style="max-width:580px;margin:0 auto;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <h2 style="font-size:1.3rem;">Deposit Funds (EFT / Cash Deposit)</h2>
+          <button type="button" class="btn btn-outline btn-sm" onclick="navigateTo('kit')">← Back</button>
+        </div>
+
+        <!-- Styled Account Details Card with Copy Buttons -->
+        <div class="bank-card">
+          <div class="bank-card-header">
+            <div>
+              <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.06em;color:#34d399;font-weight:700;">Official Banking Details</div>
+              <div style="font-size:1.05rem;font-weight:800;">Account Details</div>
+            </div>
+            <span style="font-size:1.4rem;">🏦</span>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">Bank name</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">Standard Bank</span>
+              <button type="button" class="copy-btn" onclick="copyText('Standard Bank')">Copy</button>
+            </div>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">Branch name</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">ONLINE BANKING</span>
+              <button type="button" class="copy-btn" onclick="copyText('ONLINE BANKING')">Copy</button>
+            </div>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">Branch code</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">7654</span>
+              <button type="button" class="copy-btn" onclick="copyText('7654')">Copy</button>
+            </div>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">Account holder</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">MR KGOLAGANO KP POO</span>
+              <button type="button" class="copy-btn" onclick="copyText('MR KGOLAGANO KP POO')">Copy</button>
+            </div>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">Account number</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">10 29 256 243 6</span>
+              <button type="button" class="copy-btn" onclick="copyText('10292562436')">Copy</button>
+            </div>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">Account type</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">CURRENT</span>
+              <button type="button" class="copy-btn" onclick="copyText('CURRENT')">Copy</button>
+            </div>
+          </div>
+
+          <div class="bank-row">
+            <span class="bank-label">SWIFT code</span>
+            <div class="bank-val-wrap">
+              <span class="bank-val">SBZAZAJJ</span>
+              <button type="button" class="copy-btn" onclick="copyText('SBZAZAJJ')">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size:1.05rem;margin-bottom:4px;">Submit Proof of Payment</h3>
+          <p style="font-size:0.84rem;color:var(--ink-muted);margin-bottom:14px;">
+            Make an EFT or ATM deposit into the Standard Bank account above (use your email as payment reference), then upload your Proof of Payment below.
+          </p>
+
+          <div id="depositError" class="error-banner"></div>
+
+          <div class="form-group">
+            <label class="form-label" for="depositAmount">Deposit Amount (ZAR)</label>
+            <input type="number" id="depositAmount" class="form-control" value="21.00" min="1" step="0.01" required />
+            <div class="form-hint">Minimum R21.00 to unlock the Student Kit.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Proof of Payment (PNG, JPG, JPEG, or PDF — Max 10MB)</label>
+            <div class="upload-box" onclick="document.getElementById('proofFileInput').click()">
+              <div style="font-size:1.6rem;margin-bottom:4px;">📎</div>
+              <div style="font-weight:700;font-size:0.9rem;">Tap to select Proof of Payment</div>
+              <div style="font-size:0.78rem;color:var(--ink-light);margin-top:2px;">Accepted formats: PNG, JPG, JPEG, PDF</div>
+            </div>
+            <input
+              type="file"
+              id="proofFileInput"
+              accept=".png,.jpg,.jpeg,.pdf,image/png,image/jpeg,application/pdf"
+              style="display:none;"
+              onchange="handleProofFileSelected(event)"
+            />
+
+            <div id="proofPreviewBox" class="proof-preview">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                <span id="proofFileName" style="font-weight:700;font-size:0.85rem;word-break:break-all;"></span>
+                <button type="button" class="btn btn-outline btn-sm" onclick="clearProofFile()">Remove</button>
+              </div>
+              <div id="proofVisualPreview"></div>
+            </div>
+          </div>
+
+          <button type="button" id="donePaymentBtn" class="btn btn-emerald btn-block" disabled onclick="submitDeposit()">
+            Done With Payment
+          </button>
+          <p style="font-size:0.76rem;color:var(--ink-light);text-align:center;margin-top:8px;">
+            Your wallet will be credited once an administrator verifies and approves your Proof of Payment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: WITHDRAW PAGE -->
+    <section id="view-withdraw" class="view">
+      <div style="max-width:560px;margin:0 auto;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <h2 style="font-size:1.3rem;">Withdraw Funds</h2>
+          <button type="button" class="btn btn-outline btn-sm" onclick="navigateTo('kit')">← Back</button>
+        </div>
+
+        <div class="card">
+          <div style="background:var(--surface-alt);padding:12px 14px;border-radius:10px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:0.85rem;font-weight:600;color:var(--ink-muted);">Available Wallet Balance</span>
+            <span id="withdrawAvailBalance" style="font-size:1.15rem;font-weight:800;color:var(--emerald-dark);">R0.00</span>
+          </div>
+
+          <div id="withdrawError" class="error-banner"></div>
+
+          <form id="withdrawForm" onsubmit="submitWithdrawal(event)">
+            <div class="form-group">
+              <label class="form-label" for="wdBankName">South African Bank Name</label>
+              <select id="wdBankName" class="form-control" required>
+                <option value="">-- Select Bank --</option>
+                <option value="Capitec Bank">Capitec Bank</option>
+                <option value="FNB (First National Bank)">FNB (First National Bank)</option>
+                <option value="Standard Bank">Standard Bank</option>
+                <option value="Absa Bank">Absa Bank</option>
+                <option value="Nedbank">Nedbank</option>
+                <option value="TymeBank">TymeBank</option>
+                <option value="Discovery Bank">Discovery Bank</option>
+                <option value="Bank Zero">Bank Zero</option>
+                <option value="African Bank">African Bank</option>
+                <option value="Investec">Investec</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="wdAccountHolder">Account Holder Name</label>
+              <input type="text" id="wdAccountHolder" class="form-control" placeholder="Full name as registered at bank" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="wdAccountNumber">Account Number</label>
+              <input type="text" id="wdAccountNumber" class="form-control" inputmode="numeric" placeholder="e.g. 1234567890" required />
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-group">
+                <label class="form-label" for="wdAccountType">Account Type</label>
+                <select id="wdAccountType" class="form-control" required>
+                  <option value="Savings">Savings</option>
+                  <option value="Current / Cheque">Current / Cheque</option>
+                  <option value="Transmission">Transmission</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="wdBranchCode">Branch Code</label>
+                <input type="text" id="wdBranchCode" class="form-control" inputmode="numeric" placeholder="e.g. 470010" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="wdAmount">Withdrawal Amount (ZAR)</label>
+              <input type="number" id="wdAmount" class="form-control" min="1" step="0.01" placeholder="0.00" required />
+            </div>
+
+            <button type="submit" id="wdSubmitBtn" class="btn btn-primary btn-block">
+              Request Withdrawal
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 6: TRANSACTIONS LOG -->
+    <section id="view-transactions" class="view">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <h2 style="font-size:1.3rem;">Transactions Log</h2>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="loadUserTransactions()">↻ Refresh</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="navigateTo('kit')">← Back</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="userTransactionsBody">
+            <tr><td colspan="5" style="text-align:center;color:var(--ink-light);padding:24px;">Loading transactions...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 7: ADMIN LOGIN & DASHBOARD -->
+    <section id="view-admin" class="view">
+      <!-- Admin Login Box -->
+      <div id="adminLoginCard" style="max-width:420px;margin:0 auto;">
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <h2 style="font-size:1.25rem;">Admin Portal</h2>
+            <button type="button" class="btn btn-outline btn-sm" onclick="navigateTo('kit')">← Exit</button>
+          </div>
+          <p style="font-size:0.84rem;color:var(--ink-muted);margin-bottom:16px;">
+            Enter the administrator password to manage users, deposits, withdrawals, and Supabase connection settings.
+          </p>
+
+          <div id="adminLoginError" class="error-banner"></div>
+
+          <form onsubmit="handleAdminLogin(event)">
+            <div class="form-group">
+              <label class="form-label" for="adminPasswordInput">Admin Password</label>
+              <input type="password" id="adminPasswordInput" class="form-control" placeholder="Enter admin password" required />
+            </div>
+            <button type="submit" id="adminLoginBtn" class="btn btn-primary btn-block">Unlock Admin Dashboard</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Admin Dashboard Panel -->
+      <div id="adminDashboardPanel" style="display:none;">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;">
+          <div>
+            <h2 style="font-size:1.35rem;">Admin Dashboard</h2>
+            <p style="font-size:0.82rem;color:var(--ink-muted);">Arcknowledge - Student Kit SA Management Console</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="refreshAdminDashboard()">↻ Refresh Data</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="logoutAdmin()">Lock Admin</button>
+          </div>
+        </div>
+
+        <div class="admin-tabs">
+          <button type="button" class="admin-tab active" data-tab="overview" onclick="switchAdminTab('overview')">Overview</button>
+          <button type="button" class="admin-tab" data-tab="users" onclick="switchAdminTab('users')">Users</button>
+          <button type="button" class="admin-tab" data-tab="deposits" onclick="switchAdminTab('deposits')">Deposits</button>
+          <button type="button" class="admin-tab" data-tab="withdrawals" onclick="switchAdminTab('withdrawals')">Withdrawals</button>
+          <button type="button" class="admin-tab" data-tab="transactions" onclick="switchAdminTab('transactions')">Transactions</button>
+          <button type="button" class="admin-tab" data-tab="connection" onclick="switchAdminTab('connection')">Connection</button>
+        </div>
+
+        <!-- TAB: OVERVIEW -->
+        <div id="admin-tab-overview" class="admin-tab-pane">
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">Subscription Earnings</div>
+              <div class="metric-value" id="statEarnings" style="color:var(--emerald-dark);">R0.00</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Total Users</div>
+              <div class="metric-value" id="statTotalUsers">0</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Unlocked Users</div>
+              <div class="metric-value" id="statUnlockedUsers" style="color:var(--emerald-dark);">0</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Locked Users</div>
+              <div class="metric-value" id="statLockedUsers" style="color:var(--red);">0</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Pending Deposits</div>
+              <div class="metric-value" id="statPendingDeposits" style="color:var(--gold);">0</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Pending Withdrawals</div>
+              <div class="metric-value" id="statPendingWithdrawals" style="color:var(--blue);">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: USERS -->
+        <div id="admin-tab-users" class="admin-tab-pane" style="display:none;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-bottom:12px;">
+            <input type="search" id="adminUserSearch" class="form-control" style="max-width:320px;" placeholder="Search users by name or email..." oninput="renderAdminUsers()" />
+            <button type="button" class="btn btn-emerald btn-sm" onclick="openAdminAddUserModal()">+ Add User Account</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: DEPOSITS -->
+        <div id="admin-tab-deposits" class="admin-tab-pane" style="display:none;">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Amount</th>
+                  <th>Proof</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminDepositsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: WITHDRAWALS -->
+        <div id="admin-tab-withdrawals" class="admin-tab-pane" style="display:none;">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Amount</th>
+                  <th>SA Banking Details</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminWithdrawalsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: TRANSACTIONS -->
+        <div id="admin-tab-transactions" class="admin-tab-pane" style="display:none;">
+          <div style="margin-bottom:12px;">
+            <input type="search" id="adminTxSearch" class="form-control" style="max-width:360px;" placeholder="Search transactions by user, type, or status..." oninput="renderAdminTransactions()" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="adminTransactionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB: CONNECTION (ONLY PLACE WHERE SUPABASE URL & ANON KEY ARE SHOWN) -->
+        <div id="admin-tab-connection" class="admin-tab-pane" style="display:none;">
+          <div class="card" style="max-width:580px;">
+            <h3 style="font-size:1.1rem;margin-bottom:4px;">Supabase Backend Connection</h3>
+            <p style="font-size:0.84rem;color:var(--ink-muted);margin-bottom:16px;">
+              Configure your Supabase Project URL and Public Anon Key. These credentials are stored securely in your browser and never displayed to students.
+            </p>
+
+            <div class="form-group">
+              <label class="form-label" for="sbUrlInput">Supabase Project URL</label>
+              <input type="url" id="sbUrlInput" class="form-control" placeholder="https://your-project-id.supabase.co" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="sbAnonKeyInput">Supabase Anon Public Key</label>
+              <textarea id="sbAnonKeyInput" class="form-control" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+            </div>
+
+            <div id="connectionTestResult" style="font-size:0.85rem;font-weight:600;margin-bottom:14px;"></div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:10px;">
+              <button type="button" id="testConnBtn" class="btn btn-primary" onclick="testAndSaveSupabaseConnection()">
+                Test Connection & Save
+              </button>
+              <button type="button" class="btn btn-outline" onclick="clearSupabaseConnection()">
+                Reset Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <button type="button" onclick="openLegalModal('privacy')">Privacy Policy (POPIA)</button>
+        <span>•</span>
+        <button type="button" onclick="openLegalModal('termsOfUse')">Terms of Use</button>
+        <span>•</span>
+        <button type="button" onclick="openLegalModal('termsConditions')">Terms &amp; Conditions</button>
+        <span>•</span>
+        <button type="button" onclick="navigateTo('admin')">Admin</button>
+      </div>
+      <div class="footer-copy">
+        © 2026 Arcknowledge — Student Kit SA. Built for South African Students.
+      </div>
+    </div>
+  </footer>
+
+  <!-- GENERIC MODAL (LEGAL, PROOF VIEWER, ADMIN USER EDIT/ADD) -->
+  <div id="globalModal" class="modal-backdrop" onclick="if(event.target===this) closeModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal Title</h3>
+        <button type="button" class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script>
+    // =========================================================================
+    // 1. STRUCTURED STUDENT KIT DATA (52 SOUTH AFRICAN CATEGORIES)
+    // =========================================================================
+    const STUDENT_KIT_CATEGORIES = [
+  {
+    id: 1,
+    title: "Public Universities",
+    icon: "🎓",
+    entries: [
+      { name: "University of Cape Town (UCT)", desc: "Top-ranked research university in Cape Town, Western Cape.", url: "https://www.uct.ac.za" },
+      { name: "University of the Witwatersrand (Wits)", desc: "Leading research-intensive university in Johannesburg, Gauteng.", url: "https://www.wits.ac.za" },
+      { name: "University of Pretoria (UP)", desc: "Comprehensive contact & distance university in Pretoria (Tuks).", url: "https://www.up.ac.za" },
+      { name: "Stellenbosch University (SU)", desc: "Historic research university in Stellenbosch, Western Cape (Maties).", url: "https://www.sun.ac.za" },
+      { name: "University of Johannesburg (UJ)", desc: "Vibrant metropolitan university across four Johannesburg campuses.", url: "https://www.uj.ac.za" },
+      { name: "University of KwaZulu-Natal (UKZN)", desc: "Premier KZN university across Howard College, Westville & Pietermaritzburg.", url: "https://www.ukzn.ac.za" },
+      { name: "University of South Africa (UNISA)", desc: "Africa's largest open distance e-learning (ODeL) university.", url: "https://www.unisa.ac.za" },
+      { name: "North-West University (NWU)", desc: "Multi-campus university in Potchefstroom, Mahikeng & Vanderbijlpark.", url: "https://www.nwu.ac.za" },
+      { name: "University of the Free State (UFS)", desc: "Bloemfontein & Qwaqwa campuses offering diverse degree programmes.", url: "https://www.ufs.ac.za" },
+      { name: "Rhodes University (RU)", desc: "Renowned residential university in Makhanda, Eastern Cape.", url: "https://www.ru.ac.za" },
+      { name: "Nelson Mandela University (NMU)", desc: "Coastal university in Gqeberha & George.", url: "https://www.mandela.ac.za" },
+      { name: "University of the Western Cape (UWC)", desc: "Bellville-based research university with strong science & law faculties.", url: "https://www.uwc.ac.za" },
+      { name: "Tshwane University of Technology (TUT)", desc: "South Africa's largest residential university of technology.", url: "https://www.tut.ac.za" },
+      { name: "Cape Peninsula University of Technology (CPUT)", desc: "Western Cape's leading university of technology.", url: "https://www.cput.ac.za" },
+      { name: "Durban University of Technology (DUT)", desc: "Career-focused technology university in Durban & Pietermaritzburg.", url: "https://www.dut.ac.za" },
+      { name: "Vaal University of Technology (VUT)", desc: "Engineering, science & management hub in Vanderbijlpark.", url: "https://www.vut.ac.za" },
+      { name: "Central University of Technology (CUT)", desc: "Free State technology university in Bloemfontein & Welkom.", url: "https://www.cut.ac.za" },
+      { name: "University of Limpopo (UL)", desc: "Turfloop-based university serving Limpopo & surrounds.", url: "https://www.ul.ac.za" },
+      { name: "University of Venda (UNIVEN)", desc: "Comprehensive university in Thohoyandou, Limpopo.", url: "https://www.univen.ac.za" },
+      { name: "University of Fort Hare (UFH)", desc: "Historic Eastern Cape university in Alice & East London.", url: "https://www.ufh.ac.za" },
+      { name: "Walter Sisulu University (WSU)", desc: "Developmental university across Mthatha, Butterworth, Buffalo City & Komani.", url: "https://www.wsu.ac.za" },
+      { name: "University of Zululand (UNIZULU)", desc: "Comprehensive university in KwaDlangezwa & Richards Bay.", url: "https://www.unizulu.ac.za" },
+      { name: "Sefako Makgatho Health Sciences University (SMU)", desc: "Dedicated health & medical sciences university in Ga-Rankuwa.", url: "https://www.smu.ac.za" },
+      { name: "University of Mpumalanga (UMP)", desc: "Modern comprehensive university in Mbombela & Siyabuswa.", url: "https://www.ump.ac.za" },
+      { name: "Sol Plaatje University (SPU)", desc: "Data science, heritage & education university in Kimberley.", url: "https://www.spu.ac.za" },
+      { name: "Mangosuthu University of Technology (MUT)", desc: "Umlazi-based university of technology in Durban.", url: "https://www.mut.ac.za" }
+    ]
+  },
+  {
+    id: 2,
+    title: "Private Universities",
+    icon: "🏛️",
+    entries: [
+      { name: "The IIE's Varsity College", desc: "Private higher education degrees & diplomas across 8 SA campuses.", url: "https://www.varsitycollege.co.za" },
+      { name: "Eduvos (formerly Pearson Institute)", desc: "Accredited degrees in IT, Commerce, Law & Humanities across 12 campuses.", url: "https://www.eduvos.com" },
+      { name: "Monash South Africa (IIE MSA)", desc: "International-standard private university campus in Ruimsig, Roodepoort.", url: "https://www.iiemsa.co.za" },
+      { name: "STADIO Higher Education", desc: "Contact & distance degrees in Education, Law, Policing, Commerce & Fashion.", url: "https://www.stadio.ac.za" },
+      { name: "MANCOSA", desc: "Management College of Southern Africa offering MBA, BCom & Public Admin.", url: "https://www.mancosa.co.za" },
+      { name: "REGENT Business School", desc: "Distance & supported learning business degrees across Southern Africa.", url: "https://regent.ac.za" },
+      { name: "Milpark Education", desc: "Accredited commerce, banking, insurance & CA(SA) CTA programmes.", url: "https://www.milpark.ac.za" },
+      { name: "AFDA (School for the Creative Economy)", desc: "Film, television, performance, business innovation & creative tech degrees.", url: "https://www.afda.co.za" },
+      { name: "Henley Business School Africa", desc: "Triple-accredited MBA and executive business education in Johannesburg.", url: "https://www.henleysa.ac.za" },
+      { name: "Cornerstone Institute", desc: "Not-for-profit private higher education in Cape Town.", url: "https://cornerstone.ac.za" }
+    ]
+  },
+  {
+    id: 3,
+    title: "Private Colleges",
+    icon: "🏫",
+    entries: [
+      { name: "Rosebank College (The IIE)", desc: "Affordable career-focused diplomas, degrees & higher certificates nationwide.", url: "https://www.rosebankcollege.co.za" },
+      { name: "Boston City Campus", desc: "Over 45 support centres offering accredited degrees, diplomas & occupational courses.", url: "https://www.boston.ac.za" },
+      { name: "Damelin", desc: "Long-standing private college offering FET & higher education qualifications.", url: "https://www.damelin.co.za" },
+      { name: "Vega School (The IIE)", desc: "Brand communication, graphic design, digital marketing & copywriting.", url: "https://www.vegaschool.com" },
+      { name: "AAA School of Advertising", desc: "Premier advertising, marketing & visual communication institution.", url: "https://www.aaaschool.ac.za" },
+      { name: "Inscape Education Group", desc: "Design-focused private college (Interior, Architecture, UX, Fashion).", url: "https://www.inscape.ac" },
+      { name: "CTU Training Solutions", desc: "IT, engineering, design & business career campuses across SA.", url: "https://ctutraining.ac.za" },
+      { name: "Belgium Campus iTversity", desc: "Specialist IT degrees & diplomas in Pretoria, Kempton Park & Gqeberha.", url: "https://www.belgiumcampus.ac.za" },
+      { name: "Richfield Graduate Institute of Technology", desc: "IT, business & public management programmes with free tablet/laptop perks.", url: "https://www.richfield.ac.za" },
+      { name: "Oxbridge Academy", desc: "Distance learning occupational certificates, NATED & skills courses.", url: "https://www.oxbridgeacademy.edu.za" }
+    ]
+  },
+  {
+    id: 4,
+    title: "TVET Colleges",
+    icon: "🛠️",
+    entries: [
+      { name: "DHET TVET Colleges Portal", desc: "Official Department of Higher Education directory of all 50 public TVETs.", url: "https://www.tvetcolleges.co.za" },
+      { name: "False Bay TVET College", desc: "Top-performing Western Cape TVET college in Cape Town.", url: "https://www.falsebaycollege.co.za" },
+      { name: "College of Cape Town", desc: "Art, Design, Engineering, ICT & Business NCV/NATED programmes.", url: "https://www.cct.edu.za" },
+      { name: "Northlink TVET College", desc: "Northern suburbs Cape Town technical & vocational campuses.", url: "https://www.northlink.co.za" },
+      { name: "Ekurhuleni East TVET College (EEC)", desc: "Engineering, Business & ICT campuses across Ekurhuleni.", url: "https://www.eec.edu.za" },
+      { name: "Ekurhuleni West TVET College (EWC)", desc: "Six campuses in Germiston, Alberton, Boksburg, Kempton & Tembisa.", url: "https://www.ewc.edu.za" },
+      { name: "Central Johannesburg TVET College (CJC)", desc: "Inner-city Johannesburg vocational & technical training.", url: "https://www.cjc.edu.za" },
+      { name: "South West Gauteng TVET College (SWGC)", desc: "Soweto, Roodepoort & Randburg campuses.", url: "https://www.swgc.co.za" },
+      { name: "Tshwane North TVET College (TNC)", desc: "Pretoria CBD, Mamelodi, Soshanguve & Rosslyn campuses.", url: "https://www.tnc.edu.za" },
+      { name: "Tshwane South TVET College (TSC)", desc: "Atteridgeville, Centurion, Odi & Pretoria West campuses.", url: "https://www.tsc.edu.za" },
+      { name: "Elangeni TVET College", desc: "Eight campuses across Durban & KwaZulu-Natal.", url: "https://www.elangeni.edu.za" },
+      { name: "Majuba TVET College", desc: "Newcastle & Dundee engineering, IT & business campuses.", url: "https://www.majuba.edu.za" }
+    ]
+  },
+  {
+    id: 5,
+    title: "Bursaries & Funding (NSFAS etc.)",
+    icon: "💰",
+    entries: [
+      { name: "NSFAS (National Student Financial Aid Scheme)", desc: "Government bursary covering tuition, accommodation & allowances for public uni/TVET.", url: "https://www.nsfas.org.za" },
+      { name: "Funza Lushaka Bursary Programme", desc: "Full-cost government bursary for Bachelor of Education & PGCE teaching students.", url: "https://www.funzalushaka.doe.gov.za" },
+      { name: "ISFAP (Ikusasa Student Financial Aid Programme)", desc: "Funding model for 'missing middle' students in scarce-skill degrees.", url: "https://www.isfap.org.za" },
+      { name: "Feenix Crowdfunding", desc: "Standard Bank-backed crowdfunding platform helping SA students pay off fee debt.", url: "https://www.feenix.org" },
+      { name: "StudyTrust", desc: "National bursary management organisation administering corporate & donor bursaries.", url: "https://studytrust.org.za" },
+      { name: "Allan Gray Orbis Foundation", desc: "Entrepreneurial fellowship covering full university tuition, residence & stipend.", url: "https://www.allangrayorbis.org" },
+      { name: "Sasol Bursaries", desc: "Comprehensive STEM, Engineering & Commerce bursaries with vacation work.", url: "https://www.sasolbursaries.com" },
+      { name: "Standard Bank Group Bursary", desc: "Merit & financial need bursaries for Commerce, IT, Data Science & Engineering.", url: "https://www.standardbank.com/sbg/standard-bank-group/careers/early-careers/bursaries" },
+      { name: "Investec Bursary Programme", desc: "Funding for Commerce, Accounting (CA), IT & Engineering students.", url: "https://www.investec.com/en_za/welcome-to-investec/careers/bursaries.html" },
+      { name: "Zabursaries South Africa", desc: "Comprehensive up-to-date directory of all open SA bursaries by field of study.", url: "https://www.zabursaries.co.za" },
+      { name: "Career Wise", desc: "Bursary administration for mining, engineering, finance & corporate sponsors.", url: "https://careerwise.co.za" },
+      { name: "NRF (National Research Foundation)", desc: "Honours, Master's & Doctoral postgraduate research scholarships.", url: "https://www.nrf.ac.za" }
+    ]
+  },
+  {
+    id: 6,
+    title: "Student Accommodation",
+    icon: "🏠",
+    entries: [
+      { name: "South Point Student Accommodation", desc: "Purpose-built student residences in Braamfontein, Pretoria, Cape Town & Durban.", url: "https://www.staysouthpoint.co.za" },
+      { name: "Respublica Student Living", desc: "Modern NSFAS-accredited & private student residences near major campuses.", url: "https://respublica.co.za" },
+      { name: "DigsConnect", desc: "South Africa's largest student accommodation & roommate marketplace.", url: "https://www.digsconnect.com" },
+      { name: "CampusKey Student Living", desc: "All-inclusive lifestyle student residences in Stellenbosch, Pretoria, Bloem & PE.", url: "https://campuskey.co.za" },
+      { name: "Student Digz", desc: "Verified student rooms, flats & commune listings across SA university towns.", url: "https://www.studentdigz.co.za" },
+      { name: "MyDomain Student Living", desc: "Upscale student apartments in Cape Town (Observatory, Salt River, Wynberg).", url: "https://mydomainliving.co.za" },
+      { name: "Kovsie & Private Res / Urban Circle", desc: "NSFAS-accredited off-campus student accommodation networks.", url: "https://www.urbancircle.co.za" },
+      { name: "420 Student Accommodation / Citiq Student", desc: "Safe, Wi-Fi-enabled student apartments near UJ, Wits & TUT.", url: "https://citiqstudent.co.za" }
+    ]
+  },
+  {
+    id: 7,
+    title: "Textbook Stores",
+    icon: "📚",
+    entries: [
+      { name: "Van Schaik Bookstore", desc: "South Africa's leading academic bookstore (print & e-books, NSFAS/bursary vouchers).", url: "https://www.vanschaik.com" },
+      { name: "Protea Boekwinkel", desc: "Academic & general textbooks in Hatfield, Stellenbosch, Potch & Bloemfontein.", url: "https://www.proteaboekwinkel.com" },
+      { name: "Juta Academic", desc: "Law, commerce, health sciences & humanities academic publisher & store.", url: "https://juta.co.za" },
+      { name: "LexisNexis South Africa Store", desc: "Prescribed law textbooks, statutes & legal reference materials.", url: "https://store.lexisnexis.co.za" },
+      { name: "Textbook Trader", desc: "Buy and sell second-hand university textbooks directly with other SA students.", url: "https://www.textbooktrader.co.za" },
+      { name: "Takealot Books & Textbooks", desc: "Fast nationwide delivery on prescribed textbooks and study guides.", url: "https://www.takealot.com/books" },
+      { name: "Snapplify", desc: "Digital textbook & e-learning platform used across SA institutions.", url: "https://www.snapplify.com" },
+      { name: "VitalSource Bookshelf", desc: "Rent or buy digital academic textbooks at up to 60% off print prices.", url: "https://www.vitalsource.com" }
+    ]
+  },
+  {
+    id: 8,
+    title: "Stationery & Tech Stores",
+    icon: "🖊️",
+    entries: [
+      { name: "Waltons", desc: "Back-to-varsity stationery, files, calculators, printers & office supplies.", url: "https://www.waltons.co.za" },
+      { name: "PNA Stationers", desc: "Art supplies, notebooks, exam pads & creative stationery nationwide.", url: "https://pna.co.za" },
+      { name: "CNA", desc: "Stationery, books, gifts & student essentials in malls across SA.", url: "https://www.cna.co.za" },
+      { name: "Typo (Cotton On)", desc: "Trendy notebooks, laptop sleeves, desk organisers & study accessories.", url: "https://cottonon.com/ZA/typo/" },
+      { name: "West Pack Lifestyle", desc: "Affordable storage boxes, stationery, desk lamps & res essentials.", url: "https://www.westpacklifestyle.co.za" },
+      { name: "iStore South Africa (Student Discounts)", desc: "MacBooks & iPads with official SA student & educator pricing.", url: "https://www.istore.co.za/student-discount" }
+    ]
+  },
+  {
+    id: 9,
+    title: "Search Engines",
+    icon: "🔍",
+    entries: [
+      { name: "Google Search", desc: "World's primary search engine for quick research and definitions.", url: "https://www.google.co.za" },
+      { name: "Google Scholar", desc: "Search peer-reviewed academic papers, theses, citations & case law.", url: "https://scholar.google.com" },
+      { name: "Microsoft Bing", desc: "Web search with integrated Copilot AI and visual search.", url: "https://www.bing.com" },
+      { name: "DuckDuckGo", desc: "Privacy-first search engine with zero tracking.", url: "https://duckduckgo.com" },
+      { name: "Semantic Scholar", desc: "AI-powered scientific literature search engine for researchers.", url: "https://www.semanticscholar.org" },
+      { name: "SAFLII (Southern African Legal Information Institute)", desc: "Free access to South African court judgments & legislation.", url: "https://www.saflii.org" },
+      { name: "SciELO South Africa", desc: "Open-access South African scholarly journals database.", url: "https://www.scielo.org.za" }
+    ]
+  },
+  {
+    id: 10,
+    title: "AI Assistants",
+    icon: "🤖",
+    entries: [
+      { name: "Google Gemini", desc: "Multimodal AI assistant for study summaries, coding & research.", url: "https://gemini.google.com" },
+      { name: "ChatGPT (OpenAI)", desc: "Conversational AI tutor for brainstorming, explanations & problem-solving.", url: "https://chatgpt.com" },
+      { name: "Claude (Anthropic)", desc: "Long-context AI ideal for analysing PDFs, essays & complex code.", url: "https://claude.ai" },
+      { name: "Perplexity AI", desc: "Real-time AI answer engine with cited web sources for research.", url: "https://www.perplexity.ai" },
+      { name: "NotebookLM (Google)", desc: "Upload lecture notes & PDFs to generate study guides and audio overviews.", url: "https://notebooklm.google.com" },
+      { name: "Microsoft Copilot", desc: "AI assistant integrated with Office apps and web search.", url: "https://copilot.microsoft.com" },
+      { name: "Consensus", desc: "AI search engine that extracts findings directly from scientific papers.", url: "https://consensus.app" }
+    ]
+  },
+  {
+    id: 11,
+    title: "Grocery Stores",
+    icon: "🛒",
+    entries: [
+      { name: "Shoprite", desc: "Lowest-price everyday groceries, R5 deli meals & student staples.", url: "https://www.shoprite.co.za" },
+      { name: "Checkers & Sixty60", desc: "Supermarket groceries with 60-minute delivery & Xtra Savings deals.", url: "https://www.checkers.co.za" },
+      { name: "Pick n Pay & asap!", desc: "Groceries, Smart Shopper points & on-demand delivery.", url: "https://www.pnp.co.za" },
+      { name: "SPAR South Africa", desc: "Convenient neighbourhood supermarkets & SPAR2U delivery.", url: "https://www.spar.co.za" },
+      { name: "Woolworths Food & Dash", desc: "Quality fresh meals, snacks & same-day Dash delivery.", url: "https://www.woolworths.co.za" },
+      { name: "Boxer Superstores", desc: "Discount supermarket chain ideal for bulk monthly res groceries.", url: "https://www.boxer.co.za" },
+      { name: "Food Lover's Market", desc: "Fresh fruit, vegetables, bakery & affordable daily lunch specials.", url: "https://foodloversmarket.co.za" },
+      { name: "Makro", desc: "Bulk groceries, appliances & res supplies at wholesale prices.", url: "https://www.makro.co.za" }
+    ]
+  },
+  {
+    id: 12,
+    title: "Food Delivery",
+    icon: "🍔",
+    entries: [
+      { name: "Mr D Food", desc: "South Africa's homegrown food & grocery delivery app with student promos.", url: "https://www.mrdfood.com" },
+      { name: "Uber Eats South Africa", desc: "Fast restaurant & convenience delivery across major SA cities.", url: "https://www.ubereats.com/za" },
+      { name: "Bolt Food", desc: "Competitive food delivery deals in Johannesburg, Cape Town & Pretoria.", url: "https://food.bolt.eu" },
+      { name: "Checkers Sixty60", desc: "On-demand 60-minute grocery & drinks delivery across SA.", url: "https://www.sixty60.co.za" },
+      { name: "Pick n Pay asap!", desc: "Fast grocery delivery earning Smart Shopper rewards.", url: "https://www.pnp.co.za/asap" },
+      { name: "KFC South Africa Delivery", desc: "Direct delivery for Streetwise meals & student combos.", url: "https://order.kfc.co.za" },
+      { name: "Debonairs Pizza Online", desc: "Direct ordering for Real Deals & student pizza specials.", url: "https://www.debonairspizza.co.za" }
+    ]
+  },
+  {
+    id: 13,
+    title: "Transportation (E-Hailing, Buses, Trains)",
+    icon: "🚆",
+    entries: [
+      { name: "Uber South Africa", desc: "Reliable e-hailing rides & Uber Go budget trips across SA cities.", url: "https://www.uber.com/za/en/" },
+      { name: "Bolt South Africa", desc: "Affordable e-hailing rides & Bolt Lite options for students.", url: "https://bolt.eu/en-za/" },
+      { name: "inDrive South Africa", desc: "Peer-to-peer ride-hailing where passengers and drivers agree on the fare.", url: "https://indrive.com" },
+      { name: "Gautrain", desc: "High-speed rail & bus network linking Johannesburg, Pretoria & OR Tambo.", url: "https://www.gautrain.co.za" },
+      { name: "MyCiTi Bus (Cape Town)", desc: "Safe, cashless rapid transit bus network across Cape Town.", url: "https://www.myciti.org.za" },
+      { name: "Rea Vaya (Johannesburg)", desc: "Bus Rapid Transit (BRT) connecting Soweto, UJ, Wits & Joburg CBD.", url: "https://www.reavaya.org.za" },
+      { name: "A Re Yeng (Tshwane)", desc: "Pretoria rapid bus transit serving Hatfield, Sunnyside & CBD.", url: "https://www.tshwane.gov.za" },
+      { name: "PRASA / Metrorail", desc: "Commuter rail services in Gauteng, Western Cape & KZN.", url: "https://www.prasa.com" },
+      { name: "Intercape", desc: "Intercity long-distance coaches across South Africa with student discounts.", url: "https://www.intercape.co.za" },
+      { name: "Greyhound & Citiliner", desc: "Long-distance coach travel between major SA towns & cities.", url: "https://www.greyhound.co.za" },
+      { name: "Eldo Coaches", desc: "Affordable intercity luxury coach travel across SA.", url: "https://www.eldocoaches.co.za" },
+      { name: "Computicket Travel (Buses)", desc: "Compare & book Intercape, Eagle Liner & Translux bus tickets.", url: "https://www.computicket.com" }
+    ]
+  },
+  {
+    id: 14,
+    title: "App Stores",
+    icon: "📱",
+    entries: [
+      { name: "Google Play Store", desc: "Official Android app, game & e-book store.", url: "https://play.google.com/store" },
+      { name: "Apple App Store", desc: "Official iOS & iPadOS apps for iPhone and iPad.", url: "https://www.apple.com/za/app-store/" },
+      { name: "Huawei AppGallery", desc: "Official app store for Huawei devices with local SA banking & retail apps.", url: "https://appgallery.huawei.com" },
+      { name: "Samsung Galaxy Store", desc: "Exclusive apps, themes & student discounts for Samsung Galaxy devices.", url: "https://galaxystore.samsung.com" },
+      { name: "Microsoft Store", desc: "Windows apps, study tools & utilities for student laptops.", url: "https://apps.microsoft.com" }
+    ]
+  },
+  {
+    id: 15,
+    title: "Free CV Builders",
+    icon: "📄",
+    entries: [
+      { name: "Canva Free Resume Builder", desc: "Modern, clean CV templates with easy PDF export.", url: "https://www.canva.com/create/resumes/" },
+      { name: "FlowCV", desc: "Free, ATS-friendly modern CV builder with instant PDF download.", url: "https://flowcv.com" },
+      { name: "Novoresume", desc: "Structured CV and cover letter templates tailored for graduates.", url: "https://novoresume.com" },
+      { name: "Resume.io", desc: "Step-by-step guided CV builder with graduate examples.", url: "https://resume.io" },
+      { name: "Overleaf (LaTeX CV Templates)", desc: "Clean academic & engineering LaTeX CV templates.", url: "https://www.overleaf.com/gallery/tagged/cv" },
+      { name: "SAYouth.mobi CV Builder", desc: "Free mobile-friendly CV builder built specifically for young South Africans.", url: "https://sayouth.mobi" }
+    ]
+  },
+  {
+    id: 16,
+    title: "Job Portals",
+    icon: "💼",
+    entries: [
+      { name: "LinkedIn Jobs South Africa", desc: "Professional networking, graduate programmes & entry-level roles.", url: "https://www.linkedin.com/jobs" },
+      { name: "Careers24", desc: "One of South Africa's top job boards across all provinces.", url: "https://www.careers24.com" },
+      { name: "PNet", desc: "Leading SA online recruitment portal for corporate & graduate jobs.", url: "https://www.pnet.co.za" },
+      { name: "Indeed South Africa", desc: "Aggregates thousands of part-time, retail, remote & graduate jobs.", url: "https://za.indeed.com" },
+      { name: "OfferZen", desc: "Tech & software developer job marketplace in South Africa.", url: "https://www.offerzen.com" },
+      { name: "SA Youth (Harambee)", desc: "Zero-rated platform connecting young South Africans to entry-level jobs.", url: "https://sayouth.mobi" },
+      { name: "DPSA Circular (Public Service Jobs)", desc: "Official weekly South African government vacancy circular.", url: "https://www.dpsa.gov.za/newsroom/psvc/" },
+      { name: "GradConnection South Africa", desc: "Dedicated portal for SA graduate programmes & vacation work.", url: "https://za.gradconnection.com" }
+    ]
+  },
+  {
+    id: 17,
+    title: "Learnerships & Internships",
+    icon: "🚀",
+    entries: [
+      { name: "YES4Youth (Youth Employment Service)", desc: "12-month paid quality work experiences for unemployed SA youth.", url: "https://www.yes4youth.co.za" },
+      { name: "Student Village", desc: "Graduate recruitment, internships & student brand ambassador jobs.", url: "https://www.studentvillage.co.za" },
+      { name: "SETA Learnerships Directory (National Government)", desc: "Official directory of all 21 Sector Education and Training Authorities.", url: "https://www.gov.za/about-government/contact-directory/seta" },
+      { name: "Puff & Pass", desc: "Daily updates on SA internships, learnerships & graduate programmes.", url: "https://www.puffandpass.co.za" },
+      { name: "Youth Village", desc: "Latest SA learnerships, apprenticeships, bursaries & internships.", url: "https://www.youthvillage.co.za" },
+      { name: "Careers Portal (Learnerships)", desc: "Verified South African SETA & corporate learnership listings.", url: "https://www.careersportal.co.za/learnerships" },
+      { name: "MICT SETA", desc: "Media, Information and Communication Technologies learnerships & internships.", url: "https://www.mict.org.za" },
+      { name: "BANKSETA", desc: "Banking & microfinance sector youth learnerships.", url: "https://www.bankseta.org.za" }
+    ]
+  },
+  {
+    id: 18,
+    title: "Banking Apps",
+    icon: "🏦",
+    entries: [
+      { name: "Capitec Bank (Global One)", desc: "Low-fee everyday banking, Live Better savings & Send Cash.", url: "https://www.capitecbank.co.za" },
+      { name: "FNB (First National Bank - FNBy / Student)", desc: "Zero-monthly-fee student accounts, eBucks & PayShap.", url: "https://www.fnb.co.za" },
+      { name: "Standard Bank (MyMo Student)", desc: "Student bank account with free data perks & Varsity Vibe deals.", url: "https://www.standardbank.co.za" },
+      { name: "Absa (Student Silver Account)", desc: "Affordable student banking with Absa Rewards & instant EFT.", url: "https://www.absa.co.za" },
+      { name: "Nedbank (Unlocked.Me)", desc: "Youth & student banking account with lifestyle discounts.", url: "https://personal.nedbank.co.za" },
+      { name: "TymeBank", desc: "Digital bank with zero monthly fees, GoalSave & Pick n Pay/Boxer tills.", url: "https://www.tymebank.co.za" },
+      { name: "Discovery Bank", desc: "Shared-value digital banking with Vitality Money rewards.", url: "https://www.discovery.co.za/bank/" },
+      { name: "Bank Zero", desc: "App-driven mutual bank with zero monthly account fees.", url: "https://www.bankzero.co.za" }
+    ]
+  },
+  {
+    id: 19,
+    title: "Festivals",
+    icon: "🎪",
+    entries: [
+      { name: "Rocking the Daisies", desc: "Iconic Cape Town music, lifestyle & camping festival.", url: "https://rockingthedaisies.com" },
+      { name: "Cotton Fest", desc: "Riky Rick's flagship Johannesburg & Cape Town hip-hop & streetwear festival.", url: "https://cottonfest.co.za" },
+      { name: "Splashy Fen", desc: "South Africa's longest-running Easter music festival in Underberg, KZN.", url: "https://www.splashyfen.co.za" },
+      { name: "Oppikoppi / Mieliepop Festival", desc: "Mpumalanga bushveld music & camping festival.", url: "https://www.mieliepopfestival.co.za" },
+      { name: "National Arts Festival (Makhanda)", desc: "South Africa's biggest annual theatre, music, comedy & visual arts festival.", url: "https://nationalartsfestival.co.za" },
+      { name: "Cape Town International Jazz Festival", desc: "Africa's Grandest Gathering of jazz and soulful live music.", url: "https://www.capetownjazzfest.com" },
+      { name: "Amapiano & Balcony Mix Events (Howler)", desc: "Discover major SA campus bashes & weekend festivals on Howler.", url: "https://www.howler.co.za" },
+      { name: "Ultra South Africa", desc: "Major electronic dance music festival in Joburg & Cape Town.", url: "https://ultrasouthafrica.com" }
+    ]
+  },
+  {
+    id: 20,
+    title: "Restaurants",
+    icon: "🍽️",
+    entries: [
+      { name: "Nando's South Africa", desc: "Flame-grilled PERi-PERi chicken & iconic student meals.", url: "https://www.nandos.co.za" },
+      { name: "Spur Steak Ranches", desc: "Monday burger specials & family/student sit-down favourites.", url: "https://www.spursteakranches.com/za" },
+      { name: "RocoMamas", desc: "Smashburgers, ribs, wings & shakes popular around campuses.", url: "https://www.rocomamas.com" },
+      { name: "Ocean Basket", desc: "Affordable sushi & Mediterranean seafood platters.", url: "https://www.oceanbasket.com" },
+      { name: "Mochachos", desc: "Mexican-style flame-grilled chicken & burritos.", url: "https://www.mochachos.com" },
+      { name: "Galito's", desc: "Flame-grilled chicken combos at student-friendly prices.", url: "https://www.galitos.co.za" },
+      { name: "Steers", desc: "Flame-grilled burgers & Wacky Wednesday deals.", url: "https://steers.co.za" },
+      { name: "Panarottis", desc: "All-you-can-eat pizza & pasta Thursday specials.", url: "https://www.panarottis.com/za" }
+    ]
+  },
+  {
+    id: 21,
+    title: "Malls",
+    icon: "🛍️",
+    entries: [
+      { name: "Mall of Africa (Midrand)", desc: "South Africa's largest single-phase shopping mall in Waterfall City.", url: "https://mallofafrica.co.za" },
+      { name: "Sandton City (Johannesburg)", desc: "Premier fashion, dining & Gautrain-linked shopping destination.", url: "https://sandtoncity.com" },
+      { name: "Menlyn Park Shopping Centre (Pretoria)", desc: "Massive Pretoria East mall near UP & Varsity College.", url: "https://www.menlynpark.co.za" },
+      { name: "Canal Walk (Cape Town)", desc: "Century City's flagship shopping & entertainment centre.", url: "https://canalwalk.co.za" },
+      { name: "V&A Waterfront (Cape Town)", desc: "Iconic harbour shopping, food markets & oceanfront views.", url: "https://www.waterfront.co.za" },
+      { name: "Gateway Theatre of Shopping (Umhlanga)", desc: "Durban's ultimate retail & entertainment hub.", url: "https://www.gatewayworld.co.za" },
+      { name: "Pavilion Shopping Centre (Westville)", desc: "Major Durban mall minutes from UKZN Westville campus.", url: "https://www.thepav.co.za" },
+      { name: "Maponya Mall (Soweto)", desc: "Iconic Soweto shopping & entertainment centre.", url: "https://www.maponyamall.co.za" },
+      { name: "Loch Logan Waterfront (Bloemfontein)", desc: "Central SA's largest mall near UFS & CUT.", url: "https://www.lochlogan.co.za" }
+    ]
+  },
+  {
+    id: 22,
+    title: "Barbershops & Salons",
+    icon: "💈",
+    entries: [
+      { name: "Legends Barber", desc: "South Africa's premier nationwide barbershop chain with online booking.", url: "https://legendsbarber.co.za" },
+      { name: "Sorbet Salons & Sorbet Man", desc: "Grooming, haircuts, nails & skincare across SA malls.", url: "https://www.sorbet.co.za" },
+      { name: "Booksy South Africa", desc: "Book local barbers, braiders, nail techs & stylists near your campus.", url: "https://booksy.com/en-za/" },
+      { name: "Fresha South Africa", desc: "Discover & book top-rated barbershops and hair salons near you.", url: "https://www.fresha.com" },
+      { name: "Scar Hair (Cape Town)", desc: "Edgy, creative hair styling in Cape Town CBD.", url: "https://www.scarhair.com" },
+      { name: "The Barbershop Co.", desc: "Classic fades, beard trims & student cuts.", url: "https://thebarbershop.co.za" }
+    ]
+  },
+  {
+    id: 23,
+    title: "Drivers & Learners Licence Booking",
+    icon: "🪪",
+    entries: [
+      { name: "NaTIS Online Services (eNaTIS)", desc: "Official SA portal to book Learner's Licence, Driving Licence & renewals.", url: "https://online.natis.gov.za" },
+      { name: "K53 South Africa Practice Tests", desc: "Free online K53 learner's licence mock tests, road signs & rules.", url: "https://www.k53-test.co.za" },
+      { name: "Arrive Alive K53 Guide", desc: "Official road safety rules, defensive driving & K53 checklist.", url: "https://www.arrivealive.mobi" },
+      { name: "City of Cape Town e-Services (Vehicle/Licence)", desc: "Cape Town municipal motor vehicle & licence renewal portal.", url: "https://eservices.capetown.gov.za" },
+      { name: "RTMC (Road Traffic Management Corporation)", desc: "National road traffic information, booking alerts & licence card status.", url: "https://www.rtmc.co.za" }
+    ]
+  },
+  {
+    id: 24,
+    title: "Driving Schools & Lessons",
+    icon: "🚗",
+    entries: [
+      { name: "AA Driving School (Automobile Association)", desc: "Accredited K53 driving lessons with vetted instructors nationwide.", url: "https://aa.co.za/driving-school/" },
+      { name: "He & She Driver Training", desc: "Well-known K53 Code 8 & Code 10 driving school across Gauteng.", url: "https://www.heandshe.co.za" },
+      { name: "SA Driving Schools Directory", desc: "Find accredited K53 driving schools in your suburb or campus area.", url: "https://www.sadrivingschools.co.za" },
+      { name: "Elwierda Driving School", desc: "Pretoria & Centurion K53 driving lessons & learner's classes.", url: "https://www.elwierda.co.za" },
+      { name: "Cape Town Driving Academy", desc: "Code 8 manual & automatic driving lessons across Cape Town.", url: "https://www.capetowndrivingacademy.co.za" }
+    ]
+  },
+  {
+    id: 25,
+    title: "Car Dealerships",
+    icon: "🚘",
+    entries: [
+      { name: "WeBuyCars", desc: "South Africa's largest used-car supermarket with nationwide warehouses.", url: "https://www.webuycars.co.za" },
+      { name: "AutoTrader South Africa", desc: "Browse new & used cars from verified SA dealers and private sellers.", url: "https://www.autotrader.co.za" },
+      { name: "Cars.co.za", desc: "Compare car prices, reviews, graduate finance & student hatchbacks.", url: "https://www.cars.co.za" },
+      { name: "GetWorth", desc: "Transparent used car buying & selling in Cape Town & Joburg.", url: "https://www.getworth.co.za" },
+      { name: "Motus Select", desc: "Certified pre-owned vehicles backed by SA's largest automotive group.", url: "https://www.motusselect.co.za" },
+      { name: "Suzuki Auto South Africa", desc: "Popular fuel-efficient student cars (Swift, S-Presso, Baleno).", url: "https://www.suzukiauto.co.za" }
+    ]
+  },
+  {
+    id: 26,
+    title: "Properties & Housing",
+    icon: "🏢",
+    entries: [
+      { name: "Property24", desc: "South Africa's #1 property portal for rentals, apartments & communes.", url: "https://www.property24.com" },
+      { name: "Private Property", desc: "Rent flats, garden cottages & shared houses directly from landlords/agents.", url: "https://www.privateproperty.co.za" },
+      { name: "Gumtree South Africa (Property Rentals)", desc: "Rooms to rent, flatshares & short-term student leases.", url: "https://www.gumtree.co.za/s-property-to-rent/v1c9071p1" },
+      { name: "TPN Credit Bureau (Tenant Profile)", desc: "Check your tenant credit profile and rental lease resources.", url: "https://www.tpn.co.za" },
+      { name: "Seeff Properties", desc: "Nationwide residential rental & student investment properties.", url: "https://www.seeff.com" }
+    ]
+  },
+  {
+    id: 27,
+    title: "Expos",
+    icon: "🏛️",
+    entries: [
+      { name: "Comic Con Africa", desc: "Africa's biggest pop culture, gaming, cosplay & tech expo in Joburg.", url: "https://comicconafrica.co.za" },
+      { name: "rAge Expo (Really Awesome Gaming Expo)", desc: "Premier SA video gaming, esports & geek culture exhibition.", url: "https://www.rageexpo.co.za" },
+      { name: "Africa Tech Festival (Cape Town)", desc: "Major African technology, AI & startup conference and exhibition.", url: "https://africatechfestival.com" },
+      { name: "Career Indaba & Student Expos", desc: "Annual career, university & bursary expos for SA students.", url: "https://www.careerindaba.co.za" },
+      { name: "Design Indaba", desc: "World-renowned creative, architecture & design conference in Cape Town.", url: "https://www.designindaba.com" },
+      { name: "Rand Show", desc: "Johannesburg's iconic annual lifestyle, innovation & entertainment expo.", url: "https://randshow.co.za" }
+    ]
+  },
+  {
+    id: 28,
+    title: "Seminars & Webinars",
+    icon: "🎙️",
+    entries: [
+      { name: "Eventbrite South Africa", desc: "Free & ticketed tech talks, career webinars & networking seminars.", url: "https://www.eventbrite.com/d/south-africa/seminars/" },
+      { name: "Quicket Events & Webinars", desc: "SA's leading platform for local workshops, talks & student seminars.", url: "https://www.quicket.co.za" },
+      { name: "Meetup South Africa", desc: "Local coding, startup, design & language exchange meetups in JHB, CPT & DBN.", url: "https://www.meetup.com" },
+      { name: "SAICA Student & Trainee Webinars", desc: "Accounting & commerce webinars for aspiring Chartered Accountants.", url: "https://www.saica.org.za" },
+      { name: "Geekulcha", desc: "South African youth tech community hosting hackathons & tech talks.", url: "https://www.geekulcha.dev" }
+    ]
+  },
+  {
+    id: 29,
+    title: "Gaming",
+    icon: "🎮",
+    entries: [
+      { name: "Steam", desc: "PC gaming store with frequent seasonal sales & free-to-play titles.", url: "https://store.steampowered.com" },
+      { name: "Epic Games Store", desc: "Weekly free PC games plus Fortnite & Rocket League.", url: "https://store.epicgames.com" },
+      { name: "PlayStation Store South Africa", desc: "PS4 & PS5 digital games, PS Plus & ZAR pricing.", url: "https://store.playstation.com/en-za/" },
+      { name: "Xbox South Africa & Game Pass", desc: "PC & Console Game Pass subscriptions in South African Rand.", url: "https://www.xbox.com/en-ZA" },
+      { name: "ACGL (African Cyber Gaming League)", desc: "South African esports tournaments for FIFA/EA FC, COD, Valorant & more.", url: "https://acgl.co.za" },
+      { name: "Mettlestate", desc: "SA esports tournaments, leagues & campus gaming competitions.", url: "https://www.mettlestate.com" }
+    ]
+  },
+  {
+    id: 30,
+    title: "Clothing Stores",
+    icon: "👕",
+    entries: [
+      { name: "Mr Price (MRP)", desc: "Affordable everyday fashion, sneakers & basics with student-friendly prices.", url: "https://www.mrp.com" },
+      { name: "Cotton On South Africa", desc: "Casual streetwear, denim & Varsity Vibe student discounts.", url: "https://cottonon.com/ZA/" },
+      { name: "Superbalist", desc: "South Africa's leading online fashion, sneaker & streetwear store.", url: "https://superbalist.com" },
+      { name: "Bash (TFG - Markham, Sportscene, Foschini)", desc: "Shop Sportscene, Archive, Markham, Relay Jeans & Totalsports in one app.", url: "https://bash.com" },
+      { name: "H&M South Africa", desc: "Trendy basics, interview attire & seasonal fashion.", url: "https://www2.hm.com/en_za/" },
+      { name: "Zara South Africa", desc: "Contemporary smart-casual & formal wear for presentations & interviews.", url: "https://www.zara.com/za/" },
+      { name: "Edgars", desc: "Fashion, beauty & footwear with Thank U rewards.", url: "https://www.edgars.co.za" },
+      { name: "Yaga South Africa", desc: "Safe peer-to-peer second-hand & thrift clothing marketplace in SA.", url: "https://www.yaga.co.za" }
+    ]
+  },
+  {
+    id: 31,
+    title: "Student Productivity Apps",
+    icon: "⚡",
+    entries: [
+      { name: "Notion (Free Education Plus Plan)", desc: "All-in-one notes, assignment tracker & wiki — free with a .ac.za email.", url: "https://www.notion.so/product/notion-for-education" },
+      { name: "Microsoft 365 Education", desc: "Free Word, Excel, PowerPoint & OneDrive for students with a university email.", url: "https://www.microsoft.com/en-za/education/products/office" },
+      { name: "Google Drive & Docs", desc: "Cloud storage, real-time group assignment collaboration & slides.", url: "https://drive.google.com" },
+      { name: "Anki Flashcards", desc: "Spaced-repetition flashcard app essential for medicine, law & languages.", url: "https://apps.ankiweb.net" },
+      { name: "Zotero", desc: "Free reference manager that auto-generates Harvard, APA & IEEE bibliographies.", url: "https://www.zotero.org" },
+      { name: "Forest Focus App", desc: "Gamified Pomodoro study timer to stay off your phone during exams.", url: "https://www.forestapp.cc" },
+      { name: "CamScanner / Adobe Scan", desc: "Turn phone photos of handwritten notes & forms into crisp PDFs.", url: "https://www.adobe.com/acrobat/mobile/scanner-app.html" }
+    ]
+  },
+  {
+    id: 32,
+    title: "Online Courses & Free Learning",
+    icon: "📖",
+    entries: [
+      { name: "Coursera", desc: "University courses & certificates from Google, Meta, UCT & Wits.", url: "https://www.coursera.org" },
+      { name: "edX", desc: "Free online courses from Harvard, MIT, WitsX & global universities.", url: "https://www.edx.org" },
+      { name: "Khan Academy", desc: "100% free video lessons & practice for maths, stats, economics & science.", url: "https://www.khanacademy.org" },
+      { name: "Google Digital Skills for Africa", desc: "Free digital marketing, AI & career readiness certificates.", url: "https://skillshop.exceedlms.com/student/catalog" },
+      { name: "Alison Free Online Courses", desc: "Free certificate & diploma courses across IT, business & health.", url: "https://alison.com" },
+      { name: "Siyavula", desc: "South African open textbooks & adaptive maths/science practice.", url: "https://www.siyavula.com" },
+      { name: "UCT Online High School / GetSmarter", desc: "South African online short courses & skills programmes.", url: "https://www.getsmarter.com" }
+    ]
+  },
+  {
+    id: 33,
+    title: "Cellphone Networks & Data Deals",
+    icon: "📶",
+    entries: [
+      { name: "Vodacom NXT LVL", desc: "Exclusive under-25 youth data bundles, free streaming & discounts.", url: "https://www.vodacom.co.za/vodacom/shopping/nxt-lvl" },
+      { name: "MTN Pulse", desc: "Youth & student data deals, social bundles & lifestyle rewards.", url: "https://www.mtn.co.za/home/pulse/" },
+      { name: "Telkom FreeMe & Student Deals", desc: "Affordable LTE, All-Net bundles & university Wi-Fi access.", url: "https://www.telkom.co.za" },
+      { name: "Rain 5G & 4G", desc: "Contract-free unlimited data SIMs & home routers.", url: "https://www.rain.co.za" },
+      { name: "Cell C", desc: "Prepaid data bundles, WhatsApp combos & eSIM options.", url: "https://www.cellc.co.za" },
+      { name: "Melon Mobile", desc: "Build-your-own flexible monthly mobile data & voice plans via app.", url: "https://www.melonmobile.co.za" },
+      { name: "Afrihost Air Mobile", desc: "Low-cost prepaid data & voice SIMs powered by MTN.", url: "https://www.afrihost.com/airmobile" }
+    ]
+  },
+  {
+    id: 34,
+    title: "Fibre & Wi-Fi Providers",
+    icon: "🌐",
+    entries: [
+      { name: "Afrihost Fibre", desc: "Month-to-month uncapped fibre with zero clawbacks & great support.", url: "https://www.afrihost.com/fibre" },
+      { name: "Webafrica", desc: "Uncapped home & commune fibre across Openserve, Vumatel & Frogfoot.", url: "https://www.webafrica.co.za" },
+      { name: "Cool Ideas", desc: "Low-latency uncapped fibre loved by gamers & remote students.", url: "https://coolideas.co.za" },
+      { name: "MWEB Fibre", desc: "Reliable uncapped fibre packages with free router options.", url: "https://www.mweb.co.za" },
+      { name: "Supersonic", desc: "MTN-backed fibre & 5G home internet solutions.", url: "https://www.supersonic.co.za" },
+      { name: "TooMuchWifi", desc: "Affordable uncapped prepaid community & student Wi-Fi hotspots.", url: "https://www.toomuchwifi.co.za" }
+    ]
+  },
+  {
+    id: 35,
+    title: "Insurance & Medical Aid",
+    icon: "🏥",
+    entries: [
+      { name: "Momentum Health4Me & Ingwe", desc: "Affordable student medical aid options accepted at campus clinics.", url: "https://www.momentum.co.za" },
+      { name: "Discovery Health (KeyCare & Student)", desc: "Medical scheme plans & Vitality student wellness benefits.", url: "https://www.discovery.co.za" },
+      { name: "Bonitas Medical Fund (BonCap)", desc: "Income-based affordable medical aid option for students.", url: "https://www.bonitas.co.za" },
+      { name: "CompCare NetworX", desc: "Popular budget medical aid option for international & local SA students.", url: "https://www.compcare.co.za" },
+      { name: "Naked Insurance", desc: "Instant app-based insurance for laptops, phones & student cars.", url: "https://www.naked.insure" },
+      { name: "Pineapple Insurance", desc: "Snap-a-pic gadget & car insurance with low monthly premiums.", url: "https://www.pineapple.co.za" }
+    ]
+  },
+  {
+    id: 36,
+    title: "Government Services (Home Affairs, SARS, etc.)",
+    icon: "🇿🇦",
+    entries: [
+      { name: "Department of Home Affairs (eHomeAffairs)", desc: "Smart ID card & passport applications and bank branch bookings.", url: "https://ehome.dha.gov.za" },
+      { name: "SARS eFiling", desc: "Register for a tax number, view IRP5s & file tax returns online.", url: "https://www.sarsefiling.co.za" },
+      { name: "SA Gov Services Portal", desc: "Central portal for all South African government forms & services.", url: "https://www.gov.za" },
+      { name: "SAQA (South African Qualifications Authority)", desc: "Verify national & foreign qualifications and NQF levels.", url: "https://www.saqa.org.za" },
+      { name: "CIPC (BizPortal)", desc: "Register a student side-hustle company (Pty Ltd) in 1 day.", url: "https://www.bizportal.gov.za" },
+      { name: "IEC (Electoral Commission of SA)", desc: "Check voter registration status & register to vote online.", url: "https://registertovote.elections.org.za" }
+    ]
+  },
+  {
+    id: 37,
+    title: "Mental Health & Student Support",
+    icon: "💚",
+    entries: [
+      { name: "SADAG (South African Depression and Anxiety Group)", desc: "24/7 free mental health counselling & crisis helplines (0800 567 567).", url: "https://www.sadag.org" },
+      { name: "Higher Health (24/7 Student Helpline)", desc: "Free 24-hour mental health & wellness toll-free helpline for all SA tertiary students (0800 36 36 36).", url: "https://higherhealth.ac.za" },
+      { name: "Lifeline South Africa", desc: "Free confidential emotional support & trauma counselling (0861 322 322).", url: "https://lifelinesa.co.za" },
+      { name: "Panda Mental Health App", desc: "South African mental wellness app with free support forests & chat.", url: "https://www.joinpanda.com" },
+      { name: "Headspace (Student Plan)", desc: "Guided meditation, sleep & exam stress relief.", url: "https://www.headspace.com/studentplan" }
+    ]
+  },
+  {
+    id: 38,
+    title: "Gyms & Fitness",
+    icon: "🏋️",
+    entries: [
+      { name: "Virgin Active South Africa (Youth / Student)", desc: "Discounted under-26 & student memberships at clubs nationwide.", url: "https://www.virginactive.co.za" },
+      { name: "Planet Fitness South Africa", desc: "Affordable monthly gym memberships & campus-adjacent clubs.", url: "https://www.planetfitness.co.za" },
+      { name: "Zone Fitness", desc: "Budget-friendly gyms across Cape Town, Gauteng & KZN.", url: "https://www.zonefitness.co.za" },
+      { name: "Moove Motion Fitness Club", desc: "Modern fitness clubs in Pretoria, Joburg & Cape Town.", url: "https://www.moovemotion.co.za" },
+      { name: "Nike Training Club (Free App)", desc: "100% free guided home & dorm workouts with zero equipment.", url: "https://www.nike.com/za/ntc-app" },
+      { name: "parkrun South Africa", desc: "Free weekly Saturday 5km community runs across SA parks.", url: "https://www.parkrun.co.za" }
+    ]
+  },
+  {
+    id: 39,
+    title: "Entertainment & Streaming",
+    icon: "🎬",
+    entries: [
+      { name: "Showmax South Africa", desc: "Local SA series, Premier League mobile streaming & international hits.", url: "https://www.showmax.com" },
+      { name: "Netflix South Africa", desc: "Movies, series & documentaries with Mobile-only budget plans.", url: "https://www.netflix.com/za/" },
+      { name: "DStv Stream", desc: "Live SuperSport, news & entertainment channels without a dish.", url: "https://www.dstv.com" },
+      { name: "Prime Video South Africa", desc: "Amazon Originals & movies at an affordable monthly ZAR price.", url: "https://www.primevideo.com" },
+      { name: "Disney+ South Africa", desc: "Marvel, Star Wars, Pixar, National Geographic & Hulu content.", url: "https://www.apps.disneyplus.com/za" },
+      { name: "SABC+", desc: "Free South African live TV channels, sports & local dramas.", url: "https://www.sabcplus.com" },
+      { name: "eVOD", desc: "Free & premium local South African movies and series.", url: "https://watch.evod.co.za" }
+    ]
+  },
+  {
+    id: 40,
+    title: "Music & Podcasts",
+    icon: "🎧",
+    entries: [
+      { name: "Spotify Premium Student (SA)", desc: "50% off Spotify Premium for verified South African university students.", url: "https://www.spotify.com/za-en/student/" },
+      { name: "Apple Music Student (SA)", desc: "Discounted Apple Music + free Apple TV+ for eligible SA students.", url: "https://music.apple.com" },
+      { name: "YouTube Music", desc: "Amapiano mixes, live sets & background play with YouTube Premium Student.", url: "https://music.youtube.com" },
+      { name: "SoundCloud", desc: "Discover underground SA DJ mixes, Amapiano & independent artists.", url: "https://soundcloud.com" },
+      { name: "Podcast and Chill Network", desc: "Top South African pop culture & entertainment podcasts.", url: "https://www.youtube.com/@PodcastandChillwithMacG" },
+      { name: "CliffCentral / iono.fm", desc: "South African talk radio & independent local podcast directory.", url: "https://iono.fm" }
+    ]
+  },
+  {
+    id: 41,
+    title: "Cinemas & Events",
+    icon: "🎟️",
+    entries: [
+      { name: "Ster-Kinekor (SK Club & Student Discounts)", desc: "Half-price Tuesdays & student movie ticket discounts nationwide.", url: "https://www.sterkinekor.com" },
+      { name: "Nu Metro Cinemas", desc: "4DX, Xtreme & VIP cinema experiences with rewards discounts.", url: "https://numetro.co.za" },
+      { name: "The Galileo Open Air Cinema (Cape Town)", desc: "Outdoor picnic movie screenings under the stars in Cape Town.", url: "https://thegalileo.co.za" },
+      { name: "Webtickets", desc: "Book concerts, comedy shows, theatre & museum tickets across SA.", url: "https://www.webtickets.co.za" },
+      { name: "Ticketmaster South Africa", desc: "Major international concerts, rugby & stadium events.", url: "https://www.ticketmaster.co.za" }
+    ]
+  },
+  {
+    id: 42,
+    title: "Online Shopping",
+    icon: "📦",
+    entries: [
+      { name: "Takealot.com", desc: "South Africa's #1 online store with free pickup points nationwide.", url: "https://www.takealot.com" },
+      { name: "Amazon South Africa", desc: "Fast local delivery on books, tech, home essentials & beauty.", url: "https://www.amazon.co.za" },
+      { name: "Bob Shop (formerly bidorbuy)", desc: "Online marketplace for new & second-hand bargains across SA.", url: "https://www.bobshop.co.za" },
+      { name: "OneDayOnly", desc: "Daily 24-hour flash deals up to 70% off tech, fashion & snacks.", url: "https://www.onedayonly.co.za" },
+      { name: "Loot.co.za", desc: "Online shopping for books, electronics, gaming & stationery.", url: "https://www.loot.co.za" },
+      { name: "Zando", desc: "Online footwear, clothing & accessories store.", url: "https://www.zando.co.za" }
+    ]
+  },
+  {
+    id: 43,
+    title: "Electronics Retailers",
+    icon: "💻",
+    entries: [
+      { name: "Incredible Connection", desc: "Student laptops, external hard drives, routers & tech support.", url: "https://www.incredible.co.za" },
+      { name: "Evetech", desc: "Custom PCs, gaming & student laptops at competitive prices.", url: "https://www.evetech.co.za" },
+      { name: "Wootware", desc: "Trusted Cape Town-based PC hardware & laptop retailer.", url: "https://www.wootware.co.za" },
+      { name: "Computer Mania", desc: "Laptops, accessories & repairs with branches across SA.", url: "https://computermania.co.za" },
+      { name: "HiFi Corp", desc: "Budget TVs, monitors, speakers & res appliances.", url: "https://www.hificorp.co.za" },
+      { name: "iStore Pre-Owned", desc: "Certified refurbished iPhones, iPads & MacBooks with warranty.", url: "https://istorepreowned.co.za" }
+    ]
+  },
+  {
+    id: 44,
+    title: "Furniture & Home Essentials",
+    icon: "🛋️",
+    entries: [
+      { name: "Mr Price Home (MRP Home)", desc: "Affordable bedding, desk lamps, kitchenware & res decor.", url: "https://www.mrphome.com" },
+      { name: "Sheet Street", desc: "Budget-friendly duvets, pillows, towels & curtains for student rooms.", url: "https://www.sheetstreet.com" },
+      { name: "PEP Home", desc: "Ultra-affordable dorm essentials, mugs, hangers & storage.", url: "https://www.pepstores.com/collections/pep-home" },
+      { name: "@home (TFG)", desc: "Modern kitchen appliances, kettles, air fryers & bedding.", url: "https://bash.com/home" },
+      { name: "Decofurn", desc: "Flat-pack study desks, office chairs & bookshelves at factory prices.", url: "https://www.decofurnsa.co.za" },
+      { name: "Game Stores", desc: "Mini-fridges, microwaves, kettles & study furniture.", url: "https://www.game.co.za" }
+    ]
+  },
+  {
+    id: 45,
+    title: "Pharmacies & Clinics",
+    icon: "💊",
+    entries: [
+      { name: "Clicks & Clicks Clinics", desc: "Prescriptions, toiletries, ClubCard points & affordable clinic consultations.", url: "https://clicks.co.za" },
+      { name: "Dis-Chem Pharmacies & Wellness Clinics", desc: "Full pharmacy, vitamins, health screenings & student toiletries.", url: "https://www.dischem.co.za" },
+      { name: "Medirite Pharmacy (Shoprite/Checkers)", desc: "Convenient in-store pharmacies with affordable generic medicines.", url: "https://www.medirite.co.za" },
+      { name: "Unjani Clinics", desc: "Affordable nurse-led primary healthcare clinics across SA communities.", url: "https://www.unjaniclinic.co.za" },
+      { name: "Marie Stopes South Africa", desc: "Confidential sexual & reproductive health clinics nationwide.", url: "https://www.mariestopes.org.za" }
+    ]
+  },
+  {
+    id: 46,
+    title: "Flights & Travel Booking",
+    icon: "✈️",
+    entries: [
+      { name: "FlySafair", desc: "South Africa's most punctual low-cost domestic airline.", url: "https://www.flysafair.co.za" },
+      { name: "Lift Airline", desc: "Flexible domestic flights between Joburg, Cape Town & Durban.", url: "https://www.lift.co.za" },
+      { name: "Airlink", desc: "Regional flights connecting smaller SA university towns (Bloem, PE, Polokwane).", url: "https://www.flyairlink.com" },
+      { name: "Travelstart South Africa", desc: "Compare & book cheap domestic and international flights in ZAR.", url: "https://www.travelstart.co.za" },
+      { name: "Booking.com", desc: "Hostels, guesthouses & holiday accommodation across South Africa.", url: "https://www.booking.com" },
+      { name: "LekkeSlaap", desc: "South African accommodation booking site with instant EFT options.", url: "https://www.lekkeslaap.co.za" }
+    ]
+  },
+  {
+    id: 47,
+    title: "Money & Budgeting Apps",
+    icon: "📊",
+    entries: [
+      { name: "22seven by Old Mutual", desc: "Free South African budgeting app that links all your SA bank accounts.", url: "https://www.22seven.com" },
+      { name: "Vault22", desc: "Personal finance & automated expense categorisation built for SA.", url: "https://www.vault22.io" },
+      { name: "EasyEquities", desc: "Invest in SA & US fractional shares and ETFs from as little as R5.", url: "https://www.easyequities.co.za" },
+      { name: "Splitwise", desc: "Split rent, Wi-Fi & grocery bills fairly with flatmates.", url: "https://www.splitwise.com" },
+      { name: "Varsity Vibe", desc: "South Africa's #1 student discount app (up to 50% off food, fashion & tech).", url: "https://varsityvibe.co.za" }
+    ]
+  },
+  {
+    id: 48,
+    title: "Side Hustles & Freelancing",
+    icon: "💡",
+    entries: [
+      { name: "Teach Me 2", desc: "Become a private tutor for high school or university subjects across SA.", url: "https://www.teachme2.com" },
+      { name: "BrightSparkz Tutors", desc: "Flexible part-time tutoring jobs in JHB, PTA, CPT & DBN.", url: "https://www.brightsparkz.co.za" },
+      { name: "Upwork", desc: "Global freelance marketplace for writing, design, coding & virtual assistance.", url: "https://www.upwork.com" },
+      { name: "Fiverr", desc: "Sell digital services (logos, video editing, CVs, tutoring) globally.", url: "https://www.fiverr.com" },
+      { name: "NoSweat / Kandua", desc: "Connect with local South African customers for skilled services & gigs.", url: "https://kandua.com" },
+      { name: "SweepSouth", desc: "Flexible home cleaning & outdoor work opportunities in major SA cities.", url: "https://sweepsouth.com" }
+    ]
+  },
+  {
+    id: 49,
+    title: "Coding & Tech Learning",
+    icon: "👨‍💻",
+    entries: [
+      { name: "WeThinkCode_", desc: "Tuition-free, peer-to-peer software engineering academy in JHB, CPT & DBN.", url: "https://wethinkcode.co.za" },
+      { name: "freeCodeCamp", desc: "100% free full-stack web dev, Python & data science certifications.", url: "https://www.freecodecamp.org" },
+      { name: "The Odin Project", desc: "Free, open-source full-stack JavaScript & Ruby curriculum.", url: "https://www.theodinproject.com" },
+      { name: "CS50 by Harvard", desc: "World-famous free introduction to Computer Science & Python.", url: "https://cs50.harvard.edu/x/" },
+      { name: "ALX Africa", desc: "Tech, cloud computing, data analytics & AI career accelerators.", url: "https://www.alxafrica.com" },
+      { name: "GitHub Student Developer Pack", desc: "Free Copilot, domains, cloud credits & dev tools with your student email.", url: "https://education.github.com/pack" },
+      { name: "W3Schools", desc: "Quick interactive tutorials & references for HTML, CSS, JS, SQL & Python.", url: "https://www.w3schools.com" }
+    ]
+  },
+  {
+    id: 50,
+    title: "Emergency & Safety Contacts",
+    icon: "🚨",
+    entries: [
+      { name: "National Emergency (From Cellphone): 112", desc: "Toll-free emergency number from any SA mobile network (even without airtime).", url: "tel:112" },
+      { name: "SAPS Flying Squad / Police Emergency: 10111", desc: "South African Police Service nationwide emergency response.", url: "tel:10111" },
+      { name: "Ambulance & Fire Brigade: 10177", desc: "National public medical ambulance & fire emergency number.", url: "tel:10177" },
+      { name: "Netcare 911 Emergency: 082 911", desc: "24/7 private emergency medical response across South Africa.", url: "https://www.netcare.co.za/Netcare-911" },
+      { name: "ER24 Emergency: 084 124", desc: "24-hour private ambulance & emergency medical assistance.", url: "https://www.er24.co.za" },
+      { name: "GBV Command Centre: 0800 428 428", desc: "24/7 toll-free Gender-Based Violence support & crisis helpline.", url: "https://gbv.org.za" },
+      { name: "Namola Safety App", desc: "Free South African GPS emergency response & panic button app.", url: "https://www.namola.com" },
+      { name: "Childline South Africa: 116", desc: "Free 24/7 crisis & counselling helpline.", url: "https://www.childlinesa.org.za" }
+    ]
+  },
+  {
+    id: 51,
+    title: "Campus Clubs, Sports & Volunteering",
+    icon: "🤝",
+    entries: [
+      { name: "ENACTUS South Africa", desc: "University student social entrepreneurship & community impact teams.", url: "https://enactusza.org" },
+      { name: "USSA (University Sport South Africa)", desc: "National governing body for university sports & Varsity Cup.", url: "https://www.ussa.org.za" },
+      { name: "SHAWCO (UCT Student Health & Welfare)", desc: "Student-run community outreach & education volunteer organisation.", url: "https://www.shawco.org" },
+      { name: "Forgood South Africa", desc: "Find volunteering & community service projects near your campus.", url: "https://www.forgood.co.za" },
+      { name: "Golden Key International Honour Society (SA)", desc: "Academic recognition & leadership society for top 15% university students.", url: "https://www.goldenkey.org" }
+    ]
+  },
+  {
+    id: 52,
+    title: "Printing, Courier & Campus Logistics",
+    icon: "🖨️",
+    entries: [
+      { name: "PostNet South Africa", desc: "Thesis binding, laminating, printing & PostNet2PostNet courier nationwide.", url: "https://www.postnet.co.za" },
+      { name: "Pargo Click & Collect", desc: "Collect online parcels at convenient campus & spaza pickup points.", url: "https://pargo.co.za" },
+      { name: "The Courier Guy / PUDO Lockers", desc: "24/7 smart locker parcel drop-off and collection across SA.", url: "https://www.pudo.co.za" },
+      { name: "Jetline Print on Demand", desc: "High-speed dissertation printing, posters & business cards.", url: "https://www.jetline.co.za" }
+    ]
+  }
+];
+
+    // =========================================================================
+    // 2. STATE & SUPABASE CLIENT INITIALIZATION
+    // =========================================================================
+    const STORAGE_KEY_URL = 'arcknowledge_sb_url';
+    const STORAGE_KEY_ANON = 'arcknowledge_sb_anon';
+    const UNLOCK_FEE = 21.00;
+
+    let supabaseClient = null;
+    let currentUser = null;
+    let currentProfile = null;
+    let adminSessionPassword = null;
+    let adminCache = {
+      profiles: [],
+      deposits: [],
+      withdrawals: [],
+      transactions: [],
+      total_earnings: 0
+    };
+    let selectedProofFile = null;
+    let authMode = 'signin';
+    let deferredInstallPrompt = null;
+
+    function getSavedSupabaseConfig() {
+      return {
+        url: localStorage.getItem(STORAGE_KEY_URL) || '',
+        anonKey: localStorage.getItem(STORAGE_KEY_ANON) || ''
+      };
+    }
+
+    function initSupabaseClient() {
+      const { url, anonKey } = getSavedSupabaseConfig();
+      if (url && anonKey && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(url, anonKey);
+          return true;
+        } catch (err) {
+          console.error('Supabase init failed:', err);
+          supabaseClient = null;
+        }
+      }
+      return false;
+    }
+
+    // =========================================================================
+    // 3. PWA SERVICE WORKER & MANIFEST REGISTRATION
+    // =========================================================================
+    function initPWA() {
+      const manifest = {
+        name: "Arcknowledge - Student Kit SA",
+        short_name: "Student Kit SA",
+        start_url: "./",
+        display: "standalone",
+        background_color: "#f8fafc",
+        theme_color: "#0f172a",
+        icons: [
+          {
+            src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230f172a'/%3E%3Cpath d='M256 96L76 184l180 88 180-88-180-88zm-112 128v92c0 46 50 82 112 82s112-36 112-82v-92l-112 56-112-56z' fill='%2310b981'/%3E%3C/svg%3E",
+            sizes: "512x512",
+            type: "image/svg+xml"
+          }
+        ]
+      };
+      const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      const manifestLink = document.createElement('link');
+      manifestLink.rel = 'manifest';
+      manifestLink.href = URL.createObjectURL(manifestBlob);
+      document.head.appendChild(manifestLink);
+
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        const swCode = `
+          self.addEventListener('install', e => self.skipWaiting());
+          self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+          self.addEventListener('fetch', e => {});
+        `;
+        const swBlob = new Blob([swCode], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        document.getElementById('pwaBar').classList.add('visible');
+      });
+
+      document.getElementById('pwaInstallBtn').addEventListener('click', async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          showToast('Installing Arcknowledge - Student Kit SA...', 'success');
+        }
+        deferredInstallPrompt = null;
+        document.getElementById('pwaBar').classList.remove('visible');
+      });
+
+      document.getElementById('pwaDismissBtn').addEventListener('click', () => {
+        document.getElementById('pwaBar').classList.remove('visible');
+      });
+    }
+
+    // =========================================================================
+    // 4. UI HELPERS: TOASTS, MODALS, NAVIGATION, DROPDOWNS
+    // =========================================================================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? '✅' : type === 'error' ? '⚠️' : 'ℹ️';
+      toast.innerHTML = `<span>${icon}</span><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s';
+        setTimeout(() => toast.remove(), 260);
+      }, 3600);
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatZAR(amount) {
+      const num = Number(amount || 0);
+      return 'R' + num.toFixed(2);
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied: ${text}`, 'success');
+      }).catch(() => {
+        showToast('Could not copy automatically. Please copy manually.', 'error');
+      });
+    }
+
+    function openModal(title, htmlContent) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = htmlContent;
+      document.getElementById('globalModal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('globalModal').classList.remove('open');
+    }
+
+    // Dropdown toggles
+    document.getElementById('walletNavBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('burgerMenu').classList.remove('open');
+      document.getElementById('walletDropdown').classList.toggle('open');
+    });
+
+    document.getElementById('burgerBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('walletDropdown').classList.remove('open');
+      document.getElementById('burgerMenu').classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      document.getElementById('walletDropdown').classList.remove('open');
+      document.getElementById('burgerMenu').classList.remove('open');
+    });
+
+    function navigateTo(viewName) {
+      document.getElementById('walletDropdown').classList.remove('open');
+      document.getElementById('burgerMenu').classList.remove('open');
+
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.add('active');
+
+      if (viewName === 'profile') renderProfileView();
+      if (viewName === 'transactions') loadUserTransactions();
+      if (viewName === 'withdraw') {
+        document.getElementById('withdrawAvailBalance').textContent = formatZAR(currentProfile?.wallet_balance || 0);
+      }
+      if (viewName === 'admin') {
+        const cfg = getSavedSupabaseConfig();
+        document.getElementById('sbUrlInput').value = cfg.url;
+        document.getElementById('sbAnonKeyInput').value = cfg.anonKey;
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function requireAuthAndNavigate(viewName) {
+      if (!currentUser) {
+        showToast('Please sign in or create an account first.', 'info');
+        navigateTo('auth');
+        return;
+      }
+      navigateTo(viewName);
+    }
+
+    function handleWalletAction(action) {
+      document.getElementById('walletDropdown').classList.remove('open');
+      if (!currentUser) {
+        showToast('Sign in to access your wallet.', 'info');
+        navigateTo('auth');
+        return;
+      }
+      navigateTo(action);
+    }
+
+    // =========================================================================
+    // 5. AUTHENTICATION & PROFILE SYNC
+    // =========================================================================
+    function switchAuthMode(mode) {
+      authMode = mode;
+      const isSignUp = mode === 'signup';
+      document.getElementById('signUpNameGroup').style.display = isSignUp ? 'block' : 'none';
+      document.getElementById('authName').required = isSignUp;
+      document.getElementById('authHeading').textContent = isSignUp ? 'Create Student Account' : 'Welcome back';
+      document.getElementById('authSubheading').textContent = isSignUp
+        ? 'Register to manage your R21.00 wallet and unlock all 52 Student Kit SA categories.'
+        : 'Sign in to access your wallet and Student Kit SA.';
+      document.getElementById('authSubmitBtn').textContent = isSignUp ? 'Create Account' : 'Sign In';
+
+      document.getElementById('tabSignIn').className = isSignUp ? 'btn' : 'btn btn-primary';
+      document.getElementById('tabSignIn').style.background = isSignUp ? 'transparent' : '';
+      document.getElementById('tabSignIn').style.color = isSignUp ? 'var(--ink)' : '';
+
+      document.getElementById('tabSignUp').className = isSignUp ? 'btn btn-primary' : 'btn';
+      document.getElementById('tabSignUp').style.background = isSignUp ? '' : 'transparent';
+      document.getElementById('tabSignUp').style.color = isSignUp ? '' : 'var(--ink)';
+      hideError('authError');
+    }
+
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    function hideError(id) {
+      const el = document.getElementById(id);
+      el.textContent = '';
+      el.classList.remove('visible');
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      hideError('authError');
+
+      if (!supabaseClient) {
+        showError('authError', 'Service connection is not configured yet. Please contact the administrator.');
+        return;
+      }
+
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const fullName = document.getElementById('authName').value.trim();
+      const btn = document.getElementById('authSubmitBtn');
+      const origText = btn.textContent;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Please wait...';
+
+      try {
+        if (authMode === 'signup') {
+          if (!fullName) throw new Error('Please enter your full name.');
+          const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName }
+            }
+          });
+          if (error) throw error;
+
+          if (data.user && !data.session) {
+            showToast('Account created! Please check your email to confirm before signing in.', 'success');
+            switchAuthMode('signin');
+          } else if (data.session) {
+            currentUser = data.user;
+            await fetchUserProfile();
+            showToast('Welcome to Arcknowledge - Student Kit SA!', 'success');
+            navigateTo('kit');
+          }
+        } else {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          currentUser = data.user;
+          await fetchUserProfile();
+          showToast('Signed in successfully.', 'success');
+          navigateTo('kit');
+        }
+      } catch (err) {
+        showError('authError', err.message || 'Authentication failed.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = origText;
+      }
+    }
+
+    async function handleMenuAuthClick() {
+      document.getElementById('burgerMenu').classList.remove('open');
+      if (currentUser && supabaseClient) {
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        currentProfile = null;
+        updateAuthUI();
+        renderCategories();
+        showToast('Signed out.', 'info');
+        navigateTo('kit');
+      } else {
+        navigateTo('auth');
+      }
+    }
+
+    async function fetchUserProfile() {
+      if (!supabaseClient || !currentUser) return;
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (!error && data) {
+        currentProfile = data;
+      } else {
+        currentProfile = {
+          id: currentUser.id,
+          full_name: currentUser.user_metadata?.full_name || currentUser.email,
+          email: currentUser.email,
+          wallet_balance: 0,
+          is_unlocked: false
+        };
+      }
+      updateAuthUI();
+      renderCategories();
+    }
+
+    function updateAuthUI() {
+      const bal = currentProfile ? Number(currentProfile.wallet_balance || 0) : 0;
+      const isUnlocked = Boolean(currentProfile?.is_unlocked);
+
+      document.getElementById('navBalanceText').textContent = formatZAR(bal);
+
+      const menuAuthBtn = document.getElementById('menuAuthBtn');
+      if (currentUser) {
+        menuAuthBtn.innerHTML = '<span>🚪</span> Sign Out';
+        menuAuthBtn.classList.add('danger');
+      } else {
+        menuAuthBtn.innerHTML = '<span>🔑</span> Sign In / Register';
+        menuAuthBtn.classList.remove('danger');
+      }
+
+      // Hero Unlock Bar & Badge
+      const heroLockBar = document.getElementById('heroLockBar');
+      const kitBadge = document.getElementById('kitStatusBadge');
+
+      if (isUnlocked) {
+        heroLockBar.innerHTML = `
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:1.3rem;">✅</span>
+            <div>
+              <div style="font-weight:800;font-size:0.95rem;color:#34d399;">Student Kit Unlocked (Paid R21.00)</div>
+              <div style="font-size:0.8rem;color:#cbd5e1;">All 52 categories and South African student resources are active.</div>
+            </div>
+          </div>
+        `;
+        kitBadge.textContent = 'Status: Unlocked (Paid R21.00)';
+        kitBadge.style.background = 'var(--emerald-light)';
+        kitBadge.style.color = 'var(--emerald-dark)';
+        kitBadge.style.borderColor = '#a7f3d0';
+      } else {
+        heroLockBar.innerHTML = `
+          <div style="flex:1;min-width:200px;">
+            <div style="font-weight:700;font-size:0.95rem;">🔒 Student Kit Locked</div>
+            <div style="font-size:0.8rem;color:#cbd5e1;">
+              Pay a once-off R21.00 fee from your wallet to unlock all 52 categories forever.
+            </div>
+          </div>
+          <button id="unlockKitBtn" class="unlock-btn-hero" type="button" onclick="handleUnlockKit()">
+            <span>🔓</span> Unlock Student Kit – R21.00
+          </button>
+        `;
+        kitBadge.textContent = 'Status: Locked';
+        kitBadge.style.background = 'var(--red-light)';
+        kitBadge.style.color = 'var(--red)';
+        kitBadge.style.borderColor = '#fecaca';
+      }
+    }
+
+    function renderProfileView() {
+      if (!currentProfile) return;
+      document.getElementById('profileName').textContent = currentProfile.full_name || '—';
+      document.getElementById('profileEmail').textContent = currentProfile.email || '—';
+      document.getElementById('profileBalance').textContent = formatZAR(currentProfile.wallet_balance || 0);
+
+      const statusEl = document.getElementById('profileStatus');
+      const unlockBtn = document.getElementById('profileUnlockBtn');
+      if (currentProfile.is_unlocked) {
+        statusEl.innerHTML = '<span class="badge badge-unlocked">Unlocked (Paid R21.00)</span>';
+        unlockBtn.style.display = 'none';
+      } else {
+        statusEl.innerHTML = '<span class="badge badge-locked">Locked</span>';
+        unlockBtn.style.display = 'inline-flex';
+      }
+    }
+
+    // =========================================================================
+    // 6. UNLOCK STUDENT KIT (R21.00 FROM WALLET)
+    // =========================================================================
+    async function handleUnlockKit() {
+      if (!currentUser) {
+        showToast('Create an account or sign in to unlock Student Kit SA.', 'info');
+        navigateTo('auth');
+        return;
+      }
+
+      if (!supabaseClient) {
+        showToast('Service connection not configured.', 'error');
+        return;
+      }
+
+      const bal = Number(currentProfile?.wallet_balance || 0);
+      if (bal < UNLOCK_FEE) {
+        showToast(`Insufficient balance (${formatZAR(bal)}). Deposit at least R21.00 first.`, 'info');
+        navigateTo('deposit');
+        return;
+      }
+
+      const btn = document.getElementById('unlockKitBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Unlocking...';
+      }
+
+      try {
+        const { data, error } = await supabaseClient.rpc('unlock_student_kit');
+        if (error) throw error;
+
+        if (!data.success) {
+          if (data.code === 'INSUFFICIENT_FUNDS') {
+            showToast(data.error, 'info');
+            navigateTo('deposit');
+            return;
+          }
+          throw new Error(data.error || 'Could not unlock Student Kit.');
+        }
+
+        await fetchUserProfile();
+        renderProfileView();
+        showToast('🎉 Student Kit SA Unlocked! All 52 categories are now open.', 'success');
+      } catch (err) {
+        showToast(err.message || 'Unlock failed.', 'error');
+      } finally {
+        updateAuthUI();
+      }
+    }
+
+    // =========================================================================
+    // 7. RENDER 52 STUDENT KIT ACCORDIONS & PER-CATEGORY SEARCH
+    // =========================================================================
+    const openAccordions = new Set();
+    const categorySearchTerms = {};
+
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      const globalTerm = (document.getElementById('globalCategorySearch').value || '').trim().toLowerCase();
+      const isUnlocked = Boolean(currentProfile?.is_unlocked);
+
+      const padlockSvg = `
+        <span class="red-padlock" title="Locked — Pay R21.00 once-off to unlock">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </span>
+      `;
+
+      const filteredCats = STUDENT_KIT_CATEGORIES.filter(cat => {
+        if (!globalTerm) return true;
+        if (cat.title.toLowerCase().includes(globalTerm)) return true;
+        return cat.entries.some(e =>
+          e.name.toLowerCase().includes(globalTerm) ||
+          e.desc.toLowerCase().includes(globalTerm)
+        );
+      });
+
+      if (filteredCats.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="text-align:center;color:var(--ink-muted);">
+            No categories or resources matched "<strong>${escapeHtml(globalTerm)}</strong>".
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredCats.map(cat => {
+        const isOpen = openAccordions.has(cat.id);
+        const localTerm = (categorySearchTerms[cat.id] || '').trim().toLowerCase();
+        const effectiveTerm = localTerm || globalTerm;
+
+        const matchingEntries = cat.entries.filter(entry => {
+          if (!effectiveTerm) return true;
+          return entry.name.toLowerCase().includes(effectiveTerm) ||
+                 entry.desc.toLowerCase().includes(effectiveTerm);
+        });
+
+        let bodyHtml = '';
+        if (isUnlocked) {
+          const cardsHtml = matchingEntries.length
+            ? matchingEntries.map(entry => `
+                <div class="entry-card">
+                  <div>
+                    <div class="entry-name">${escapeHtml(entry.name)}</div>
+                    <div class="entry-desc">${escapeHtml(entry.desc)}</div>
+                  </div>
+                  <a class="entry-link" href="${escapeHtml(entry.url)}" target="_blank" rel="noopener noreferrer">
+                    Open Resource ↗
+                  </a>
+                </div>
+              `).join('')
+            : `<div style="font-size:0.85rem;color:var(--ink-light);padding:8px 0;">No entries match "${escapeHtml(localTerm)}".</div>`;
+
+          bodyHtml = `
+            <input
+              type="search"
+              class="cat-search-bar"
+              placeholder="Search inside ${escapeHtml(cat.title)}..."
+              value="${escapeHtml(categorySearchTerms[cat.id] || '')}"
+              oninput="handleCategorySearch(${cat.id}, this.value)"
+            />
+            <div class="entries-grid">${cardsHtml}</div>
+          `;
+        } else {
+          // Locked view: search bar filters preview titles without exposing links
+          const previewChips = matchingEntries.slice(0, 6).map(e =>
+            `<span class="locked-chip">🔒 ${escapeHtml(e.name)}</span>`
+          ).join('');
+
+          bodyHtml = `
+            <input
+              type="search"
+              class="cat-search-bar"
+              placeholder="Search inside ${escapeHtml(cat.title)}..."
+              value="${escapeHtml(categorySearchTerms[cat.id] || '')}"
+              oninput="handleCategorySearch(${cat.id}, this.value)"
+            />
+            <div class="locked-gate">
+              <h4>🔒 ${escapeHtml(cat.title)} (${cat.entries.length} Verified Resources)</h4>
+              <p>Unlock Student Kit SA for a once-off fee of <strong>R21.00</strong> to reveal all direct links, portals, and app links.</p>
+              <div class="locked-preview-list">${previewChips}</div>
+              <button type="button" class="btn btn-emerald btn-sm" onclick="handleUnlockKit()">
+                🔓 Unlock Student Kit – R21.00
+              </button>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="accordion-item ${isOpen ? 'open' : ''}" id="acc-item-${cat.id}">
+            <button type="button" class="accordion-header" onclick="toggleAccordion(${cat.id})">
+              <div class="acc-left">
+                <span class="acc-num">${String(cat.id).padStart(2, '0')}</span>
+                <span class="acc-icon">${cat.icon}</span>
+                <span class="acc-title">${escapeHtml(cat.title)}</span>
+              </div>
+              <div class="acc-right">
+                <span class="acc-count">${cat.entries.length}</span>
+                ${isUnlocked ? '' : padlockSvg}
+                <span class="acc-chevron">▼</span>
+              </div>
+            </button>
+            <div class="accordion-body">${bodyHtml}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleAccordion(catId) {
+      if (openAccordions.has(catId)) {
+        openAccordions.delete(catId);
+      } else {
+        openAccordions.add(catId);
+      }
+      renderCategories();
+    }
+
+    function handleCategorySearch(catId, value) {
+      categorySearchTerms[catId] = value;
+      renderCategories();
+      const item = document.getElementById(`acc-item-${catId}`);
+      if (item) {
+        const input = item.querySelector('.cat-search-bar');
+        if (input) {
+          input.focus();
+          input.setSelectionRange(value.length, value.length);
+        }
+      }
+    }
+
+    // =========================================================================
+    // 8. WALLET: DEPOSIT & PROOF OF PAYMENT UPLOAD
+    // =========================================================================
+    const ALLOWED_PROOF_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+    const MAX_PROOF_BYTES = 10 * 1024 * 1024; // 10MB
+
+    function handleProofFileSelected(e) {
+      hideError('depositError');
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!ALLOWED_PROOF_TYPES.includes(file.type)) {
+        showError('depositError', 'Invalid file type. Only PNG, JPG, JPEG, and PDF files are accepted.');
+        clearProofFile();
+        return;
+      }
+
+      if (file.size > MAX_PROOF_BYTES) {
+        showError('depositError', 'File is too large. Maximum allowed size is 10MB.');
+        clearProofFile();
+        return;
+      }
+
+      selectedProofFile = file;
+      document.getElementById('proofFileName').textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      const visual = document.getElementById('proofVisualPreview');
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          visual.innerHTML = `<img src="${ev.target.result}" alt="Proof of payment preview" />`;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        visual.innerHTML = `<div style="margin-top:8px;padding:10px;background:var(--surface-alt);border-radius:8px;font-size:0.82rem;font-weight:600;">📄 PDF Document Ready for Upload</div>`;
+      }
+
+      document.getElementById('proofPreviewBox').classList.add('visible');
+      document.getElementById('donePaymentBtn').disabled = false;
+    }
+
+    function clearProofFile() {
+      selectedProofFile = null;
+      document.getElementById('proofFileInput').value = '';
+      document.getElementById('proofPreviewBox').classList.remove('visible');
+      document.getElementById('proofVisualPreview').innerHTML = '';
+      document.getElementById('donePaymentBtn').disabled = true;
+    }
+
+    async function submitDeposit() {
+      hideError('depositError');
+      if (!currentUser || !supabaseClient) {
+        showError('depositError', 'Please sign in first.');
+        return;
+      }
+      if (!selectedProofFile) {
+        showError('depositError', 'Please upload a Proof of Payment file first.');
+        return;
+      }
+
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      if (isNaN(amount) || amount < 1) {
+        showError('depositError', 'Please enter a valid deposit amount (at least R1.00).');
+        return;
+      }
+
+      const btn = document.getElementById('donePaymentBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Uploading Proof...';
+
+      try {
+        const safeExt = selectedProofFile.name.split('.').pop().toLowerCase();
+        const filePath = `${currentUser.id}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${safeExt}`;
+
+        const { error: uploadErr } = await supabaseClient.storage
+          .from('proofs')
+          .upload(filePath, selectedProofFile, {
+            contentType: selectedProofFile.type,
+            upsert: false
+          });
+
+        if (uploadErr) throw uploadErr;
+
+        const { data: depRow, error: depErr } = await supabaseClient
+          .from('deposits')
+          .insert({
+            user_id: currentUser.id,
+            amount: amount,
+            proof_path: filePath,
+            proof_filename: selectedProofFile.name,
+            proof_mime: selectedProofFile.type,
+            status: 'Pending'
+          })
+          .select()
+          .single();
+
+        if (depErr) throw depErr;
+
+        await supabaseClient.from('transactions').insert({
+          user_id: currentUser.id,
+          type: 'Deposit',
+          amount: amount,
+          status: 'Pending',
+          reference_id: depRow.id,
+          description: `EFT Deposit (${selectedProofFile.name}) — Awaiting Admin Verification`
+        });
+
+        clearProofFile();
+        showToast('Deposit submitted! Your wallet will be credited once approved by Admin.', 'success');
+        navigateTo('transactions');
+      } catch (err) {
+        showError('depositError', err.message || 'Failed to submit deposit.');
+        btn.disabled = false;
+      } finally {
+        btn.textContent = 'Done With Payment';
+      }
+    }
+
+    // =========================================================================
+    // 9. WALLET: WITHDRAWAL REQUEST
+    // =========================================================================
+    async function submitWithdrawal(e) {
+      e.preventDefault();
+      hideError('withdrawError');
+
+      if (!currentUser || !supabaseClient) {
+        showError('withdrawError', 'Please sign in first.');
+        return;
+      }
+
+      const bankName = document.getElementById('wdBankName').value.trim();
+      const accountHolder = document.getElementById('wdAccountHolder').value.trim();
+      const accountNumber = document.getElementById('wdAccountNumber').value.trim();
+      const accountType = document.getElementById('wdAccountType').value;
+      const branchCode = document.getElementById('wdBranchCode').value.trim();
+      const amount = parseFloat(document.getElementById('wdAmount').value);
+      const balance = Number(currentProfile?.wallet_balance || 0);
+
+      if (!bankName || !accountHolder || !accountNumber || !branchCode) {
+        showError('withdrawError', 'Please complete all banking fields.');
+        return;
+      }
+      if (isNaN(amount) || amount <= 0) {
+        showError('withdrawError', 'Please enter a valid withdrawal amount.');
+        return;
+      }
+      if (amount > balance) {
+        showError('withdrawError', `Withdrawal amount (${formatZAR(amount)}) cannot exceed your wallet balance (${formatZAR(balance)}).`);
+        return;
+      }
+
+      const btn = document.getElementById('wdSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Submitting Request...';
+
+      try {
+        const { data: wdRow, error: wdErr } = await supabaseClient
+          .from('withdrawals')
+          .insert({
+            user_id: currentUser.id,
+            amount: amount,
+            bank_name: bankName,
+            account_holder: accountHolder,
+            account_number: accountNumber,
+            account_type: accountType,
+            branch_code: branchCode,
+            status: 'Pending'
+          })
+          .select()
+          .single();
+
+        if (wdErr) throw wdErr;
+
+        await supabaseClient.from('transactions').insert({
+          user_id: currentUser.id,
+          type: 'Withdrawal',
+          amount: amount,
+          status: 'Pending',
+          reference_id: wdRow.id,
+          description: `Withdrawal to ${bankName} (${accountNumber})`
+        });
+
+        document.getElementById('withdrawForm').reset();
+        showToast('Withdrawal request submitted for admin approval.', 'success');
+        navigateTo('transactions');
+      } catch (err) {
+        showError('withdrawError', err.message || 'Failed to submit withdrawal.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Request Withdrawal';
+      }
+    }
+
+    // =========================================================================
+    // 10. TRANSACTIONS LOG
+    // =========================================================================
+    async function loadUserTransactions() {
+      const tbody = document.getElementById('userTransactionsBody');
+      if (!supabaseClient || !currentUser) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">Please sign in to view transactions.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">Loading transactions...</td></tr>';
+
+      const { data, error } = await supabaseClient
+        .from('transactions')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color:var(--red);padding:16px;">${escapeHtml(error.message)}</td></tr>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--ink-light);padding:24px;">No transactions recorded yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map(tx => {
+        const badgeClass = tx.status === 'Approved' ? 'badge-approved' : tx.status === 'Rejected' ? 'badge-rejected' : 'badge-pending';
+        const dateStr = new Date(tx.created_at).toLocaleString('en-ZA', { dateStyle: 'medium', timeStyle: 'short' });
+        return `
+          <tr>
+            <td>${escapeHtml(dateStr)}</td>
+            <td><strong>${escapeHtml(tx.type)}</strong></td>
+            <td><strong>${formatZAR(tx.amount)}</strong></td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(tx.status)}</span></td>
+            <td style="white-space:normal;min-width:180px;">${escapeHtml(tx.description || '—')}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 11. ADMIN PORTAL (SERVER-SIDE BCRYPT RPC VERIFICATION & MANAGEMENT)
+    // =========================================================================
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      hideError('adminLoginError');
+      const pwd = document.getElementById('adminPasswordInput').value;
+      const btn = document.getElementById('adminLoginBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Verifying...';
+
+      try {
+        if (!supabaseClient) {
+          // Allow initial bootstrap access ONLY to Connection tab if Supabase URL is not yet configured
+          // Once Supabase is connected, verification always runs against Postgres pgcrypto RPC.
+          throw new Error('Supabase connection is not configured yet. Configure it below first.');
+        }
+
+        const { data: isValid, error } = await supabaseClient.rpc('verify_admin_password', {
+          p_password: pwd
+        });
+
+        if (error) throw error;
+        if (!isValid) {
+          throw new Error('Invalid administrator password.');
+        }
+
+        adminSessionPassword = pwd;
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('adminLoginCard').style.display = 'none';
+        document.getElementById('adminDashboardPanel').style.display = 'block';
+        await refreshAdminDashboard();
+        showToast('Admin access granted.', 'success');
+      } catch (err) {
+        // If Supabase is not connected yet, allow opening Connection tab when URL/Key are blank
+        if (!supabaseClient) {
+          showError('adminLoginError', 'Supabase is not connected yet. Enter your Supabase URL and Anon Key in the Connection setup below, then log in.');
+          renderBootstrapConnectionForm();
+        } else {
+          showError('adminLoginError', err.message || 'Admin verification failed.');
+        }
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Unlock Admin Dashboard';
+      }
+    }
+
+    function renderBootstrapConnectionForm() {
+      const card = document.getElementById('adminLoginCard');
+      if (document.getElementById('bootstrapConnBox')) return;
+      const div = document.createElement('div');
+      div.id = 'bootstrapConnBox';
+      div.className = 'card';
+      div.innerHTML = `
+        <h3 style="font-size:1.05rem;margin-bottom:6px;">Initial Supabase Connection Setup</h3>
+        <p style="font-size:0.82rem;color:var(--ink-muted);margin-bottom:12px;">
+          Connect your Supabase project so admin password verification and database operations can run.
+        </p>
+        <div class="form-group">
+          <label class="form-label">Supabase Project URL</label>
+          <input type="url" id="bootSbUrl" class="form-control" placeholder="https://xyz.supabase.co" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Supabase Anon Key</label>
+          <textarea id="bootSbKey" class="form-control" rows="2" placeholder="eyJ..."></textarea>
+        </div>
+        <button type="button" class="btn btn-emerald btn-block" onclick="saveBootstrapConnection()">Save & Test Connection</button>
+      `;
+      card.appendChild(div);
+    }
+
+    async function saveBootstrapConnection() {
+      const url = document.getElementById('bootSbUrl').value.trim();
+      const key = document.getElementById('bootSbKey').value.trim();
+      if (!url || !key) {
+        showToast('Enter both Supabase URL and Anon Key.', 'error');
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY_URL, url);
+      localStorage.setItem(STORAGE_KEY_ANON, key);
+      initSupabaseClient();
+      const box = document.getElementById('bootstrapConnBox');
+      if (box) box.remove();
+      hideError('adminLoginError');
+      showToast('Supabase configuration saved! Now enter the Admin password above.', 'success');
+    }
+
+    function logoutAdmin() {
+      adminSessionPassword = null;
+      document.getElementById('adminDashboardPanel').style.display = 'none';
+      document.getElementById('adminLoginCard').style.display = 'block';
+      showToast('Admin session locked.', 'info');
+    }
+
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.admin-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tabName);
+      });
+      document.querySelectorAll('.admin-tab-pane').forEach(p => {
+        p.style.display = 'none';
+      });
+      document.getElementById(`admin-tab-${tabName}`).style.display = 'block';
+    }
+
+    async function refreshAdminDashboard() {
+      if (!supabaseClient || !adminSessionPassword) return;
+      const { data, error } = await supabaseClient.rpc('admin_get_dashboard', {
+        p_password: adminSessionPassword
+      });
+
+      if (error || !data?.success) {
+        showToast(error?.message || data?.error || 'Failed to load admin data.', 'error');
+        return;
+      }
+
+      adminCache = data;
+      renderAdminOverview();
+      renderAdminUsers();
+      renderAdminDeposits();
+      renderAdminWithdrawals();
+      renderAdminTransactions();
+    }
+
+    function renderAdminOverview() {
+      const profiles = adminCache.profiles || [];
+      const unlockedCount = profiles.filter(p => p.is_unlocked).length;
+      const lockedCount = profiles.length - unlockedCount;
+      const pendingDeps = (adminCache.deposits || []).filter(d => d.status === 'Pending').length;
+      const pendingWds = (adminCache.withdrawals || []).filter(w => w.status === 'Pending').length;
+
+      document.getElementById('statEarnings').textContent = formatZAR(adminCache.total_earnings || 0);
+      document.getElementById('statTotalUsers').textContent = profiles.length;
+      document.getElementById('statUnlockedUsers').textContent = unlockedCount;
+      document.getElementById('statLockedUsers').textContent = lockedCount;
+      document.getElementById('statPendingDeposits').textContent = pendingDeps;
+      document.getElementById('statPendingWithdrawals').textContent = pendingWds;
+    }
+
+    function renderAdminUsers() {
+      const q = (document.getElementById('adminUserSearch').value || '').trim().toLowerCase();
+      const list = (adminCache.profiles || []).filter(u =>
+        !q ||
+        (u.full_name || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q)
+      );
+
+      const tbody = document.getElementById('adminUsersBody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">No users found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(u => `
+        <tr>
+          <td><strong>${escapeHtml(u.full_name)}</strong></td>
+          <td>${escapeHtml(u.email)}</td>
+          <td><strong>${formatZAR(u.wallet_balance)}</strong></td>
+          <td>
+            ${u.is_unlocked
+              ? '<span class="badge badge-unlocked">Unlocked (Paid R21.00)</span>'
+              : '<span class="badge badge-locked">Locked</span>'}
+          </td>
+          <td>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openAdminEditUserModal('${u.id}')">Edit</button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="adminDeleteUser('${u.id}', '${escapeHtml(u.email)}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openAdminAddUserModal() {
+      openModal('Add New User Account', `
+        <form onsubmit="submitAdminAddUser(event)">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="newAdmUserName" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="newAdmUserEmail" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Initial Password</label>
+            <input type="password" id="newAdmUserPass" class="form-control" minlength="6" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Initial Wallet Balance (ZAR)</label>
+            <input type="number" id="newAdmUserBal" class="form-control" value="0.00" min="0" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;font-weight:600;color:var(--ink);">
+              <input type="checkbox" id="newAdmUserUnlocked" /> Set Status to Unlocked (Paid R21.00)
+            </label>
+          </div>
+          <button type="submit" class="btn btn-emerald btn-block">Create User Account</button>
+        </form>
+      `);
+    }
+
+    async function submitAdminAddUser(e) {
+      e.preventDefault();
+      const { data, error } = await supabaseClient.rpc('admin_create_user', {
+        p_password: adminSessionPassword,
+        p_full_name: document.getElementById('newAdmUserName').value.trim(),
+        p_email: document.getElementById('newAdmUserEmail').value.trim(),
+        p_user_password: document.getElementById('newAdmUserPass').value,
+        p_balance: parseFloat(document.getElementById('newAdmUserBal').value || 0),
+        p_is_unlocked: document.getElementById('newAdmUserUnlocked').checked
+      });
+
+      if (error || !data?.success) {
+        showToast(error?.message || data?.error || 'Could not create user.', 'error');
+        return;
+      }
+
+      closeModal();
+      showToast('User account created.', 'success');
+      await refreshAdminDashboard();
+    }
+
+    function openAdminEditUserModal(userId) {
+      const user = (adminCache.profiles || []).find(u => u.id === userId);
+      if (!user) return;
+
+      openModal(`Edit User: ${user.email}`, `
+        <form onsubmit="submitAdminEditUser(event, '${user.id}')">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="editAdmUserName" class="form-control" value="${escapeHtml(user.full_name)}" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Wallet Balance (ZAR)</label>
+            <input type="number" id="editAdmUserBal" class="form-control" value="${Number(user.wallet_balance).toFixed(2)}" min="0" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;font-weight:600;color:var(--ink);">
+              <input type="checkbox" id="editAdmUserUnlocked" ${user.is_unlocked ? 'checked' : ''} /> Student Kit Unlocked (Paid R21.00)
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+        </form>
+      `);
+    }
+
+    async function submitAdminEditUser(e, userId) {
+      e.preventDefault();
+      const { data, error } = await supabaseClient.rpc('admin_update_user', {
+        p_password: adminSessionPassword,
+        p_user_id: userId,
+        p_full_name: document.getElementById('editAdmUserName').value.trim(),
+        p_balance: parseFloat(document.getElementById('editAdmUserBal').value),
+        p_is_unlocked: document.getElementById('editAdmUserUnlocked').checked
+      });
+
+      if (error || !data?.success) {
+        showToast(error?.message || data?.error || 'Update failed.', 'error');
+        return;
+      }
+
+      closeModal();
+      showToast('User updated successfully.', 'success');
+      await refreshAdminDashboard();
+      if (currentUser && currentUser.id === userId) {
+        await fetchUserProfile();
+      }
+    }
+
+    async function adminDeleteUser(userId, email) {
+      if (!confirm(`Permanently delete user ${email} and all their records?`)) return;
+      const { data, error } = await supabaseClient.rpc('admin_delete_user', {
+        p_password: adminSessionPassword,
+        p_user_id: userId
+      });
+
+      if (error || !data?.success) {
+        showToast(error?.message || data?.error || 'Delete failed.', 'error');
+        return;
+      }
+
+      showToast('User deleted.', 'info');
+      await refreshAdminDashboard();
+    }
+
+    function renderAdminDeposits() {
+      const list = adminCache.deposits || [];
+      const tbody = document.getElementById('adminDepositsBody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No deposit requests yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(d => {
+        const badgeClass = d.status === 'Approved' ? 'badge-approved' : d.status === 'Rejected' ? 'badge-rejected' : 'badge-pending';
+        const dateStr = new Date(d.created_at).toLocaleString('en-ZA', { dateStyle: 'short', timeStyle: 'short' });
+        return `
+          <tr>
+            <td>${escapeHtml(dateStr)}</td>
+            <td><strong>${escapeHtml(d.user_name)}</strong><br><span style="font-size:0.75rem;color:var(--ink-light);">${escapeHtml(d.user_email)}</span></td>
+            <td><strong>${formatZAR(d.amount)}</strong></td>
+            <td>
+              <button type="button" class="btn btn-outline btn-sm" onclick="viewProofOfPayment('${escapeHtml(d.proof_path)}', '${escapeHtml(d.proof_filename)}', '${escapeHtml(d.proof_mime)}')">
+                👁 View Proof
+              </button>
+            </td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(d.status)}</span></td>
+            <td>
+              ${d.status === 'Pending' ? `
+                <button type="button" class="btn btn-emerald btn-sm" onclick="reviewDeposit('${d.id}', 'Approved')">Approve</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="reviewDeposit('${d.id}', 'Rejected')">Reject</button>
+              ` : '—'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function viewProofOfPayment(proofPath, filename, mime) {
+      if (!supabaseClient) return;
+      const { data, error } = await supabaseClient.storage
+        .from('proofs')
+        .createSignedUrl(proofPath, 300);
+
+      if (error || !data?.signedUrl) {
+        showToast('Could not generate signed URL for proof file.', 'error');
+        return;
+      }
+
+      const url = data.signedUrl;
+      const isPdf = mime === 'application/pdf' || filename.toLowerCase().endsWith('.pdf');
+      const content = isPdf
+        ? `<p style="margin-bottom:10px;"><strong>File:</strong> ${escapeHtml(filename)}</p>
+           <iframe src="${url}" style="width:100%;height:420px;border:1px solid var(--border);border-radius:8px;"></iframe>
+           <div style="margin-top:10px;"><a href="${url}" target="_blank" class="btn btn-primary btn-sm">Open PDF in New Tab ↗</a></div>`
+        : `<p style="margin-bottom:10px;"><strong>File:</strong> ${escapeHtml(filename)}</p>
+           <img src="${url}" alt="Proof of Payment" style="max-width:100%;border-radius:10px;border:1px solid var(--border);" />
+           <div style="margin-top:10px;"><a href="${url}" target="_blank" class="btn btn-primary btn-sm">Open Full Image ↗</a></div>`;
+
+      openModal('Proof of Payment Viewer', content);
+    }
+
+    async function reviewDeposit(depositId, decision) {
+      const { data, error } = await supabaseClient.rpc('admin_review_deposit', {
+        p_password: adminSessionPassword,
+        p_deposit_id: depositId,
+        p_decision: decision
+      });
+
+      if (error || !data?.success) {
+        showToast(error?.message || data?.error || 'Action failed.', 'error');
+        return;
+      }
+
+      showToast(`Deposit ${decision.toLowerCase()}.`, decision === 'Approved' ? 'success' : 'info');
+      await refreshAdminDashboard();
+      if (currentUser) await fetchUserProfile();
+    }
+
+    function renderAdminWithdrawals() {
+      const list = adminCache.withdrawals || [];
+      const tbody = document.getElementById('adminWithdrawalsBody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No withdrawal requests yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(w => {
+        const badgeClass = w.status === 'Approved' ? 'badge-approved' : w.status === 'Rejected' ? 'badge-rejected' : 'badge-pending';
+        const dateStr = new Date(w.created_at).toLocaleString('en-ZA', { dateStyle: 'short', timeStyle: 'short' });
+        return `
+          <tr>
+            <td>${escapeHtml(dateStr)}</td>
+            <td><strong>${escapeHtml(w.user_name)}</strong><br><span style="font-size:0.75rem;color:var(--ink-light);">${escapeHtml(w.user_email)}</span></td>
+            <td><strong>${formatZAR(w.amount)}</strong></td>
+            <td style="white-space:normal;min-width:200px;font-size:0.8rem;">
+              <strong>${escapeHtml(w.bank_name)}</strong> (${escapeHtml(w.account_type)})<br>
+              Holder: ${escapeHtml(w.account_holder)}<br>
+              Acc: <code>${escapeHtml(w.account_number)}</code> | Branch: <code>${escapeHtml(w.branch_code)}</code>
+            </td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(w.status)}</span></td>
+            <td>
+              ${w.status === 'Pending' ? `
+                <button type="button" class="btn btn-emerald btn-sm" onclick="reviewWithdrawal('${w.id}', 'Approved')">Mark as Paid</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="reviewWithdrawal('${w.id}', 'Rejected')">Reject</button>
+              ` : '—'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function reviewWithdrawal(withdrawalId, decision) {
+      const { data, error } = await supabaseClient.rpc('admin_review_withdrawal', {
+        p_password: adminSessionPassword,
+        p_withdrawal_id: withdrawalId,
+        p_decision: decision
+      });
+
+      if (error || !data?.success) {
+        showToast(error?.message || data?.error || 'Action failed.', 'error');
+        return;
+      }
+
+      showToast(decision === 'Approved' ? 'Withdrawal marked as Paid & deducted.' : 'Withdrawal rejected.', 'success');
+      await refreshAdminDashboard();
+      if (currentUser) await fetchUserProfile();
+    }
+
+    function renderAdminTransactions() {
+      const q = (document.getElementById('adminTxSearch').value || '').trim().toLowerCase();
+      const list = (adminCache.transactions || []).filter(t =>
+        !q ||
+        (t.user_name || '').toLowerCase().includes(q) ||
+        (t.user_email || '').toLowerCase().includes(q) ||
+        (t.type || '').toLowerCase().includes(q) ||
+        (t.status || '').toLowerCase().includes(q)
+      );
+
+      const tbody = document.getElementById('adminTransactionsBody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;">No transactions found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(t => {
+        const badgeClass = t.status === 'Approved' ? 'badge-approved' : t.status === 'Rejected' ? 'badge-rejected' : 'badge-pending';
+        const dateStr = new Date(t.created_at).toLocaleString('en-ZA', { dateStyle: 'short', timeStyle: 'short' });
+        return `
+          <tr>
+            <td>${escapeHtml(dateStr)}</td>
+            <td><strong>${escapeHtml(t.user_name)}</strong><br><span style="font-size:0.75rem;color:var(--ink-light);">${escapeHtml(t.user_email)}</span></td>
+            <td>${escapeHtml(t.type)}</td>
+            <td><strong>${formatZAR(t.amount)}</strong></td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(t.status)}</span></td>
+            <td style="white-space:normal;min-width:180px;">${escapeHtml(t.description || '—')}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 12. ADMIN CONNECTION TAB (ONLY PLACE SUPABASE CREDENTIALS APPEAR)
+    // =========================================================================
+    async function testAndSaveSupabaseConnection() {
+      const url = document.getElementById('sbUrlInput').value.trim();
+      const anonKey = document.getElementById('sbAnonKeyInput').value.trim();
+      const resultEl = document.getElementById('connectionTestResult');
+      const btn = document.getElementById('testConnBtn');
+
+      if (!url || !anonKey) {
+        resultEl.style.color = 'var(--red)';
+        resultEl.textContent = '⚠️ Both Project URL and Anon Public Key are required.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Testing Connection...';
+      resultEl.textContent = '';
+
+      try {
+        const testClient = window.supabase.createClient(url, anonKey);
+        const { error } = await testClient.rpc('verify_admin_password', { p_password: '__ping__' });
+        if (error) throw error;
+
+        localStorage.setItem(STORAGE_KEY_URL, url);
+        localStorage.setItem(STORAGE_KEY_ANON, anonKey);
+        supabaseClient = testClient;
+
+        resultEl.style.color = 'var(--emerald-dark)';
+        resultEl.textContent = '✅ Connected successfully! Database tables & RPC functions verified.';
+        showToast('Supabase connection verified and saved.', 'success');
+      } catch (err) {
+        resultEl.style.color = 'var(--red)';
+        resultEl.textContent = `❌ Connection failed: ${err.message || 'Check URL, Anon Key, and ensure supabase_setup.sql was run.'}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Test Connection & Save';
+      }
+    }
+
+    function clearSupabaseConnection() {
+      localStorage.removeItem(STORAGE_KEY_URL);
+      localStorage.removeItem(STORAGE_KEY_ANON);
+      supabaseClient = null;
+      document.getElementById('sbUrlInput').value = '';
+      document.getElementById('sbAnonKeyInput').value = '';
+      document.getElementById('connectionTestResult').textContent = 'Settings cleared.';
+      showToast('Supabase connection settings cleared.', 'info');
+    }
+
+    // =========================================================================
+    // 13. LEGAL MODALS (POPIA PRIVACY POLICY, TERMS OF USE, TERMS & CONDITIONS)
+    // =========================================================================
+    const LEGAL_CONTENT = {
+      privacy: {
+        title: 'Privacy Policy (POPIA Compliant — South Africa)',
+        html: `
+          <p><strong>Effective Date:</strong> 1 January 2026 | <strong>Jurisdiction:</strong> Republic of South Africa</p>
+          <h4>1. Responsible Party & POPIA Compliance</h4>
+          <p>Arcknowledge ("we", "us", "our"), operator of <strong>Arcknowledge - Student Kit SA</strong>, respects your constitutional right to privacy and processes personal information strictly in accordance with the <strong>Protection of Personal Information Act 4 of 2013 (POPIA)</strong> of South Africa.</p>
+          <h4>2. Personal Information We Collect</h4>
+          <p>When you register and use our platform, we collect only minimal, necessary information: (a) Full Name and Email Address for account creation; (b) Encrypted authentication credentials; (c) Wallet transaction records, deposit Proof of Payment files (stored in a private, access-controlled bucket), and South African banking details submitted solely when you request a withdrawal.</p>
+          <h4>3. Purpose & Lawful Basis of Processing</h4>
+          <p>Your personal information is processed exclusively to: administer your student account, verify manual EFT deposits, process withdrawal payouts, unlock your once-off Student Kit SA access, and comply with South African financial record-keeping laws.</p>
+          <h4>4. Security Safeguards & Storage</h4>
+          <p>All data is transmitted over HTTPS/TLS encryption and protected by PostgreSQL Row Level Security (RLS) so that each student can only view and manage their own profile, wallet, proofs, and transactions. Proof of Payment files are stored in a private storage bucket accessible only to you and verified administrators.</p>
+          <h4>5. Your Rights Under POPIA</h4>
+          <p>You have the right to request access to, correction of, or deletion of your personal information, or to object to processing by contacting our Information Officer via the platform's support channels.</p>
+        `
+      },
+      termsOfUse: {
+        title: 'Terms of Use — Arcknowledge - Student Kit SA',
+        html: `
+          <h4>1. Acceptance of Terms</h4>
+          <p>By accessing or creating an account on <strong>Arcknowledge - Student Kit SA</strong>, you agree to comply with these Terms of Use and all applicable laws of the Republic of South Africa.</p>
+          <h4>2. Permitted Student & Personal Use</h4>
+          <p>The Student Kit SA directory (comprising curated South African universities, bursaries, NSFAS links, student accommodation, discounts, and productivity resources) is licensed for your personal, non-commercial educational use. Scraping, reselling, or redistributing the directory is strictly prohibited.</p>
+          <h4>3. Account Integrity</h4>
+          <p>You are responsible for safeguarding your login credentials. Submitting fraudulent, altered, or duplicate Proof of Payment documents will result in immediate account suspension and permanent ban without refund.</p>
+          <h4>4. Third-Party External Links</h4>
+          <p>Our directory provides convenient links to external South African institutions, banks, retailers, and government portals. Arcknowledge does not control, endorse, or guarantee the availability or content of third-party websites.</p>
+        `
+      },
+      termsConditions: {
+        title: 'Terms & Conditions (Wallet, R21.00 Fee & Governing Law)',
+        html: `
+          <h4>1. Digital Wallet & Deposits</h4>
+          <p>Users may fund their Student Kit SA wallet via EFT or cash deposit into the designated Standard Bank account (<strong>MR KGOLAGANO KP POO</strong>, Account: <strong>10 29 256 243 6</strong>, Branch Code: <strong>7654</strong>). Deposits remain in <em>Pending</em> status until an administrator verifies the uploaded Proof of Payment (PNG, JPG, JPEG, or PDF). Arcknowledge is not liable for delays caused by inter-bank clearance times or incorrect payment references.</p>
+          <h4>2. Once-Off R21.00 Unlock Fee & Refund Policy</h4>
+          <p>Unlocking all categories of Student Kit SA requires a once-off payment of <strong>R21.00 (ZAR)</strong> deducted from your wallet balance. Because full digital access to all curated links and resources is granted instantaneously upon payment, the <strong>R21.00 unlock fee is non-refundable</strong> once your account status changes to <em>Unlocked (Paid R21.00)</em>, subject to statutory cooling-off rights under Section 44 of the Electronic Communications and Transactions Act 25 of 2002 (ECTA) where applicable.</p>
+          <h4>3. Withdrawals</h4>
+          <p>Unspent wallet balances may be withdrawn to a valid South African bank account. Withdrawal requests cannot exceed your available wallet balance and are subject to administrative verification prior to EFT payout.</p>
+          <h4>4. Disclaimers & Limitation of Liability</h4>
+          <p>Arcknowledge - Student Kit SA is an independent student resource aggregator and is not affiliated with NSFAS, DHET, SARS, or any listed university or bank. All services are provided "as is" without warranties of uninterrupted availability.</p>
+          <h4>5. Governing Law</h4>
+          <p>These Terms & Conditions are governed by and construed in accordance with the laws of the <strong>Republic of South Africa</strong>, and any disputes shall be subject to the exclusive jurisdiction of South African courts.</p>
+        `
+      }
+    };
+
+    function openLegalModal(key) {
+      const item = LEGAL_CONTENT[key];
+      if (!item) return;
+      openModal(item.title, item.html);
+    }
+
+    // =========================================================================
+    // 14. BOOTSTRAP APPLICATION ON LOAD
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      initPWA();
+      renderCategories();
+
+      const connected = initSupabaseClient();
+      if (connected && supabaseClient) {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session?.user) {
+          currentUser = session.user;
+          await fetchUserProfile();
+        }
+
+        supabaseClient.auth.onAuthStateChange(async (_event, session) => {
+          currentUser = session?.user || null;
+          if (currentUser) {
+            await fetchUserProfile();
+          } else {
+            currentProfile = null;
+            updateAuthUI();
+            renderCategories();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
