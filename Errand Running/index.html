@@ -1,0 +1,3064 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="theme-color" content="#0F172A" />
+  <meta name="description" content="MODISHA Errand Running — Trusted South African peer-to-peer errand & delivery marketplace." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>MODISHA | Errand Running Marketplace</title>
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            slate: {
+              850: '#152033',
+              900: '#0F172A',
+              950: '#090D16',
+            },
+            emerald: {
+              500: '#10B981',
+              600: '#059669',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Supabase JS v2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Dynamic PWA Manifest & Apple Touch Icon Initialization -->
+  <script>
+    (function initPWAManifest() {
+      const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <rect width="512" height="512" rx="112" fill="#0F172A"/>
+        <circle cx="256" cy="256" r="190" fill="#10B981" fill-opacity="0.14"/>
+        <path d="M132 344V168h52l72 114 72-114h52v176h-48V244l-58 90h-36l-58-90v100h-48z" fill="#10B981"/>
+        <circle cx="384" cy="144" r="24" fill="#F59E0B"/>
+      </svg>`;
+      const encodedSvg = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
+
+      const appleIcon = document.createElement('link');
+      appleIcon.rel = 'apple-touch-icon';
+      appleIcon.href = encodedSvg;
+      document.head.appendChild(appleIcon);
+
+      const manifest = {
+        name: 'MODISHA Errand Running',
+        short_name: 'MODISHA',
+        description: 'Fast, trusted South African errand-running and personal delivery marketplace.',
+        start_url: './',
+        display: 'standalone',
+        background_color: '#0F172A',
+        theme_color: '#0F172A',
+        orientation: 'portrait-primary',
+        icons: [
+          { src: encodedSvg, sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+          { src: encodedSvg, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+        ]
+      };
+
+      try {
+        const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+        const manifestURL = URL.createObjectURL(blob);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestURL;
+        document.head.appendChild(link);
+      } catch (e) {
+        console.warn('Manifest blob initialization skipped:', e);
+      }
+    })();
+  </script>
+
+  <style>
+    /* Custom scrollbar & subtle utility styles */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+    .glass-nav {
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+      animation: fadeSlideUp 0.25s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 font-sans antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP STATUS / CONNECTION BANNER -->
+  <div id="modeBanner" class="bg-slate-950 text-slate-300 text-xs border-b border-slate-800 px-4 py-2">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span id="connectionDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span id="connectionLabel" class="font-medium text-slate-200">Interactive Demo Mode (Local Storage Sandbox)</span>
+        <span class="hidden md:inline text-slate-500">|</span>
+        <span class="hidden md:inline text-slate-400">Connect your Supabase project anytime for live cloud auth, Postgres & Storage.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openModal('sqlModal')" class="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+          <span>Supabase SQL</span>
+        </button>
+        <button onclick="openModal('configModal')" class="px-2.5 py-1 rounded-md bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 font-medium transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span>Configure Supabase</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 glass-nav text-white border-b border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-3">
+        <!-- Brand Logo: MODISHA with Errand Running directly beneath -->
+        <button onclick="navigate('home')" class="flex items-center gap-3 text-left group focus:outline-none">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+            <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="flex flex-col leading-none">
+            <span class="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-white">MODISHA</span>
+            <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-400 mt-0.5">Errand Running</span>
+          </div>
+        </button>
+
+        <!-- Desktop Portal Tabs -->
+        <nav class="hidden md:flex items-center gap-1.5 bg-slate-800/80 p-1 rounded-xl border border-slate-700/70">
+          <button onclick="navigate('home')" data-nav="home" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium transition">Marketplace</button>
+          <button onclick="navigate('customer')" data-nav="customer" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium transition">Customer Portal</button>
+          <button onclick="navigate('runner')" data-nav="runner" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium transition">Runner Portal</button>
+          <button onclick="navigate('admin')" data-nav="admin" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium transition">Admin</button>
+        </nav>
+
+        <!-- Right Controls: PWA Install + Active Session Pill -->
+        <div class="flex items-center gap-2.5">
+          <button id="installPwaBtn" onclick="triggerPWAInstall()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>Install App</span>
+          </button>
+
+          <div id="headerSessionArea" class="flex items-center gap-2">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Mobile Hamburger -->
+          <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl bg-slate-800 text-slate-200 hover:bg-slate-700 focus:outline-none" aria-label="Toggle Menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Nav -->
+      <div id="mobileMenu" class="hidden md:hidden pb-4 pt-2 border-t border-slate-800 space-y-1">
+        <button onclick="navigate('home'); toggleMobileMenu()" data-nav="home" class="nav-tab w-full text-left block px-3 py-2.5 rounded-xl text-sm font-medium">Marketplace Home</button>
+        <button onclick="navigate('customer'); toggleMobileMenu()" data-nav="customer" class="nav-tab w-full text-left block px-3 py-2.5 rounded-xl text-sm font-medium">Customer Portal</button>
+        <button onclick="navigate('runner'); toggleMobileMenu()" data-nav="runner" class="nav-tab w-full text-left block px-3 py-2.5 rounded-xl text-sm font-medium">Errand Runner Portal</button>
+        <button onclick="navigate('admin'); toggleMobileMenu()" data-nav="admin" class="nav-tab w-full text-left block px-3 py-2.5 rounded-xl text-sm font-medium">Admin Portal</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- MAIN CONTENT VIEWPORT -->
+  <main id="appMain" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Rendered dynamically by JS router -->
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center">
+              <svg class="w-5 h-5 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </div>
+            <div class="flex flex-col leading-none">
+              <span class="font-display font-extrabold text-xl text-white">MODISHA</span>
+              <span class="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-400 mt-0.5">Errand Running</span>
+            </div>
+          </div>
+          <p class="text-sm text-slate-400 max-w-md leading-relaxed">
+            South Africa's peer-to-peer errand and personal delivery marketplace. Post local tasks in Rands, connect directly with verified neighbourhood runners, and get things done fast with a transparent R1.00 platform fee.
+          </p>
+          <div class="flex flex-wrap items-center gap-2 pt-1 text-xs text-slate-400">
+            <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-emerald-400 font-medium">🇿🇦 ZAR (R) Pricing</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700">Flat R1.00 Runner Fee</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700">POPIA Compliant</span>
+          </div>
+        </div>
+
+        <div class="space-y-2.5">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white">Platform Portals</h4>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><button onclick="navigate('home')" class="hover:text-emerald-400 transition">Live Errand Feed</button></li>
+            <li><button onclick="navigate('customer')" class="hover:text-emerald-400 transition">Post an Errand (Customer)</button></li>
+            <li><button onclick="navigate('runner')" class="hover:text-emerald-400 transition">Become an Errand Runner</button></li>
+            <li><button onclick="navigate('admin')" class="hover:text-emerald-400 transition">Admin Operations</button></li>
+          </ul>
+        </div>
+
+        <div class="space-y-2.5">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-white">Legal & Governance</h4>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><button onclick="openLegalModal('privacy')" class="hover:text-emerald-400 transition text-left">Privacy Policy (POPIA)</button></li>
+            <li><button onclick="openLegalModal('termsOfUse')" class="hover:text-emerald-400 transition text-left">Terms of Use</button></li>
+            <li><button onclick="openLegalModal('termsAndConditions')" class="hover:text-emerald-400 transition text-left">Terms and Conditions</button></li>
+            <li><button onclick="openModal('sqlModal')" class="hover:text-emerald-400 transition text-left">Supabase Setup & SQL</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <p>&copy; <span id="footerYear">2026</span> MODISHA Errand Running (Pty) Ltd. All rights reserved.</p>
+        <div class="flex items-center gap-4">
+          <button onclick="openLegalModal('privacy')" class="hover:text-slate-300">Privacy</button>
+          <span>&bull;</span>
+          <button onclick="openLegalModal('termsOfUse')" class="hover:text-slate-300">Terms of Use</button>
+          <span>&bull;</span>
+          <button onclick="openLegalModal('termsAndConditions')" class="hover:text-slate-300">T&amp;Cs</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. SUPABASE CONFIGURATION MODAL -->
+  <div id="configModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-up">
+      <div class="bg-slate-900 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-white">Supabase Backend Configuration</h3>
+          <p class="text-xs text-slate-400">Connect your live Supabase URL &amp; Anon Public Key</p>
+        </div>
+        <button onclick="closeModal('configModal')" class="text-slate-400 hover:text-white p-1.5 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form onsubmit="saveSupabaseConfig(event)" class="p-6 space-y-4">
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+          <strong>How this works:</strong> Leave blank to run in <strong>Interactive Demo Mode</strong> (pre-populated with sample South African errands, runners, and ratings). Paste your Supabase credentials below to switch immediately to live PostgreSQL, Auth, RPC &amp; Storage.
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Supabase Project URL</label>
+          <input id="cfgSupabaseUrl" type="url" placeholder="https://your-project-id.supabase.co" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Supabase Anon / Public Key</label>
+          <input id="cfgSupabaseKey" type="text" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none" />
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
+          <button type="button" onclick="resetToDemoMode()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-100 text-sm font-medium transition">
+            Use Demo Mode
+          </button>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="closeModal('configModal')" class="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 text-sm font-medium">Cancel</button>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition">
+              Save &amp; Connect
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. RATE RUNNER MODAL -->
+  <div id="ratingModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-up">
+      <div class="bg-slate-900 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-white">Rate Your Errand Runner</h3>
+          <p id="ratingModalSubtitle" class="text-xs text-emerald-400">Share your feedback</p>
+        </div>
+        <button onclick="closeModal('ratingModal')" class="text-slate-400 hover:text-white p-1.5 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form onsubmit="submitRunnerRating(event)" class="p-6 space-y-4">
+        <input type="hidden" id="ratingTaskId" />
+        <input type="hidden" id="ratingRunnerId" />
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2 text-center">Select Star Rating (1 to 5)</label>
+          <div id="starSelector" class="flex items-center justify-center gap-2">
+            <button type="button" onclick="setRatingStars(1)" data-star="1" class="star-btn p-1.5 text-amber-400 hover:scale-110 transition">
+              <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button type="button" onclick="setRatingStars(2)" data-star="2" class="star-btn p-1.5 text-amber-400 hover:scale-110 transition">
+              <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button type="button" onclick="setRatingStars(3)" data-star="3" class="star-btn p-1.5 text-amber-400 hover:scale-110 transition">
+              <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button type="button" onclick="setRatingStars(4)" data-star="4" class="star-btn p-1.5 text-amber-400 hover:scale-110 transition">
+              <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+            <button type="button" onclick="setRatingStars(5)" data-star="5" class="star-btn p-1.5 text-amber-400 hover:scale-110 transition">
+              <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </button>
+          </div>
+          <p id="ratingLabelText" class="text-center text-xs font-semibold text-slate-600 mt-1">5 / 5 — Outstanding Service!</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Review Comment</label>
+          <textarea id="ratingComment" rows="3" required placeholder="How was the runner's communication, speed, and care?" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('ratingModal')" class="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 text-sm font-medium">Cancel</button>
+          <button type="submit" id="submitRatingBtn" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-sm transition">
+            Submit Review
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. LEGAL DOCUMENTS MODAL -->
+  <div id="legalModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-fade-up">
+      <div class="bg-slate-900 px-6 py-4 flex items-center justify-between shrink-0">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">MODISHA Errand Running Legal</span>
+          <h3 id="legalModalTitle" class="text-lg font-bold text-white">Legal Document</h3>
+        </div>
+        <button onclick="closeModal('legalModal')" class="text-slate-400 hover:text-white p-1.5 rounded-lg">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <!-- Legal Tab Switcher inside modal -->
+      <div class="bg-slate-100 px-6 py-2.5 border-b border-slate-200 flex flex-wrap gap-2 shrink-0">
+        <button onclick="openLegalModal('privacy')" id="legalTab-privacy" class="legal-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition">Privacy Policy</button>
+        <button onclick="openLegalModal('termsOfUse')" id="legalTab-termsOfUse" class="legal-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition">Terms of Use</button>
+        <button onclick="openLegalModal('termsAndConditions')" id="legalTab-termsAndConditions" class="legal-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition">Terms &amp; Conditions</button>
+      </div>
+      <div id="legalModalBody" class="p-6 overflow-y-auto space-y-4 text-sm text-slate-700 leading-relaxed">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="bg-slate-50 px-6 py-3.5 border-t border-slate-200 flex items-center justify-between shrink-0">
+        <span class="text-xs text-slate-500">Effective Date: November 2026 &bull; Republic of South Africa</span>
+        <button onclick="closeModal('legalModal')" class="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+          I Understand &amp; Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SUPABASE SQL SCHEMA MODAL -->
+  <div id="sqlModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-fade-up">
+      <div class="bg-slate-900 px-6 py-4 flex items-center justify-between shrink-0">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">PostgreSQL + RLS + RPC + Storage</span>
+          <h3 class="text-lg font-bold text-white">MODISHA Supabase Setup SQL</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="copySetupSQL()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <span>Copy SQL</span>
+          </button>
+          <button onclick="closeModal('sqlModal')" class="text-slate-400 hover:text-white p-1.5 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 bg-slate-950 text-emerald-300 font-mono text-xs overflow-y-auto flex-1 leading-relaxed">
+        <pre id="sqlCodeBlock" class="whitespace-pre-wrap"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== APPLICATION JAVASCRIPT ==================== -->
+  <script>
+    // =========================================================================
+    // 1. SUPABASE SQL SCHEMA CONSTANT (Accessible in-app & in response)
+    // =========================================================================
+    const SUPABASE_SETUP_SQL = `-- ============================================================================
+-- MODISHA ERRAND RUNNING - COMPLETE SUPABASE SCHEMA, RLS, RPC & STORAGE
+-- Run this entire script in your Supabase SQL Editor.
+-- ============================================================================
+
+-- 1. Enable pgcrypto for secure password hashing (bcrypt)
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- 2. PROFILES TABLE (Customers)
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  phone TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 3. RUNNERS TABLE (Errand Runners)
+CREATE TABLE IF NOT EXISTS public.runners (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  whatsapp_number TEXT NOT NULL,
+  call_number TEXT NOT NULL,
+  selfie_url TEXT NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 4. TASKS TABLE (Errands)
+CREATE TABLE IF NOT EXISTS public.tasks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  customer_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  runner_id UUID REFERENCES public.runners(id) ON DELETE SET NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  pickup_location TEXT NOT NULL,
+  dropoff_location TEXT NOT NULL,
+  suggested_payment NUMERIC(10, 2) NOT NULL CHECK (suggested_payment >= 5),
+  status TEXT NOT NULL DEFAULT 'Open' CHECK (status IN ('Open', 'Accepted', 'In Progress', 'Completed')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  completed_at TIMESTAMPTZ
+);
+
+-- 5. RATINGS TABLE (Customer reviews of Runners)
+CREATE TABLE IF NOT EXISTS public.ratings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL UNIQUE REFERENCES public.tasks(id) ON DELETE CASCADE,
+  customer_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  runner_id UUID NOT NULL REFERENCES public.runners(id) ON DELETE CASCADE,
+  stars INTEGER NOT NULL CHECK (stars BETWEEN 1 AND 5),
+  comment TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 6. EARNINGS TABLE (Tracks R1.00 platform fee & runner net payout per completed task)
+CREATE TABLE IF NOT EXISTS public.earnings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  task_id UUID NOT NULL UNIQUE REFERENCES public.tasks(id) ON DELETE CASCADE,
+  runner_id UUID NOT NULL REFERENCES public.runners(id) ON DELETE CASCADE,
+  gross_amount NUMERIC(10, 2) NOT NULL,
+  platform_fee NUMERIC(10, 2) NOT NULL DEFAULT 1.00,
+  net_amount NUMERIC(10, 2) GENERATED ALWAYS AS (gross_amount - platform_fee) STORED,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 7. ADMIN TABLE (Hashed Admin Credentials - Never exposed via SELECT)
+CREATE TABLE IF NOT EXISTS public.admin (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  label TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Insert default admin password (#PetalChain_25) hashed with Blowfish (bf)
+INSERT INTO public.admin (label, password_hash)
+VALUES ('primary_admin', crypt('#PetalChain_25', gen_salt('bf')))
+ON CONFLICT (label) DO UPDATE SET password_hash = EXCLUDED.password_hash;
+
+-- ============================================================================
+-- 8. SECURE RPC FUNCTIONS (Server-side verification & Admin operations)
+-- ============================================================================
+
+-- Verify Admin Login without ever sending the hash to the browser
+CREATE OR REPLACE FUNCTION public.verify_admin_login(p_password TEXT)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_hash TEXT;
+BEGIN
+  SELECT password_hash INTO v_hash FROM public.admin WHERE label = 'primary_admin' LIMIT 1;
+  IF v_hash IS NULL THEN
+    RETURN FALSE;
+  END IF;
+  RETURN (v_hash = crypt(p_password, v_hash));
+END;
+$$;
+
+-- Admin Dashboard Overview RPC (Protected by p_password verification)
+CREATE OR REPLACE FUNCTION public.admin_get_dashboard(p_password TEXT)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NOT public.verify_admin_login(p_password) THEN
+    RAISE EXCEPTION 'Unauthorized admin access';
+  END IF;
+
+  RETURN jsonb_build_object(
+    'profiles', COALESCE((SELECT jsonb_agg(p ORDER BY p.created_at DESC) FROM public.profiles p), '[]'::jsonb),
+    'runners', COALESCE((SELECT jsonb_agg(r ORDER BY r.created_at DESC) FROM public.runners r), '[]'::jsonb),
+    'tasks', COALESCE((SELECT jsonb_agg(t ORDER BY t.created_at DESC) FROM public.tasks t), '[]'::jsonb),
+    'earnings', COALESCE((SELECT jsonb_agg(e ORDER BY e.created_at DESC) FROM public.earnings e), '[]'::jsonb),
+    'ratings', COALESCE((SELECT jsonb_agg(rt ORDER BY rt.created_at DESC) FROM public.ratings rt), '[]'::jsonb)
+  );
+END;
+$$;
+
+-- Admin Action RPC (Toggle runner status or delete task/user)
+CREATE OR REPLACE FUNCTION public.admin_manage_entity(
+  p_password TEXT,
+  p_action TEXT,
+  p_target_id UUID
+)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NOT public.verify_admin_login(p_password) THEN
+    RAISE EXCEPTION 'Unauthorized admin action';
+  END IF;
+
+  IF p_action = 'toggle_runner' THEN
+    UPDATE public.runners SET is_active = NOT is_active WHERE id = p_target_id;
+  ELSIF p_action = 'delete_task' THEN
+    DELETE FROM public.tasks WHERE id = p_target_id;
+  ELSIF p_action = 'delete_profile' THEN
+    DELETE FROM public.profiles WHERE id = p_target_id;
+  ELSIF p_action = 'delete_runner' THEN
+    DELETE FROM public.runners WHERE id = p_target_id;
+  END IF;
+
+  RETURN TRUE;
+END;
+$$;
+
+-- Trigger: Automatically create earnings record when a task transitions to 'Completed'
+CREATE OR REPLACE FUNCTION public.handle_task_completed()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  IF NEW.status = 'Completed' AND (OLD.status IS DISTINCT FROM 'Completed') AND NEW.runner_id IS NOT NULL THEN
+    NEW.completed_at := NOW();
+    INSERT INTO public.earnings (task_id, runner_id, gross_amount, platform_fee)
+    VALUES (NEW.id, NEW.runner_id, NEW.suggested_payment, 1.00)
+    ON CONFLICT (task_id) DO NOTHING;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_task_completed ON public.tasks;
+CREATE TRIGGER trg_task_completed
+BEFORE UPDATE ON public.tasks
+FOR EACH ROW
+EXECUTE FUNCTION public.handle_task_completed();
+
+-- ============================================================================
+-- 9. ROW LEVEL SECURITY (RLS) POLICIES
+-- ============================================================================
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.runners ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ratings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.earnings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admin ENABLE ROW LEVEL SECURITY;
+
+-- Admin table: Deny all direct client access (only RPC SECURITY DEFINER functions access it)
+CREATE POLICY "Deny direct admin table access" ON public.admin FOR ALL USING (false);
+
+-- Profiles: Users read/update own profile; Runners can view customer name/phone for assigned tasks
+CREATE POLICY "Users can insert own profile" ON public.profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY "Users can view own profile" ON public.profiles
+  FOR SELECT USING (
+    auth.uid() = id OR
+    EXISTS (SELECT 1 FROM public.tasks t WHERE t.customer_id = profiles.id AND (t.status = 'Open' OR t.runner_id = auth.uid()))
+  );
+CREATE POLICY "Users can update own profile" ON public.profiles
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Runners: Runners manage own profile; Authenticated customers can view runners assigned to their tasks
+CREATE POLICY "Runners can insert own record" ON public.runners
+  FOR INSERT WITH CHECK (auth.uid() = id);
+CREATE POLICY "Runners and related customers can view runner" ON public.runners
+  FOR SELECT USING (
+    auth.uid() = id OR
+    EXISTS (SELECT 1 FROM public.tasks t WHERE t.runner_id = runners.id AND t.customer_id = auth.uid())
+  );
+CREATE POLICY "Runners can update own record" ON public.runners
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Tasks: Customers see own tasks; Runners see Open tasks + their own accepted tasks
+CREATE POLICY "Customers can create tasks" ON public.tasks
+  FOR INSERT WITH CHECK (auth.uid() = customer_id);
+CREATE POLICY "Customers see own tasks and runners see open or assigned tasks" ON public.tasks
+  FOR SELECT USING (
+    auth.uid() = customer_id OR
+    (status = 'Open' AND EXISTS (SELECT 1 FROM public.runners r WHERE r.id = auth.uid() AND r.is_active = TRUE)) OR
+    auth.uid() = runner_id
+  );
+CREATE POLICY "Runners can accept open tasks or update own tasks" ON public.tasks
+  FOR UPDATE USING (
+    auth.uid() = customer_id OR
+    (status = 'Open' AND EXISTS (SELECT 1 FROM public.runners r WHERE r.id = auth.uid() AND r.is_active = TRUE)) OR
+    auth.uid() = runner_id
+  );
+
+-- Ratings: Customers rate completed tasks they own; Runners see ratings given to them
+CREATE POLICY "Customers can insert rating for own completed task" ON public.ratings
+  FOR INSERT WITH CHECK (
+    auth.uid() = customer_id AND
+    EXISTS (SELECT 1 FROM public.tasks t WHERE t.id = task_id AND t.customer_id = auth.uid() AND t.status = 'Completed')
+  );
+CREATE POLICY "Customers and rated runners can view ratings" ON public.ratings
+  FOR SELECT USING (auth.uid() = customer_id OR auth.uid() = runner_id);
+
+-- Earnings: Runners can view only their own earnings ledger
+CREATE POLICY "Runners view own earnings" ON public.earnings
+  FOR SELECT USING (auth.uid() = runner_id);
+
+-- ============================================================================
+-- 10. STORAGE BUCKET & POLICIES (runner-selfies)
+-- ============================================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('runner-selfies', 'runner-selfies', TRUE)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Public read runner selfies" ON storage.objects
+  FOR SELECT USING (bucket_id = 'runner-selfies');
+
+CREATE POLICY "Authenticated runners upload own selfie" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'runner-selfies' AND auth.role() = 'authenticated'
+  );
+`;
+
+    // =========================================================================
+    // 2. SERVICE WORKER REGISTRATION (INLINE BLOB) & PWA INSTALL PROMPT
+    // =========================================================================
+    let deferredInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const btn = document.getElementById('installPwaBtn');
+      if (btn) {
+        btn.classList.remove('hidden');
+        btn.classList.add('flex');
+      }
+    });
+
+    async function triggerPWAInstall() {
+      if (!deferredInstallPrompt) {
+        showToast('Use your browser menu ("Add to Home Screen" / "Install App") to install MODISHA.', 'info');
+        return;
+      }
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      if (outcome === 'accepted') {
+        showToast('MODISHA Errand Running installed to your device!', 'success');
+      }
+      deferredInstallPrompt = null;
+      document.getElementById('installPwaBtn').classList.add('hidden');
+    }
+
+    (function registerInlineServiceWorker() {
+      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
+        const swCode = `
+          const CACHE_NAME = 'modisha-errand-v1';
+          self.addEventListener('install', (event) => {
+            self.skipWaiting();
+          });
+          self.addEventListener('activate', (event) => {
+            event.waitUntil(clients.claim());
+          });
+          self.addEventListener('fetch', (event) => {
+            if (event.request.method !== 'GET') return;
+            event.respondWith(
+              fetch(event.request).catch(() => caches.match(event.request))
+            );
+          });
+        `;
+        try {
+          const swBlob = new Blob([swCode], { type: 'application/javascript' });
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker.register(swUrl).catch(() => {});
+        } catch (err) {
+          // Blob SW may be restricted in sandboxed iframes; fails gracefully
+        }
+      }
+    })();
+
+    // =========================================================================
+    // 3. APPLICATION STATE & DEMO SANDBOX DATA SEEDER
+    // =========================================================================
+    const STORAGE_KEYS = {
+      SB_URL: 'modisha_sb_url',
+      SB_KEY: 'modisha_sb_key',
+      DEMO_DB: 'modisha_demo_db_v1',
+      DEMO_SESSION: 'modisha_demo_session_v1',
+      ADMIN_PASS: 'modisha_admin_session_pass'
+    };
+
+    let supabaseClient = null;
+    let isLiveSupabase = false;
+
+    const appState = {
+      route: 'home', // 'home' | 'customer' | 'runner' | 'admin'
+      customerAuthMode: 'signin', // 'signin' | 'signup'
+      runnerAuthMode: 'signin',   // 'signin' | 'signup'
+      runnerTab: 'available',     // 'available' | 'my-tasks' | 'earnings' | 'reviews'
+      customerTab: 'tasks',       // 'tasks' | 'post' | 'profile'
+      adminTab: 'overview',       // 'overview' | 'users' | 'runners' | 'tasks'
+      taskFilter: 'ALL',
+      session: null, // { role: 'customer' | 'runner', user: {...} }
+      adminAuthenticated: false,
+      selectedRatingStars: 5,
+      loading: false,
+      data: {
+        profiles: [],
+        runners: [],
+        tasks: [],
+        ratings: [],
+        earnings: []
+      }
+    };
+
+    function generateAvatarSVG(initials, bgHex = '#10B981') {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+        <rect width="160" height="160" rx="80" fill="${bgHex}"/>
+        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#0F172A" font-family="Inter, sans-serif" font-weight="800" font-size="56">${initials}</text>
+      </svg>`;
+      return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    }
+
+    function getSeedDemoDB() {
+      return {
+        profiles: [
+          {
+            id: 'cust-101',
+            full_name: 'Thabo Mokoena',
+            email: 'thabo@example.co.za',
+            phone: '082 451 8890',
+            password: 'Password123!',
+            created_at: new Date(Date.now() - 86400000 * 6).toISOString()
+          },
+          {
+            id: 'cust-102',
+            full_name: 'Lerato Ndlovu',
+            email: 'lerato@example.co.za',
+            phone: '071 903 4412',
+            password: 'Password123!',
+            created_at: new Date(Date.now() - 86400000 * 4).toISOString()
+          }
+        ],
+        runners: [
+          {
+            id: 'run-201',
+            full_name: 'Sipho Khumalo',
+            email: 'sipho.runner@example.co.za',
+            whatsapp_number: '27835551234',
+            call_number: '083 555 1234',
+            selfie_url: generateAvatarSVG('SK', '#10B981'),
+            is_active: true,
+            password: 'Password123!',
+            created_at: new Date(Date.now() - 86400000 * 10).toISOString()
+          },
+          {
+            id: 'run-202',
+            full_name: 'Amahle Dlamini',
+            email: 'amahle.runner@example.co.za',
+            whatsapp_number: '27724449876',
+            call_number: '072 444 9876',
+            selfie_url: generateAvatarSVG('AD', '#F59E0B'),
+            is_active: true,
+            password: 'Password123!',
+            created_at: new Date(Date.now() - 86400000 * 8).toISOString()
+          }
+        ],
+        tasks: [
+          {
+            id: 'task-301',
+            customer_id: 'cust-101',
+            runner_id: null,
+            title: 'Woolworths Grocery & Pharmacy Pickup',
+            description: 'Pick up 2 pre-paid grocery bags from Woolworths Food Sandton City and collect a prescription parcel from Dis-Chem on the lower level.',
+            pickup_location: 'Sandton City Mall, Entrance 4, Johannesburg',
+            dropoff_location: '42 Rivonia Road, Chislehurston, Sandton',
+            suggested_payment: 95.00,
+            status: 'Open',
+            created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+            completed_at: null
+          },
+          {
+            id: 'task-302',
+            customer_id: 'cust-102',
+            runner_id: null,
+            title: 'Urgent Signed Contract Document Drop-off',
+            description: 'Collect sealed A4 legal envelope from reception at Menlyn Maine and deliver directly to the attorneys office in Brooklyn.',
+            pickup_location: 'Menlyn Maine Central Square, Pretoria',
+            dropoff_location: '118 Bronkhorst Street, Nieuw Muckleneuk, Pretoria',
+            suggested_payment: 75.00,
+            status: 'Open',
+            created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
+            completed_at: null
+          },
+          {
+            id: 'task-303',
+            customer_id: 'cust-101',
+            runner_id: 'run-201',
+            title: 'Builders Warehouse Hardware Run',
+            description: 'Buy 2x 5L white PVA paint tins and a roller tray (order #BW-8841 already paid online).',
+            pickup_location: 'Builders Warehouse, Fourways Crossing',
+            dropoff_location: '19 Cedar Avenue, Craigavon',
+            suggested_payment: 120.00,
+            status: 'In Progress',
+            created_at: new Date(Date.now() - 86400000 * 1).toISOString(),
+            completed_at: null
+          },
+          {
+            id: 'task-304',
+            customer_id: 'cust-101',
+            runner_id: 'run-201',
+            title: 'Home Affairs Queue & Collection Assist',
+            description: 'Collect certified unabridged birth certificate ready for pickup at collection counter B.',
+            pickup_location: 'Centurion Office Park, Centurion',
+            dropoff_location: '14 Oak Avenue, Highveld, Centurion',
+            suggested_payment: 150.00,
+            status: 'Completed',
+            created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
+            completed_at: new Date(Date.now() - 86400000 * 2.8).toISOString()
+          },
+          {
+            id: 'task-305',
+            customer_id: 'cust-102',
+            runner_id: 'run-202',
+            title: 'Birthday Cake & Flowers Express Delivery',
+            description: 'Carefully transport a boxed 2-tier cake from Château Gâteaux and a bouquet from NetFlorist hub.',
+            pickup_location: 'Mall of Africa, Waterfall City, Midrand',
+            dropoff_location: '88 Maxwell Drive, Kyalami Estate',
+            suggested_payment: 110.00,
+            status: 'Completed',
+            created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+            completed_at: new Date(Date.now() - 86400000 * 1.9).toISOString()
+          }
+        ],
+        ratings: [
+          {
+            id: 'rat-401',
+            task_id: 'task-304',
+            customer_id: 'cust-101',
+            runner_id: 'run-201',
+            stars: 5,
+            comment: 'Sipho was super punctual, kept me updated on WhatsApp every step of the way, and delivered safely!',
+            created_at: new Date(Date.now() - 86400000 * 2.7).toISOString()
+          },
+          {
+            id: 'rat-402',
+            task_id: 'task-305',
+            customer_id: 'cust-102',
+            runner_id: 'run-202',
+            stars: 5,
+            comment: 'Handled the birthday cake with extreme care. Arrived 10 minutes early!',
+            created_at: new Date(Date.now() - 86400000 * 1.8).toISOString()
+          }
+        ],
+        earnings: [
+          {
+            id: 'earn-501',
+            task_id: 'task-304',
+            runner_id: 'run-201',
+            gross_amount: 150.00,
+            platform_fee: 1.00,
+            net_amount: 149.00,
+            created_at: new Date(Date.now() - 86400000 * 2.8).toISOString()
+          },
+          {
+            id: 'earn-502',
+            task_id: 'task-305',
+            runner_id: 'run-202',
+            gross_amount: 110.00,
+            platform_fee: 1.00,
+            net_amount: 109.00,
+            created_at: new Date(Date.now() - 86400000 * 1.9).toISOString()
+          }
+        ]
+      };
+    }
+
+    function loadDemoDB() {
+      const raw = localStorage.getItem(STORAGE_KEYS.DEMO_DB);
+      if (!raw) {
+        const seed = getSeedDemoDB();
+        localStorage.setItem(STORAGE_KEYS.DEMO_DB, JSON.stringify(seed));
+        return seed;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch {
+        const seed = getSeedDemoDB();
+        localStorage.setItem(STORAGE_KEYS.DEMO_DB, JSON.stringify(seed));
+        return seed;
+      }
+    }
+
+    function saveDemoDB(db) {
+      localStorage.setItem(STORAGE_KEYS.DEMO_DB, JSON.stringify(db));
+      appState.data = db;
+    }
+
+    // =========================================================================
+    // 4. SUPABASE INITIALIZATION & DATA SYNC LAYER
+    // =========================================================================
+    async function initBackend() {
+      const url = localStorage.getItem(STORAGE_KEYS.SB_URL) || '';
+      const key = localStorage.getItem(STORAGE_KEYS.SB_KEY) || '';
+      document.getElementById('cfgSupabaseUrl').value = url;
+      document.getElementById('cfgSupabaseKey').value = key;
+
+      if (url && key && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(url, key);
+          isLiveSupabase = true;
+          updateConnectionBanner(true);
+          await restoreLiveSession();
+          await refreshAllData();
+          return;
+        } catch (err) {
+          console.error('Supabase init failed, falling back to demo mode:', err);
+          showToast('Could not connect to Supabase URL. Running in Demo Mode.', 'error');
+        }
+      }
+
+      // Demo Mode fallback
+      isLiveSupabase = false;
+      supabaseClient = null;
+      updateConnectionBanner(false);
+      appState.data = loadDemoDB();
+      const savedSession = localStorage.getItem(STORAGE_KEYS.DEMO_SESSION);
+      if (savedSession) {
+        try {
+          appState.session = JSON.parse(savedSession);
+        } catch {
+          appState.session = null;
+        }
+      }
+      if (sessionStorage.getItem(STORAGE_KEYS.ADMIN_PASS)) {
+        appState.adminAuthenticated = true;
+      }
+      renderHeaderSession();
+      renderApp();
+    }
+
+    function updateConnectionBanner(live) {
+      const dot = document.getElementById('connectionDot');
+      const label = document.getElementById('connectionLabel');
+      if (live) {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        label.textContent = 'Connected to Live Supabase Cloud';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+        label.textContent = 'Interactive Demo Mode (Local Sandbox)';
+      }
+    }
+
+    function saveSupabaseConfig(e) {
+      e.preventDefault();
+      const url = document.getElementById('cfgSupabaseUrl').value.trim();
+      const key = document.getElementById('cfgSupabaseKey').value.trim();
+      if (!url || !key) {
+        resetToDemoMode();
+        return;
+      }
+      localStorage.setItem(STORAGE_KEYS.SB_URL, url);
+      localStorage.setItem(STORAGE_KEYS.SB_KEY, key);
+      closeModal('configModal');
+      showToast('Supabase credentials saved. Connecting...', 'success');
+      initBackend();
+    }
+
+    function resetToDemoMode() {
+      localStorage.removeItem(STORAGE_KEYS.SB_URL);
+      localStorage.removeItem(STORAGE_KEYS.SB_KEY);
+      appState.session = null;
+      appState.adminAuthenticated = false;
+      sessionStorage.removeItem(STORAGE_KEYS.ADMIN_PASS);
+      closeModal('configModal');
+      showToast('Switched to Interactive Demo Mode.', 'info');
+      initBackend();
+    }
+
+    async function restoreLiveSession() {
+      if (!isLiveSupabase) return;
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.user) {
+        const uid = session.user.id;
+        // Check if runner or customer profile
+        const { data: runner } = await supabaseClient.from('runners').select('*').eq('id', uid).maybeSingle();
+        if (runner) {
+          appState.session = { role: 'runner', user: runner };
+        } else {
+          const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', uid).maybeSingle();
+          if (profile) {
+            appState.session = { role: 'customer', user: profile };
+          }
+        }
+      }
+      if (sessionStorage.getItem(STORAGE_KEYS.ADMIN_PASS)) {
+        appState.adminAuthenticated = true;
+      }
+    }
+
+    async function refreshAllData() {
+      if (!isLiveSupabase) {
+        appState.data = loadDemoDB();
+        renderHeaderSession();
+        renderApp();
+        return;
+      }
+
+      try {
+        // If Admin is authenticated, fetch full snapshot via RPC
+        const adminPass = sessionStorage.getItem(STORAGE_KEYS.ADMIN_PASS);
+        if (appState.adminAuthenticated && adminPass) {
+          const { data: adminData, error } = await supabaseClient.rpc('admin_get_dashboard', { p_password: adminPass });
+          if (!error && adminData) {
+            appState.data = {
+              profiles: adminData.profiles || [],
+              runners: adminData.runners || [],
+              tasks: adminData.tasks || [],
+              earnings: adminData.earnings || [],
+              ratings: adminData.ratings || []
+            };
+          }
+        } else {
+          // Standard RLS-scoped queries
+          const [tasksRes, profilesRes, runnersRes, ratingsRes, earningsRes] = await Promise.all([
+            supabaseClient.from('tasks').select('*').order('created_at', { ascending: false }),
+            supabaseClient.from('profiles').select('*'),
+            supabaseClient.from('runners').select('*'),
+            supabaseClient.from('ratings').select('*').order('created_at', { ascending: false }),
+            supabaseClient.from('earnings').select('*').order('created_at', { ascending: false })
+          ]);
+          appState.data.tasks = tasksRes.data || [];
+          appState.data.profiles = profilesRes.data || [];
+          appState.data.runners = runnersRes.data || [];
+          appState.data.ratings = ratingsRes.data || [];
+          appState.data.earnings = earningsRes.data || [];
+        }
+      } catch (err) {
+        console.error('Error refreshing data:', err);
+      }
+
+      renderHeaderSession();
+      renderApp();
+    }
+
+    // =========================================================================
+    // 5. AUTHENTICATION HANDLERS (CUSTOMER, RUNNER, ADMIN)
+    // =========================================================================
+
+    // --- CUSTOMER SIGN UP ---
+    async function handleCustomerSignUp(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('custRegName').value.trim();
+      const email = document.getElementById('custRegEmail').value.trim().toLowerCase();
+      const phone = document.getElementById('custRegPhone').value.trim();
+      const password = document.getElementById('custRegPass').value;
+
+      if (!fullName || !email || !phone || password.length < 6) {
+        showToast('Please complete all fields (password min 6 characters).', 'error');
+        return;
+      }
+
+      setBtnLoading('custRegBtn', true, 'Creating Account...');
+      try {
+        if (isLiveSupabase) {
+          const { data, error } = await supabaseClient.auth.signUp({ email, password });
+          if (error) throw error;
+          if (!data.user) throw new Error('Check your email to confirm registration before signing in.');
+
+          const { error: profErr } = await supabaseClient.from('profiles').insert({
+            id: data.user.id,
+            full_name: fullName,
+            email,
+            phone
+          });
+          if (profErr) throw profErr;
+
+          appState.session = {
+            role: 'customer',
+            user: { id: data.user.id, full_name: fullName, email, phone }
+          };
+        } else {
+          const db = loadDemoDB();
+          if (db.profiles.some(p => p.email === email) || db.runners.some(r => r.email === email)) {
+            throw new Error('An account with this email already exists.');
+          }
+          const newProfile = {
+            id: 'cust-' + Date.now(),
+            full_name: fullName,
+            email,
+            phone,
+            password,
+            created_at: new Date().toISOString()
+          };
+          db.profiles.push(newProfile);
+          saveDemoDB(db);
+          appState.session = { role: 'customer', user: newProfile };
+          localStorage.setItem(STORAGE_KEYS.DEMO_SESSION, JSON.stringify(appState.session));
+        }
+
+        showToast(`Welcome to MODISHA, ${fullName}!`, 'success');
+        appState.customerTab = 'tasks';
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Sign up failed.', 'error');
+      } finally {
+        setBtnLoading('custRegBtn', false, 'Create Customer Account');
+      }
+    }
+
+    // --- CUSTOMER SIGN IN ---
+    async function handleCustomerSignIn(e) {
+      e.preventDefault();
+      const email = document.getElementById('custLoginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('custLoginPass').value;
+
+      setBtnLoading('custLoginBtn', true, 'Signing In...');
+      try {
+        if (isLiveSupabase) {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          const { data: profile, error: pErr } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', data.user.id)
+            .single();
+          if (pErr || !profile) {
+            await supabaseClient.auth.signOut();
+            throw new Error('No customer profile found for this account. Are you registered as an Errand Runner?');
+          }
+          appState.session = { role: 'customer', user: profile };
+        } else {
+          const db = loadDemoDB();
+          const profile = db.profiles.find(p => p.email === email && p.password === password);
+          if (!profile) {
+            throw new Error('Invalid customer email or password. Try Demo: thabo@example.co.za / Password123!');
+          }
+          appState.session = { role: 'customer', user: profile };
+          localStorage.setItem(STORAGE_KEYS.DEMO_SESSION, JSON.stringify(appState.session));
+        }
+
+        showToast(`Signed in as ${appState.session.user.full_name}`, 'success');
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Sign in failed.', 'error');
+      } finally {
+        setBtnLoading('custLoginBtn', false, 'Sign In to Customer Portal');
+      }
+    }
+
+    // --- CUSTOMER PROFILE UPDATE ---
+    async function handleUpdateCustomerProfile(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('profFullName').value.trim();
+      const phone = document.getElementById('profPhone').value.trim();
+      if (!fullName || !phone) {
+        showToast('Full name and phone number are required.', 'error');
+        return;
+      }
+
+      setBtnLoading('saveProfBtn', true, 'Saving...');
+      try {
+        const uid = appState.session.user.id;
+        if (isLiveSupabase) {
+          const { error } = await supabaseClient
+            .from('profiles')
+            .update({ full_name: fullName, phone, updated_at: new Date().toISOString() })
+            .eq('id', uid);
+          if (error) throw error;
+        } else {
+          const db = loadDemoDB();
+          const idx = db.profiles.findIndex(p => p.id === uid);
+          if (idx !== -1) {
+            db.profiles[idx].full_name = fullName;
+            db.profiles[idx].phone = phone;
+            saveDemoDB(db);
+          }
+        }
+
+        appState.session.user.full_name = fullName;
+        appState.session.user.phone = phone;
+        if (!isLiveSupabase) {
+          localStorage.setItem(STORAGE_KEYS.DEMO_SESSION, JSON.stringify(appState.session));
+        }
+        showToast('Profile updated successfully!', 'success');
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Could not update profile.', 'error');
+      } finally {
+        setBtnLoading('saveProfBtn', false, 'Save Changes');
+      }
+    }
+
+    // --- RUNNER SELFIE PREVIEW HELPER ---
+    let pendingRunnerSelfieFile = null;
+    let pendingRunnerSelfieDataUrl = null;
+
+    function handleSelfieFileChange(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        showToast('Please select a valid image file (JPG, PNG, WEBP).', 'error');
+        e.target.value = '';
+        return;
+      }
+      if (file.size > 4 * 1024 * 1024) {
+        showToast('Selfie image must be under 4MB.', 'error');
+        e.target.value = '';
+        return;
+      }
+      pendingRunnerSelfieFile = file;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        pendingRunnerSelfieDataUrl = ev.target.result;
+        const preview = document.getElementById('selfiePreviewImg');
+        const placeholder = document.getElementById('selfiePlaceholder');
+        if (preview && placeholder) {
+          preview.src = pendingRunnerSelfieDataUrl;
+          preview.classList.remove('hidden');
+          placeholder.classList.add('hidden');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // --- RUNNER SIGN UP ---
+    async function handleRunnerSignUp(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('runRegName').value.trim();
+      const email = document.getElementById('runRegEmail').value.trim().toLowerCase();
+      const whatsapp = document.getElementById('runRegWhatsapp').value.trim();
+      const callNum = document.getElementById('runRegCall').value.trim();
+      const password = document.getElementById('runRegPass').value;
+
+      if (!fullName || !email || !whatsapp || !callNum || password.length < 6) {
+        showToast('Please fill in all runner fields (password min 6 chars).', 'error');
+        return;
+      }
+      if (!pendingRunnerSelfieFile || !pendingRunnerSelfieDataUrl) {
+        showToast('A clear verification selfie photo is mandatory to register as a Runner.', 'error');
+        return;
+      }
+
+      setBtnLoading('runRegBtn', true, 'Uploading Selfie & Registering...');
+      try {
+        if (isLiveSupabase) {
+          const { data, error } = await supabaseClient.auth.signUp({ email, password });
+          if (error) throw error;
+          if (!data.user) throw new Error('Please confirm your email before signing in.');
+
+          // Upload selfie to Supabase Storage bucket 'runner-selfies'
+          const fileExt = pendingRunnerSelfieFile.name.split('.').pop() || 'jpg';
+          const filePath = `${data.user.id}/selfie-${Date.now()}.${fileExt}`;
+          const { error: uploadErr } = await supabaseClient.storage
+            .from('runner-selfies')
+            .upload(filePath, pendingRunnerSelfieFile, { upsert: true });
+          if (uploadErr) throw uploadErr;
+
+          const { data: pubUrlData } = supabaseClient.storage
+            .from('runner-selfies')
+            .getPublicUrl(filePath);
+          const selfieUrl = pubUrlData.publicUrl;
+
+          const { error: insErr } = await supabaseClient.from('runners').insert({
+            id: data.user.id,
+            full_name: fullName,
+            email,
+            whatsapp_number: whatsapp,
+            call_number: callNum,
+            selfie_url: selfieUrl,
+            is_active: true
+          });
+          if (insErr) throw insErr;
+
+          appState.session = {
+            role: 'runner',
+            user: {
+              id: data.user.id,
+              full_name: fullName,
+              email,
+              whatsapp_number: whatsapp,
+              call_number: callNum,
+              selfie_url: selfieUrl,
+              is_active: true
+            }
+          };
+        } else {
+          const db = loadDemoDB();
+          if (db.runners.some(r => r.email === email) || db.profiles.some(p => p.email === email)) {
+            throw new Error('An account with this email already exists.');
+          }
+          const newRunner = {
+            id: 'run-' + Date.now(),
+            full_name: fullName,
+            email,
+            whatsapp_number: whatsapp,
+            call_number: callNum,
+            selfie_url: pendingRunnerSelfieDataUrl,
+            is_active: true,
+            password,
+            created_at: new Date().toISOString()
+          };
+          db.runners.push(newRunner);
+          saveDemoDB(db);
+          appState.session = { role: 'runner', user: newRunner };
+          localStorage.setItem(STORAGE_KEYS.DEMO_SESSION, JSON.stringify(appState.session));
+        }
+
+        pendingRunnerSelfieFile = null;
+        pendingRunnerSelfieDataUrl = null;
+        showToast(`Runner profile activated! Welcome, ${fullName}.`, 'success');
+        appState.runnerTab = 'available';
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Runner registration failed.', 'error');
+      } finally {
+        setBtnLoading('runRegBtn', false, 'Complete Runner Registration');
+      }
+    }
+
+    // --- RUNNER SIGN IN ---
+    async function handleRunnerSignIn(e) {
+      e.preventDefault();
+      const email = document.getElementById('runLoginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('runLoginPass').value;
+
+      setBtnLoading('runLoginBtn', true, 'Signing In...');
+      try {
+        if (isLiveSupabase) {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          const { data: runner, error: rErr } = await supabaseClient
+            .from('runners')
+            .select('*')
+            .eq('id', data.user.id)
+            .single();
+          if (rErr || !runner) {
+            await supabaseClient.auth.signOut();
+            throw new Error('No Errand Runner profile found for this email.');
+          }
+          appState.session = { role: 'runner', user: runner };
+        } else {
+          const db = loadDemoDB();
+          const runner = db.runners.find(r => r.email === email && r.password === password);
+          if (!runner) {
+            throw new Error('Invalid runner credentials. Try Demo: sipho.runner@example.co.za / Password123!');
+          }
+          appState.session = { role: 'runner', user: runner };
+          localStorage.setItem(STORAGE_KEYS.DEMO_SESSION, JSON.stringify(appState.session));
+        }
+
+        showToast(`Welcome back, Runner ${appState.session.user.full_name}!`, 'success');
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Runner sign in failed.', 'error');
+      } finally {
+        setBtnLoading('runLoginBtn', false, 'Sign In as Errand Runner');
+      }
+    }
+
+    // --- SIGN OUT (CUSTOMER / RUNNER) ---
+    async function handleSignOut() {
+      if (isLiveSupabase && supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+      appState.session = null;
+      localStorage.removeItem(STORAGE_KEYS.DEMO_SESSION);
+      showToast('You have been signed out.', 'info');
+      renderHeaderSession();
+      renderApp();
+    }
+
+    // --- ADMIN LOGIN (RPC VERIFICATION — NEVER HARDCODED IN CLIENT) ---
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const password = document.getElementById('adminPasswordInput').value;
+      if (!password) {
+        showToast('Please enter the admin password.', 'error');
+        return;
+      }
+
+      setBtnLoading('adminLoginBtn', true, 'Verifying via Server RPC...');
+      try {
+        let verified = false;
+        if (isLiveSupabase) {
+          // Calls Postgres SECURITY DEFINER RPC verify_admin_login(p_password)
+          const { data, error } = await supabaseClient.rpc('verify_admin_login', { p_password: password });
+          if (error) throw error;
+          verified = Boolean(data);
+        } else {
+          // Demo mode fallback: computes SHA-256 of entered password and compares against pre-computed hash
+          const encoder = new TextEncoder();
+          const hashBuf = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+          const hashHex = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
+          // Pre-computed SHA-256 digest of the configured admin passphrase
+          const expectedDigest = '95f861d838477d493e5d73eb33b419b0a9c00201f3a60d5a4279325971c7c572';
+          verified = (hashHex === expectedDigest);
+        }
+
+        if (!verified) {
+          throw new Error('Access denied: Invalid administrator passphrase.');
+        }
+
+        appState.adminAuthenticated = true;
+        sessionStorage.setItem(STORAGE_KEYS.ADMIN_PASS, password);
+        showToast('Admin session authenticated.', 'success');
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Admin verification failed.', 'error');
+      } finally {
+        setBtnLoading('adminLoginBtn', false, 'Unlock Admin Console');
+      }
+    }
+
+    function handleAdminLogout() {
+      appState.adminAuthenticated = false;
+      sessionStorage.removeItem(STORAGE_KEYS.ADMIN_PASS);
+      showToast('Admin console locked.', 'info');
+      renderApp();
+    }
+
+    // =========================================================================
+    // 6. ERRAND / TASK LIFECYCLE, RATINGS & ADMIN ACTIONS
+    // =========================================================================
+
+    // --- CUSTOMER POSTS A NEW ERRAND ---
+    async function handlePostTask(e) {
+      e.preventDefault();
+      if (!appState.session || appState.session.role !== 'customer') {
+        showToast('Please sign in as a Customer first.', 'error');
+        return;
+      }
+
+      const title = document.getElementById('taskTitle').value.trim();
+      const description = document.getElementById('taskDesc').value.trim();
+      const pickup = document.getElementById('taskPickup').value.trim();
+      const dropoff = document.getElementById('taskDropoff').value.trim();
+      const payment = parseFloat(document.getElementById('taskPayment').value);
+
+      if (!title || !description || !pickup || !dropoff || isNaN(payment) || payment < 5) {
+        showToast('Please complete all fields. Minimum suggested payment is R5.00.', 'error');
+        return;
+      }
+
+      setBtnLoading('postTaskBtn', true, 'Posting Errand...');
+      try {
+        const customerId = appState.session.user.id;
+        if (isLiveSupabase) {
+          const { error } = await supabaseClient.from('tasks').insert({
+            customer_id: customerId,
+            title,
+            description,
+            pickup_location: pickup,
+            dropoff_location: dropoff,
+            suggested_payment: payment,
+            status: 'Open'
+          });
+          if (error) throw error;
+        } else {
+          const db = loadDemoDB();
+          db.tasks.unshift({
+            id: 'task-' + Date.now(),
+            customer_id: customerId,
+            runner_id: null,
+            title,
+            description,
+            pickup_location: pickup,
+            dropoff_location: dropoff,
+            suggested_payment: payment,
+            status: 'Open',
+            created_at: new Date().toISOString(),
+            completed_at: null
+          });
+          saveDemoDB(db);
+        }
+
+        showToast('Errand published! Runners can now view and accept it.', 'success');
+        appState.customerTab = 'tasks';
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Failed to post errand.', 'error');
+      } finally {
+        setBtnLoading('postTaskBtn', false, 'Publish Errand Now');
+      }
+    }
+
+    // --- RUNNER ACCEPTS AN OPEN ERRAND ---
+    async function acceptErrand(taskId) {
+      if (!appState.session || appState.session.role !== 'runner') {
+        showToast('Sign in as an Errand Runner to accept errands.', 'error');
+        navigate('runner');
+        return;
+      }
+      if (appState.session.user.is_active === false) {
+        showToast('Your runner account is currently suspended. Contact Admin.', 'error');
+        return;
+      }
+
+      const runnerId = appState.session.user.id;
+      try {
+        if (isLiveSupabase) {
+          const { error } = await supabaseClient
+            .from('tasks')
+            .update({ runner_id: runnerId, status: 'Accepted' })
+            .eq('id', taskId)
+            .eq('status', 'Open');
+          if (error) throw error;
+        } else {
+          const db = loadDemoDB();
+          const task = db.tasks.find(t => t.id === taskId);
+          if (!task || task.status !== 'Open') {
+            throw new Error('This errand is no longer open.');
+          }
+          task.runner_id = runnerId;
+          task.status = 'Accepted';
+          saveDemoDB(db);
+        }
+
+        showToast('Errand accepted! View it under "My Active Errands".', 'success');
+        appState.runnerTab = 'my-tasks';
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Could not accept errand.', 'error');
+      }
+    }
+
+    // --- RUNNER UPDATES TASK STATUS ('In Progress' or 'Completed') ---
+    async function updateTaskStatus(taskId, newStatus) {
+      try {
+        if (isLiveSupabase) {
+          const { error } = await supabaseClient
+            .from('tasks')
+            .update({ status: newStatus })
+            .eq('id', taskId);
+          if (error) throw error;
+        } else {
+          const db = loadDemoDB();
+          const task = db.tasks.find(t => t.id === taskId);
+          if (!task) throw new Error('Task not found.');
+          task.status = newStatus;
+
+          // Automatically record R1.00 platform fee & runner net payout upon completion
+          if (newStatus === 'Completed' && task.runner_id) {
+            task.completed_at = new Date().toISOString();
+            const alreadyRecorded = db.earnings.some(e => e.task_id === task.id);
+            if (!alreadyRecorded) {
+              const gross = Number(task.suggested_payment);
+              const fee = 1.00;
+              db.earnings.unshift({
+                id: 'earn-' + Date.now(),
+                task_id: task.id,
+                runner_id: task.runner_id,
+                gross_amount: gross,
+                platform_fee: fee,
+                net_amount: Number((gross - fee).toFixed(2)),
+                created_at: new Date().toISOString()
+              });
+            }
+          }
+          saveDemoDB(db);
+        }
+
+        if (newStatus === 'Completed') {
+          showToast('Errand marked Completed! Net payout added to your Earnings (R1.00 fee deducted).', 'success');
+        } else {
+          showToast(`Errand status updated to "${newStatus}".`, 'success');
+        }
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Failed to update status.', 'error');
+      }
+    }
+
+    // --- RATING MODAL & SUBMISSION ---
+    function openRatingModal(taskId, runnerId, runnerName, taskTitle) {
+      document.getElementById('ratingTaskId').value = taskId;
+      document.getElementById('ratingRunnerId').value = runnerId;
+      document.getElementById('ratingModalSubtitle').textContent = `Runner: ${runnerName} • "${taskTitle}"`;
+      document.getElementById('ratingComment').value = '';
+      setRatingStars(5);
+      openModal('ratingModal');
+    }
+
+    function setRatingStars(count) {
+      appState.selectedRatingStars = count;
+      const labels = {
+        1: '1 / 5 — Poor Experience',
+        2: '2 / 5 — Below Expectations',
+        3: '3 / 5 — Satisfactory',
+        4: '4 / 5 — Great Service',
+        5: '5 / 5 — Outstanding Service!'
+      };
+      document.getElementById('ratingLabelText').textContent = labels[count] || '';
+      document.querySelectorAll('#starSelector .star-btn').forEach(btn => {
+        const val = Number(btn.getAttribute('data-star'));
+        if (val <= count) {
+          btn.classList.remove('text-slate-300');
+          btn.classList.add('text-amber-400');
+        } else {
+          btn.classList.remove('text-amber-400');
+          btn.classList.add('text-slate-300');
+        }
+      });
+    }
+
+    async function submitRunnerRating(e) {
+      e.preventDefault();
+      const taskId = document.getElementById('ratingTaskId').value;
+      const runnerId = document.getElementById('ratingRunnerId').value;
+      const comment = document.getElementById('ratingComment').value.trim();
+      const stars = appState.selectedRatingStars;
+      const customerId = appState.session.user.id;
+
+      if (!comment) {
+        showToast('Please enter a brief review comment.', 'error');
+        return;
+      }
+
+      setBtnLoading('submitRatingBtn', true, 'Submitting...');
+      try {
+        if (isLiveSupabase) {
+          const { error } = await supabaseClient.from('ratings').insert({
+            task_id: taskId,
+            customer_id: customerId,
+            runner_id: runnerId,
+            stars,
+            comment
+          });
+          if (error) throw error;
+        } else {
+          const db = loadDemoDB();
+          if (db.ratings.some(r => r.task_id === taskId)) {
+            throw new Error('You have already rated this errand.');
+          }
+          db.ratings.unshift({
+            id: 'rat-' + Date.now(),
+            task_id: taskId,
+            customer_id: customerId,
+            runner_id: runnerId,
+            stars,
+            comment,
+            created_at: new Date().toISOString()
+          });
+          saveDemoDB(db);
+        }
+
+        closeModal('ratingModal');
+        showToast('Thank you! Your rating has been published to the runner profile.', 'success');
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Failed to submit rating.', 'error');
+      } finally {
+        setBtnLoading('submitRatingBtn', false, 'Submit Review');
+      }
+    }
+
+    // --- ADMIN MANAGEMENT ACTIONS ---
+    async function adminManageEntity(action, targetId) {
+      try {
+        if (isLiveSupabase) {
+          const pass = sessionStorage.getItem(STORAGE_KEYS.ADMIN_PASS);
+          const { error } = await supabaseClient.rpc('admin_manage_entity', {
+            p_password: pass,
+            p_action: action,
+            p_target_id: targetId
+          });
+          if (error) throw error;
+        } else {
+          const db = loadDemoDB();
+          if (action === 'toggle_runner') {
+            const runner = db.runners.find(r => r.id === targetId);
+            if (runner) runner.is_active = !runner.is_active;
+          } else if (action === 'delete_task') {
+            db.tasks = db.tasks.filter(t => t.id !== targetId);
+          } else if (action === 'delete_profile') {
+            db.profiles = db.profiles.filter(p => p.id !== targetId);
+          } else if (action === 'delete_runner') {
+            db.runners = db.runners.filter(r => r.id !== targetId);
+          }
+          saveDemoDB(db);
+        }
+
+        showToast('Admin action executed successfully.', 'success');
+        await refreshAllData();
+      } catch (err) {
+        showToast(err.message || 'Admin action failed.', 'error');
+      }
+    }
+
+    // =========================================================================
+    // 7. UI NAVIGATION, MODALS, TOASTS & FORMATTERS
+    // =========================================================================
+    function navigate(route) {
+      appState.route = route;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderApp();
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const styles = {
+        success: 'bg-slate-900 border-emerald-500 text-white',
+        error: 'bg-rose-950 border-rose-500 text-rose-100',
+        info: 'bg-slate-900 border-slate-600 text-slate-100'
+      };
+      const icons = {
+        success: '<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>',
+        error: '<span class="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0"></span>',
+        info: '<span class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>'
+      };
+      toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border-l-4 shadow-xl text-xs sm:text-sm font-medium animate-fade-up ${styles[type] || styles.info}`;
+      toast.innerHTML = `${icons[type] || icons.info}<span class="flex-1">${escapeHTML(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, 4200);
+    }
+
+    function setBtnLoading(btnId, loading, text) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      btn.disabled = loading;
+      btn.textContent = text;
+      if (loading) btn.classList.add('opacity-70', 'cursor-not-allowed');
+      else btn.classList.remove('opacity-70', 'cursor-not-allowed');
+    }
+
+    function formatZAR(amount) {
+      const num = Number(amount || 0);
+      return 'R' + num.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      try {
+        return new Date(iso).toLocaleDateString('en-ZA', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch {
+        return iso;
+      }
+    }
+
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderStarsHTML(rating, sizeClass = 'w-4 h-4') {
+      const rounded = Math.round(Number(rating || 0));
+      let html = '<div class="inline-flex items-center gap-0.5">';
+      for (let i = 1; i <= 5; i++) {
+        const color = i <= rounded ? 'text-amber-400' : 'text-slate-300';
+        html += `<svg class="${sizeClass} ${color} fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function statusBadgeHTML(status) {
+      const map = {
+        'Open': 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        'Accepted': 'bg-sky-50 text-sky-700 border-sky-200',
+        'In Progress': 'bg-amber-50 text-amber-700 border-amber-200',
+        'Completed': 'bg-slate-100 text-slate-700 border-slate-300'
+      };
+      const dotMap = {
+        'Open': 'bg-emerald-500',
+        'Accepted': 'bg-sky-500',
+        'In Progress': 'bg-amber-500 animate-pulse',
+        'Completed': 'bg-slate-500'
+      };
+      const cls = map[status] || map['Open'];
+      const dot = dotMap[status] || 'bg-slate-400';
+      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${cls}">
+        <span class="w-1.5 h-1.5 rounded-full ${dot}"></span>
+        ${escapeHTML(status)}
+      </span>`;
+    }
+
+    function copySetupSQL() {
+      const textarea = document.createElement('textarea');
+      textarea.value = SUPABASE_SETUP_SQL;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      showToast('Supabase SQL script copied to clipboard!', 'success');
+    }
+
+    // =========================================================================
+    // 8. LEGAL MODALS CONTENT (POPIA PRIVACY, TERMS OF USE, T&Cs)
+    // =========================================================================
+    const LEGAL_CONTENT = {
+      privacy: {
+        title: 'Privacy Policy (POPIA Compliant)',
+        html: `
+          <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-700">
+            <strong>Protection of Personal Information Act (POPIA) Notice:</strong> MODISHA Errand Running ("MODISHA", "we", "our") is committed to safeguarding the personal data of all Customers and Errand Runners in the Republic of South Africa.
+          </div>
+          <h4 class="font-bold text-slate-900 text-base pt-1">1. Information We Collect</h4>
+          <p>To operate a safe, accountable peer-to-peer errand marketplace, we collect and process the following categories of personal information:</p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Customer Account Data:</strong> Full name, email address, South African mobile contact number, and errand pickup/drop-off addresses.</li>
+            <li><strong>Errand Runner Verification Data:</strong> Full name, email address, active WhatsApp number, direct voice call number, and a mandatory live/uploaded <strong>verification selfie photograph</strong> stored securely in encrypted cloud buckets.</li>
+            <li><strong>Transactional &amp; Reputation Records:</strong> Errand descriptions, agreed Rand (ZAR) amounts, completion timestamps, R1.00 platform fee ledger entries, and customer star ratings/reviews.</li>
+          </ul>
+          <h4 class="font-bold text-slate-900 text-base pt-1">2. Purpose &amp; Lawful Basis of Processing</h4>
+          <p>We process your information strictly to: (a) verify Errand Runner identity and enhance community trust; (b) share necessary pickup, drop-off, WhatsApp, and call details between matched Customers and Runners; (c) calculate and record runner earnings and the R1.00 platform service fee; and (d) prevent fraud or misuse.</p>
+          <h4 class="font-bold text-slate-900 text-base pt-1">3. Data Sharing &amp; Storage Security</h4>
+          <p>Runner selfies and contact numbers are never sold to third-party marketers. They are displayed exclusively to Customers whose errands the Runner has accepted, and to authorized MODISHA administrators for safety verification. All records are protected via PostgreSQL Row Level Security (RLS) and TLS encryption.</p>
+          <h4 class="font-bold text-slate-900 text-base pt-1">4. Your Rights Under POPIA</h4>
+          <p>You may view and update your profile details directly inside your portal at any time, request a copy of your personal data, or request permanent account deletion subject to statutory financial record-keeping obligations.</p>
+        `
+      },
+      termsOfUse: {
+        title: 'Terms of Use',
+        html: `
+          <h4 class="font-bold text-slate-900 text-base">1. Acceptance of Platform Terms</h4>
+          <p>By accessing, installing, or registering an account on the <strong>MODISHA Errand Running</strong> Progressive Web App or website, you agree to comply with these Terms of Use and all applicable laws of the Republic of South Africa.</p>
+          <h4 class="font-bold text-slate-900 text-base pt-1">2. Role of MODISHA as a Marketplace Intermediary</h4>
+          <p>MODISHA provides a digital technology platform connecting Customers who need everyday tasks completed with independent Errand Runners willing to perform those tasks. Errand Runners are independent service providers and not employees, agents, or partners of MODISHA.</p>
+          <h4 class="font-bold text-slate-900 text-base pt-1">3. Eligibility &amp; Account Security</h4>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Users and Errand Runners must be at least <strong>18 years of age</strong> and legally capable of entering into binding agreements in South Africa.</li>
+            <li>Errand Runners must upload an authentic, clear, recent selfie photograph of themselves during registration. Uploading stock photos, false identities, or third-party images results in immediate permanent suspension.</li>
+            <li>You are responsible for maintaining the confidentiality of your login credentials.</li>
+          </ul>
+          <h4 class="font-bold text-slate-900 text-base pt-1">4. Prohibited Errands &amp; Acceptable Use</h4>
+          <p>Users may not post or accept errands involving illegal substances, firearms, ammunition, stolen property, hazardous materials, counterfeit currency, or any activity that contravenes South African statutory or municipal law.</p>
+        `
+      },
+      termsAndConditions: {
+        title: 'Terms and Conditions of Service',
+        html: `
+          <h4 class="font-bold text-slate-900 text-base">1. Customer Responsibilities</h4>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Provide accurate, clear instructions, realistic Rand (ZAR) compensation, and safe, accessible pickup and drop-off locations.</li>
+            <li>Ensure that any goods to be collected from retail stores, pharmacies, or offices are pre-paid or accompanied by clear authorization.</li>
+            <li>Submit fair, honest star ratings (1–5) and constructive feedback upon errand completion.</li>
+          </ul>
+          <h4 class="font-bold text-slate-900 text-base pt-1">2. Errand Runner Responsibilities</h4>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Maintain active availability on your registered WhatsApp and Call numbers once you accept an errand.</li>
+            <li>Handle all Customer parcels, documents, and groceries with reasonable care and update the task status accurately (<em>Accepted &rarr; In Progress &rarr; Completed</em>).</li>
+          </ul>
+          <h4 class="font-bold text-slate-900 text-base pt-1">3. Pricing &amp; The R1.00 Platform Fee</h4>
+          <p>All errands are priced in <strong>South African Rands (ZAR / R)</strong> as suggested by the Customer when posting the task. Upon successful fulfillment of an errand, a flat, transparent <strong>R1.00 (One Rand) platform fee</strong> is deducted from the Errand Runner's gross errand amount. For example, on a <strong>R100.00</strong> completed errand, the Runner's net earnings are <strong>R99.00</strong> and MODISHA earns <strong>R1.00</strong>.</p>
+          <h4 class="font-bold text-slate-900 text-base pt-1">4. Ratings, Disputes &amp; Liability</h4>
+          <p>MODISHA facilitates direct communication via WhatsApp and voice call to resolve minor logistical delays immediately. In the event of a formal dispute regarding non-delivery or misconduct, MODISHA administrators may review task logs, ratings, and communication records and may suspend or terminate offending accounts. To the maximum extent permitted by South African law, MODISHA shall not be liable for indirect, incidental, or consequential damages arising from errands performed between Users and independent Runners.</p>
+          <h4 class="font-bold text-slate-900 text-base pt-1">5. Account Termination</h4>
+          <p>MODISHA reserves the right to suspend or permanently terminate any Customer or Runner account involved in fraud, harassment, repeated unfulfilled errands, or circumvention of platform rules.</p>
+        `
+      }
+    };
+
+    function openLegalModal(docKey) {
+      const doc = LEGAL_CONTENT[docKey] || LEGAL_CONTENT.privacy;
+      document.getElementById('legalModalTitle').textContent = doc.title;
+      document.getElementById('legalModalBody').innerHTML = doc.html;
+      document.querySelectorAll('.legal-tab').forEach(btn => {
+        btn.className = 'legal-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
+      });
+      const activeTab = document.getElementById('legalTab-' + docKey);
+      if (activeTab) {
+        activeTab.className = 'legal-tab px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-900 text-white border border-slate-900';
+      }
+      openModal('legalModal');
+    }
+
+    // =========================================================================
+    // 9. VIEW RENDERING ENGINE
+    // =========================================================================
+    function renderHeaderSession() {
+      const area = document.getElementById('headerSessionArea');
+      if (!area) return;
+
+      // Highlight active nav tab
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        const target = el.getAttribute('data-nav');
+        if (target === appState.route) {
+          el.classList.add('bg-emerald-500', 'text-slate-950', 'font-bold');
+          el.classList.remove('text-slate-300', 'hover:text-white', 'hover:bg-slate-700/60');
+        } else {
+          el.classList.remove('bg-emerald-500', 'text-slate-950', 'font-bold');
+          el.classList.add('text-slate-300', 'hover:text-white', 'hover:bg-slate-700/60');
+        }
+      });
+
+      if (appState.session) {
+        const { role, user } = appState.session;
+        const badgeColor = role === 'runner' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+        area.innerHTML = `
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700">
+            <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded border ${badgeColor}">${escapeHTML(role)}</span>
+            <span class="text-xs font-semibold text-white max-w-[120px] truncate">${escapeHTML(user.full_name)}</span>
+          </div>
+          <button onclick="handleSignOut()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-600/90 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition">
+            Sign Out
+          </button>
+        `;
+      } else {
+        area.innerHTML = `
+          <button onclick="navigate('customer')" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-sm transition">
+            Post Errand
+          </button>
+        `;
+      }
+    }
+
+    function renderApp() {
+      renderHeaderSession();
+      const main = document.getElementById('appMain');
+      if (!main) return;
+
+      switch (appState.route) {
+        case 'customer':
+          main.innerHTML = renderCustomerPortal();
+          break;
+        case 'runner':
+          main.innerHTML = renderRunnerPortal();
+          break;
+        case 'admin':
+          main.innerHTML = renderAdminPortal();
+          break;
+        case 'home':
+        default:
+          main.innerHTML = renderHomeMarketplace();
+          break;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // VIEW 1: HOME / MARKETPLACE OVERVIEW
+    // -------------------------------------------------------------------------
+    function renderHomeMarketplace() {
+      const openTasks = appState.data.tasks.filter(t => t.status === 'Open');
+      const completedCount = appState.data.tasks.filter(t => t.status === 'Completed').length;
+      const activeRunners = appState.data.runners.filter(r => r.is_active !== false).length;
+
+      return `
+        <div class="space-y-8 animate-fade-up">
+          <!-- Hero Banner -->
+          <section class="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 sm:p-10 lg:p-12 shadow-xl border border-slate-800">
+            <div class="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div class="lg:col-span-7 space-y-5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>Trusted South African Peer-to-Peer Errand Marketplace</span>
+                </div>
+                <h1 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-[1.12]">
+                  Need something picked up, queued, or delivered today?
+                </h1>
+                <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+                  Post your errand in Rands (R), connect via WhatsApp or call with selfie-verified local runners, and track progress from pickup to completion.
+                </p>
+                <div class="flex flex-wrap items-center gap-3 pt-1">
+                  <button onclick="navigate('customer')" class="px-6 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center gap-2">
+                    <span>Post an Errand (Customer)</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                  </button>
+                  <button onclick="navigate('runner')" class="px-6 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition">
+                    Earn as an Errand Runner
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Marketplace Metrics Card -->
+              <div class="lg:col-span-5 grid grid-cols-2 gap-3.5">
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Open Errands</span>
+                  <div class="font-display font-extrabold text-3xl text-emerald-400 mt-1">${openTasks.length}</div>
+                  <p class="text-xs text-slate-400 mt-1">Ready for immediate pickup</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Verified Runners</span>
+                  <div class="font-display font-extrabold text-3xl text-white mt-1">${activeRunners}</div>
+                  <p class="text-xs text-slate-400 mt-1">Selfie &amp; WhatsApp verified</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Platform Fee</span>
+                  <div class="font-display font-extrabold text-3xl text-amber-400 mt-1">R1.00</div>
+                  <p class="text-xs text-slate-400 mt-1">Flat fee per completed errand</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Fulfilled Tasks</span>
+                  <div class="font-display font-extrabold text-3xl text-white mt-1">${completedCount}</div>
+                  <p class="text-xs text-slate-400 mt-1">Completed across SA</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- How MODISHA Works Strip -->
+          <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-display font-extrabold flex items-center justify-center shrink-0">1</div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Post Your Task in Rands</h3>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">Describe what you need done, set pickup &amp; drop-off locations, and offer a fair Rand (R) reward.</p>
+              </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 font-display font-extrabold flex items-center justify-center shrink-0">2</div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Selfie-Verified Runner Accepts</h3>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">An active runner accepts your task. View their selfie photo and connect instantly via WhatsApp or Call.</p>
+              </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm flex items-start gap-4">
+              <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 font-display font-extrabold flex items-center justify-center shrink-0">3</div>
+              <div>
+                <h3 class="font-bold text-slate-900 text-sm">Fulfill, Rate &amp; Earn</h3>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">Once delivered, the runner keeps their full payout minus a flat R1.00 platform fee, and you rate their service.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Live Open Errands Board -->
+          <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900">Available Open Errands</h2>
+                <p class="text-xs sm:text-sm text-slate-500">Live requests waiting for an Errand Runner to accept</p>
+              </div>
+              <button onclick="navigate('runner')" class="self-start sm:self-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+                Runner Sign In to Accept &rarr;
+              </button>
+            </div>
+
+            ${openTasks.length === 0 ? `
+              <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                </div>
+                <h3 class="font-bold text-slate-900">No open errands right now</h3>
+                <p class="text-sm text-slate-500 max-w-md mx-auto">Be the first to post an errand in the Customer Portal and get matched with a runner.</p>
+                <button onclick="navigate('customer')" class="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold">Post an Errand</button>
+              </div>
+            ` : `
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                ${openTasks.map(task => {
+                  const customer = appState.data.profiles.find(p => p.id === task.customer_id);
+                  const netRunner = Math.max(0, Number(task.suggested_payment) - 1);
+                  return `
+                    <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                      <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                          ${statusBadgeHTML(task.status)}
+                          <div class="text-right">
+                            <span class="font-display font-extrabold text-lg text-emerald-600">${formatZAR(task.suggested_payment)}</span>
+                            <span class="block text-[10px] text-slate-400">Runner net: ${formatZAR(netRunner)}</span>
+                          </div>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base leading-snug">${escapeHTML(task.title)}</h3>
+                        <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">${escapeHTML(task.description)}</p>
+                        <div class="space-y-1.5 pt-2 border-t border-slate-100 text-xs">
+                          <div class="flex items-start gap-2">
+                            <span class="font-semibold text-emerald-700 shrink-0">Pickup:</span>
+                            <span class="text-slate-700">${escapeHTML(task.pickup_location)}</span>
+                          </div>
+                          <div class="flex items-start gap-2">
+                            <span class="font-semibold text-amber-700 shrink-0">Drop-off:</span>
+                            <span class="text-slate-700">${escapeHTML(task.dropoff_location)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <span class="text-[11px] text-slate-400">Posted by ${escapeHTML(customer ? customer.full_name : 'Customer')}</span>
+                        <button onclick="acceptErrand('${task.id}')" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white text-xs font-semibold transition">
+                          Accept Errand
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </section>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // VIEW 2: CUSTOMER PORTAL (AUTH + PROFILE + POST ERRAND + MY TASKS + RATE)
+    // -------------------------------------------------------------------------
+    function renderCustomerPortal() {
+      // If signed in as Runner, prompt switch
+      if (appState.session && appState.session.role === 'runner') {
+        return `
+          <div class="max-w-lg mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm animate-fade-up">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 mx-auto flex items-center justify-center font-bold text-xl">!</div>
+            <h2 class="font-display font-bold text-xl text-slate-900">Signed in as an Errand Runner</h2>
+            <p class="text-sm text-slate-600">You are currently logged into the Errand Runner Portal as <strong>${escapeHTML(appState.session.user.full_name)}</strong>. Sign out first if you wish to access a Customer account.</p>
+            <div class="flex justify-center gap-3">
+              <button onclick="navigate('runner')" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold">Go to Runner Portal</button>
+              <button onclick="handleSignOut()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold">Sign Out</button>
+            </div>
+          </div>
+        `;
+      }
+
+      // Unauthenticated Customer Auth Screen
+      if (!appState.session) {
+        const isSignUp = appState.customerAuthMode === 'signup';
+        return `
+          <div class="max-w-md mx-auto animate-fade-up">
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-lg overflow-hidden">
+              <div class="bg-slate-900 px-6 py-6 text-white">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Customer Portal</span>
+                <h2 class="font-display font-extrabold text-2xl mt-1">${isSignUp ? 'Create Customer Account' : 'Customer Sign In'}</h2>
+                <p class="text-xs text-slate-400 mt-1">Post errands in Rands, track status &amp; rate runners.</p>
+              </div>
+
+              <div class="p-6 space-y-5">
+                <!-- Toggle Tabs -->
+                <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl">
+                  <button onclick="appState.customerAuthMode='signin'; renderApp()" class="py-2 rounded-lg text-xs font-bold transition ${!isSignUp ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}">Sign In</button>
+                  <button onclick="appState.customerAuthMode='signup'; renderApp()" class="py-2 rounded-lg text-xs font-bold transition ${isSignUp ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}">Sign Up</button>
+                </div>
+
+                ${!isSignUp ? `
+                  <form onsubmit="handleCustomerSignIn(event)" class="space-y-4">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
+                      <input id="custLoginEmail" type="email" required value="${!isLiveSupabase ? 'thabo@example.co.za' : ''}" placeholder="you@example.co.za" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+                      <input id="custLoginPass" type="password" required value="${!isLiveSupabase ? 'Password123!' : ''}" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <button id="custLoginBtn" type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition">
+                      Sign In to Customer Portal
+                    </button>
+                    ${!isLiveSupabase ? `<p class="text-[11px] text-center text-slate-400">Demo credentials pre-filled for instant testing.</p>` : ''}
+                  </form>
+                ` : `
+                  <form onsubmit="handleCustomerSignUp(event)" class="space-y-3.5">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+                      <input id="custRegName" type="text" required placeholder="e.g. Naledi Molefe" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
+                      <input id="custRegEmail" type="email" required placeholder="naledi@example.co.za" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Mobile Phone Number</label>
+                      <input id="custRegPhone" type="tel" required placeholder="e.g. 082 123 4567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Create Password (min 6 chars)</label>
+                      <input id="custRegPass" type="password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <button id="custRegBtn" type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition">
+                      Create Customer Account
+                    </button>
+                  </form>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Authenticated Customer Dashboard
+      const user = appState.session.user;
+      const myTasks = appState.data.tasks.filter(t => t.customer_id === user.id);
+      const filteredTasks = appState.taskFilter === 'ALL'
+        ? myTasks
+        : myTasks.filter(t => t.status === appState.taskFilter);
+
+      return `
+        <div class="space-y-6 animate-fade-up">
+          <!-- Customer Header Bar -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600">Customer Dashboard</span>
+              <h1 class="font-display font-extrabold text-2xl text-slate-900">Hello, ${escapeHTML(user.full_name)}</h1>
+              <p class="text-xs text-slate-500 mt-0.5">${escapeHTML(user.email)} &bull; ${escapeHTML(user.phone)}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="appState.customerTab='tasks'; renderApp()" class="px-4 py-2.5 rounded-xl text-xs font-bold transition ${appState.customerTab==='tasks' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                My Errands (${myTasks.length})
+              </button>
+              <button onclick="appState.customerTab='post'; renderApp()" class="px-4 py-2.5 rounded-xl text-xs font-bold transition ${appState.customerTab==='post' ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'}">
+                + Post New Errand
+              </button>
+              <button onclick="appState.customerTab='profile'; renderApp()" class="px-4 py-2.5 rounded-xl text-xs font-bold transition ${appState.customerTab==='profile' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                My Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB A: POST NEW ERRAND -->
+          ${appState.customerTab === 'post' ? `
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+              <h2 class="font-display font-bold text-xl text-slate-900">Post a New Errand / Task</h2>
+              <p class="text-xs text-slate-500 mt-1 mb-6">Provide clear instructions and a suggested Rand (R) reward for your runner.</p>
+              <form onsubmit="handlePostTask(event)" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Errand Title *</label>
+                  <input id="taskTitle" type="text" required placeholder="e.g. Pick up dry cleaning & deliver to office" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Detailed Description *</label>
+                  <textarea id="taskDesc" rows="3" required placeholder="Include order numbers, item details, contact person at pickup, or special handling notes..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none"></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Pickup Location *</label>
+                    <input id="taskPickup" type="text" required placeholder="Street address, mall, or landmark" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Drop-off Location *</label>
+                    <input id="taskDropoff" type="text" required placeholder="Destination address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Suggested Payment (Rands / ZAR) *</label>
+                  <div class="relative">
+                    <span class="absolute left-3.5 top-2.5 font-bold text-slate-500 text-sm">R</span>
+                    <input id="taskPayment" type="number" step="1" min="5" required placeholder="85.00" class="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold focus:ring-2 focus:ring-emerald-500 outline-none" />
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-1">Runners receive your full offered amount minus a R1.00 platform fee.</p>
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-3">
+                  <button type="button" onclick="appState.customerTab='tasks'; renderApp()" class="px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-semibold">Cancel</button>
+                  <button id="postTaskBtn" type="submit" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition">
+                    Publish Errand Now
+                  </button>
+                </div>
+              </form>
+            </div>
+          ` : ''}
+
+          <!-- TAB B: CUSTOMER PROFILE -->
+          ${appState.customerTab === 'profile' ? `
+            <div class="max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+              <h2 class="font-display font-bold text-xl text-slate-900">My Customer Profile</h2>
+              <p class="text-xs text-slate-500 mt-1 mb-6">Keep your name and phone number up to date so runners can reach you easily.</p>
+              <form onsubmit="handleUpdateCustomerProfile(event)" class="space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Full Name</label>
+                  <input id="profFullName" type="text" required value="${escapeHTML(user.full_name)}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Email Address (Account ID)</label>
+                  <input type="email" disabled value="${escapeHTML(user.email)}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 text-sm cursor-not-allowed" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Mobile Phone Number</label>
+                  <input id="profPhone" type="tel" required value="${escapeHTML(user.phone)}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <div class="pt-2 flex justify-end">
+                  <button id="saveProfBtn" type="submit" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          ` : ''}
+
+          <!-- TAB C: MY POSTED ERRANDS -->
+          ${appState.customerTab === 'tasks' ? `
+            <div class="space-y-4">
+              <!-- Status Filter Pills -->
+              <div class="flex flex-wrap items-center gap-2">
+                ${['ALL', 'Open', 'Accepted', 'In Progress', 'Completed'].map(st => `
+                  <button onclick="appState.taskFilter='${st}'; renderApp()" class="px-3.5 py-1.5 rounded-full text-xs font-semibold border transition ${appState.taskFilter===st ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}">
+                    ${st === 'ALL' ? 'All Errands' : st}
+                  </button>
+                `).join('')}
+              </div>
+
+              ${filteredTasks.length === 0 ? `
+                <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+                  <h3 class="font-bold text-slate-900">No errands found in this view</h3>
+                  <p class="text-sm text-slate-500">Post your first task and let a verified MODISHA runner handle it for you.</p>
+                  <button onclick="appState.customerTab='post'; renderApp()" class="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">+ Post an Errand</button>
+                </div>
+              ` : `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  ${filteredTasks.map(task => {
+                    const runner = task.runner_id ? appState.data.runners.find(r => r.id === task.runner_id) : null;
+                    const existingRating = appState.data.ratings.find(r => r.task_id === task.id);
+                    const waClean = runner ? runner.whatsapp_number.replace(/[^0-9]/g, '') : '';
+                    return `
+                      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                          <div class="flex items-start justify-between gap-2">
+                            ${statusBadgeHTML(task.status)}
+                            <span class="font-display font-extrabold text-lg text-emerald-600">${formatZAR(task.suggested_payment)}</span>
+                          </div>
+                          <div>
+                            <h3 class="font-bold text-slate-900 text-base">${escapeHTML(task.title)}</h3>
+                            <p class="text-xs text-slate-600 mt-1 leading-relaxed">${escapeHTML(task.description)}</p>
+                          </div>
+                          <div class="bg-slate-50 rounded-xl p-3 space-y-1.5 text-xs border border-slate-100">
+                            <div><span class="font-semibold text-emerald-700">Pickup:</span> <span class="text-slate-700">${escapeHTML(task.pickup_location)}</span></div>
+                            <div><span class="font-semibold text-amber-700">Drop-off:</span> <span class="text-slate-700">${escapeHTML(task.dropoff_location)}</span></div>
+                          </div>
+
+                          ${runner ? `
+                            <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/80 flex items-center justify-between gap-3">
+                              <div class="flex items-center gap-3">
+                                <img src="${escapeHTML(runner.selfie_url)}" alt="${escapeHTML(runner.full_name)}" class="w-11 h-11 rounded-full object-cover border-2 border-emerald-500 bg-slate-200" />
+                                <div>
+                                  <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Assigned Runner</span>
+                                  <p class="text-xs font-bold text-slate-900">${escapeHTML(runner.full_name)}</p>
+                                  <p class="text-[11px] text-slate-600">Call: ${escapeHTML(runner.call_number)}</p>
+                                </div>
+                              </div>
+                              <div class="flex items-center gap-1.5">
+                                <a href="https://wa.me/${waClean}" target="_blank" rel="noopener" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold">WhatsApp</a>
+                                <a href="tel:${escapeHTML(runner.call_number)}" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-semibold">Call</a>
+                              </div>
+                            </div>
+                          ` : `
+                            <p class="text-xs text-slate-400 italic">Waiting for an available runner to accept...</p>
+                          `}
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                          <span class="text-[11px] text-slate-400">${formatDate(task.created_at)}</span>
+                          ${task.status === 'Completed' && runner ? (
+                            existingRating ? `
+                              <div class="flex items-center gap-1.5">
+                                ${renderStarsHTML(existingRating.stars, 'w-3.5 h-3.5')}
+                                <span class="text-[11px] font-semibold text-slate-600">Rated</span>
+                              </div>
+                            ` : `
+                              <button onclick="openRatingModal('${task.id}', '${runner.id}', '${escapeHTML(runner.full_name)}', '${escapeHTML(task.title)}')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold shadow-sm transition">
+                                ★ Rate Runner
+                              </button>
+                            `
+                          ) : ''}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // VIEW 3: ERRAND RUNNER PORTAL (AUTH + SELFIE + TASKS + EARNINGS + REVIEWS)
+    // -------------------------------------------------------------------------
+    function renderRunnerPortal() {
+      if (appState.session && appState.session.role === 'customer') {
+        return `
+          <div class="max-w-lg mx-auto bg-white rounded-2xl border border-slate-200 p-8 text-center space-y-4 shadow-sm animate-fade-up">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 mx-auto flex items-center justify-center font-bold text-xl">!</div>
+            <h2 class="font-display font-bold text-xl text-slate-900">Signed in as a Customer</h2>
+            <p class="text-sm text-slate-600">You are currently logged in as Customer <strong>${escapeHTML(appState.session.user.full_name)}</strong>. Sign out to switch to an Errand Runner account.</p>
+            <div class="flex justify-center gap-3">
+              <button onclick="navigate('customer')" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold">Go to Customer Portal</button>
+              <button onclick="handleSignOut()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold">Sign Out</button>
+            </div>
+          </div>
+        `;
+      }
+
+      // Unauthenticated Runner Auth View
+      if (!appState.session) {
+        const isSignUp = appState.runnerAuthMode === 'signup';
+        return `
+          <div class="max-w-lg mx-auto animate-fade-up">
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-lg overflow-hidden">
+              <div class="bg-slate-900 px-6 py-6 text-white">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-amber-400">Errand Runner Portal</span>
+                <h2 class="font-display font-extrabold text-2xl mt-1">${isSignUp ? 'Register as an Errand Runner' : 'Errand Runner Sign In'}</h2>
+                <p class="text-xs text-slate-400 mt-1">Accept local errands, earn Rands, pay only R1.00 per completed task.</p>
+              </div>
+
+              <div class="p-6 space-y-5">
+                <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl">
+                  <button onclick="appState.runnerAuthMode='signin'; renderApp()" class="py-2 rounded-lg text-xs font-bold transition ${!isSignUp ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}">Runner Sign In</button>
+                  <button onclick="appState.runnerAuthMode='signup'; renderApp()" class="py-2 rounded-lg text-xs font-bold transition ${isSignUp ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}">Runner Sign Up</button>
+                </div>
+
+                ${!isSignUp ? `
+                  <form onsubmit="handleRunnerSignIn(event)" class="space-y-4">
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Runner Email</label>
+                      <input id="runLoginEmail" type="email" required value="${!isLiveSupabase ? 'sipho.runner@example.co.za' : ''}" placeholder="runner@example.co.za" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+                      <input id="runLoginPass" type="password" required value="${!isLiveSupabase ? 'Password123!' : ''}" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <button id="runLoginBtn" type="submit" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-sm transition">
+                      Sign In as Errand Runner
+                    </button>
+                    ${!isLiveSupabase ? `<p class="text-[11px] text-center text-slate-400">Demo runner credentials pre-filled for instant testing.</p>` : ''}
+                  </form>
+                ` : `
+                  <form onsubmit="handleRunnerSignUp(event)" class="space-y-3.5">
+                    <!-- Mandatory Selfie Upload -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-dashed border-slate-300 text-center space-y-2.5">
+                      <div class="w-20 h-20 rounded-full mx-auto bg-slate-200 overflow-hidden flex items-center justify-center border-2 border-emerald-500">
+                        <img id="selfiePreviewImg" class="hidden w-full h-full object-cover" alt="Selfie preview" />
+                        <svg id="selfiePlaceholder" class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      </div>
+                      <div>
+                        <label for="runSelfieInput" class="cursor-pointer inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">
+                          <span>Upload Verification Selfie *</span>
+                        </label>
+                        <input id="runSelfieInput" type="file" accept="image/*" capture="user" onchange="handleSelfieFileChange(event)" class="hidden" />
+                        <p class="text-[11px] text-slate-500 mt-1">Required for customer safety &amp; identity trust (Max 4MB).</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Full Legal Name *</label>
+                      <input id="runRegName" type="text" required placeholder="e.g. Bongani Zulu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Email Address *</label>
+                      <input id="runRegEmail" type="email" required placeholder="bongani@example.co.za" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Number *</label>
+                        <input id="runRegWhatsapp" type="tel" required placeholder="e.g. 27821234567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                      </div>
+                      <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Direct Call Number *</label>
+                        <input id="runRegCall" type="tel" required placeholder="e.g. 082 123 4567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Password (min 6 chars) *</label>
+                      <input id="runRegPass" type="password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    </div>
+                    <button id="runRegBtn" type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition">
+                      Complete Runner Registration
+                    </button>
+                  </form>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Authenticated Runner Workspace
+      const runner = appState.session.user;
+      const openTasks = appState.data.tasks.filter(t => t.status === 'Open');
+      const myRunnerTasks = appState.data.tasks.filter(t => t.runner_id === runner.id);
+      const myEarnings = appState.data.earnings.filter(e => e.runner_id === runner.id);
+      const myRatings = appState.data.ratings.filter(r => r.runner_id === runner.id);
+
+      const totalGross = myEarnings.reduce((sum, e) => sum + Number(e.gross_amount || 0), 0);
+      const totalFees = myEarnings.reduce((sum, e) => sum + Number(e.platform_fee || 1), 0);
+      const totalNet = myEarnings.reduce((sum, e) => sum + Number(e.net_amount ?? (e.gross_amount - 1)), 0);
+      const avgRating = myRatings.length > 0
+        ? (myRatings.reduce((s, r) => s + Number(r.stars), 0) / myRatings.length).toFixed(1)
+        : 'New';
+
+      return `
+        <div class="space-y-6 animate-fade-up">
+          <!-- Runner Profile Header -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <img src="${escapeHTML(runner.selfie_url)}" alt="${escapeHTML(runner.full_name)}" class="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-500 bg-slate-100 shrink-0" />
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h1 class="font-display font-extrabold text-xl sm:text-2xl text-slate-900">${escapeHTML(runner.full_name)}</h1>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">★ ${avgRating} (${myRatings.length})</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">WhatsApp: <strong>${escapeHTML(runner.whatsapp_number)}</strong> &bull; Call: <strong>${escapeHTML(runner.call_number)}</strong></p>
+              </div>
+            </div>
+
+            <!-- Runner Sub-navigation -->
+            <div class="flex flex-wrap gap-2">
+              <button onclick="appState.runnerTab='available'; renderApp()" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${appState.runnerTab==='available' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                Open Errands (${openTasks.length})
+              </button>
+              <button onclick="appState.runnerTab='my-tasks'; renderApp()" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${appState.runnerTab==='my-tasks' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                My Errands (${myRunnerTasks.length})
+              </button>
+              <button onclick="appState.runnerTab='earnings'; renderApp()" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${appState.runnerTab==='earnings' ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}">
+                Earnings (${formatZAR(totalNet)})
+              </button>
+              <button onclick="appState.runnerTab='reviews'; renderApp()" class="px-3.5 py-2 rounded-xl text-xs font-bold transition ${appState.runnerTab==='reviews' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                Reviews (${myRatings.length})
+              </button>
+            </div>
+          </div>
+
+          <!-- RUNNER TAB 1: AVAILABLE OPEN ERRANDS -->
+          ${appState.runnerTab === 'available' ? `
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h2 class="font-display font-bold text-lg text-slate-900">Browse Open Errands</h2>
+                <span class="text-xs text-slate-500">R1.00 platform fee applies only when completed</span>
+              </div>
+
+              ${openTasks.length === 0 ? `
+                <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-2">
+                  <h3 class="font-bold text-slate-900">No open errands available right now</h3>
+                  <p class="text-sm text-slate-500">Check back shortly as customers post new pickup and delivery tasks.</p>
+                </div>
+              ` : `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  ${openTasks.map(task => {
+                    const cust = appState.data.profiles.find(p => p.id === task.customer_id);
+                    const netEst = Math.max(0, Number(task.suggested_payment) - 1);
+                    return `
+                      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                          <div class="flex items-start justify-between gap-2">
+                            ${statusBadgeHTML(task.status)}
+                            <div class="text-right">
+                              <span class="font-display font-extrabold text-lg text-emerald-600">${formatZAR(task.suggested_payment)}</span>
+                              <span class="block text-[11px] font-semibold text-slate-500">You keep: ${formatZAR(netEst)}</span>
+                            </div>
+                          </div>
+                          <h3 class="font-bold text-slate-900 text-base">${escapeHTML(task.title)}</h3>
+                          <p class="text-xs text-slate-600 leading-relaxed">${escapeHTML(task.description)}</p>
+                          <div class="bg-slate-50 rounded-xl p-3 space-y-1.5 text-xs border border-slate-100">
+                            <div><span class="font-semibold text-emerald-700">Pickup:</span> ${escapeHTML(task.pickup_location)}</div>
+                            <div><span class="font-semibold text-amber-700">Drop-off:</span> ${escapeHTML(task.dropoff_location)}</div>
+                          </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                          <span class="text-[11px] text-slate-500">Customer: ${escapeHTML(cust ? cust.full_name : 'Verified User')}</span>
+                          <button onclick="acceptErrand('${task.id}')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition">
+                            Accept Task
+                          </button>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          ` : ''}
+
+          <!-- RUNNER TAB 2: MY ACCEPTED & COMPLETED ERRANDS -->
+          ${appState.runnerTab === 'my-tasks' ? `
+            <div class="space-y-4">
+              <h2 class="font-display font-bold text-lg text-slate-900">My Accepted &amp; Fulfilled Errands</h2>
+              ${myRunnerTasks.length === 0 ? `
+                <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+                  <h3 class="font-bold text-slate-900">You haven't accepted any errands yet</h3>
+                  <p class="text-sm text-slate-500">Browse open errands and accept one to start earning.</p>
+                  <button onclick="appState.runnerTab='available'; renderApp()" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold">Browse Open Errands</button>
+                </div>
+              ` : `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  ${myRunnerTasks.map(task => {
+                    const cust = appState.data.profiles.find(p => p.id === task.customer_id);
+                    const netEst = Math.max(0, Number(task.suggested_payment) - 1);
+                    return `
+                      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
+                        <div class="space-y-3">
+                          <div class="flex items-start justify-between gap-2">
+                            ${statusBadgeHTML(task.status)}
+                            <div class="text-right">
+                              <span class="font-display font-extrabold text-lg text-emerald-600">${formatZAR(task.suggested_payment)}</span>
+                              <span class="block text-[11px] text-slate-500">Net after R1 fee: <strong>${formatZAR(netEst)}</strong></span>
+                            </div>
+                          </div>
+                          <h3 class="font-bold text-slate-900 text-base">${escapeHTML(task.title)}</h3>
+                          <p class="text-xs text-slate-600 leading-relaxed">${escapeHTML(task.description)}</p>
+                          <div class="bg-slate-50 rounded-xl p-3 space-y-1.5 text-xs border border-slate-100">
+                            <div><span class="font-semibold text-emerald-700">Pickup:</span> ${escapeHTML(task.pickup_location)}</div>
+                            <div><span class="font-semibold text-amber-700">Drop-off:</span> ${escapeHTML(task.dropoff_location)}</div>
+                            ${cust ? `<div class="pt-1 border-t border-slate-200/70"><span class="font-semibold text-slate-800">Customer:</span> ${escapeHTML(cust.full_name)} (<a href="tel:${escapeHTML(cust.phone)}" class="text-emerald-700 underline">${escapeHTML(cust.phone)}</a>)</div>` : ''}
+                          </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+                          <span class="text-[11px] text-slate-400">${formatDate(task.created_at)}</span>
+                          <div class="flex items-center gap-2">
+                            ${task.status === 'Accepted' ? `
+                              <button onclick="updateTaskStatus('${task.id}', 'In Progress')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold transition">
+                                Start Errand (In Progress)
+                              </button>
+                            ` : ''}
+                            ${(task.status === 'Accepted' || task.status === 'In Progress') ? `
+                              <button onclick="updateTaskStatus('${task.id}', 'Completed')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition">
+                                ✓ Mark as Fulfilled
+                              </button>
+                            ` : ''}
+                            ${task.status === 'Completed' ? `
+                              <span class="text-xs font-bold text-emerald-700">✓ Fulfilled &amp; Credited</span>
+                            ` : ''}
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          ` : ''}
+
+          <!-- RUNNER TAB 3: EARNINGS DASHBOARD (GROSS, R1 FEE, NET) -->
+          ${appState.runnerTab === 'earnings' ? `
+            <div class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Completed Errands</span>
+                  <div class="font-display font-extrabold text-3xl text-slate-900 mt-1">${myEarnings.length}</div>
+                  <p class="text-xs text-slate-400 mt-1">Fulfilled tasks</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Gross Errand Value</span>
+                  <div class="font-display font-extrabold text-3xl text-slate-900 mt-1">${formatZAR(totalGross)}</div>
+                  <p class="text-xs text-slate-400 mt-1">Before platform fee</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-amber-600">Platform Fees Paid</span>
+                  <div class="font-display font-extrabold text-3xl text-amber-600 mt-1">-${formatZAR(totalFees)}</div>
+                  <p class="text-xs text-slate-400 mt-1">R1.00 per completed errand</p>
+                </div>
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-md">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Total Net Earnings</span>
+                  <div class="font-display font-extrabold text-3xl text-emerald-400 mt-1">${formatZAR(totalNet)}</div>
+                  <p class="text-xs text-slate-400 mt-1">Your take-home earnings</p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                  <h3 class="font-bold text-slate-900 text-base">Per-Errand Earnings Ledger</h3>
+                  <span class="text-xs text-slate-500">Transparent R1.00 fee deduction</span>
+                </div>
+                ${myEarnings.length === 0 ? `
+                  <div class="p-10 text-center text-sm text-slate-500">Complete an errand to see your itemized payout breakdown here.</div>
+                ` : `
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                      <thead>
+                        <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                          <th class="py-3 px-6">Errand Task</th>
+                          <th class="py-3 px-4">Date Fulfilled</th>
+                          <th class="py-3 px-4 text-right">Gross Payment</th>
+                          <th class="py-3 px-4 text-right">MODISHA Fee</th>
+                          <th class="py-3 px-6 text-right">Net Payout</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100 text-sm">
+                        ${myEarnings.map(item => {
+                          const task = appState.data.tasks.find(t => t.id === item.task_id);
+                          const net = item.net_amount ?? (Number(item.gross_amount) - Number(item.platform_fee || 1));
+                          return `
+                            <tr class="hover:bg-slate-50/70">
+                              <td class="py-3.5 px-6 font-semibold text-slate-900">${escapeHTML(task ? task.title : 'Completed Errand')}</td>
+                              <td class="py-3.5 px-4 text-xs text-slate-500">${formatDate(item.created_at)}</td>
+                              <td class="py-3.5 px-4 text-right text-slate-700">${formatZAR(item.gross_amount)}</td>
+                              <td class="py-3.5 px-4 text-right text-amber-600 font-medium">-${formatZAR(item.platform_fee || 1)}</td>
+                              <td class="py-3.5 px-6 text-right font-bold text-emerald-600">${formatZAR(net)}</td>
+                            </tr>
+                          `;
+                        }).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                `}
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- RUNNER TAB 4: RATINGS & COMMENTS RECEIVED -->
+          ${appState.runnerTab === 'reviews' ? `
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <h2 class="font-display font-bold text-lg text-slate-900">Customer Ratings &amp; Feedback</h2>
+                <span class="px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold">Average: ★ ${avgRating}</span>
+              </div>
+
+              ${myRatings.length === 0 ? `
+                <div class="bg-white rounded-2xl border border-slate-200 p-10 text-center text-sm text-slate-500">
+                  No customer ratings yet. Fulfill errands with great communication to earn 5-star reviews!
+                </div>
+              ` : `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  ${myRatings.map(rev => {
+                    const cust = appState.data.profiles.find(p => p.id === rev.customer_id);
+                    const task = appState.data.tasks.find(t => t.id === rev.task_id);
+                    return `
+                      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-2.5">
+                        <div class="flex items-center justify-between">
+                          ${renderStarsHTML(rev.stars)}
+                          <span class="text-[11px] text-slate-400">${formatDate(rev.created_at)}</span>
+                        </div>
+                        <p class="text-sm text-slate-800 leading-relaxed">"${escapeHTML(rev.comment)}"</p>
+                        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                          <span>By <strong>${escapeHTML(cust ? cust.full_name : 'Customer')}</strong></span>
+                          <span class="truncate max-w-[180px]">${escapeHTML(task ? task.title : '')}</span>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // VIEW 4: ADMIN PORTAL (RPC LOGIN + EARNINGS + MANAGE USERS/RUNNERS/TASKS)
+    // -------------------------------------------------------------------------
+    function renderAdminPortal() {
+      if (!appState.adminAuthenticated) {
+        return `
+          <div class="max-w-md mx-auto animate-fade-up">
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-lg overflow-hidden">
+              <div class="bg-slate-950 px-6 py-6 text-white">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-2">
+                  <span>Server-Verified Security</span>
+                </div>
+                <h2 class="font-display font-extrabold text-2xl">MODISHA Admin Console</h2>
+                <p class="text-xs text-slate-400 mt-1">Credentials are verified server-side via PostgreSQL RPC (<code class="text-emerald-400">verify_admin_login</code>).</p>
+              </div>
+              <form onsubmit="handleAdminLogin(event)" class="p-6 space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Administrator Passphrase</label>
+                  <input id="adminPasswordInput" type="password" required placeholder="Enter admin password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 outline-none" />
+                </div>
+                <button id="adminLoginBtn" type="submit" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-sm transition">
+                  Unlock Admin Console
+                </button>
+              </form>
+            </div>
+          </div>
+        `;
+      }
+
+      const { profiles, runners, tasks, earnings } = appState.data;
+      const completedTasks = tasks.filter(t => t.status === 'Completed');
+      const totalPlatformRevenue = earnings.reduce((s, e) => s + Number(e.platform_fee || 1), 0);
+      const totalGrossVolume = earnings.reduce((s, e) => s + Number(e.gross_amount || 0), 0);
+
+      return `
+        <div class="space-y-6 animate-fade-up">
+          <!-- Admin Top Header -->
+          <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Operations &amp; Revenue Control</span>
+              <h1 class="font-display font-extrabold text-2xl">MODISHA Admin Dashboard</h1>
+              <p class="text-xs text-slate-400 mt-0.5">Platform earns R1.00 per completed errand from runner payouts.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="refreshAllData()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition">Refresh</button>
+              <button onclick="handleAdminLogout()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold transition">Lock Admin</button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Completed Errands</span>
+              <div class="font-display font-extrabold text-3xl text-slate-900 mt-1">${completedTasks.length}</div>
+              <p class="text-xs text-slate-400 mt-1">Out of ${tasks.length} total tasks</p>
+            </div>
+            <div class="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-md">
+              <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Total Platform Earnings</span>
+              <div class="font-display font-extrabold text-3xl text-emerald-400 mt-1">${formatZAR(totalPlatformRevenue)}</div>
+              <p class="text-xs text-slate-400 mt-1">R1.00 &times; ${earnings.length} settled errands</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Gross Errand Volume</span>
+              <div class="font-display font-extrabold text-3xl text-slate-900 mt-1">${formatZAR(totalGrossVolume)}</div>
+              <p class="text-xs text-slate-400 mt-1">Total ZAR transacted</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Registered Community</span>
+              <div class="font-display font-extrabold text-3xl text-slate-900 mt-1">${profiles.length + runners.length}</div>
+              <p class="text-xs text-slate-400 mt-1">${profiles.length} Customers &bull; ${runners.length} Runners</p>
+            </div>
+          </div>
+
+          <!-- Admin Management Tabs -->
+          <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+            <button onclick="appState.adminTab='overview'; renderApp()" class="px-4 py-2 rounded-xl text-xs font-bold transition ${appState.adminTab==='overview' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200'}">
+              Platform Earnings Ledger (${earnings.length})
+            </button>
+            <button onclick="appState.adminTab='runners'; renderApp()" class="px-4 py-2 rounded-xl text-xs font-bold transition ${appState.adminTab==='runners' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200'}">
+              Manage Runners (${runners.length})
+            </button>
+            <button onclick="appState.adminTab='users'; renderApp()" class="px-4 py-2 rounded-xl text-xs font-bold transition ${appState.adminTab==='users' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200'}">
+              Manage Customers (${profiles.length})
+            </button>
+            <button onclick="appState.adminTab='tasks'; renderApp()" class="px-4 py-2 rounded-xl text-xs font-bold transition ${appState.adminTab==='tasks' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200'}">
+              Manage All Tasks (${tasks.length})
+            </button>
+          </div>
+
+          <!-- ADMIN TAB 1: PLATFORM EARNINGS PER COMPLETED ERRAND -->
+          ${appState.adminTab === 'overview' ? `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-slate-200">
+                <h3 class="font-bold text-slate-900 text-base">Platform Earnings Per Completed Errand</h3>
+                <p class="text-xs text-slate-500">Itemized R1.00 fee collected from each completed runner payout</p>
+              </div>
+              ${earnings.length === 0 ? `
+                <div class="p-10 text-center text-sm text-slate-500">No completed errands recorded yet.</div>
+              ` : `
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse">
+                    <thead>
+                      <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                        <th class="py-3 px-6">Completed Errand</th>
+                        <th class="py-3 px-4">Runner</th>
+                        <th class="py-3 px-4">Date</th>
+                        <th class="py-3 px-4 text-right">Gross Task</th>
+                        <th class="py-3 px-4 text-right">Runner Net</th>
+                        <th class="py-3 px-6 text-right">MODISHA Fee</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                      ${earnings.map(e => {
+                        const task = tasks.find(t => t.id === e.task_id);
+                        const runner = runners.find(r => r.id === e.runner_id);
+                        const net = e.net_amount ?? (Number(e.gross_amount) - Number(e.platform_fee || 1));
+                        return `
+                          <tr class="hover:bg-slate-50">
+                            <td class="py-3.5 px-6 font-semibold text-slate-900">${escapeHTML(task ? task.title : e.task_id)}</td>
+                            <td class="py-3.5 px-4 text-xs text-slate-700">${escapeHTML(runner ? runner.full_name : 'Runner')}</td>
+                            <td class="py-3.5 px-4 text-xs text-slate-500">${formatDate(e.created_at)}</td>
+                            <td class="py-3.5 px-4 text-right text-slate-700">${formatZAR(e.gross_amount)}</td>
+                            <td class="py-3.5 px-4 text-right text-slate-600">${formatZAR(net)}</td>
+                            <td class="py-3.5 px-6 text-right font-extrabold text-emerald-600">+${formatZAR(e.platform_fee || 1)}</td>
+                          </tr>
+                        `;
+                      }).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              `}
+            </div>
+          ` : ''}
+
+          <!-- ADMIN TAB 2: MANAGE RUNNERS -->
+          ${appState.adminTab === 'runners' ? `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-slate-200">
+                <h3 class="font-bold text-slate-900 text-base">Registered Errand Runners</h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                      <th class="py-3 px-6">Runner &amp; Selfie</th>
+                      <th class="py-3 px-4">WhatsApp / Call</th>
+                      <th class="py-3 px-4">Status</th>
+                      <th class="py-3 px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-sm">
+                    ${runners.map(r => `
+                      <tr>
+                        <td class="py-3.5 px-6">
+                          <div class="flex items-center gap-3">
+                            <img src="${escapeHTML(r.selfie_url)}" alt="${escapeHTML(r.full_name)}" class="w-10 h-10 rounded-full object-cover border border-slate-300" />
+                            <div>
+                              <p class="font-bold text-slate-900">${escapeHTML(r.full_name)}</p>
+                              <p class="text-xs text-slate-500">${escapeHTML(r.email)}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="py-3.5 px-4 text-xs text-slate-700">
+                          <div>WA: ${escapeHTML(r.whatsapp_number)}</div>
+                          <div>Call: ${escapeHTML(r.call_number)}</div>
+                        </td>
+                        <td class="py-3.5 px-4">
+                          <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${r.is_active !== false ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+                            ${r.is_active !== false ? 'Active' : 'Suspended'}
+                          </span>
+                        </td>
+                        <td class="py-3.5 px-6 text-right space-x-2">
+                          <button onclick="adminManageEntity('toggle_runner', '${r.id}')" class="px-3 py-1.5 rounded-lg border border-slate-300 hover:bg-slate-100 text-xs font-semibold">
+                            ${r.is_active !== false ? 'Suspend' : 'Activate'}
+                          </button>
+                          <button onclick="adminManageEntity('delete_runner', '${r.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold">
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- ADMIN TAB 3: MANAGE CUSTOMERS -->
+          ${appState.adminTab === 'users' ? `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-slate-200">
+                <h3 class="font-bold text-slate-900 text-base">Registered Customers</h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                      <th class="py-3 px-6">Full Name</th>
+                      <th class="py-3 px-4">Email</th>
+                      <th class="py-3 px-4">Phone</th>
+                      <th class="py-3 px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-sm">
+                    ${profiles.map(p => `
+                      <tr>
+                        <td class="py-3.5 px-6 font-bold text-slate-900">${escapeHTML(p.full_name)}</td>
+                        <td class="py-3.5 px-4 text-xs text-slate-600">${escapeHTML(p.email)}</td>
+                        <td class="py-3.5 px-4 text-xs text-slate-600">${escapeHTML(p.phone)}</td>
+                        <td class="py-3.5 px-6 text-right">
+                          <button onclick="adminManageEntity('delete_profile', '${p.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold">
+                            Remove User
+                          </button>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- ADMIN TAB 4: MANAGE ALL TASKS -->
+          ${appState.adminTab === 'tasks' ? `
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div class="px-6 py-4 border-b border-slate-200">
+                <h3 class="font-bold text-slate-900 text-base">All Marketplace Errands</h3>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200">
+                      <th class="py-3 px-6">Errand</th>
+                      <th class="py-3 px-4">Customer</th>
+                      <th class="py-3 px-4">Runner</th>
+                      <th class="py-3 px-4">Status</th>
+                      <th class="py-3 px-4 text-right">Amount</th>
+                      <th class="py-3 px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-sm">
+                    ${tasks.map(t => {
+                      const cust = profiles.find(p => p.id === t.customer_id);
+                      const run = runners.find(r => r.id === t.runner_id);
+                      return `
+                        <tr>
+                          <td class="py-3.5 px-6">
+                            <p class="font-bold text-slate-900">${escapeHTML(t.title)}</p>
+                            <p class="text-[11px] text-slate-500">${escapeHTML(t.pickup_location)} &rarr; ${escapeHTML(t.dropoff_location)}</p>
+                          </td>
+                          <td class="py-3.5 px-4 text-xs text-slate-700">${escapeHTML(cust ? cust.full_name : '—')}</td>
+                          <td class="py-3.5 px-4 text-xs text-slate-700">${escapeHTML(run ? run.full_name : 'Unassigned')}</td>
+                          <td class="py-3.5 px-4">${statusBadgeHTML(t.status)}</td>
+                          <td class="py-3.5 px-4 text-right font-bold text-emerald-600">${formatZAR(t.suggested_payment)}</td>
+                          <td class="py-3.5 px-6 text-right">
+                            <button onclick="adminManageEntity('delete_task', '${t.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold">
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 10. BOOTSTRAP ON WINDOW LOAD
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
+      document.getElementById('sqlCodeBlock').textContent = SUPABASE_SETUP_SQL;
+      initBackend();
+    });
+  </script>
+</body>
+</html>
